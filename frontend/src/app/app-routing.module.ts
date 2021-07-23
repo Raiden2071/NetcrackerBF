@@ -15,7 +15,7 @@ const routes: Routes = [
       { path: 'profile', loadChildren: () => import('./modules/profile/profile/profile.module').then(m => m.ProfileModule) },
       { path: 'test', loadChildren: () => import('./modules/test/test.module').then(m => m.TestModule) },
       { path: 'dashboard', loadChildren: () => import('./modules/dashboard/dashboard.module').then(m => m.DashboardModule) },
-      { path: 'announcment', loadChildren: () => import('./shared/announcment/announcment.module').then(m => m.AnnouncmentModule) },
+      { path: 'announcment', loadChildren: () => import('./modules/announcement/announcment.module').then(m => m.AnnouncmentModule) },
     ],
     // canActivate: [AuthGuard]
   },

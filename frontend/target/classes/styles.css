@@ -11313,5 +11313,8 @@ textarea.form-control-lg {
 html, body {
   height: 100%;
 }
+app-announcment {
+  width: 100% !important;
+}
 
 /*# sourceMappingURL=styles.css.map*/
