@@ -1,0 +1,49 @@
+
+<div class="m-5">
+  <!-- Search -->
+  <div class="col-6 mb-5 input-group input-group-merge">
+    <input type="search" class="form-control" [formControl]="searchProject" placeholder="Найти проект">
+    <div class="input-group-append">
+      <span class="input-group-text">
+        <img src="/assets/images/icons/search_black_24dp.svg" alt="search" class="svg">
+      </span>
+    </div>
+  </div>
+  <h2>All Announcment</h2>
+  <!-- Cards -->
+  <div class="row flex-wrap">
+    <div *ngFor="let annoucnment of annoucnments" class="col-lg-4 mb-3 d-flex align-items-stretch">
+      <!--  [routerLink]="[project.id]" -->
+      <div class="card">
+        <div class="card-body d-flex">
+          <div class="d-flex flex-column">
+            <!-- img, title, description -->
+            <div class="d-flex mb-2">
+              <img src="/assets/user.jpg" alt="image" class="image" class="me-2">
+              <div>
+                <div>{{annoucnment.title}}</div>
+                <div>by {{annoucnment.owner.firstName}} {{annoucnment.owner.lastName}}</div>
+              </div>
+            </div>
+            <div>
+              {{annoucnment.description}}
+            </div>
+          </div>
+            <!-- date, street, likes -->
+            <div>
+              <div>
+                <img src="/assets/images/icons/today_black_24dp.svg" alt="date" class="svg">
+                <div>{{annoucnment.date | date}}  </div>
+              </div>
+              <div>
+                <img src="/assets/images/icons/today_black_24dp.svg" alt="date" class="svg">
+                <div>{{annoucnment.address}}</div>
+              </div>
+            </div>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+
+</div>

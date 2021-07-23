@@ -11,8 +11,11 @@ const routes: Routes = [
     path: '', 
     component: LayoutComponent,
     children: [
-      { path: '', pathMatch: 'full', redirectTo: 'test'},
-      { path: 'test', loadChildren: () => import('./modules/test/test.module').then(m => m.TestModule) }
+      { path: '', pathMatch: 'full', redirectTo: 'test' },
+      { path: 'profile', loadChildren: () => import('./modules/profile/profile/profile.module').then(m => m.ProfileModule) },
+      { path: 'test', loadChildren: () => import('./modules/test/test.module').then(m => m.TestModule) },
+      { path: 'dashboard', loadChildren: () => import('./modules/dashboard/dashboard.module').then(m => m.DashboardModule) },
+      { path: 'announcment', loadChildren: () => import('./shared/announcment/announcment.module').then(m => m.AnnouncmentModule) },
     ],
     // canActivate: [AuthGuard]
   },
