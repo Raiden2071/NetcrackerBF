@@ -50,7 +50,7 @@ const routes = [
             { path: 'profile', loadChildren: () => __webpack_require__.e(/*! import() */ "src_app_modules_profile_profile_profile_module_ts").then(__webpack_require__.bind(__webpack_require__, /*! ./modules/profile/profile/profile.module */ 3355)).then(m => m.ProfileModule) },
             { path: 'test', loadChildren: () => __webpack_require__.e(/*! import() */ "src_app_modules_test_test_module_ts").then(__webpack_require__.bind(__webpack_require__, /*! ./modules/test/test.module */ 1434)).then(m => m.TestModule) },
             { path: 'dashboard', loadChildren: () => __webpack_require__.e(/*! import() */ "src_app_modules_dashboard_dashboard_module_ts").then(__webpack_require__.bind(__webpack_require__, /*! ./modules/dashboard/dashboard.module */ 8757)).then(m => m.DashboardModule) },
-            { path: 'announcment', loadChildren: () => __webpack_require__.e(/*! import() */ "src_app_shared_announcment_announcment_module_ts").then(__webpack_require__.bind(__webpack_require__, /*! ./shared/announcment/announcment.module */ 6870)).then(m => m.AnnouncmentModule) },
+            { path: 'announcment', loadChildren: () => __webpack_require__.e(/*! import() */ "src_app_modules_announcement_announcment_module_ts").then(__webpack_require__.bind(__webpack_require__, /*! ./modules/announcement/announcment.module */ 1892)).then(m => m.AnnouncmentModule) },
         ],
         // canActivate: [AuthGuard]
     },
@@ -115,7 +115,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _layout_layout_layout_component__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./layout/layout/layout.component */ 6571);
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/common/http */ 1841);
 /* harmony import */ var _shared_sidebar_sidebar_sidebar_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./shared/sidebar/sidebar/sidebar.component */ 668);
+/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/forms */ 3679);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/core */ 7716);
+
 
 
 
@@ -132,14 +134,16 @@ AppModule.ɵinj = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵ
             _angular_platform_browser__WEBPACK_IMPORTED_MODULE_5__.BrowserModule,
             _app_routing_module__WEBPACK_IMPORTED_MODULE_0__.AppRoutingModule,
             _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_6__.NgbModule,
-            _angular_common_http__WEBPACK_IMPORTED_MODULE_7__.HttpClientModule
+            _angular_common_http__WEBPACK_IMPORTED_MODULE_7__.HttpClientModule,
+            _angular_forms__WEBPACK_IMPORTED_MODULE_8__.ReactiveFormsModule
         ]] });
 (function () { (typeof ngJitMode === "undefined" || ngJitMode) && _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵsetNgModuleScope"](AppModule, { declarations: [_app_component__WEBPACK_IMPORTED_MODULE_1__.AppComponent,
         _layout_layout_layout_component__WEBPACK_IMPORTED_MODULE_2__.LayoutComponent,
         _shared_sidebar_sidebar_sidebar_component__WEBPACK_IMPORTED_MODULE_3__.SidebarComponent], imports: [_angular_platform_browser__WEBPACK_IMPORTED_MODULE_5__.BrowserModule,
         _app_routing_module__WEBPACK_IMPORTED_MODULE_0__.AppRoutingModule,
         _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_6__.NgbModule,
-        _angular_common_http__WEBPACK_IMPORTED_MODULE_7__.HttpClientModule] }); })();
+        _angular_common_http__WEBPACK_IMPORTED_MODULE_7__.HttpClientModule,
+        _angular_forms__WEBPACK_IMPORTED_MODULE_8__.ReactiveFormsModule] }); })();
 
 
 /***/ }),
