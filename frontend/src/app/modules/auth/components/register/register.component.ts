@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { MustMatch } from '../../validators/must-match.validator';
 
@@ -14,6 +15,7 @@ export class RegisterComponent implements OnInit {
   showErrors = false;
   
   registerForm: FormGroup = this.fb.group({
+    username: ['1212'],
     firstName:        ['', [Validators.required]],
     lastName:         ['', [Validators.required]],
     email:            ['', [Validators.email, Validators.required]],
@@ -25,7 +27,8 @@ export class RegisterComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -34,7 +37,8 @@ export class RegisterComponent implements OnInit {
   
   onSubmit(): void {
     if(this.registerForm.valid) {
-        this.authService.register(this.registerForm.value).subscribe(data => console.log(data))
+      this.authService.register(this.registerForm.value).subscribe(data => console.log(data));
+      this.router.navigateByUrl('/auth/login');
     }
     else {
       this.showErrors = true;

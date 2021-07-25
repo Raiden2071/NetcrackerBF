@@ -16,13 +16,15 @@ export class AuthService {
   constructor(private http: HttpClient) { }
 
   login(data: LoginRequest, remember: boolean): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(this.path + 'local', { identifier: data.email, ...data }).pipe(
+    return this.http.post<AuthResponse>('auth/local', data).pipe(
       tap(authResponse => this.setTokens(authResponse, remember))
-    )
+    );
   }
   // поменяй any!
   register(data: any): Observable<User> {
-    return this.http.post<User>(this.path + 'local/register', data)
+    console.log(data);
+    
+    return this.http.post<User>('auth/local/register', data)
   }
   
   setTokens(authResponse: AuthResponse, remember: boolean): void {
@@ -37,4 +39,9 @@ export class AuthService {
   isAuthenticated(): boolean {
     return Boolean(localStorage.getItem('access_token') || Boolean(sessionStorage.getItem('access_token')));
   }
+
+  getToken(): string | null {
+    return localStorage.getItem('access_token') ?? sessionStorage.getItem('access_token');
+  }
+  
 }
