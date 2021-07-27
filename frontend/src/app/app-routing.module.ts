@@ -16,6 +16,8 @@ const routes: Routes = [
       { path: 'test', loadChildren: () => import('./modules/test/test.module').then(m => m.TestModule) },
       { path: 'dashboard', loadChildren: () => import('./modules/dashboard/dashboard.module').then(m => m.DashboardModule) },
       { path: 'announcment', loadChildren: () => import('./modules/announcement/announcment.module').then(m => m.AnnouncmentModule) },
+      { path: 'settings', loadChildren: () => import('./modules/settings/settings.module').then(m => m.SettingsModule) }
+
     ],
     // canActivate: [AuthGuard]
   },
