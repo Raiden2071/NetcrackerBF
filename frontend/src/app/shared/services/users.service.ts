@@ -8,7 +8,7 @@ import { AbstractCrudService } from '../abstracts/abstract-crud.service';
 @Injectable({
   providedIn: 'root'
 })
-export class UsersService extends AbstractCrudService<User>{
+export class UserService extends AbstractCrudService<User>{
 
   path = 'users';
 

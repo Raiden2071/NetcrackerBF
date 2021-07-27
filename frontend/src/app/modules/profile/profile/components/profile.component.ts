@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from 'src/app/models/user';
-import { UsersService } from 'src/app/shared/services/users.service';
+import { UserService } from 'src/app/shared/services/users.service';
 
 @Component({
   selector: 'app-profile',
@@ -11,7 +11,7 @@ export class ProfileComponent implements OnInit {
 
   user: User;
   constructor(
-    private usersService: UsersService,
+    private userService: UserService,
   ) { }
 
   ngOnInit(): void {
@@ -25,11 +25,9 @@ export class ProfileComponent implements OnInit {
   }
 
   getUser() {
-    this.usersService.userInfo$.subscribe((user) => {
-      this.user = user;
-      console.log(user);
-    });
-    this.usersService.subject$.next(1);
+    // this.usersService.getMe().subscribe(user => {this.user = user;});
+    this.userService.userInfo$.subscribe((user) => this.user = user);
+    // this.usersService.subject$.next(1);
   }
 
 }

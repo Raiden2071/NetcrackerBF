@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from 'src/app/models/user';
-import { UsersService } from 'src/app/shared/services/users.service';
+import { UserService } from 'src/app/shared/services/users.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -12,7 +12,7 @@ export class DashboardComponent implements OnInit {
   user: User;
 
   constructor(
-    private userService: UsersService
+    private userService: UserService
   ) { }
 
   ngOnInit(): void {
@@ -26,6 +26,8 @@ export class DashboardComponent implements OnInit {
   }
 
   getUser() {
+    // this.UserService.getMe().subscribe(user => this.user = user);
+
     this.userService.userInfo$.subscribe(user => this.user = user);
   }
 
