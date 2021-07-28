@@ -1,9 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { SettingsComponent } from './components/settings.component';
+import { ChangePasswordComponent } from './components/change-password/change-password.component';
+import { EditProfileComponent } from './components/edit-profile/edit-profile.component';
 
 const routes: Routes = [
-  { path: '', component: SettingsComponent },
+  { path: '', redirectTo: 'edit' },
+  { path: 'password', component: ChangePasswordComponent },
+  { path: 'edit', component: EditProfileComponent }
 ];
 
 @NgModule({
