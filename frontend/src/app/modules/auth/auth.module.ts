@@ -9,7 +9,11 @@ import { RecoveryComponent } from './recovery/recovery/recovery.component';
 
 
 @NgModule({
-  declarations: [LoginComponent, RegisterComponent, RecoveryComponent],
+  declarations: [
+    LoginComponent,
+    RegisterComponent,
+    RecoveryComponent
+  ],
   imports: [
     CommonModule,
     AuthRoutingModule,

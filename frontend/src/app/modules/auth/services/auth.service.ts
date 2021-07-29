@@ -22,9 +22,11 @@ export class AuthService {
   }
   // поменяй any!
   register(data: any): Observable<User> {
-    console.log(data);
-    
     return this.http.post<User>('auth/local/register', data)
+  }
+
+  forgotPassword(email: string): Observable<string> {
+    return this.http.post<string>('auth/forgot-password', email);
   }
   
   setTokens(authResponse: AuthResponse, remember: boolean): void {

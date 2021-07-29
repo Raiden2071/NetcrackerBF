@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { switchAll, switchMap, tap } from 'rxjs/operators';
 import { User } from 'src/app/models/user';
+import { UserService } from 'src/app/shared/services/users.service';
 
 @Component({
   selector: 'app-edit-profile',
@@ -10,29 +13,44 @@ import { User } from 'src/app/models/user';
 export class EditProfileComponent implements OnInit {
 
   user: User;
-
-  editForm: FormGroup = this.fb.group({
-    firstName:   ['', [Validators.required]], 
-    lastName:    ['', [Validators.required]],
-    email:       ['', [Validators.email, Validators.required]],
-    description: ['', [Validators.required]]
-  });
+  editForm: FormGroup;
 
   constructor(
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private userService: UserService
   ) { }
 
   ngOnInit(): void {
-    (this.user as any) = {
-      firstName: "Slava",
-      lastName: "Danilchak",
-      description: "Slavik like marmalades",
-      email: "slava@gmail.com"
-    };
+    this.getUser(); 
+    // подумай, как исправить
+    this.editForm = this.fb.group({
+      firstName:   ['', [Validators.required]], 
+      lastName:    ['', [Validators.required]],
+      email:       ['', [Validators.email, Validators.required]],
+      description: ['', [Validators.required]]
+    });   
+    setTimeout(() => {
+      this.editForm = this.fb.group({
+        firstName:   [this.user?.firstName, [Validators.required]], 
+        lastName:    [this.user?.lastName, [Validators.required]],
+        email:       [this.user?.email, [Validators.email, Validators.required]],
+        description: ['', [Validators.required]]
+      });
+    }, 500);
   }
 
+
   getUser() {
-    
+    this.userService.userInfo$.subscribe(user => this.user = user);
+  }
+
+  onSubmit() {
+    if(this.editForm.valid) {
+    this.userService.editOne(this.user.id, this.editForm.value).subscribe(() => {
+      this.userService.userInfo$.subscribe(user => this.user = user);
+      this.userService.subject$.next(1);
+    });
+    }
   }
 
 }

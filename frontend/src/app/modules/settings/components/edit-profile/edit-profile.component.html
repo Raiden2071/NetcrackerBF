@@ -1,4 +1,5 @@
-<div class="m-5">
+<!-- ngModel почитай про формы и поменяй! -->
+<form *ngIf="user" [formGroup]="editForm" (ngSubmit)="onSubmit()" class="m-5">
   <h1 class="mb-4 text-center">Settings</h1>
   <div class="d-flex justify-content-between">
     <!-- left panel -->
@@ -18,7 +19,7 @@
           <span class="h4 text__input me-4">
             FirstName
           </span>
-          <input type="text" class="form-control" formControlName="firstName">
+          <input type="text" class="form-control" formControlName="firstName" >
         </div>
         <!-- lastName -->
         <div class="d-flex mb-4">
@@ -59,4 +60,8 @@
       <app-selection-menu></app-selection-menu>
     </div>
   </div>
-</div>
+</form>
+
+
+
+<!-- [class.border-danger]="ownerForm.controls.name?.errors && showErrors" -->

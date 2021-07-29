@@ -13,7 +13,7 @@
           [class.border-danger]="showErrors">
       </div>
       <!-- Password -->
-      <label class="mb-2" [class.text-danger]="showErrors">Пароль</label>
+      <label class="mb-2" [class.text-danger]="showErrors">Password</label>
       <div class="input-group input-group-merge pass rounded mb-3"
         [class.border-danger]="(loginForm.controls.password?.errors || loginForm.controls.confirmPassword?.errors) || showErrors">
         <input [type]="showPassword ? 'text' : 'password'" formControlName="password" class="form-control pass"
