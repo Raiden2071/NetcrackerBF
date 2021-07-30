@@ -16,18 +16,10 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.getUser();
-    // (this.user as any) = {
-    //   firstName: "Slava",
-    //   lastName: "Danilchak",
-    //   description: "Slavik like marmalades",
-    //   email: "slava@gmail.com"
-    // };
   }
 
   getUser() {
-    // this.usersService.getMe().subscribe(user => {this.user = user;});
     this.userService.userInfo$.subscribe((user) => this.user = user);
-    // this.usersService.subject$.next(1);
   }
 
 }

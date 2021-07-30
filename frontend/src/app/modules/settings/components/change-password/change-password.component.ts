@@ -26,8 +26,8 @@ export class ChangePasswordComponent implements OnInit {
   constructor(
     private userService: UserService,
     private fb: FormBuilder,
-    private modal: NgbModal,
-    private activeModal: NgbActiveModal
+    private modal: NgbModal
+    // private activeModal: NgbActiveModal
   ) { }
 
   ngOnInit(): void {
@@ -39,13 +39,13 @@ export class ChangePasswordComponent implements OnInit {
   }
 
   openRecovery() {
-    this.activeModal.close();
-    let modalRef = this.modal.open(RecoveryComponent);
+    // this.activeModal.close();
+    let modalRef = this.modal.open(RecoveryComponent, { centered: true });
     modalRef.componentInstance.isModal = true;
   }
 
   onSubmit() {
-    // create request for
+    // create request form
     if(this.changeForm.valid) {
       console.log(this.changeForm.value);
     }

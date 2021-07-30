@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../services/auth.service';
 
@@ -22,15 +22,20 @@ export class RecoveryComponent implements OnInit {
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private activeModal: NgbActiveModal
   ) { }
 
   ngOnInit(): void {
     this.recoveryForm.valueChanges.subscribe(() => this.showErrors = false);
   }
 
-  onSubmit(): void {
+  openLogin(): void {
+    this.activeModal.close();
+    this.router.navigateByUrl('/auth/login')
+  }
 
+  onSubmit(): void {
     if(this.recoveryForm.valid) {
       this.toastr.info(`Мы отправили ссылку для восстановления доступа к вашему аккаунту на адрес ${this.recoveryForm.value.email}.`, '', {
         timeOut: 2000,

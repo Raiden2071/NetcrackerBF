@@ -17,6 +17,7 @@
 .full_card {
   max-height: 450px;
 }
+
 .second__card {
   min-width: 90px;
 }
@@ -28,3 +29,9 @@
   -webkit-box-orient: vertical;
   overflow-y: hidden;
 }
+
+:host {
+  width: 100%;
+  height: 100%;
+}
+

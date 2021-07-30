@@ -1,8 +1,10 @@
-export interface Annoucnment {
+import { User } from "./user";
+
+export interface Announcement {
   id: number,
   title: String,
   description: String,
-  owner: number,
+  owner: User,
   date: Date,
   address: String,
   likes?: number

@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { switchMap, tap } from 'rxjs/operators';
 import { CreateAnnouncementComponent } from 'src/app/modals/create-announcement/components/create-announcement';
-import { Annoucnment } from 'src/app/models/annoucnment';
+import { Announcement } from 'src/app/models/announcements';
+import { announcementService } from 'src/app/shared/services/announcement.service';
 
 @Component({
   selector: 'app-announcment',
@@ -11,60 +12,31 @@ import { Annoucnment } from 'src/app/models/annoucnment';
 })
 export class AnnouncmentComponent implements OnInit {
 
-  annoucnments: Annoucnment[];
-  
-  searchProject: FormControl = new FormControl('');
-  term : any;
+  announcements: Announcement[];
+  // searchProject: FormControl = new FormControl('');
+  term: any;
   p: number = 1;
 
   constructor(
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private announcementService: announcementService,
   ) { }
 
   ngOnInit(): void {
-    (this.annoucnments as any) = [
-    {
-      title: "Title1",
-      description: "Some description",
-      owner: {
-        firstName: "Slava",
-        lastName: "Danilchak"
-      },
-      date: 24242422342,
-      address: "St. Williams",
-      likes: 2
-    },
-    {
-      title: "Title2",
-      description: "Some description Some description Some description Some description Some description Some description Some description Some description Some description",
-      owner: {
-        firstName: "Slava",
-        lastName: "Danilchak"
-      },
-      date: 24242422342,
-      address: "12345678900987654321",
-      likes: 2
-    },
-    {
-      title: "Title3",
-      description: "Some description",
-      owner: {
-        firstName: "Slava",
-        lastName: "Danilchak"
-      },
-      date: 24242422342,
-      address: "St. Williams",
-      likes: 2
-    }
-   ]
+    this.getAnnouncement();
   }
 
-  getUser() {
-
+  getAnnouncement() {
+    this.announcementService.getList().subscribe(announcement => this.announcements = announcement);
   }
 
   createAnnouncement(): void {
     const modalRef = this.modalService.open(CreateAnnouncementComponent, { centered: true });
+    modalRef.closed.pipe(
+      switchMap(announcement => this.announcementService.createOne(announcement))
+    ).subscribe(() =>
+      this.getAnnouncement()
+    );
   }
 
 }

@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Observable } from 'rxjs';
-import { switchAll, switchMap, tap } from 'rxjs/operators';
 import { User } from 'src/app/models/user';
 import { UserService } from 'src/app/shared/services/users.service';
 
@@ -31,10 +29,10 @@ export class EditProfileComponent implements OnInit {
     });   
     setTimeout(() => {
       this.editForm = this.fb.group({
-        firstName:   [this.user?.firstName, [Validators.required]], 
-        lastName:    [this.user?.lastName, [Validators.required]],
-        email:       [this.user?.email, [Validators.email, Validators.required]],
-        description: ['', [Validators.required]]
+        firstName:   [this.user?.firstName,   [Validators.required]], 
+        lastName:    [this.user?.lastName,    [Validators.required]],
+        email:       [this.user?.email,       [Validators.email, Validators.required]],
+        description: [this.user?.description, [Validators.required]]
       });
     }, 500);
   }
