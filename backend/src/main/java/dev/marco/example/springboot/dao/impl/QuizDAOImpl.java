@@ -64,6 +64,7 @@ public class QuizDAOImpl implements QuizDAO {
             preparedStatement.setDate(3, (Date) quiz.getCreationDate());
             preparedStatement.setLong(4, quiz.getQuizType().ordinal());
             preparedStatement.setLong(5, quiz.getCreatorId().longValue());
+            //preparedStatement.setLong(6, quiz.getQuestionsId().longValue());
             preparedStatement.executeUpdate();
 
             preparedStatement.clearParameters();
@@ -102,6 +103,7 @@ public class QuizDAOImpl implements QuizDAO {
             preparedStatement.setDate(3, (Date) quiz.getCreationDate());
             preparedStatement.setLong(4, quiz.getQuizType().ordinal());
             preparedStatement.setLong(5, quiz.getCreatorId().longValue());
+            //preparedStatement.setLong(5, quiz.getQuestionsId().longValue());
             preparedStatement.setLong(6, quiz.getId().longValue());
 
             preparedStatement.executeUpdate();
@@ -148,6 +150,7 @@ public class QuizDAOImpl implements QuizDAO {
                     .setQuizType(QuizType.values()[resultSet.getInt(QUIZ_TYPE)])
                     .setCreationDate(resultSet.getDate(CREATION_DATE))
                     .setCreatorId(BigInteger.valueOf(resultSet.getInt(CREATOR)))
+                    //.setQuestionsId(BigInteger.valueOf(resultSet.getInt(QUESTIONS_ID)))
                     .build();
 
         } catch (SQLException | QuizException e) {
@@ -191,6 +194,7 @@ public class QuizDAOImpl implements QuizDAO {
                         .setQuizType(QuizType.values()[resultSet.getInt(QUIZ_TYPE)])
                         .setCreationDate(resultSet.getDate(CREATION_DATE))
                         .setCreatorId(BigInteger.valueOf(resultSet.getInt(CREATOR)))
+                        //.setQuestionsId(BigInteger.valueOf(resultSet.getInt(QUESTIONS_ID)))
                         .build();
 
                 quizzes.add(quiz);
@@ -222,6 +226,7 @@ public class QuizDAOImpl implements QuizDAO {
                         .setQuizType(QuizType.values()[resultSet.getInt(QUIZ_TYPE)])
                         .setCreationDate(resultSet.getDate(CREATION_DATE))
                         .setCreatorId(BigInteger.valueOf(resultSet.getInt(CREATOR)))
+                        //.setQuestionsId(BigInteger.valueOf(resultSet.getInt(QUESTIONS_ID)))
                         .build();
                 quizzes.add(quiz);
             }
@@ -253,6 +258,7 @@ public class QuizDAOImpl implements QuizDAO {
                     .setQuizType(QuizType.values()[resultSet.getInt(QUIZ_TYPE)])
                     .setCreationDate(resultSet.getDate(CREATION_DATE))
                     .setCreatorId(BigInteger.valueOf(resultSet.getInt(CREATOR)))
+                    //.setQuestionsId(BigInteger.valueOf(resultSet.getInt(QUESTIONS_ID)))
                     .build();
 
         } catch (SQLException | QuizException e) {
@@ -281,6 +287,7 @@ public class QuizDAOImpl implements QuizDAO {
                         .setQuizType(QuizType.values()[resultSet.getInt(QUIZ_TYPE)])
                         .setCreationDate(resultSet.getDate(CREATION_DATE))
                         .setCreatorId(BigInteger.valueOf(resultSet.getInt(CREATOR)))
+                        //.setQuestionsId(BigInteger.valueOf(resultSet.getInt(QUESTIONS_ID)))
                         .build();
 
                 quizzes.add(quiz);

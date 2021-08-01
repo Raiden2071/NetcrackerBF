@@ -20,6 +20,11 @@ public class QuizController {
     @Autowired
     private QuizService quizService;
 
+    @Autowired
+    public void setTestConnection() throws DAOConfigException {
+        quizService.setTestConnection();
+    }
+
     private static final Logger log = Logger.getLogger(QuizController.class);
 
     @GetMapping("/")
@@ -51,7 +56,7 @@ public class QuizController {
     }
 
     @PutMapping("/{id}")
-    public Quiz updateQuiz(@PathVariable BigInteger id) throws DAOLogicException, QuizDoesNotExistException, QuizException {
+    public Quiz updateQuiz(@PathVariable BigInteger id) throws DAOLogicException, QuizDoesNotExistException, QuizException, QuestionDoesNotExistException {
         Quiz updatedQuiz = quizService.getQuizById(id);
         if (updatedQuiz == null) {
             log.error(QUIZ_NOT_FOUND_EXCEPTION);
@@ -92,7 +97,12 @@ public class QuizController {
         return null;
     }
 
-    @GetMapping("/finish")
+    @GetMapping("/game/{id}")
+    public void quizGame(String title, User user, Collection<Answer> answers) {
+
+    }
+
+    @GetMapping("/game/end")
     public void finishQuiz(String title, User user, Collection<Answer> answers) {
 
     }
