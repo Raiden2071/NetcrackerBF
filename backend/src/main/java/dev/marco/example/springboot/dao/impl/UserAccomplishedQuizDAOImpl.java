@@ -161,6 +161,7 @@ public class UserAccomplishedQuizDAOImpl implements UserAccomplishedQuizDAO {
       QuizAccomplishedImpl quizAccomplished = new QuizAccomplishedImpl();
       quizAccomplished.setCorrectAnswers(resultSet.getInt(CORRECT_ANSWERS));
       quizAccomplished.setBoolFavourite(resultSet.getInt(IS_FAVOURITE));
+      quizAccomplished.setQuizId(idQuiz);
       return quizAccomplished;
     } catch (SQLException throwables) {
       log.error(DAO_LOGIC_EXCEPTION + throwables.getMessage());

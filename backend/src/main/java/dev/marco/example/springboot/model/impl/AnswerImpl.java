@@ -64,4 +64,13 @@ public class AnswerImpl implements Answer {
         this.questionId = questionId;
     }
 
+    @Override
+    public String toString() {
+        return "AnswerImpl{" +
+                "id=" + id +
+                ", value='" + value + '\'' +
+                ", answer=" + answer +
+                ", questionId=" + questionId +
+                '}';
+    }
 }

@@ -1,5 +1,7 @@
 package dev.marco.example.springboot.service.impl;
 
+import dev.marco.example.springboot.service.QuestionService;
+import dev.marco.example.springboot.service.QuizService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import dev.marco.example.springboot.dao.AnswerDAO;
@@ -16,17 +18,20 @@ import java.util.List;
 @Service
 public class GameServiceImpl implements GameService {
 
-    private QuestionDAO questionDAO;
-    private AnswerDAO answerDAO;
-    private UserAccomplishedQuizDAO userAccomplishedQuizDAO;
-
-    private final int NUMBER_OF_QUESTIONS = 10;
+    private final QuestionDAO questionDAO;
+    private final AnswerDAO answerDAO;
+    private final UserAccomplishedQuizDAO userAccomplishedQuizDAO;
+    private final QuizService quizService;
+    private final QuestionService questionService;
 
     @Autowired
-    public GameServiceImpl(QuestionDAO questionDAO, AnswerDAO answerDAO, UserAccomplishedQuizDAO userAccomplishedQuizDAO) {
+    public GameServiceImpl(QuestionDAO questionDAO, AnswerDAO answerDAO,
+                           UserAccomplishedQuizDAO userAccomplishedQuizDAO, QuizService quizService, QuestionService questionService) {
         this.questionDAO = questionDAO;
         this.answerDAO = answerDAO;
         this.userAccomplishedQuizDAO = userAccomplishedQuizDAO;
+        this.quizService = quizService;
+        this.questionService = questionService;
     }
 
     @Override
@@ -37,8 +42,13 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public void sendGameQuiz(String title) {
-
+    public Quiz sendGameQuiz(String title) throws DAOLogicException, QuizDoesNotExistException,
+            QuizException, QuestionDoesNotExistException, AnswerDoesNotExistException {
+        Quiz quiz = quizService.getQuizByTitle(title);
+        BigInteger quizId = quiz.getId();
+        List<Question> questionList = questionService.getQuestionsByQuiz(quizId);
+        quiz.setQuestions(questionList);
+        return quiz;
     }
 
     @Override
