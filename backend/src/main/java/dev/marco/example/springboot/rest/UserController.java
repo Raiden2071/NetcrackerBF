@@ -1,11 +1,12 @@
 package dev.marco.example.springboot.rest;
 
+import dev.marco.example.springboot.model.RegisterRequest;
+import dev.marco.example.springboot.model.impl.LoginRequestImpl;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import dev.marco.example.springboot.exception.*;
 import dev.marco.example.springboot.model.Quiz;
 import dev.marco.example.springboot.model.User;
@@ -29,14 +30,22 @@ public class UserController implements RegexPatterns {
     private MailSenderService mailSenderService;
 
     @PostMapping("/register")
-    public void createUser(String email, String password, String name, String surname) {
+    public void createUser(@RequestBody RegisterRequest registerRequest) {
         try {
-            userService.validateNewUser(email, password, name, surname);
-            BigInteger userId = userService.buildNewUser(email, password, name, surname);
+            userService.validateNewUser(
+                    registerRequest.getEmail(),
+                    registerRequest.getPassword(),
+                    registerRequest.getName(),
+                    registerRequest.getSurname());
+            BigInteger userId = userService.buildNewUser(
+                    registerRequest.getEmail(),
+                    registerRequest.getPassword(),
+                    registerRequest.getName(),
+                    registerRequest.getSurname());
 
             User user = new UserImpl.UserBuilder()
                     .setId(userId)
-                    .setEmail(email)
+                    .setEmail(registerRequest.getEmail())
                     .build();
 
             mailSenderService.sendEmail(user);
@@ -50,24 +59,25 @@ public class UserController implements RegexPatterns {
         return "Test";
     }
 
-    //return user?
     @PostMapping("/login")
-    public void tryToAuthorize(String email, String password) {
-        log.info("email: " + email + ", password: " + password);
+    public ResponseEntity<User> tryToAuthorize(@RequestBody LoginRequestImpl user) {
         try { 
-            if(!email.matches(mailPattern)) {
+            if(!user.getEmail().matches(mailPattern)) {
                 throw new UserException(MessagesForException.INVALID_EMAIL);
             }
-            if(!password.matches(passPattern)) {
+            if(!user.getPassword().matches(passPattern)) {
                 throw new UserException(MessagesForException.INVALID_PASSWORD);
             }
-            User user = new UserImpl.UserBuilder()
-                    .setEmail(email)
-                    .setPassword(password)
+            User responseUser = new UserImpl.UserBuilder()
+                    .setEmail(user.getEmail())
+                    .setPassword(user.getPassword())
                     .build();
-            User receivedUser = userService.authorize(user);
+            User receivedUser = userService.authorize(responseUser);
+
+            return ResponseEntity.ok(receivedUser);
         } catch (DAOLogicException | UserException e) {
             log.error(e.getMessage());
+            return ResponseEntity.notFound().build();
         }
     }
 
@@ -79,9 +89,13 @@ public class UserController implements RegexPatterns {
 
     }
 
+
     @PostMapping("/recover")
-    public void recoverPassword(User user) {
+    public void recoverPassword(@RequestBody String email) {
         try {
+            User user = new UserImpl.UserBuilder()
+                    .setEmail(email)
+                    .build();
             userService.recoverPassword(user);
         } catch (DAOLogicException | MailException | UserException e) {
             log.error("a");

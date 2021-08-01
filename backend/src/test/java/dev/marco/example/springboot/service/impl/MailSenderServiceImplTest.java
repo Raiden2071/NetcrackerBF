@@ -36,7 +36,7 @@ class MailSenderServiceImplTest {
     }
   }
 
-  @Test
+  //@Test
   @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
   void testSendEmail() {
     try {
