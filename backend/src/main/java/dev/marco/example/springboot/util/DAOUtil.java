@@ -10,7 +10,7 @@ import java.util.Properties;
 
 public class DAOUtil {
 
-  private static final String PATH_PROPERTY = "backend/src/main/resources/sqlScripts.properties";
+  private static final String PATH_PROPERTY = "./src/main/resources/sqlScripts.properties";
   private static final String DRIVER_PATH_PROPERTY = "oracle.jdbc.OracleDriver";
 
   private static final Logger log = Logger.getLogger(DAOUtil.class);
