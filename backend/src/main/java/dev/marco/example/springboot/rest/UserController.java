@@ -3,12 +3,13 @@ package dev.marco.example.springboot.rest;
 import dev.marco.example.springboot.model.RegisterRequest;
 import dev.marco.example.springboot.model.impl.LoginRequestImpl;
 import org.apache.commons.lang3.StringUtils;
+import dev.marco.example.springboot.model.impl.QuizAccomplishedImpl;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import dev.marco.example.springboot.exception.*;
-import dev.marco.example.springboot.model.Quiz;
 import dev.marco.example.springboot.model.User;
 import dev.marco.example.springboot.model.impl.UserImpl;
 import dev.marco.example.springboot.service.MailSenderService;
@@ -16,7 +17,7 @@ import dev.marco.example.springboot.service.UserService;
 import dev.marco.example.springboot.util.RegexPatterns;
 
 import java.math.BigInteger;
-import java.util.List;
+import java.util.Set;
 
 @RestController
 public class UserController implements RegexPatterns {
@@ -28,6 +29,11 @@ public class UserController implements RegexPatterns {
 
     @Autowired
     private MailSenderService mailSenderService;
+
+    @Autowired
+    public void setTestConnection() throws DAOConfigException {
+        userService.setTestConnection();
+    }
 
     @PostMapping("/register")
     public void createUser(@RequestBody RegisterRequest registerRequest) {
@@ -61,7 +67,7 @@ public class UserController implements RegexPatterns {
 
     @PostMapping("/login")
     public ResponseEntity<User> tryToAuthorize(@RequestBody LoginRequestImpl user) {
-        try { 
+        try {
             if(!user.getEmail().matches(mailPattern)) {
                 throw new UserException(MessagesForException.INVALID_EMAIL);
             }
@@ -103,18 +109,35 @@ public class UserController implements RegexPatterns {
     }
 
     @PutMapping("/updatePassword")
-    public void updatePassword(BigInteger id, String newPassword) {
-
-        //free
-        //userService.updateUsersPassword(id, newPassword);
+    public void updatePassword(BigInteger id, String newPassword) throws UserException {
+        try {
+            if (id == null) {
+                throw new UserDoesNotExistException(MessagesForException.USER_NOT_FOUND_EXCEPTION);
+            }
+            if (!newPassword.matches(passPattern)) {
+                throw new UserException(MessagesForException.INVALID_PASSWORD);
+            }
+            userService.updateUsersPassword(id, newPassword);
+        } catch (DAOLogicException | UserDoesNotExistException e) {
+            e.printStackTrace();
+        }
     }
 
     public void registrationConfirm(User user) {
         //free
+
     }
 
     public void confirmEmail(String confirmationCode) {
         //free
+        try {
+            if(StringUtils.isEmpty(confirmationCode)) {
+                throw new Exception(MessagesForException.EMAIL_ERROR);
+            }
+            mailSenderService.confirmEmail(confirmationCode);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public User getUser(BigInteger userId) {
@@ -122,7 +145,7 @@ public class UserController implements RegexPatterns {
         return null;
     }
 
-    public List<Quiz> getAccomplishedQuizes(BigInteger userId) {
+    public Set<QuizAccomplishedImpl> getAccomplishedQuizes(BigInteger userId) {
         //free
         //return userService.getAccomplishedQuizById(userId);
         return null;

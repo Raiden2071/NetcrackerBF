@@ -100,7 +100,7 @@ class QuizServiceImplTest {
 
             assertNotEquals(quiz.getCreationDate(), updatedQuiz.getCreationDate());
 
-        } catch (QuizDoesNotExistException | DAOLogicException | QuizException e) {
+        } catch (QuizDoesNotExistException | DAOLogicException | QuizException | QuestionDoesNotExistException e) {
             log.error("Error while testing updateQuiz in quizService", e);
             fail();
         }

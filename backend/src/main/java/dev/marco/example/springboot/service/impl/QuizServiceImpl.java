@@ -1,5 +1,6 @@
 package dev.marco.example.springboot.service.impl;
 
+import dev.marco.example.springboot.dao.QuestionDAO;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,9 @@ public class QuizServiceImpl implements QuizService {
 
     @Autowired
     private QuizDAO quizDAO;
+
+    @Autowired
+    private QuestionDAO questionDAO;
 
     @Override
     public void setTestConnection() throws DAOConfigException {
@@ -52,14 +56,14 @@ public class QuizServiceImpl implements QuizService {
                     .setCreatorId(userId)
                     .build();
 
-            //validateNewQuiz(title, description, questions, userId);
+            validateNewQuiz(title, description, questions, userId);
 
             return quizDAO.createQuiz(quiz);
 
         } catch (DAOLogicException e) {
             log.error(DAO_LOGIC_EXCEPTION + " in buildNewQuiz()");
             throw new DAOLogicException(DAO_LOGIC_EXCEPTION, e);
-        } catch (UserDoesNotExistException e) {
+        } catch (UserDoesNotExistException | UserException e) {
             log.error(USER_NOT_FOUND_EXCEPTION + " in buildNewQuiz()");
             throw new QuestionException(USER_NOT_FOUND_EXCEPTION, e);
         }
@@ -89,11 +93,13 @@ public class QuizServiceImpl implements QuizService {
 
     @Override
     public void updateQuiz(Quiz updatedQuiz)
-            throws QuizDoesNotExistException, DAOLogicException {
+            throws QuizDoesNotExistException, DAOLogicException, QuestionDoesNotExistException {
 
         Quiz quizFromDAO = quizDAO.getQuizById(updatedQuiz.getId());
 
         if (quizFromDAO != null) {
+            List<Question> questions = questionDAO.getAllQuestions(updatedQuiz.getId());
+            updatedQuiz.setQuestions(questions);
             quizDAO.updateQuiz(updatedQuiz);
         } else {
             log.error(QUIZ_NOT_FOUND_EXCEPTION + " in updateQuiz");
