@@ -8,13 +8,18 @@ import { AuthGuard } from './modules/auth/auth.guard';
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: '/auth/login'},
   {
-    path: '', 
+    path: '',
     component: LayoutComponent,
     children: [
-      { path: '', pathMatch: 'full', redirectTo: 'test'},
-      { path: 'test', loadChildren: () => import('./modules/test/test.module').then(m => m.TestModule) }
+      { path: '', pathMatch: 'full', redirectTo: 'test' },
+      { path: 'profile', loadChildren: () => import('./modules/profile/profile/profile.module').then(m => m.ProfileModule) },
+      { path: 'test', loadChildren: () => import('./modules/test/test.module').then(m => m.TestModule) },
+      { path: 'dashboard', loadChildren: () => import('./modules/dashboard/dashboard.module').then(m => m.DashboardModule) },
+      { path: 'announcment', loadChildren: () => import('./modules/announcement/announcment.module').then(m => m.AnnouncmentModule) },
+      { path: 'settings', loadChildren: () => import('./modules/settings/settings.module').then(m => m.SettingsModule) }
+
     ],
-    // canActivate: [AuthGuard]
+    canActivate: [AuthGuard]
   },
   {
     path: 'auth', loadChildren: () => import('./modules/auth/auth.module').then(m => m.AuthModule)
@@ -23,7 +28,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, { useHash: true })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

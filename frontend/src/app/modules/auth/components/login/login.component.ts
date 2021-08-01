@@ -14,15 +14,15 @@ export class LoginComponent implements OnInit {
   showErrors = false;
 
   loginForm: FormGroup = this.fb.group({
-    email:    ['', [Validators.email, Validators.required]],
-    password: ['', [Validators.email, Validators.required]],
-    remember: [true]
+    email: ['', [Validators.email, Validators.required]],
+    password:   ['', [Validators.minLength(8), Validators.required]],
+    remember:   [true]
   });
 
   constructor(
     private router: Router,
     private fb: FormBuilder,
-    private authService: AuthService
+    private authService: AuthService,
     ) { }
 
   ngOnInit(): void {
@@ -33,13 +33,15 @@ export class LoginComponent implements OnInit {
     if(this.loginForm.valid) {
       const data = this.loginForm.value;
       this.authService.login(data, data.remember).subscribe(() => {
-        // this.router.navigateByUrl('')
+        this.router.navigateByUrl('/profile')
+      },err => {
+        this.showErrors = true;
       });
     }
     else {
       this.showErrors = true;
     }
-    
+
   }
 
 }

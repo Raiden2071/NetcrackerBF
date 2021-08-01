@@ -1,6 +1,7 @@
+import { User } from "../user";
+
 export interface AuthResponse {
-  jwt: string; 
-  // user: User;
+  jwt: string;
+  user: User;
 }
 
-// import { User } from '@models/user/user';

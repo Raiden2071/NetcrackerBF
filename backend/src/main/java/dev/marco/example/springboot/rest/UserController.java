@@ -35,32 +35,33 @@ public class UserController implements RegexPatterns {
     }
 
     @PostMapping("/auth/local/register")
-    public void createUser(@RequestBody RegisterRequest registerRequest) {
+    public void createUser(@RequestBody UserImpl user) {
+        log.info("mail: " + user.getEmail() + "firstName: " + user.getFirstName());
         try {
             userService.validateNewUser(
-                    registerRequest.getEmail(),
-                    registerRequest.getPassword(),
-                    registerRequest.getFirstName(),
-                    registerRequest.getLastName());
+                    user.getEmail(),
+                    user.getPassword(),
+                    user.getFirstName(),
+                    user.getLastName());
             BigInteger userId = userService.buildNewUser(
-                    registerRequest.getEmail(),
-                    registerRequest.getPassword(),
-                    registerRequest.getFirstName(),
-                    registerRequest.getLastName());
+                    user.getEmail(),
+                    user.getPassword(),
+                    user.getFirstName(),
+                    user.getLastName());
 
-            User user = new UserImpl.UserBuilder()
+            User user1 = new UserImpl.UserBuilder()
                     .setId(userId)
-                    .setEmail(registerRequest.getEmail())
+                    .setEmail(user.getEmail())
                     .build();
 
-            mailSenderService.sendEmail(user);
+            mailSenderService.sendEmail(user1);
         } catch (DAOLogicException | MailException | UserException e) {
-            log.error("a");
+            log.error(e.getMessage());
         }
     }
 
     @PostMapping("/auth/local")
-    public ResponseEntity<User> tryToAuthorize(@RequestBody LoginRequestImpl user) {
+    public ResponseEntity<User> tryToAuthorize(@RequestBody UserImpl user) {
         try {
             if(!user.getEmail().matches(mailPattern)) {
                 throw new UserException(MessagesForException.INVALID_EMAIL);
@@ -68,11 +69,7 @@ public class UserController implements RegexPatterns {
             if(!user.getPassword().matches(passPattern)) {
                 throw new UserException(MessagesForException.INVALID_PASSWORD);
             }
-            User responseUser = new UserImpl.UserBuilder()
-                    .setEmail(user.getEmail())
-                    .setPassword(user.getPassword())
-                    .build();
-            User receivedUser = userService.authorize(responseUser);
+            User receivedUser = userService.authorize(user);
 
             return ResponseEntity.ok(receivedUser);
         } catch (DAOLogicException | UserException e) {
