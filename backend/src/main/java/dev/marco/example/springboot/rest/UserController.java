@@ -1,7 +1,5 @@
 package dev.marco.example.springboot.rest;
 
-import dev.marco.example.springboot.model.RegisterRequest;
-import dev.marco.example.springboot.model.impl.LoginRequestImpl;
 import org.apache.commons.lang3.StringUtils;
 import dev.marco.example.springboot.model.impl.QuizAccomplishedImpl;
 import org.apache.log4j.Logger;
