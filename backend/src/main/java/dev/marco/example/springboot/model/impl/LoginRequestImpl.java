@@ -4,22 +4,22 @@ import dev.marco.example.springboot.model.LoginRequest;
 
 public class LoginRequestImpl implements LoginRequest {
 
-    private String email;
+    private String identifier;
     private String password;
 
     public LoginRequestImpl(String email, String password) {
-        this.email = email;
+        this.identifier = email;
         this.password = password;
     }
 
     @Override
     public String getEmail() {
-        return email;
+        return identifier;
     }
 
     @Override
     public void setEmail(String email) {
-        this.email = email;
+        this.identifier = email;
     }
 
     @Override

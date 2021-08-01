@@ -10,12 +10,12 @@ public interface RegisterRequest {
 
     String getPassword();
 
-    void setName(String name);
+    void setFirstName(String firstName);
 
-    String getName();
+    String getFirstName();
 
-    void setSurname(String surname);
+    void setLastName(String lastName);
 
-    String getSurname();
+    String getLastName();
 
 }

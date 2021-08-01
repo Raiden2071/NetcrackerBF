@@ -4,7 +4,6 @@ import dev.marco.example.springboot.model.RegisterRequest;
 import dev.marco.example.springboot.model.impl.LoginRequestImpl;
 import org.apache.commons.lang3.StringUtils;
 import dev.marco.example.springboot.model.impl.QuizAccomplishedImpl;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -35,19 +34,19 @@ public class UserController implements RegexPatterns {
         userService.setTestConnection();
     }
 
-    @PostMapping("/register")
+    @PostMapping("/auth/local/register")
     public void createUser(@RequestBody RegisterRequest registerRequest) {
         try {
             userService.validateNewUser(
                     registerRequest.getEmail(),
                     registerRequest.getPassword(),
-                    registerRequest.getName(),
-                    registerRequest.getSurname());
+                    registerRequest.getFirstName(),
+                    registerRequest.getLastName());
             BigInteger userId = userService.buildNewUser(
                     registerRequest.getEmail(),
                     registerRequest.getPassword(),
-                    registerRequest.getName(),
-                    registerRequest.getSurname());
+                    registerRequest.getFirstName(),
+                    registerRequest.getLastName());
 
             User user = new UserImpl.UserBuilder()
                     .setId(userId)
@@ -60,12 +59,7 @@ public class UserController implements RegexPatterns {
         }
     }
 
-    @GetMapping("/test")
-    public String test() {
-        return "Test";
-    }
-
-    @PostMapping("/login")
+    @PostMapping("/auth/local")
     public ResponseEntity<User> tryToAuthorize(@RequestBody LoginRequestImpl user) {
         try {
             if(!user.getEmail().matches(mailPattern)) {
@@ -94,7 +88,6 @@ public class UserController implements RegexPatterns {
     public void editUser(User user) {
 
     }
-
 
     @PostMapping("/recover")
     public void recoverPassword(@RequestBody String email) {

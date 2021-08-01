@@ -4,10 +4,10 @@ import dev.marco.example.springboot.model.RegisterRequest;
 
 public class RegisterRequestImpl implements RegisterRequest {
 
+    private String firstName;
+    private String lastName;
     private String email;
     private String password;
-    private String name;
-    private String surname;
 
     @Override
     public String getEmail() {
@@ -30,22 +30,22 @@ public class RegisterRequestImpl implements RegisterRequest {
     }
 
     @Override
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
     @Override
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     @Override
-    public String getSurname() {
-        return surname;
+    public String getLastName() {
+        return lastName;
     }
 
     @Override
-    public void setSurname(String surname) {
-        this.surname = surname;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 }
