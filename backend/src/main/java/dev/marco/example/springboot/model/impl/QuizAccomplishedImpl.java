@@ -3,59 +3,60 @@ package dev.marco.example.springboot.model.impl;
 import java.math.BigInteger;
 
 public class QuizAccomplishedImpl {
-    private int correctAnswers;
-    private Boolean isFavourite;
-    private BigInteger quizId;
 
-    public QuizAccomplishedImpl(int correctAnswers, Boolean isFavourite, BigInteger quizId) {
-        this.correctAnswers = correctAnswers;
-        this.isFavourite = isFavourite;
-        this.quizId = quizId;
-    }
+  private int correctAnswers;
+  private Boolean isFavourite;
+  private BigInteger quizId;
 
-    public QuizAccomplishedImpl(int correctAnswers, BigInteger quizId) {
-        this.correctAnswers = correctAnswers;
-        this.quizId = quizId;
-    }
+  public QuizAccomplishedImpl(int correctAnswers, Boolean isFavourite, BigInteger quizId) {
+    this.correctAnswers = correctAnswers;
+    this.isFavourite = isFavourite;
+    this.quizId = quizId;
+  }
 
-    public QuizAccomplishedImpl() {
-    }
+  public QuizAccomplishedImpl(int correctAnswers, BigInteger quizId) {
+    this.isFavourite = false;
+    this.correctAnswers = correctAnswers;
+    this.quizId = quizId;
+  }
 
-    public int getCorrectAnswers() {
-        return correctAnswers;
-    }
+  private QuizAccomplishedImpl() {
+  }
 
-    public void setCorrectAnswers(int correctAnswers) {
-        this.correctAnswers = correctAnswers;
-    }
+  public int getCorrectAnswers() {
+    return correctAnswers;
+  }
 
-    public Boolean getFavourite() {
-        return isFavourite;
-    }
+  public void setCorrectAnswers(int correctAnswers) {
+    this.correctAnswers = correctAnswers;
+  }
 
-    public void setBoolFavourite(int isFavourite) {
-        if(isFavourite == 1)
-            this.isFavourite = true;
-        else if(isFavourite == 0)
-            this.isFavourite = false;
-    }
+  public Boolean getFavourite() {
+    return isFavourite;
+  }
 
-    public int getIntFavourite() {
-        if(this.isFavourite)
-            return 1;
-        else return 0;
+  public void setBoolFavourite(int isFavourite) {
+    if (isFavourite == 1) {
+      this.isFavourite = true;
+    } else if (isFavourite == 0) {
+      this.isFavourite = false;
     }
+  }
 
-    public void setFavourite(Boolean favourite) {
-        isFavourite = favourite;
-    }
+  public int getIntFavourite() {
+    return this.isFavourite ? 1 : 0;
+  }
 
-    public BigInteger getQuizId() {
-        return quizId;
-    }
+  public void setFavourite(Boolean favourite) {
+    isFavourite = favourite;
+  }
 
-    public void setQuizId(BigInteger quizId) {
-        this.quizId = quizId;
-    }
+  public BigInteger getQuizId() {
+    return quizId;
+  }
+
+  public void setQuizId(BigInteger quizId) {
+    this.quizId = quizId;
+  }
 
 }

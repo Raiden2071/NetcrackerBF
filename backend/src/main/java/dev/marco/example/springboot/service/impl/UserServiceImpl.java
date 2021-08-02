@@ -255,10 +255,8 @@ public class UserServiceImpl implements UserService {
   @Override
   public Set<QuizAccomplishedImpl> getFavoriteQuizesByUser(BigInteger id)
       throws DAOLogicException, UserDoesNotExistException {
-    User userFromDAO = userDAO.getUserById(id);
-    if (userFromDAO == null) {
-      throw new UserDoesNotExistException(USER_NOT_FOUND_EXCEPTION);
-    }
+    userDAO.getUserById(id);
+
     return userAccomplishedQuizDAO.getFavoriteQuizesByUser(id);
   }
 
