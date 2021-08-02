@@ -126,4 +126,8 @@ class UserControllerTest {
         verify(userService).updateUsersPassword(BigInteger.ONE, "12345Qwerty");
     }
 
+    @Test
+    void getFavoriteQuizesByUserTest() {
+
+    }
 }

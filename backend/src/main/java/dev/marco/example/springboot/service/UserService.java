@@ -51,7 +51,7 @@ public interface UserService {
 
   Set<QuizAccomplishedImpl> getAccomplishedQuizesByUser(BigInteger id) throws DAOLogicException, QuizDoesNotExistException, UserDoesNotExistException;
 
-  Set<QuizAccomplishedImpl> getFavoriteQuizesByUser(BigInteger id) throws DAOLogicException, UserDoesNotExistException;
+  Set<QuizAccomplishedImpl> getFavoriteQuizesByUser(BigInteger id) throws DAOLogicException, UserDoesNotExistException, QuizDoesNotExistException;
 
   void editAccomplishedQuiz(BigInteger idUser, QuizAccomplishedImpl newQuiz) throws DAOLogicException;
 

@@ -78,14 +78,6 @@ public class UserController implements RegexPatterns {
         }
     }
 
-    public void deleteUser(User user) {
-
-    }
-
-    public void editUser(User user) {
-
-    }
-
     @PostMapping("/recover")
     public void recoverPassword(@RequestBody String email) {
         try {
@@ -184,5 +176,15 @@ public class UserController implements RegexPatterns {
         //free
         //return userService.getAccomplishedQuizById(userId);
         return null;
+    }
+
+    @GetMapping("/user/favorite")
+    public Set<QuizAccomplishedImpl> getFavoriteQuizesByUser(@RequestBody UserImpl user) {
+        try {
+            return userService.getFavoriteQuizesByUser(user.getId());
+        } catch (DAOLogicException | UserDoesNotExistException | QuizDoesNotExistException e) {
+            log.error(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
+        }
     }
 }
