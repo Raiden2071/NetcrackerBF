@@ -1,5 +1,7 @@
 package dev.marco.example.springboot.service.impl;
 
+import dev.marco.example.springboot.model.impl.QuizAccomplishedImpl;
+import java.util.Set;
 import org.apache.log4j.Logger;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -242,12 +244,43 @@ class UserServiceImplTest {
   @Test
   void testGetAccomplishedQuizesByUser() {
     try {
+      userService.addAccomplishedQuiz(BigInteger.ONE, new QuizAccomplishedImpl(1, BigInteger.ONE));
       assertNotNull(userService.getAccomplishedQuizesByUser(BigInteger.ONE));
     } catch (DAOLogicException | QuizDoesNotExistException | UserDoesNotExistException e) {
       fail();
     }
   }
 
+  @Test
+  void testGetFavoriteQuizes() {
+    try {
+      userService
+          .addAccomplishedQuiz(BigInteger.ONE, new QuizAccomplishedImpl(1, true, BigInteger.ONE));
+      assertNotNull(userService.getFavoriteQuizesByUser(BigInteger.ONE));
+    } catch (DAOLogicException | UserDoesNotExistException e) {
+      e.printStackTrace();
+      log.error(e.getMessage());
+      fail();
+    }
+  }
 
+  @Test
+  void testGetAccomplishedQuizById() {
+    try {
+      assertNotNull(userService.getAccomplishedQuizById(BigInteger.ONE, BigInteger.ONE));
+    } catch (QuizDoesNotExistException | DAOLogicException e) {
+      log.error(e.getMessage());
+      fail();
+    }
+  }
 
+  @Test
+  void testIsAccomplishedQuiz() {
+    try {
+      assertTrue(userService.isAccomplishedQuiz(BigInteger.ONE, BigInteger.ONE));
+    } catch (DAOLogicException e) {
+      log.error(e.getMessage());
+      fail();
+    }
+  }
 }
