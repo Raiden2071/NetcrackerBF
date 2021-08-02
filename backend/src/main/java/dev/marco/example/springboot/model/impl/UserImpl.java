@@ -1,14 +1,17 @@
 package dev.marco.example.springboot.model.impl;
 
+import dev.marco.example.springboot.exception.MessagesForException;
 import dev.marco.example.springboot.exception.UserException;
 import dev.marco.example.springboot.model.Quiz;
 import dev.marco.example.springboot.model.User;
 import dev.marco.example.springboot.model.UserRoles;
 
+import dev.marco.example.springboot.service.impl.UserServiceImpl;
 import java.math.BigInteger;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.apache.log4j.Logger;
 
 import static dev.marco.example.springboot.exception.MessagesForException.*;
 
@@ -25,6 +28,8 @@ public class UserImpl implements User {
   private Set<Quiz> favoriteQuizes;
   private Set<Quiz> accomplishedQuizes;
   private String emailCode;
+
+  private static final Logger log = Logger.getLogger(UserImpl.class);
 
   private UserImpl() {
 
@@ -171,48 +176,60 @@ public class UserImpl implements User {
 
     public UserBuilder setId(BigInteger id) throws UserException {
       if (id == null) {
+        log.error(EMPTY_USER_ID);
         throw new UserException(EMPTY_USER_ID);
       }
       newUser.id = id;
+      log.debug("Id=" + id + " was added in user builder");
       return this;
     }
 
     public UserBuilder setFirstName(String firstName) throws UserException {
       if (firstName == null) {
+        log.error(INVALID_USERS_FIRST_NAME);
         throw new UserException(NULL_FIRST_NAME);
       }
       if (firstName.isBlank() || firstName.length() < 3) {
+        log.error(INVALID_USERS_FIRST_NAME);
         throw new UserException(EMPTY_FIRST_NAME);
       }
       newUser.firstName = firstName;
+      log.debug("First name=" + firstName + " was added in user builder");
       return this;
     }
 
     public UserBuilder setLastName(String lastName) throws UserException {
       if (lastName == null) {
+        log.error(INVALID_USERS_LAST_NAME);
         throw new UserException(NULL_LAST_NAME);
       }
       if (lastName.isBlank() || lastName.length() < 3) {
+        log.error(INVALID_USERS_LAST_NAME);
         throw new UserException(EMPTY_LAST_NAME);
       }
       newUser.lastName = lastName;
+      log.debug("Last name=" + lastName + " was added in user builder");
       return this;
     }
 
     public UserBuilder setEmail(String email) throws UserException {
       if (email == null) {
+        log.error(INVALID_USERS_EMAIL);
         throw new UserException(NULL_EMAIL);
       }
       if (email.isBlank()) {
+        log.error(INVALID_USERS_EMAIL);
         throw new UserException(EMPTY_EMAIL);
       }
       Pattern pattern = Pattern.compile(EMAIL_PATTERN);
       Matcher matcher = pattern.matcher(email);
 
       if (!matcher.find()) {
+        log.error(INVALID_USERS_EMAIL + " with email=" + email + " in user builder");
         throw new UserException(INVALID_USERS_EMAIL);
       }
       newUser.email = email;
+      log.debug("Email=" + email + " was added in user builder");
       return this;
     }
 

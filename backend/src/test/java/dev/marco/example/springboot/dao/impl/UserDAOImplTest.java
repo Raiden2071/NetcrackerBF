@@ -1,5 +1,6 @@
 package dev.marco.example.springboot.dao.impl;
 
+import dev.marco.example.springboot.model.UserRoles;
 import org.apache.log4j.Logger;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
@@ -424,4 +425,15 @@ class UserDAOImplTest {
     }
   }
 
+  @Test
+  void testUpdateUserRole() {
+    try {
+      userDAO.updateUserRole(BigInteger.ONE, UserRoles.USER);
+      assertEquals(UserRoles.USER, userDAO.getUserById(BigInteger.ONE).getUserRole());
+
+    } catch (DAOLogicException | UserDoesNotExistException e) {
+      log.error("Error while testing updateExistUsersEmailCode " + e.getMessage());
+      fail();
+    }
+  }
 }

@@ -49,9 +49,14 @@ public class UserServiceImpl implements UserService {
       throws UserException, DAOLogicException {
     try {
       validateNewUser(email, password, firstName, lastName);
+      log.debug("User with email=" + email + " was validated!");
 
-      if (userDAO.getUserByEmail(email) != null) {
-        throw new UserException(USER_ALREADY_EXIST);
+      try {
+        if (userDAO.getUserByEmail(email) != null) {
+          throw new UserException(USER_ALREADY_EXIST);
+        }
+      } catch (UserDoesNotExistException e) {
+        log.debug("User with email=" + email + " doesn't exist");
       }
 
       User user = new UserImpl.UserBuilder()
@@ -60,10 +65,10 @@ public class UserServiceImpl implements UserService {
           .setEmail(email)
           .setPassword(password)
           .build();
-
+      log.debug("User with email=" + email + " was build!");
       return userDAO.createUser(user);
-    } catch (DAOLogicException | UserDoesNotExistException e) {
-      log.info(DAO_LOGIC_EXCEPTION);
+    } catch (DAOLogicException e) {
+      log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
       throw new DAOLogicException(DAO_LOGIC_EXCEPTION, e);
     }
 
@@ -77,7 +82,7 @@ public class UserServiceImpl implements UserService {
       }
       throw new UserException(USERS_DOESNT_EXIT);
     } catch (DAOLogicException | UserDoesNotExistException | UserDoesNotConfirmedEmailException e) {
-      log.info(DAO_LOGIC_EXCEPTION);
+      log.info(DAO_LOGIC_EXCEPTION + e.getMessage());
       throw new DAOLogicException(DAO_LOGIC_EXCEPTION + e.getMessage(), e);
     }
   }
