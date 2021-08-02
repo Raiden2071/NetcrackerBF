@@ -6,6 +6,7 @@ import dev.marco.example.springboot.service.DashboardService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
@@ -16,8 +17,9 @@ public class DashboardController {
     @Autowired
     private DashboardService dashboardService;
 
-    private static final Logger log = Logger.getLogger(UserController.class);
+    private static final Logger log = Logger.getLogger(DashboardController.class);
 
+    @GetMapping("/")
     public void generateDashboard(@RequestBody User user) {
         try {
             dashboardService.generateDashboard(user);

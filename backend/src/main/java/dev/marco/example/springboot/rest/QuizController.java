@@ -2,10 +2,12 @@ package dev.marco.example.springboot.rest;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import dev.marco.example.springboot.exception.*;
 import dev.marco.example.springboot.model.*;
 import dev.marco.example.springboot.service.QuizService;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigInteger;
 import java.util.Collection;
@@ -27,56 +29,94 @@ public class QuizController {
 
     private static final Logger log = Logger.getLogger(QuizController.class);
 
+    //done
     @GetMapping("/")
-    public List<Quiz> showAllQuizzes() throws DAOLogicException, QuizDoesNotExistException {
-        List<Quiz> quizzes = quizService.getAllQuizzes();
-        if (quizzes.isEmpty()) {
-            log.error(QUIZ_NOT_FOUND_EXCEPTION);
-            throw new QuizDoesNotExistException(QUIZ_NOT_FOUND_EXCEPTION);
+    public List<Quiz> showAllQuizzes() {
+        try {
+            List<Quiz> quizzes = quizService.getAllQuizzes();
+            if (quizzes.isEmpty()) {
+                log.error(QUIZ_NOT_FOUND_EXCEPTION);
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            }
+            return quizzes;
+        } catch (QuizDoesNotExistException e) {
+            log.error(QUIZ_NOT_FOUND_EXCEPTION + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
+        } catch (DAOLogicException e) {
+            log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e.getCause());
         }
-        return quizzes;
+
     }
 
+    //done
     @GetMapping("/{id}")
-    public Quiz getQuizById(@PathVariable BigInteger id) throws DAOLogicException, QuizDoesNotExistException, QuizException {
-        Quiz quiz = quizService.getQuizById(id);
-        if (quiz == null) {
-            log.error(QUIZ_NOT_FOUND_EXCEPTION);
-            throw new QuizDoesNotExistException(QUIZ_NOT_FOUND_EXCEPTION);
+    public Quiz getQuizById(@PathVariable BigInteger id) {
+        try {
+            Quiz quiz = quizService.getQuizById(id);
+            if (quiz == null) {
+                log.error(QUIZ_NOT_FOUND_EXCEPTION);
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            }
+            return quiz;
+        } catch (QuizDoesNotExistException | QuizException e) {
+            log.error(QUIZ_NOT_FOUND_EXCEPTION + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
+        } catch (DAOLogicException e) {
+            log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e.getCause());
         }
-        return quiz;
+
     }
 
-    @PostMapping("/create")
+    @PostMapping("/")
     public Quiz createQuiz(String title, String description, QuizType quizType,
-                           List<Question> questions, BigInteger creatorId)
-            throws DAOLogicException, UserException, QuizException, QuestionException {
-
+                           List<Question> questions, BigInteger creatorId) throws DAOLogicException, UserException, QuizException, QuestionException {
         return quizService.buildNewQuiz(title, description, quizType, questions, creatorId);
     }
 
-    @PutMapping("/{id}")
-    public Quiz updateQuiz(@PathVariable BigInteger id) throws DAOLogicException, QuizDoesNotExistException, QuizException, QuestionDoesNotExistException {
-        Quiz updatedQuiz = quizService.getQuizById(id);
-        if (updatedQuiz == null) {
-            log.error(QUIZ_NOT_FOUND_EXCEPTION);
-            throw new QuizDoesNotExistException(QUIZ_NOT_FOUND_EXCEPTION);
+    @PutMapping("/")
+    public Quiz updateQuiz(@RequestBody Quiz updatedQuiz) {
+        try {
+            //Quiz updatedQuiz = quizService.getQuizById(id);
+            if (updatedQuiz == null) {
+                log.error(QUIZ_NOT_FOUND_EXCEPTION);
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            }
+            quizService.updateQuiz(updatedQuiz);
+            return updatedQuiz;
+        } catch (QuizDoesNotExistException e) {
+            log.error(QUIZ_NOT_FOUND_EXCEPTION + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
+        } catch (DAOLogicException e) {
+            log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e.getCause());
+        } catch (QuestionDoesNotExistException e) {
+            log.error(QUESTION_NOT_FOUND + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
         }
-        quizService.updateQuiz(updatedQuiz);
-        return updatedQuiz;
+
     }
 
+    //done
     @DeleteMapping("/{id}")
-    public void deleteQuiz(@PathVariable BigInteger id) throws QuizDoesNotExistException, DAOLogicException, QuizException {
-        Quiz quiz = quizService.getQuizById(id);
-        if (quiz == null) {
-            log.error(QUIZ_NOT_FOUND_EXCEPTION);
-            throw new QuizDoesNotExistException(QUIZ_NOT_FOUND_EXCEPTION);
-        }
+    public void deleteQuiz(@PathVariable BigInteger id) {
         try {
+            Quiz quiz = quizService.getQuizById(id);
+            if (quiz == null) {
+                log.error(QUIZ_NOT_FOUND_EXCEPTION);
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            }
             quizService.deleteQuiz(quiz);
-        } catch (DAOLogicException | UserDoesNotExistException | UserException e) {
-            throw new DAOLogicException(DAO_LOGIC_EXCEPTION + e.getMessage());
+        } catch (QuizDoesNotExistException | QuizException e) {
+            log.error(QUIZ_NOT_FOUND_EXCEPTION + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
+        } catch (DAOLogicException e) {
+            log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e.getCause());
+        } catch (UserException | UserDoesNotExistException e) {
+            log.error(USER_NOT_FOUND_EXCEPTION + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
         }
     }
 
