@@ -100,11 +100,11 @@ public class QuizDAOImpl implements QuizDAO {
 
             preparedStatement.setString(1, quiz.getTitle());
             preparedStatement.setString(2, quiz.getDescription());
-            preparedStatement.setDate(3, (Date) quiz.getCreationDate());
-            preparedStatement.setLong(4, quiz.getQuizType().ordinal());
-            preparedStatement.setLong(5, quiz.getCreatorId().longValue());
+            //preparedStatement.setDate(3, new java.sql.Date(System.currentTimeMillis()));
+            preparedStatement.setLong(3, quiz.getQuizType().ordinal());
+            preparedStatement.setLong(4, quiz.getCreatorId().longValue());
             //preparedStatement.setLong(5, quiz.getQuestionsId().longValue());
-            preparedStatement.setLong(6, quiz.getId().longValue());
+            preparedStatement.setLong(5, quiz.getId().longValue());
 
             preparedStatement.executeUpdate();
 

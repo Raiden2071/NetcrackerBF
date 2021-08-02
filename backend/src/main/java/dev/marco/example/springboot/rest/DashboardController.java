@@ -1,7 +1,7 @@
 package dev.marco.example.springboot.rest;
 
 import dev.marco.example.springboot.exception.*;
-import dev.marco.example.springboot.model.User;
+import dev.marco.example.springboot.model.impl.UserImpl;
 import dev.marco.example.springboot.service.DashboardService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +19,8 @@ public class DashboardController {
 
     private static final Logger log = Logger.getLogger(DashboardController.class);
 
-    @GetMapping("/")
-    public void generateDashboard(@RequestBody User user) {
+    @GetMapping("/dashboard")
+    public void generateDashboard(@RequestBody UserImpl user) {
         try {
             dashboardService.generateDashboard(user);
         } catch (DAOLogicException e) {

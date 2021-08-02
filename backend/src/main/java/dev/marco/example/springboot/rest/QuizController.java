@@ -1,5 +1,6 @@
 package dev.marco.example.springboot.rest;
 
+import dev.marco.example.springboot.model.impl.QuizImpl;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -75,16 +76,18 @@ public class QuizController {
         return quizService.buildNewQuiz(title, description, quizType, questions, creatorId);
     }
 
+    //done
     @PutMapping("/")
-    public Quiz updateQuiz(@RequestBody Quiz updatedQuiz) {
+    public Quiz updateQuiz(@RequestBody QuizImpl quiz) {
         try {
-            //Quiz updatedQuiz = quizService.getQuizById(id);
-            if (updatedQuiz == null) {
+            //Quiz quiz = quizService.getQuizById(id);
+            if (quiz == null) {
                 log.error(QUIZ_NOT_FOUND_EXCEPTION);
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND);
             }
-            quizService.updateQuiz(updatedQuiz);
-            return updatedQuiz;
+            quizService.updateQuiz(quiz);
+            return quiz;
+
         } catch (QuizDoesNotExistException e) {
             log.error(QUIZ_NOT_FOUND_EXCEPTION + e.getMessage());
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
