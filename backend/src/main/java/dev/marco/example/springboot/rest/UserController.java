@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import dev.marco.example.springboot.model.impl.QuizAccomplishedImpl;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import dev.marco.example.springboot.exception.*;
@@ -12,6 +13,7 @@ import dev.marco.example.springboot.model.impl.UserImpl;
 import dev.marco.example.springboot.service.MailSenderService;
 import dev.marco.example.springboot.service.UserService;
 import dev.marco.example.springboot.util.RegexPatterns;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigInteger;
 import java.util.Set;
@@ -128,9 +130,54 @@ public class UserController implements RegexPatterns {
         }
     }
 
-    public User getUser(BigInteger userId) {
-        //User user = userService.getUserById(userId);
-        return null;
+    @GetMapping("/user")
+    public User getUser(@RequestParam BigInteger idUser) {
+        try {
+            return userService.getUserById(idUser);
+        } catch (UserDoesNotExistException e) {
+            log.error(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
+        } catch (DAOLogicException e) {
+            log.error(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e.getCause());
+        }
+    }
+
+    @DeleteMapping("/user")
+    public void deleteUser(@RequestParam BigInteger idUser ) {
+        try {
+            userService.deleteUser(idUser);
+        } catch (DAOLogicException e) {
+            log.error(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e.getCause());
+        } catch (UserDoesNotExistException e) {
+            log.error(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
+        }
+    }
+
+    @PutMapping("/user/{idUser}")
+    public void editUser(@PathVariable BigInteger idUser,
+                         @RequestBody  UserImpl user) {
+        try {
+            if (StringUtils.isBlank(user.getFirstName()) || StringUtils.isBlank(user.getLastName()))
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            else userService.updateUsersFullName(idUser, user.getFirstName(), user.getLastName());
+
+            if(StringUtils.isBlank(user.getDescription()))
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            else userService.updateUsersDescription(idUser, user.getDescription());
+
+            if(StringUtils.isBlank(user.getPassword()))
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            else userService.updateUsersPassword(idUser, user.getPassword());
+        } catch (DAOLogicException e) {
+            log.error(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e.getCause());
+        } catch (UserDoesNotExistException e) {
+            log.error(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
+        }
     }
 
     public Set<QuizAccomplishedImpl> getAccomplishedQuizes(BigInteger userId) {
