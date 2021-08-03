@@ -1,6 +1,7 @@
 package dev.marco.example.springboot.rest;
 
 import dev.marco.example.springboot.exception.*;
+import dev.marco.example.springboot.model.Dashboard;
 import dev.marco.example.springboot.model.impl.UserImpl;
 import dev.marco.example.springboot.service.DashboardService;
 import org.apache.log4j.Logger;
@@ -17,12 +18,17 @@ public class DashboardController {
     @Autowired
     private DashboardService dashboardService;
 
+    @Autowired
+    public void setTestConnection() throws DAOConfigException {
+        dashboardService.setTestConnection();
+    }
+
     private static final Logger log = Logger.getLogger(DashboardController.class);
 
     @GetMapping("/dashboard")
-    public void generateDashboard(@RequestBody UserImpl user) {
+    public Dashboard generateDashboard(@RequestBody UserImpl user) {
         try {
-            dashboardService.generateDashboard(user);
+            return dashboardService.generateDashboard(user);
         } catch (DAOLogicException e) {
             log.error(MessagesForException.DAO_LOGIC_EXCEPTION);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e.getCause());
