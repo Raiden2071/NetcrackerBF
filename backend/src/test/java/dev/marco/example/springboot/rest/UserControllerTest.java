@@ -214,12 +214,13 @@ class UserControllerTest {
 
     @Test
     void getFavoriteQuizesByUserTest() throws Exception {
-        Set<QuizAccomplishedImpl> quizAccomplishedsSet = new HashSet<>();
-        QuizAccomplishedImpl quizAccomplished1 = new QuizAccomplishedImpl(7, true, BigInteger.valueOf(3));
-        quizAccomplishedsSet.add(quizAccomplished1);
+        this.mockMvc
+                .perform(MockMvcRequestBuilders
+                        .get("/user/favorite")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{ \"id\": 1 }"))
+                .andExpect(MockMvcResultMatchers.status().isOk());
 
-        when(userService.getFavoriteQuizesByUser(BigInteger.valueOf(3)))
-                .thenReturn(quizAccomplishedsSet);
-
+        verify(userService).getFavoriteQuizesByUser(BigInteger.valueOf(1));
     }
 }
