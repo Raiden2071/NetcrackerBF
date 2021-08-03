@@ -1,5 +1,6 @@
 package dev.marco.example.springboot.service.impl;
 
+import dev.marco.example.springboot.util.RegexPatterns;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ import java.util.regex.Pattern;
 import static dev.marco.example.springboot.exception.MessagesForException.*;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService, RegexPatterns {
 
   private static final Logger log = Logger.getLogger(UserServiceImpl.class);
 
@@ -75,7 +76,8 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public User authorize(User user) throws DAOLogicException, UserException, UserDoesNotExistException {
+  public User authorize(User user)
+      throws DAOLogicException, UserException, UserDoesNotExistException {
     try {
       if (user != null) {
         return userDAO.getAuthorizeUser(user.getEmail(), user.getPassword());
@@ -114,21 +116,23 @@ public class UserServiceImpl implements UserService {
   @Override
   public void validateNewUser(String email, String password, String firstName, String lastName)
       throws UserException {
-    Pattern pattern = Pattern.compile(EMAIL_PATTERN);
-    Matcher matcher = pattern.matcher(email);
-    if (!matcher.find()) {
+    if (StringUtils.isEmpty(email)) {
       log.error(MessagesForException.INVALID_USERS_EMAIL);
       throw new UserException(INVALID_USERS_EMAIL);
     }
-    if (password == null) {
+    if (!email.matches(EMAIL_PATTERN)) {
+      log.error(MessagesForException.INVALID_USERS_EMAIL);
+      throw new UserException(INVALID_USERS_EMAIL);
+    }
+    if (StringUtils.isEmpty(password)) {
       log.error(EMPTY_PASSWORD);
       throw new UserException(INVALID_USERS_EMAIL);
     }
-    if (password.length() < 8) {
+    if (!password.matches(passPattern)) {
       log.error(EMPTY_PASSWORD);
       throw new UserException(INVALID_USERS_EMAIL);
     }
-    if (firstName == null) {
+    if (StringUtils.isEmpty(firstName)) {
       log.error(EMPTY_FIRST_NAME);
       throw new UserException(INVALID_USERS_FIRST_NAME);
     }
@@ -136,7 +140,7 @@ public class UserServiceImpl implements UserService {
       log.error(EMPTY_FIRST_NAME);
       throw new UserException(INVALID_USERS_FIRST_NAME);
     }
-    if (lastName == null) {
+    if (StringUtils.isEmpty(lastName)) {
       log.error(EMPTY_LAST_NAME);
       throw new UserException(INVALID_USERS_LAST_NAME);
     }
