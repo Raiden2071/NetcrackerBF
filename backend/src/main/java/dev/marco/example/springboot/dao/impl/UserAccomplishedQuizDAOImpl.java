@@ -66,8 +66,7 @@ public class UserAccomplishedQuizDAOImpl implements UserAccomplishedQuizDAO {
             ResultSet resultSet = statement.executeQuery();
             Set<QuizAccomplishedImpl> quizzes = new HashSet<>();
             if (!resultSet.isBeforeFirst()) {
-                log.error(ACCOMPLISHED_QUIZ_HAS_NOT_BEEN_FOUNDED + MESSAGE_FOR_GET_ACCOMPLISHED_QUIZ_BY_ID);
-                throw new QuizDoesNotExistException(ACCOMPLISHED_QUIZ_HAS_NOT_BEEN_FOUNDED);
+                return quizzes;
             }
             while (resultSet.next()) {
                 QuizAccomplishedImpl quiz = new QuizAccomplishedImpl(

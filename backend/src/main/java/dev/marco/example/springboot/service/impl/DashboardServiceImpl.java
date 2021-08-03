@@ -7,7 +7,6 @@ import dev.marco.example.springboot.exception.*;
 import dev.marco.example.springboot.model.Announcement;
 import dev.marco.example.springboot.model.Dashboard;
 import dev.marco.example.springboot.model.Quiz;
-import dev.marco.example.springboot.model.User;
 import dev.marco.example.springboot.model.impl.DashboardImpl;
 import dev.marco.example.springboot.service.AnnouncementService;
 import dev.marco.example.springboot.service.DashboardService;
@@ -43,7 +42,7 @@ public class DashboardServiceImpl implements DashboardService {
     }
 
     @Override
-    public Dashboard generateDashboard(User user) throws DAOLogicException,
+    public Dashboard generateDashboard(BigInteger id) throws DAOLogicException,
             QuizDoesNotExistException, AnnouncementDoesNotExistException, AnnouncementException {
 
         List<Quiz> lastQuizzes = quizService.getLastCreatedQuizzes(DASHBOARD_COUNT_LAST_CREATED_QUIZZES);
@@ -61,7 +60,7 @@ public class DashboardServiceImpl implements DashboardService {
             throw new AnnouncementDoesNotExistException(ANNOUNCEMENT_NOT_FOUND_EXCEPTION);
         }
 
-        Set<Announcement> likedAnnouncement = announcementService.getAnnouncementsLikedByUser(user.getId());
+        Set<Announcement> likedAnnouncement = announcementService.getAnnouncementsLikedByUser(id);
 
         return new DashboardImpl(lastQuizzes, popularAnnouncement, likedAnnouncement);
     }

@@ -28,7 +28,7 @@ public class DashboardController {
     @GetMapping("/dashboard")
     public Dashboard generateDashboard(@RequestBody UserImpl user) {
         try {
-            return dashboardService.generateDashboard(user);
+            return dashboardService.generateDashboard(user.getId());
         } catch (DAOLogicException e) {
             log.error(MessagesForException.DAO_LOGIC_EXCEPTION);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e.getCause());

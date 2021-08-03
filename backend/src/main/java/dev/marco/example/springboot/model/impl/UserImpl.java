@@ -166,6 +166,23 @@ public class UserImpl implements User {
     this.emailCode = emailCode;
   }
 
+  @Override
+  public String toString() {
+    return "UserImpl{" +
+            "id=" + id +
+            ", firstName='" + firstName + '\'' +
+            ", lastName='" + lastName + '\'' +
+            ", email='" + email + '\'' +
+            ", password='" + password + '\'' +
+            ", role=" + role +
+            ", description='" + description + '\'' +
+            ", active=" + active +
+            ", favoriteQuizes=" + favoriteQuizes +
+            ", accomplishedQuizes=" + accomplishedQuizes +
+            ", emailCode='" + emailCode + '\'' +
+            '}';
+  }
+
   public static class UserBuilder {
 
     private final UserImpl newUser;

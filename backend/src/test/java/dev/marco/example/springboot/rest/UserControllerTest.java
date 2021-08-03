@@ -248,6 +248,7 @@ class UserControllerTest {
     }
 
     @Test
+    @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
     void getFavoriteQuizesByUserTest() throws Exception {
         this.mockMvc
                 .perform(MockMvcRequestBuilders

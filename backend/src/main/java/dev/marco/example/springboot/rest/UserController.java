@@ -206,8 +206,14 @@ public class UserController implements RegexPatterns {
     public Set<QuizAccomplishedImpl> getFavoriteQuizesByUser(@RequestBody UserImpl user) {
         try {
             return userService.getFavoriteQuizesByUser(user.getId());
-        } catch (DAOLogicException | UserDoesNotExistException | QuizDoesNotExistException e) {
-            log.error(e.getMessage(), e);
+        } catch (DAOLogicException e) {
+            log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e.getCause());
+        } catch (QuizDoesNotExistException e) {
+            log.error(QUIZ_NOT_FOUND_EXCEPTION + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
+        } catch (UserDoesNotExistException e) {
+            log.error(USER_NOT_FOUND_EXCEPTION + e.getMessage());
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
         }
     }

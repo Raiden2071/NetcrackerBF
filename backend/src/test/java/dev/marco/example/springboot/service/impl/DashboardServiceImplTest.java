@@ -45,7 +45,7 @@ public class DashboardServiceImplTest {
           .setId(BigInteger.valueOf(1))
           .build();
 
-      Dashboard dashboard = dashboardService.generateDashboard(user);
+      Dashboard dashboard = dashboardService.generateDashboard(user.getId());
       assertNotNull(dashboard);
     } catch (DAOLogicException | AnnouncementException | AnnouncementDoesNotExistException | QuizDoesNotExistException | UserException e) {
       log.error(DAO_LOGIC_EXCEPTION + " in generateDashboard");
