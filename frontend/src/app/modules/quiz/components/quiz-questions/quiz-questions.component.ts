@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { map, tap } from 'rxjs/operators';
 import { Quiz, QuizType } from 'src/app/models/quiz';
@@ -11,8 +12,13 @@ import { Quiz, QuizType } from 'src/app/models/quiz';
 export class QuizQuestionsComponent implements OnInit {
 
   data: Quiz;
+
+  questionsForm: FormGroup = this.fb.group({
+    value: ['']
+  });
   constructor(
-    private route: ActivatedRoute, private router: Router
+    private route: ActivatedRoute,
+    private fb: FormBuilder
   ) { }
 
   ngOnInit(): void {
@@ -22,6 +28,10 @@ export class QuizQuestionsComponent implements OnInit {
 
   click() {
     console.log(this.data);
+    
+  }
+
+  onSubmit(): void {
     
   }
 
