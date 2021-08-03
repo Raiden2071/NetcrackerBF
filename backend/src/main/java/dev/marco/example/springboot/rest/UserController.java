@@ -88,14 +88,17 @@ public class UserController implements RegexPatterns {
   }
 
   @PostMapping("/recover")
-  public void recoverPassword(@RequestBody String email) {
+  public void recoverPassword(@RequestParam String email) {
     try {
       User user = new UserImpl.UserBuilder()
           .setEmail(email)
           .build();
-      userService.recoverPassword(user);
+      if (!userService.recoverPassword(user)) {
+        log.error(MessagesForException.EMAIL_ERROR);
+        throw new MailException(MessagesForException.EMAIL_ERROR);
+      }
     } catch (DAOLogicException | MailException | UserException e) {
-      log.error("a");
+      log.error("Error while recoverPassword() with email=" + email + " "+ e.getMessage());
     }
   }
 
