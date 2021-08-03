@@ -13,7 +13,6 @@ import javax.mail.*;
 import javax.mail.Message.RecipientType;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -64,7 +63,8 @@ public class MailSenderServiceImpl implements MailSenderService {
         }
       });
 
-      Message message = prepareMessage(session, from, to, code);
+      Message message = prepareMessage(session, from, to, EMAIL_SUBJECT,
+          String.format(TEXT_HTML, code));
       Transport.send(message);
       return true;
     } catch (DAOLogicException | UserDoesNotExistException | MessagingException e) {
@@ -74,16 +74,17 @@ public class MailSenderServiceImpl implements MailSenderService {
   }
 
   @Override
-  public Message prepareMessage(Session session, String from, String to, String code)
+  public Message prepareMessage(Session session, String from, String to, String subject,
+      String content)
       throws MailException {
     try {
       Message message = new MimeMessage(session);
       message.setFrom(new InternetAddress(from));
       message.setRecipient(RecipientType.TO, new InternetAddress(to));
 
-      message.setSubject(EMAIL_SUBJECT);
+      message.setSubject(subject);
 //      message.setText("Email tesxt");
-      message.setContent(String.format(TEXT_HTML,code), TEXT_TYPE);
+      message.setContent(content, TEXT_TYPE);
       return message;
     } catch (MessagingException e) {
       log.error(MessagesForException.MESSAGE_ERROR + e.getMessage());
@@ -93,7 +94,8 @@ public class MailSenderServiceImpl implements MailSenderService {
 
   @Override
   public void setProperties(Properties properties) throws MailException {
-    try (InputStream fis = MailSenderService.class.getClassLoader().getResourceAsStream(PATH_PROPERTY)) {
+    try (InputStream fis = MailSenderService.class.getClassLoader()
+        .getResourceAsStream(PATH_PROPERTY)) {
       properties.load(fis);
     } catch (IOException e) {
       log.error(MessagesForException.PROPERTY_ERROR + e.getMessage());
@@ -144,10 +146,39 @@ public class MailSenderServiceImpl implements MailSenderService {
   }
 
   @Override
-  public void generateNewPassword(String email) throws MailException {
+  public boolean generateNewPassword(String email) throws MailException {
     try {
-      userDAO.updateUsersPassword(userDAO.getUserByEmail(email).getId(), generateCode());
-    } catch (DAOLogicException | UserDoesNotExistException e) {
+      log.debug("Starting to generateNewPassword() with email=" + email);
+      String newPassword = generateCode();
+      userDAO.updateUsersPassword(userDAO.getUserByEmail(email).getId(), newPassword);
+
+      Properties properties = new Properties();
+      setProperties(properties);
+
+      String to = email;
+      String from = properties.getProperty(HOST_EMAIL_NAME);
+      String password = properties.getProperty(HOST_EMAIL_PASSWORD);
+
+      properties = new Properties();
+
+      properties.put("mail.smtp.auth", "true");
+      properties.put("mail.smtp.starttls.enable", "true");
+      properties.put("mail.smtp.host", "smtp.gmail.com");
+      properties.put("mail.smtp.port", "587");
+
+      Session session = Session.getInstance(properties, new Authenticator() {
+        @Override
+        protected PasswordAuthentication getPasswordAuthentication() {
+          return new PasswordAuthentication(from, password);
+        }
+      });
+
+      Message message = prepareMessage(session, from, to, EMAIL_SUBJECT,
+          String.format(TEXT_PASSWORD, newPassword));
+      Transport.send(message);
+      log.debug("Password was successfully recovered");
+      return true;
+    } catch (DAOLogicException | UserDoesNotExistException | MessagingException e) {
       log.error(MessagesForException.ERROR_WHILE_RECOVERING_PASSWORD + e.getMessage());
       throw new MailException(MessagesForException.ERROR_WHILE_RECOVERING_PASSWORD, e);
     }

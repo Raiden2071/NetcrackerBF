@@ -91,11 +91,14 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public void recoverPassword(User user) throws UserException, DAOLogicException, MailException {
+  public boolean recoverPassword(User user) throws UserException, DAOLogicException, MailException {
     try {
       if (userDAO.getUserByEmail(user.getEmail()).isActive()) {
-        mailSenderService.generateNewPassword(user.getEmail());
+        log.debug("User was found and active");
+        return mailSenderService.generateNewPassword(user.getEmail());
       }
+      log.error(EMAIL_ERROR);
+      throw new MailException(EMAIL_ERROR);
     } catch (UserDoesNotExistException e) {
       log.error(MessagesForException.USER_NOT_FOUND_EXCEPTION + e.getMessage());
       throw new UserException(USER_NOT_FOUND_EXCEPTION, e);

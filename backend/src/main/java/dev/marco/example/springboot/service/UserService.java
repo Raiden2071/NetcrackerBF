@@ -19,7 +19,7 @@ public interface UserService {
 
   User authorize(User user) throws DAOLogicException, UserException, UserDoesNotExistException;
 
-  void recoverPassword(User user) throws UserException, DAOLogicException, MailException;
+  boolean recoverPassword(User user) throws UserException, DAOLogicException, MailException;
 
   void validateNewUser(String email, String password, String firstName, String lastName)
       throws UserException;
