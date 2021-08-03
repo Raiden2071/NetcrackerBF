@@ -226,7 +226,7 @@ public class UserImpl implements User {
 
       if (!matcher.find()) {
         log.error(INVALID_USERS_EMAIL + " with email=" + email + " in user builder");
-        throw new UserException(INVALID_USERS_EMAIL);
+        throw new UserException(INVALID_USERS_EMAIL + " mail: " + email);
       }
       newUser.email = email;
       log.debug("Email=" + email + " was added in user builder");

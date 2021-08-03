@@ -84,7 +84,7 @@ class UserServiceImplTest {
   void testAuthorizeNull() {
     try {
       userService.authorize(null);
-    } catch (UserException e) {
+    } catch (UserException | UserDoesNotExistException e) {
       assertTrue(true);
     } catch (DAOLogicException e) {
       log.error(DAO_LOGIC_EXCEPTION);

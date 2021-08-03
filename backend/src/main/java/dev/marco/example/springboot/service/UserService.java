@@ -17,7 +17,7 @@ public interface UserService {
   BigInteger buildNewUser(String email, String password, String name, String surname)
       throws UserException, DAOLogicException;
 
-  User authorize(User user) throws DAOLogicException, UserException;
+  User authorize(User user) throws DAOLogicException, UserException, UserDoesNotExistException;
 
   void recoverPassword(User user) throws UserException, DAOLogicException, MailException;
 
