@@ -355,6 +355,22 @@ public class UserDAOImpl implements UserDAO {
       log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
       throw new DAOLogicException(MessagesForException.DAO_LOGIC_EXCEPTION + id, e);
     }
+  }
 
+  @Override
+  public void updateUserRole(BigInteger id, UserRoles role)
+      throws UserDoesNotExistException, DAOLogicException {
+    try (PreparedStatement statement = connection
+        .prepareStatement(properties.getProperty(UPDATE_USER_ROLE))) {
+      statement.setInt(1, role.ordinal());
+      statement.setLong(2, id.longValue());
+
+      if (statement.executeUpdate() != 1) {
+        throw new UserDoesNotExistException(MessagesForException.USERS_DOESNT_EXIT + id);
+      }
+    } catch (SQLException e) {
+      log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
+      throw new DAOLogicException(MessagesForException.DAO_LOGIC_EXCEPTION + id + role.name(), e);
+    }
   }
 }

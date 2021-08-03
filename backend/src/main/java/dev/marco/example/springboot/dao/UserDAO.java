@@ -6,6 +6,7 @@ import dev.marco.example.springboot.exception.UserDoesNotConfirmedEmailException
 import dev.marco.example.springboot.exception.UserDoesNotExistException;
 import dev.marco.example.springboot.model.User;
 
+import dev.marco.example.springboot.model.UserRoles;
 import java.math.BigInteger;
 
 public interface UserDAO {
@@ -43,6 +44,9 @@ public interface UserDAO {
 
   boolean disactivateUser(BigInteger id) throws DAOLogicException, UserDoesNotExistException;
 
+  void updateUserRole(BigInteger id, UserRoles role)
+      throws UserDoesNotExistException, DAOLogicException;
+
   String URL_PROPERTY = "${spring.datasource.url}";
   String USERNAME_PROPERTY = "${spring.datasource.username}";
   String PASSWORD_PROPERTY = "${spring.datasource.password}";
@@ -69,8 +73,10 @@ public interface UserDAO {
   String SEARCH_USER_BY_EMAIL_CODE = "SEARCH_USER_BY_EMAIL_CODE";
   String UPDATE_USER_ACTIVE = "UPDATE_USER_ACTIVE";
   String UPDATE_USER_DISACTIVE = "UPDATE_USER_DISACTIVE";
+  String UPDATE_USER_ROLE = "UPDATE_USER_ROLE";
   String SEARCH_USER_BY_EMAIL = "SEARCH_USER_BY_EMAIL";
   String CHECK_USER_PASSWORD = "CHECK_USER_PASSWORD";
+
 
   String DAO_LOGIC_EXCEPTION = "Dao logic exception ";
 

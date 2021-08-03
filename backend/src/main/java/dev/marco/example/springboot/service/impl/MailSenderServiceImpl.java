@@ -1,5 +1,6 @@
 package dev.marco.example.springboot.service.impl;
 
+import java.io.InputStream;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -82,7 +83,7 @@ public class MailSenderServiceImpl implements MailSenderService {
 
       message.setSubject(EMAIL_SUBJECT);
 //      message.setText("Email tesxt");
-      message.setContent(TEXT_HTML1 + code + TEXT_HTML2, TEXT_TYPE);
+      message.setContent(String.format(TEXT_HTML,code), TEXT_TYPE);
       return message;
     } catch (MessagingException e) {
       log.error(MessagesForException.MESSAGE_ERROR + e.getMessage());
@@ -92,7 +93,7 @@ public class MailSenderServiceImpl implements MailSenderService {
 
   @Override
   public void setProperties(Properties properties) throws MailException {
-    try (FileInputStream fis = new FileInputStream(PATH_PROPERTY)) {
+    try (InputStream fis = MailSenderService.class.getClassLoader().getResourceAsStream(PATH_PROPERTY)) {
       properties.load(fis);
     } catch (IOException e) {
       log.error(MessagesForException.PROPERTY_ERROR + e.getMessage());

@@ -14,10 +14,15 @@ public interface MailSenderService {
 
   String SYMBOLS = "1234567890qwertyuiopasdfghjklzxcvbnm";
   String EMAIL_SUBJECT = "Email confirmation for quiz";
-  String TEXT_HTML1 = "<p><a href=\"http://localhot:8080/";
-  String TEXT_HTML2 = "\">Confirm email</a></p>";
+//  String TEXT_HTML = "<p><a href=\"http://localhost:8080/confirm?code=%s\">Confirm email</a></p>";
+
+  String TEXT_HTML = "<form action=\"http://localhost:8080/confirm?code=%s\" method=\"post\">\n"
+      + "   <button type=\"submit\">Confirm email</button>\n"
+      + "  </form>";
+
+
   String TEXT_TYPE = "text/html";
-  String PATH_PROPERTY = "src/main/resources/email.properties";
+  String PATH_PROPERTY = "email.properties";
   String HOST_EMAIL_NAME = "HOST_EMAIL_NAME";
   String HOST_EMAIL_PASSWORD = "HOST_EMAIL_PASSWORD";
 
