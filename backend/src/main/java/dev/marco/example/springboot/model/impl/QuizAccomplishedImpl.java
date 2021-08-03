@@ -59,4 +59,12 @@ public class QuizAccomplishedImpl {
     this.quizId = quizId;
   }
 
+  @Override
+  public String toString() {
+    return "QuizAccomplishedImpl{" +
+            "correctAnswers=" + correctAnswers +
+            ", isFavourite=" + isFavourite +
+            ", quizId=" + quizId +
+            '}';
+  }
 }

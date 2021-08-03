@@ -69,21 +69,24 @@ public class UserServiceImpl implements UserService {
       return userDAO.createUser(user);
     } catch (DAOLogicException e) {
       log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
-      throw new DAOLogicException(DAO_LOGIC_EXCEPTION, e);
+      throw new DAOLogicException(DAO_LOGIC_EXCEPTION + e.getMessage(), e);
     }
 
   }
 
   @Override
-  public User authorize(User user) throws DAOLogicException, UserException {
+  public User authorize(User user) throws DAOLogicException, UserException, UserDoesNotExistException {
     try {
       if (user != null) {
         return userDAO.getAuthorizeUser(user.getEmail(), user.getPassword());
       }
       throw new UserException(USERS_DOESNT_EXIT);
-    } catch (DAOLogicException | UserDoesNotExistException | UserDoesNotConfirmedEmailException e) {
+    } catch (DAOLogicException | UserDoesNotConfirmedEmailException e) {
       log.info(DAO_LOGIC_EXCEPTION + e.getMessage());
       throw new DAOLogicException(DAO_LOGIC_EXCEPTION + e.getMessage(), e);
+    } catch (UserDoesNotExistException e) {
+      log.info(USERS_DOESNT_EXIT);
+      throw new UserDoesNotExistException(USERS_DOESNT_EXIT + e.getMessage(), e);
     }
   }
 

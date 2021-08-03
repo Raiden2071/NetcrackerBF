@@ -17,7 +17,7 @@ public interface UserService {
   BigInteger buildNewUser(String email, String password, String name, String surname)
       throws UserException, DAOLogicException;
 
-  User authorize(User user) throws DAOLogicException, UserException;
+  User authorize(User user) throws DAOLogicException, UserException, UserDoesNotExistException;
 
   boolean recoverPassword(User user) throws UserException, DAOLogicException, MailException;
 
@@ -51,7 +51,7 @@ public interface UserService {
 
   Set<QuizAccomplishedImpl> getAccomplishedQuizesByUser(BigInteger id) throws DAOLogicException, QuizDoesNotExistException, UserDoesNotExistException;
 
-  Set<QuizAccomplishedImpl> getFavoriteQuizesByUser(BigInteger id) throws DAOLogicException, UserDoesNotExistException;
+  Set<QuizAccomplishedImpl> getFavoriteQuizesByUser(BigInteger id) throws DAOLogicException, UserDoesNotExistException, QuizDoesNotExistException;
 
   void editAccomplishedQuiz(BigInteger idUser, QuizAccomplishedImpl newQuiz) throws DAOLogicException;
 

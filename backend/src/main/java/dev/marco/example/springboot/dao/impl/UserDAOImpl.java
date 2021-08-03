@@ -98,7 +98,8 @@ public class UserDAOImpl implements UserDAO {
       ResultSet resultSet = statement.executeQuery();
 
       if (!resultSet.next()) {
-        throw new UserDoesNotExistException(MessagesForException.INVALID_USERS_EMAIL + email);
+        return null;
+        //throw new UserDoesNotExistException(MessagesForException.INVALID_USERS_EMAIL + email);
       }
 
       return new UserImpl.UserBuilder()

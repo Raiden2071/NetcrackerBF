@@ -53,7 +53,7 @@ class AnnouncementServiceImplTest {
             BigInteger idAnnouncement = announcementService.buildNewAnnouncement(new AnnouncementImpl.AnnouncementBuilder()
                     .setTitle(TEST_TITLE)
                     .setDescription(TEST_DESCRIPTION)
-                    .setOwner(BigInteger.ONE)
+                    .setOwner(BigInteger.valueOf(5))
                     .setAddress(TEST_ADDRESS)
                     .build());
             assertNotNull(idAnnouncement);
@@ -61,13 +61,14 @@ class AnnouncementServiceImplTest {
                     ()-> announcementService.buildNewAnnouncement(new AnnouncementImpl.AnnouncementBuilder()
                             .setTitle(TEST_TITLE)
                             .setDescription(TEST_DESCRIPTION)
-                            .setOwner(BigInteger.ONE)
+                            .setOwner(BigInteger.valueOf(5))
                             .setAddress(TEST_ADDRESS)
                             .build()));
             assertNotNull(exception);
-            announcementService.deleteAnnouncement(idAnnouncement, BigInteger.ONE);
+            announcementService.deleteAnnouncement(idAnnouncement, BigInteger.valueOf(5));
         } catch (AnnouncementException | DAOLogicException | UserException e) {
             log.error(LOG_ERROR_CASE +"buildNewAnnouncement "+ e.getMessage());
+            e.printStackTrace();
             fail();
         }
     }
@@ -94,7 +95,7 @@ class AnnouncementServiceImplTest {
             BigInteger idAnnouncement = announcementService.buildNewAnnouncement(new AnnouncementImpl.AnnouncementBuilder()
                     .setTitle(TEST_TITLE)
                     .setDescription(TEST_DESCRIPTION)
-                    .setOwner(BigInteger.ONE)
+                    .setOwner(BigInteger.valueOf(5))
                     .setAddress(TEST_ADDRESS)
                     .build());
             assertNotNull(idAnnouncement);
@@ -103,12 +104,12 @@ class AnnouncementServiceImplTest {
                     .setTitle(TEST_NEW_TITLE)
                     .setDescription(TEST_NEW_DESCRIPTION)
                     .setAddress(TEST_NEW_ADDRESS)
-                    .build(), BigInteger.ONE);
+                    .build(), BigInteger.valueOf(5));
             Announcement testAnnouncement = announcementDAO.getAnnouncementById(idAnnouncement);
             assertEquals(TEST_NEW_TITLE, testAnnouncement.getTitle());
             assertEquals(TEST_NEW_DESCRIPTION, testAnnouncement.getDescription());
             assertEquals(TEST_NEW_ADDRESS, testAnnouncement.getAddress());
-            announcementService.deleteAnnouncement(idAnnouncement, BigInteger.ONE);
+            announcementService.deleteAnnouncement(idAnnouncement, BigInteger.valueOf(5));
         } catch (DAOLogicException | AnnouncementException | AnnouncementDoesNotExistException | UserException e) {
             log.error(LOG_ERROR_CASE +"editAnnouncement "+ e.getMessage());
             fail();
@@ -122,11 +123,11 @@ class AnnouncementServiceImplTest {
             BigInteger idAnnouncement = announcementService.buildNewAnnouncement(new AnnouncementImpl.AnnouncementBuilder()
                     .setTitle(TEST_TITLE)
                     .setDescription(TEST_DESCRIPTION)
-                    .setOwner(BigInteger.ONE)
+                    .setOwner(BigInteger.valueOf(5))
                     .setAddress(TEST_ADDRESS)
                     .build());
             assertNotNull(idAnnouncement);
-            announcementService.deleteAnnouncement(idAnnouncement, BigInteger.ONE);
+            announcementService.deleteAnnouncement(idAnnouncement, BigInteger.valueOf(5));
             AnnouncementDoesNotExistException thrown = assertThrows(AnnouncementDoesNotExistException.class, () ->
                     announcementDAO.getAnnouncementById(idAnnouncement));
             assertNotNull(thrown);
