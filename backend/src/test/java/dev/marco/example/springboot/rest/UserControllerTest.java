@@ -1,9 +1,6 @@
 package dev.marco.example.springboot.rest;
 
-import dev.marco.example.springboot.dao.UserDAO;
-import dev.marco.example.springboot.exception.QuestionDoesNotExistException;
-import dev.marco.example.springboot.exception.UserException;
-import dev.marco.example.springboot.model.User;
+import dev.marco.example.springboot.model.impl.QuizAccomplishedImpl;
 import dev.marco.example.springboot.model.impl.UserImpl;
 import dev.marco.example.springboot.service.UserService;
 import org.apache.log4j.Logger;
@@ -21,7 +18,9 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.math.BigInteger;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -214,7 +213,13 @@ class UserControllerTest {
     }
 
     @Test
-    void getFavoriteQuizesByUserTest() {
+    void getFavoriteQuizesByUserTest() throws Exception {
+        Set<QuizAccomplishedImpl> quizAccomplishedsSet = new HashSet<>();
+        QuizAccomplishedImpl quizAccomplished1 = new QuizAccomplishedImpl(7, true, BigInteger.valueOf(3));
+        quizAccomplishedsSet.add(quizAccomplished1);
+
+        when(userService.getFavoriteQuizesByUser(BigInteger.valueOf(3)))
+                .thenReturn(quizAccomplishedsSet);
 
     }
 }

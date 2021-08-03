@@ -129,13 +129,7 @@ class UserServiceImplTest {
       userService.recoverPassword(userDAO.getUserById(BigInteger.TWO));
 
       assertFalse(userDAO.comparisonOfPasswords(BigInteger.TWO, "testPassword"));
-    } catch (DAOLogicException e) {
-      e.printStackTrace();
-    } catch (UserException e) {
-      e.printStackTrace();
-    } catch (MailException e) {
-      e.printStackTrace();
-    } catch (UserDoesNotExistException e) {
+    } catch (DAOLogicException | UserException | MailException | UserDoesNotExistException e) {
       e.printStackTrace();
     }
   }
@@ -257,7 +251,7 @@ class UserServiceImplTest {
       userService
           .addAccomplishedQuiz(BigInteger.ONE, new QuizAccomplishedImpl(1, true, BigInteger.ONE));
       assertNotNull(userService.getFavoriteQuizesByUser(BigInteger.ONE));
-    } catch (DAOLogicException | UserDoesNotExistException e) {
+    } catch (DAOLogicException | UserDoesNotExistException | QuizDoesNotExistException e) {
       e.printStackTrace();
       log.error(e.getMessage());
       fail();

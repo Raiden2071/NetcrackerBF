@@ -59,13 +59,14 @@ public class UserAccomplishedQuizDAOImpl implements UserAccomplishedQuizDAO {
             throws DAOLogicException, QuizDoesNotExistException {
         try (PreparedStatement statement = connection
                 .prepareStatement(properties.getProperty(SEARCH_ACCOMPLISHED_QUIZES_BY_USER_ID))) {
+
             statement.setLong(1, idUser.longValue());
             ResultSet resultSet = statement.executeQuery();
-            if (!resultSet.isBeforeFirst()) {
-                throw new QuizDoesNotExistException(
-                        "Error while getAccomplishedQuizesByUser with id=" + idUser);
-            }
             Set<QuizAccomplishedImpl> quizes = new HashSet<>();
+
+            if (!resultSet.isBeforeFirst()) {
+                return quizes;
+            }
             while (resultSet.next()) {
                 QuizAccomplishedImpl quiz = new QuizAccomplishedImpl(
                         resultSet.getInt(CORRECT_ANSWERS),
@@ -90,7 +91,7 @@ public class UserAccomplishedQuizDAOImpl implements UserAccomplishedQuizDAO {
                     .collect(Collectors.toSet());
         } catch (Exception e) {
             log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
-            throw new DAOLogicException("Dao logic exception", e);
+            throw new DAOLogicException(DAO_LOGIC_EXCEPTION, e);
         }
 
     }
