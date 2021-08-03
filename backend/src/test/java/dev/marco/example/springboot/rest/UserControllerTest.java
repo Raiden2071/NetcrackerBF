@@ -20,7 +20,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -88,7 +87,8 @@ class UserControllerTest {
         this.mockMvc
                 .perform(MockMvcRequestBuilders
                         .get("/user")
-                        .param("idUser", "1"))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("1"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(BigInteger.ONE))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.firstName").value("Golum"))
@@ -102,7 +102,8 @@ class UserControllerTest {
         this.mockMvc
                 .perform(MockMvcRequestBuilders
                         .delete("/user")
-                        .param("idUser", "1"))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("1"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
 
         verify(userService).deleteUser(BigInteger.ONE);
@@ -113,9 +114,10 @@ class UserControllerTest {
 
         this.mockMvc
                 .perform(MockMvcRequestBuilders
-                        .put("/user/{idUser}", BigInteger.ONE)
+                        .put("/user")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"firstName\":\"Leopold\"," +
+                        .content("{ \"id\": 1,"+
+                                " \"firstName\":\"Leopold\"," +
                                 " \"lastName\":\"Kotanovich\"," +
                                 " \"description\":\"i like to play billiards\"," +
                                 " \"password\":\"12345Qwerty\"}"))
