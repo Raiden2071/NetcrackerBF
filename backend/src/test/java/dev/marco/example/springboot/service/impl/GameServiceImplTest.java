@@ -113,7 +113,7 @@ public class GameServiceImplTest {
             assertNotNull(finalUserAccomplishedQuiz);
             assertEquals(1, finalUserAccomplishedQuiz.getCorrectAnswers());
 
-        } catch (UserDoesNotExistException | DAOLogicException | QuizDoesNotExistException | AnswerDoesNotExistException | QuestionDoesNotExistException e) {
+        } catch (UserDoesNotExistException | DAOLogicException | QuizDoesNotExistException | AnswerDoesNotExistException | QuestionDoesNotExistException | QuizException e) {
             log.error("Error while testing validateAnswers in GameService " + e.getMessage());
             fail();
         }
@@ -130,7 +130,8 @@ public class GameServiceImplTest {
                     userAccomplishedQuizDAO.getAccomplishedQuizById(user.getId(), BigInteger.valueOf(3));
             assertNotNull(quizAccomplished);
 
-            quizAccomplished.setQuizId(BigInteger.valueOf(3));
+            Quiz quizById = quizDAO.getQuizById(BigInteger.valueOf(3));
+            quizAccomplished.setQuizId(quizById);
             assertEquals(false, quizAccomplished.getFavourite());
 
             gameService.setIsFavorite(user, quizAccomplished);

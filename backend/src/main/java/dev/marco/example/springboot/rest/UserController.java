@@ -18,6 +18,8 @@ import org.springframework.web.server.ResponseStatusException;
 import java.math.BigInteger;
 import java.util.Set;
 
+import static dev.marco.example.springboot.exception.MessagesForException.*;
+
 @RestController
 public class UserController implements RegexPatterns {
 
@@ -184,10 +186,20 @@ public class UserController implements RegexPatterns {
         }
     }
 
-    public Set<QuizAccomplishedImpl> getAccomplishedQuizes(BigInteger userId) {
-        //free
-        //return userService.getAccomplishedQuizById(userId);
-        return null;
+    @GetMapping("/user/acc_quiz")
+    public Set<QuizAccomplishedImpl> getAccomplishedQuizzes(@RequestParam BigInteger userId) {
+        try {
+            return userService.getAccomplishedQuizesByUser(userId);
+        } catch (DAOLogicException e) {
+            log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e.getCause());
+        } catch (QuizDoesNotExistException e) {
+            log.error(QUIZ_NOT_FOUND_EXCEPTION + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
+        } catch (UserDoesNotExistException e) {
+            log.error(USER_NOT_FOUND_EXCEPTION + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
+        }
     }
 
     @GetMapping("/user/favorite")

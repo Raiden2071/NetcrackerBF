@@ -1,23 +1,25 @@
 package dev.marco.example.springboot.model.impl;
 
+import dev.marco.example.springboot.model.Quiz;
+
 import java.math.BigInteger;
 
 public class QuizAccomplishedImpl {
 
   private int correctAnswers;
   private Boolean isFavourite;
-  private BigInteger quizId;
+  private Quiz quiz;
 
-  public QuizAccomplishedImpl(int correctAnswers, Boolean isFavourite, BigInteger quizId) {
+  public QuizAccomplishedImpl(int correctAnswers, Boolean isFavourite, Quiz quiz) {
     this.correctAnswers = correctAnswers;
     this.isFavourite = isFavourite;
-    this.quizId = quizId;
+    this.quiz = quiz;
   }
 
-  public QuizAccomplishedImpl(int correctAnswers, BigInteger quizId) {
+  public QuizAccomplishedImpl(int correctAnswers, Quiz quiz) {
     this.isFavourite = false;
     this.correctAnswers = correctAnswers;
-    this.quizId = quizId;
+    this.quiz = quiz;
   }
 
   private QuizAccomplishedImpl() {
@@ -51,12 +53,12 @@ public class QuizAccomplishedImpl {
     isFavourite = favourite;
   }
 
-  public BigInteger getQuizId() {
-    return quizId;
+  public Quiz getQuizId() {
+    return quiz;
   }
 
-  public void setQuizId(BigInteger quizId) {
-    this.quizId = quizId;
+  public void setQuizId(Quiz quiz) {
+    this.quiz = quiz;
   }
 
   @Override
@@ -64,7 +66,7 @@ public class QuizAccomplishedImpl {
     return "QuizAccomplishedImpl{" +
             "correctAnswers=" + correctAnswers +
             ", isFavourite=" + isFavourite +
-            ", quizId=" + quizId +
+            ", quiz=" + quiz +
             '}';
   }
 }

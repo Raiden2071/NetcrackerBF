@@ -53,7 +53,7 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public void validateAnswers(Quiz quiz, User user, List<Answer> answers)
-            throws QuestionDoesNotExistException, DAOLogicException, AnswerDoesNotExistException, QuizDoesNotExistException {
+            throws QuestionDoesNotExistException, DAOLogicException, AnswerDoesNotExistException, QuizDoesNotExistException, QuizException {
         BigInteger quizId = quiz.getId();
         BigInteger userId = user.getId();
         List<Question> questions = questionDAO.getAllQuestions(quizId);
@@ -88,7 +88,8 @@ public class GameServiceImpl implements GameService {
                 userAccomplishedQuizDAO.editAccomplishedQuiz(userId, existedQuizAccomplished);
             }
         } else {
-            QuizAccomplishedImpl quizAccomplished = new QuizAccomplishedImpl(counterOfCorrectAnswers, quizId);
+            Quiz newQuiz = quizService.getQuizById(quizId);
+            QuizAccomplishedImpl quizAccomplished = new QuizAccomplishedImpl(counterOfCorrectAnswers, newQuiz);
             userAccomplishedQuizDAO.addAccomplishedQuiz(userId, quizAccomplished);
         }
     }
