@@ -36,41 +36,41 @@ class MailSenderServiceImplTest {
     }
   }
 
-  //@Test
+  @Test
   @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
   void testSendEmail() {
-//    try {
-//      try {
-//        userDAO.getUserByEmail("max.bataiev@gmail.com");
-//      } catch (DAOLogicException e) {
-//        log.error(MessagesForException.DAO_LOGIC_EXCEPTION + e.getMessage());
-//        fail();
-//      } catch (UserDoesNotExistException e) {
-//        userDAO.createUser(
-//            new UserImpl.UserBuilder()
-//                .setId(BigInteger.ONE)
-//                .setFirstName("test")
-//                .setLastName("test")
-//                .setPassword("test")
-//                .setEmail("max.bataiev@gmail.com")
-//                .build()
-//        );
-//      }
-//
-//      assertTrue(
-//          mailSenderService.sendEmail(
-//              new UserImpl.UserBuilder()
-//                  .setId(BigInteger.ONE)
-//                  .setFirstName("test")
-//                  .setLastName("test")
-//                  .setPassword("test")
-//                  .setEmail("max.bataiev@gmail.com")
-//                  .build()
-//          ));
-//    } catch (UserException | MailException | DAOLogicException e) {
-//      log.error(MessagesForException.DAO_LOGIC_EXCEPTION + e.getMessage());
-//      fail();
-//    }
+    try {
+      try {
+        userDAO.getUserByEmail("test@gmail.com");
+      } catch (DAOLogicException e) {
+        log.error(MessagesForException.DAO_LOGIC_EXCEPTION + e.getMessage());
+        fail();
+      } catch (UserDoesNotExistException e) {
+        userDAO.createUser(
+            new UserImpl.UserBuilder()
+                .setId(BigInteger.ONE)
+                .setFirstName("test")
+                .setLastName("test")
+                .setPassword("Qwerty123")
+                .setEmail("test@gmail.com")
+                .build()
+        );
+      }
+
+      assertTrue(
+          mailSenderService.sendEmail(
+              new UserImpl.UserBuilder()
+                  .setId(BigInteger.ONE)
+                  .setFirstName("test")
+                  .setLastName("test")
+                  .setPassword("Qwerty123")
+                  .setEmail("test@gmail.com")
+                  .build()
+          ));
+    } catch (UserException | MailException | DAOLogicException e) {
+      log.error(MessagesForException.DAO_LOGIC_EXCEPTION + e.getMessage());
+      fail();
+    }
   }
 
   @Test

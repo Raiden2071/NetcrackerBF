@@ -140,7 +140,7 @@ class UserServiceImplTest {
   void testValidateNewUser() {
     try {
       userService
-          .validateNewUser("max.bataiev@gmail.com", "qwertyui", "testFirstName", "testLastName");
+          .validateNewUser("max.bataiev@gmail.com", "Qwerty123", "testFirstName", "testLastName");
       assertTrue(true);
     } catch (UserException e) {
       fail();
@@ -171,7 +171,7 @@ class UserServiceImplTest {
   @Test
   void testNotValidFirstNameValidateNewUser() {
     try {
-      userService.validateNewUser("max.bataiev@gmail.com", "qwertyui", "te", "testLastName");
+      userService.validateNewUser("max.bataiev@gmail.com", "Qwerty123", "te", "testLastName");
       fail();
     } catch (UserException e) {
       assertTrue(true);

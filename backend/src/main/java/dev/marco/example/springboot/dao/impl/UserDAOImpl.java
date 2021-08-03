@@ -1,5 +1,6 @@
 package dev.marco.example.springboot.dao.impl;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -89,7 +90,9 @@ public class UserDAOImpl implements UserDAO {
 
   @Override
   public User getUserByEmail(String email) throws UserDoesNotExistException, DAOLogicException {
-
+//    if (StringUtils.isEmpty(email)) {
+//      throw new UserDoesNotExistException(MessagesForException.USERS_DOESNT_EXIT);
+//    }
     try (PreparedStatement statement = connection
         .prepareStatement(properties.getProperty(SEARCH_USER_BY_EMAIL))) {
 
@@ -98,8 +101,7 @@ public class UserDAOImpl implements UserDAO {
       ResultSet resultSet = statement.executeQuery();
 
       if (!resultSet.next()) {
-        return null;
-        //throw new UserDoesNotExistException(MessagesForException.INVALID_USERS_EMAIL + email);
+        throw new UserDoesNotExistException(MessagesForException.INVALID_USERS_EMAIL + email);
       }
 
       return new UserImpl.UserBuilder()
