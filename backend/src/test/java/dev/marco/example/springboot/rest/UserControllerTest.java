@@ -1,8 +1,14 @@
 package dev.marco.example.springboot.rest;
 
+import dev.marco.example.springboot.dao.UserDAO;
+import dev.marco.example.springboot.exception.QuestionDoesNotExistException;
+import dev.marco.example.springboot.exception.UserException;
+import dev.marco.example.springboot.model.User;
 import dev.marco.example.springboot.model.impl.UserImpl;
 import dev.marco.example.springboot.service.UserService;
+import org.apache.log4j.Logger;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,21 +16,32 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.math.BigInteger;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import static dev.marco.example.springboot.exception.MessagesForException.INVALID_USERS_EMAIL;
+import static dev.marco.example.springboot.model.User.EMAIL_PATTERN;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 class UserControllerTest {
+
+    private static final Logger log = Logger.getLogger(UserControllerTest.class);
 
     @Autowired
     private MockMvc mockMvc;
@@ -32,48 +49,114 @@ class UserControllerTest {
     @MockBean
     private UserService userService;
 
-    //@Test
-    @WithMockUser(username = "spring", password = "secret")
-    void authTest() throws Exception {
-        this.mockMvc.perform(get("/test"))
-                .andExpect(status().is(200));
+    @Test
+    @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
+    void loginTest() {
+        try {
+            String content = "{\n   \"email\":\"mark2@gmail.com\",\n   \"password\":\"testPassword2-\"\n}";
+
+            this.mockMvc.perform(post("/auth/local")
+                    .content(content)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk())
+                    .andReturn();
+
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
     }
 
-    //@Test
-    @WithMockUser(username = "spring", password = "secret")
-    void loginTest() throws Exception {
-        this.mockMvc.perform(post("/login")
-                .param("email", "mark2@gmail.com")
-                .param("password", "testPassword1-")
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                //.andExpect(content().json(""))
-                .andReturn();
+    @Test
+    @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
+    void loginBadRequestTest() {
+        try {
+            String content = "{\n   \"email\":\"mark2@gmail.com\",\n   \"password\":\"notAPassword\"\n}";
+
+            this.mockMvc.perform(post("/auth/local")
+                    .content(content)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isBadRequest())
+                    .andReturn();
+
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
     }
 
     /*
     @Test
-    @WithMockUser(username = "spring", password = "secret")
-    void loginTestThrows() throws Exception {
-        this.mockMvc.perform(post("/login")
-                .param("email", "asdasdasd")
-                .param("password", "asddasadasd")
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+    @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
+    void registerTest() throws Exception {
+        int num = new Random().nextInt(500000);
+        String content = "{\n\t\"firstName\":\"asdasd\"," +
+                "\n\t\"lastName\":\"asdasd\",\n   " +
+                "\"email\":\"newUser" + num + "@gmail.com\",\n   " +
+                "\"password\":\"testP123assword1-\"\n}";
+
+        this.mockMvc.perform(post("/auth/local/register")
+                .content(content)
+                .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
-
     }
-
      */
 
     @Test
+    @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
+    void registerAlredyExistsTest() throws Exception {
+        String content = "{\n\t\"firstName\":\"Mamba\"," +
+                "\n\t\"lastName\":\"Sigma\",\n   " +
+                "\"email\":\"masig@gmail.com\",\n   " +
+                "\"password\":\"testPassword3-\"\n}";
+
+        this.mockMvc.perform(post("/auth/local/register")
+                .content(content)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andReturn();
+    }
+
+    @Test
+    @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
+    void registerBadDataTest() throws Exception {
+        String content = "{\n\t\"firstName\":\"1\"," +
+                "\n\t\"2\":\"Sigma\",\n   " +
+                "\"email\":\"3\",\n   " +
+                "\"password\":\"4\"\n}";
+
+        this.mockMvc.perform(post("/auth/local/register")
+                .content(content)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andReturn();
+    }
+
+    @Test
+    @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
+    void recoverTest() throws Exception {
+        String content = "{\n\t\"email\":\"Olvik@gmail.com\"\n}";
+
+        this.mockMvc.perform(post("/auth/recover")
+                .content(content)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+    }
+
+    @Test
+    @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
     void shouldCreateMockMVC() {
         assertNotNull(mockMvc);
     }
 
     @Test
+    @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
     void getUserTest() throws Exception {
         when(userService.getUserById(BigInteger.ONE))
                 .thenReturn(new UserImpl.UserBuilder()
@@ -97,6 +180,7 @@ class UserControllerTest {
     }
 
     @Test
+    @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
     void deleteUserTest() throws Exception {
 
         this.mockMvc
@@ -110,6 +194,7 @@ class UserControllerTest {
     }
 
     @Test
+    @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
     void editUserTest() throws Exception {
 
         this.mockMvc

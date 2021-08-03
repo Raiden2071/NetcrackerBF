@@ -36,13 +36,13 @@ public class UserController implements RegexPatterns {
 
     @PostMapping("/auth/local/register")
     public void createUser(@RequestBody UserImpl user) {
-        log.info("mail: " + user.getEmail() + "firstName: " + user.getFirstName());
         try {
             userService.validateNewUser(
                     user.getEmail(),
                     user.getPassword(),
                     user.getFirstName(),
                     user.getLastName());
+
             BigInteger userId = userService.buildNewUser(
                     user.getEmail(),
                     user.getPassword(),
@@ -55,46 +55,54 @@ public class UserController implements RegexPatterns {
                     .build();
 
             mailSenderService.sendEmail(user1);
-        } catch (DAOLogicException | MailException | UserException e) {
+        } catch (UserException e) {
             log.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e.getCause());
+        } catch (DAOLogicException | MailException e) {
+            log.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e.getCause());
         }
     }
 
     @PostMapping("/auth/local")
     public ResponseEntity<User> tryToAuthorize(@RequestBody UserImpl user) {
         try {
-            if(!user.getEmail().matches(mailPattern)) {
-                throw new UserException(MessagesForException.INVALID_EMAIL);
+            if(StringUtils.isEmpty(user.getEmail()) || !user.getEmail().matches(mailPattern)) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
             }
-            if(!user.getPassword().matches(passPattern)) {
-                throw new UserException(MessagesForException.INVALID_PASSWORD);
+            if(StringUtils.isEmpty(user.getPassword()) || !user.getPassword().matches(passPattern)) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
             }
+
             User receivedUser = userService.authorize(user);
 
-            return ResponseEntity.ok(receivedUser);
-        } catch (DAOLogicException | UserException e) {
+            return new ResponseEntity<>(receivedUser, HttpStatus.OK);
+        } catch (DAOLogicException e) {
             log.error(e.getMessage());
-            return ResponseEntity.notFound().build();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e.getCause());
+        } catch (UserException | UserDoesNotExistException e) {
+            log.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
         }
     }
 
-    public void deleteUser(User user) {
-
-    }
-
-    public void editUser(User user) {
-
-    }
-
-    @PostMapping("/recover")
-    public void recoverPassword(@RequestBody String email) {
+    @PostMapping("/auth/recover")
+    public void recoverPassword(@RequestBody UserImpl user) {
         try {
-            User user = new UserImpl.UserBuilder()
-                    .setEmail(email)
-                    .build();
+            if(StringUtils.isEmpty(user.getEmail()) || !user.getEmail().matches(mailPattern)) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            }
+            log.error("wtf1");
             userService.recoverPassword(user);
-        } catch (DAOLogicException | MailException | UserException e) {
-            log.error("a");
+
+        } catch (DAOLogicException | MailException e) {
+            log.error("wtf2");
+            log.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e.getCause());
+        } catch (UserException e) {
+            log.error("wtf3");
+            log.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
         }
     }
 
