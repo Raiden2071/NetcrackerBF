@@ -1,6 +1,9 @@
 package dev.marco.example.springboot.dao.impl;
 
 import java.util.stream.Collectors;
+
+import dev.marco.example.springboot.model.QuizType;
+import dev.marco.example.springboot.model.impl.QuizImpl;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -59,25 +62,30 @@ public class UserAccomplishedQuizDAOImpl implements UserAccomplishedQuizDAO {
             throws DAOLogicException, QuizDoesNotExistException {
         try (PreparedStatement statement = connection
                 .prepareStatement(properties.getProperty(SEARCH_ACCOMPLISHED_QUIZES_BY_USER_ID))) {
-
             statement.setLong(1, idUser.longValue());
             ResultSet resultSet = statement.executeQuery();
-            Set<QuizAccomplishedImpl> quizes = new HashSet<>();
-
+            Set<QuizAccomplishedImpl> quizzes = new HashSet<>();
             if (!resultSet.isBeforeFirst()) {
-                return quizes;
+                log.error(ACCOMPLISHED_QUIZ_HAS_NOT_BEEN_FOUNDED + MESSAGE_FOR_GET_ACCOMPLISHED_QUIZ_BY_ID);
+                throw new QuizDoesNotExistException(ACCOMPLISHED_QUIZ_HAS_NOT_BEEN_FOUNDED);
             }
             while (resultSet.next()) {
                 QuizAccomplishedImpl quiz = new QuizAccomplishedImpl(
                         resultSet.getInt(CORRECT_ANSWERS),
                         resultSet.getInt(IS_FAVOURITE) == TRUE_SQL,
-                        BigInteger.valueOf(resultSet.getLong(QUIZ))
-                );
-
-                quizes.add(quiz);
+                        resultSet.getDate(DATE_CREATE),
+                          QuizImpl.QuizBuilder()
+                                .setId(BigInteger.valueOf(resultSet.getLong(ID_QUIZ)))
+                                .setTitle(resultSet.getString(TITLE))
+                                .setDescription(resultSet.getString(DESCRIPTION))
+                                .setCreationDate(resultSet.getDate(CREATION_DATE))
+                                .setQuizType(QuizType.values() [resultSet.getInt(QUIZ_TYPE)])
+                                .setCreatorId(BigInteger.valueOf(resultSet.getLong(CREATOR)))
+                                .build());
+                quizzes.add(quiz);
             }
-            return quizes;
-        } catch (SQLException e) {
+            return quizzes;
+        } catch (SQLException | QuizException e) {
             throw new DAOLogicException("DaoLogic exception", e);
         }
     }
@@ -100,11 +108,13 @@ public class UserAccomplishedQuizDAOImpl implements UserAccomplishedQuizDAO {
     public void addAccomplishedQuiz(BigInteger idUser, QuizAccomplishedImpl quiz)
             throws DAOLogicException {
         try {
+            if(isAccomplishedQuiz(idUser, quiz.getQuiz().getId()))
+                return;
             PreparedStatement preparedStatement = connection.prepareStatement(
                     properties.getProperty(ADD_ACCOMPLISHED_QUIZ));
             preparedStatement.setLong(1, idUser.longValue());
             preparedStatement.setDate(2, new Date(System.currentTimeMillis()));
-            preparedStatement.setLong(3, quiz.getQuizId().longValue());
+            preparedStatement.setLong(3, quiz.getQuiz().getId().longValue());
             preparedStatement.setInt(4, quiz.getCorrectAnswers());
             preparedStatement.setInt(5, quiz.getIntFavourite());
             preparedStatement.executeUpdate();
@@ -122,9 +132,8 @@ public class UserAccomplishedQuizDAOImpl implements UserAccomplishedQuizDAO {
                     .prepareStatement(properties.getProperty(UPDATE_ACCOMPLISHED_QUIZ));
             preparedStatement.setDate(1, new Date(System.currentTimeMillis()));
             preparedStatement.setInt(2, newQuiz.getCorrectAnswers());
-            preparedStatement.setInt(3, newQuiz.getIntFavourite());
-            preparedStatement.setLong(4, idUser.longValue());
-            preparedStatement.setLong(5, newQuiz.getQuizId().longValue());
+            preparedStatement.setLong(3, idUser.longValue());
+            preparedStatement.setLong(4, newQuiz.getQuiz().getId().longValue());
             preparedStatement.executeUpdate();
         } catch (SQLException throwables) {
             log.error(DAO_LOGIC_EXCEPTION + throwables.getMessage());
@@ -133,15 +142,15 @@ public class UserAccomplishedQuizDAOImpl implements UserAccomplishedQuizDAO {
     }
 
     @Override
-    public void setIsFavoriteQuiz(BigInteger idUser, QuizAccomplishedImpl quiz)
+    public void setIsFavoriteQuiz(BigInteger idUser, BigInteger idQuiz, int isFavourite)
             throws DAOLogicException {
 
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(
                     properties.getProperty(SET_IS_FAVOURITE));
-            preparedStatement.setInt(1, quiz.getIntFavourite());
+            preparedStatement.setInt(1, isFavourite);
             preparedStatement.setLong(2, idUser.longValue());
-            preparedStatement.setLong(3, quiz.getQuizId().longValue());
+            preparedStatement.setLong(3, idQuiz.longValue());
             preparedStatement.executeUpdate();
         } catch (SQLException throwables) {
             log.error(DAO_LOGIC_EXCEPTION + throwables.getMessage());
@@ -163,13 +172,19 @@ public class UserAccomplishedQuizDAOImpl implements UserAccomplishedQuizDAO {
                 throw new QuizDoesNotExistException(ACCOMPLISHED_QUIZ_HAS_NOT_BEEN_FOUNDED);
             }
             resultSet.next();
-
             return new QuizAccomplishedImpl(
                     resultSet.getInt(CORRECT_ANSWERS),
                     resultSet.getInt(IS_FAVOURITE) == TRUE_SQL,
-                    BigInteger.valueOf(resultSet.getLong(QUIZ))
-            );
-        } catch (SQLException throwables) {
+                    resultSet.getDate(DATE_CREATE),
+                    QuizImpl.QuizBuilder()
+                            .setId(BigInteger.valueOf(resultSet.getLong(ID_QUIZ)))
+                            .setTitle(resultSet.getString(TITLE))
+                            .setDescription(resultSet.getString(DESCRIPTION))
+                            .setCreationDate(resultSet.getDate(CREATION_DATE))
+                            .setQuizType(QuizType.values() [resultSet.getInt(QUIZ_TYPE)])
+                            .setCreatorId(BigInteger.valueOf(resultSet.getLong(CREATOR)))
+                            .build());
+        } catch (SQLException | QuizException throwables) {
             log.error(DAO_LOGIC_EXCEPTION + throwables.getMessage());
             throw new DAOLogicException(DAO_LOGIC_EXCEPTION, throwables);
         }

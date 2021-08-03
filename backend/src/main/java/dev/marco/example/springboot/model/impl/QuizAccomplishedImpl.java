@@ -1,18 +1,26 @@
 package dev.marco.example.springboot.model.impl;
-
 import dev.marco.example.springboot.model.Quiz;
 
-import java.math.BigInteger;
+import java.util.Date;
+
 
 public class QuizAccomplishedImpl {
 
   private int correctAnswers;
   private Boolean isFavourite;
+  private Date dateOfQuiz;
   private Quiz quiz;
 
   public QuizAccomplishedImpl(int correctAnswers, Boolean isFavourite, Quiz quiz) {
     this.correctAnswers = correctAnswers;
     this.isFavourite = isFavourite;
+    this.quiz = quiz;
+  }
+
+  public QuizAccomplishedImpl(int correctAnswers, Boolean isFavourite, Date dateOfQuiz, Quiz quiz) {
+    this.correctAnswers = correctAnswers;
+    this.isFavourite = isFavourite;
+    this.dateOfQuiz = dateOfQuiz;
     this.quiz = quiz;
   }
 
@@ -53,12 +61,20 @@ public class QuizAccomplishedImpl {
     isFavourite = favourite;
   }
 
-  public Quiz getQuizId() {
+  public Quiz getQuiz() {
     return quiz;
   }
 
-  public void setQuizId(Quiz quiz) {
+  public void setQuiz(Quiz quiz) {
     this.quiz = quiz;
+  }
+
+  public void setDateOfQuiz(Date dateOfQuiz) {
+    this.dateOfQuiz = dateOfQuiz;
+  }
+
+  public Date getDateOfQuiz() {
+    return dateOfQuiz;
   }
 
   @Override

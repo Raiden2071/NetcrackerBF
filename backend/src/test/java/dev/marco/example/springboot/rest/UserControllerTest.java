@@ -1,21 +1,27 @@
 package dev.marco.example.springboot.rest;
 
+import dev.marco.example.springboot.exception.DAOLogicException;
+import dev.marco.example.springboot.exception.UserDoesNotExistException;
 import dev.marco.example.springboot.model.impl.QuizAccomplishedImpl;
 import dev.marco.example.springboot.model.impl.UserImpl;
 import dev.marco.example.springboot.service.UserService;
 import org.apache.log4j.Logger;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
+import org.mockito.internal.matchers.Any;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.web.HttpMediaTypeException;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigInteger;
 import java.util.HashSet;
@@ -27,8 +33,8 @@ import java.util.regex.Pattern;
 
 import static dev.marco.example.springboot.exception.MessagesForException.INVALID_USERS_EMAIL;
 import static dev.marco.example.springboot.model.User.EMAIL_PATTERN;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -210,6 +216,35 @@ class UserControllerTest {
         verify(userService).updateUsersFullName(BigInteger.ONE, "Leopold", "Kotanovich");
         verify(userService).updateUsersDescription(BigInteger.ONE, "i like to play billiards");
         verify(userService).updateUsersPassword(BigInteger.ONE, "12345Qwerty");
+    }
+
+    @Test
+    @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
+    void getUserShouldReturnResponseStatusExceptionNotFound() throws Exception {
+        when(userService.getUserById(any(BigInteger.class)))
+                .thenThrow(UserDoesNotExistException.class);
+
+        this.mockMvc.perform(MockMvcRequestBuilders
+                        .get("/user")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("1"))
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof ResponseStatusException))
+                .andExpect(result -> assertEquals(HttpStatus.NOT_FOUND.value(), result.getResponse().getStatus()));
+    }
+
+
+    @Test
+    @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
+    void getUserShouldReturnResponseStatusExceptionInternalServerError() throws Exception {
+        when(userService.getUserById(any(BigInteger.class)))
+                .thenThrow(DAOLogicException.class);
+
+        this.mockMvc.perform(MockMvcRequestBuilders
+                        .get("/user")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("1"))
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof ResponseStatusException))
+                .andExpect(result -> assertEquals(HttpStatus.INTERNAL_SERVER_ERROR.value(), result.getResponse().getStatus()));
     }
 
     @Test

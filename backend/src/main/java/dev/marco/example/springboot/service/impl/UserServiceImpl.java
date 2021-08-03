@@ -278,9 +278,9 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public void setIsFavoriteQuiz(BigInteger idUser, QuizAccomplishedImpl quiz)
+  public void setIsFavoriteQuiz(BigInteger idUser, BigInteger idQuiz, int isFavourite)
       throws DAOLogicException {
-    userAccomplishedQuizDAO.setIsFavoriteQuiz(idUser, quiz);
+    userAccomplishedQuizDAO.setIsFavoriteQuiz(idUser, idQuiz, isFavourite);
   }
 
   @Override

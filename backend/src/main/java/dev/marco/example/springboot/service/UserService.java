@@ -55,7 +55,7 @@ public interface UserService {
 
   void editAccomplishedQuiz(BigInteger idUser, QuizAccomplishedImpl newQuiz) throws DAOLogicException;
 
-  void setIsFavoriteQuiz(BigInteger idUser, QuizAccomplishedImpl quiz) throws DAOLogicException;
+  void setIsFavoriteQuiz(BigInteger idUser,  BigInteger idQuiz, int isFavourite) throws DAOLogicException;
 
   void addAccomplishedQuiz(BigInteger id, QuizAccomplishedImpl quiz) throws DAOLogicException;
 
