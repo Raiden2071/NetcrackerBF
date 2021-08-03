@@ -68,7 +68,6 @@ class AnnouncementServiceImplTest {
             announcementService.deleteAnnouncement(idAnnouncement, BigInteger.valueOf(5));
         } catch (AnnouncementException | DAOLogicException | UserException e) {
             log.error(LOG_ERROR_CASE +"buildNewAnnouncement "+ e.getMessage());
-            e.printStackTrace();
             fail();
         }
     }

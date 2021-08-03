@@ -130,13 +130,15 @@ public class GameServiceImplTest {
                     userAccomplishedQuizDAO.getAccomplishedQuizById(user.getId(), BigInteger.valueOf(3));
             assertNotNull(quizAccomplished);
 
-            Quiz quizById = quizDAO.getQuizById(BigInteger.valueOf(3));
-            quizAccomplished.setQuizId(quizById);
+            quizAccomplished.setFavourite(false);
+            gameService.setIsFavorite(user, quizAccomplished);
             assertEquals(false, quizAccomplished.getFavourite());
 
+            quizAccomplished.setFavourite(true);
             gameService.setIsFavorite(user, quizAccomplished);
             assertEquals(true, quizAccomplished.getFavourite());
 
+            quizAccomplished.setFavourite(false);
             gameService.setIsFavorite(user, quizAccomplished);
             assertEquals(false, quizAccomplished.getFavourite());
         } catch (UserDoesNotExistException | DAOLogicException | QuizDoesNotExistException e) {

@@ -26,7 +26,7 @@ public interface UserAccomplishedQuizDAO {
   void editAccomplishedQuiz(BigInteger idUser, QuizAccomplishedImpl newQuiz)
       throws DAOLogicException;
 
-  void setIsFavoriteQuiz(BigInteger idUser, QuizAccomplishedImpl quiz) throws DAOLogicException;
+  void setIsFavoriteQuiz(BigInteger idUser, BigInteger idQuiz, int isFavourite) throws DAOLogicException;
 
   void addAccomplishedQuiz(BigInteger id, QuizAccomplishedImpl quiz) throws DAOLogicException;
 
@@ -44,7 +44,13 @@ public interface UserAccomplishedQuizDAO {
 
   String CORRECT_ANSWERS = "correct_answers";
   String IS_FAVOURITE = "is_favourite";
-  String QUIZ = "quiz";
+  String DATE_CREATE = "date_create";
+  String ID_QUIZ = "id_quiz";
+  String TITLE = "title";
+  String DESCRIPTION = "description";
+  String CREATION_DATE = "creation_date";
+  String QUIZ_TYPE = "quiz_type";
+  String CREATOR = "creator";
 
   String MESSAGE_FOR_GET_ACCOMPLISHED_QUIZ_BY_ID = " in getAccomplishedQuizById";
 
