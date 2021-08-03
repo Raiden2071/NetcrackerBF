@@ -82,7 +82,7 @@ public class UserController implements RegexPatterns {
     }
 
     @PostMapping("/recover")
-    public void recoverPassword(@RequestParam String email) {
+    public void recoverPassword(@RequestBody String email) {
         try {
             User user = new UserImpl.UserBuilder()
                     .setEmail(email)
