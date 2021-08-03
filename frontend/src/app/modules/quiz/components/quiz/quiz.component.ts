@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { switchMap } from 'rxjs/operators';
 import { Quiz } from 'src/app/models/quiz';
+import { quizService } from 'src/app/shared/services/quiz.service';
 
 @Component({
   selector: 'app-quiz',
@@ -17,7 +19,8 @@ export class QuizComponent implements OnInit {
 
   constructor(
     private modalService: NgbModal,
-    // private quizService: quizService,
+    private quizService: quizService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -144,17 +147,12 @@ export class QuizComponent implements OnInit {
     // this.getquiz();
   }
 
-  getQuiz() {
+  getQuizzes() {
     // this.quizService.getList().subscribe(quiz => this.quiz = quiz);
   }
 
   createQuiz(): void {
-  //   const modalRef = this.modalService.open(CreateQuizComponent, { centered: true });
-  //   modalRef.closed.pipe(
-  //     switchMap(quiz => this.quizService.createOne(quiz))
-  //   ).subscribe(() =>
-  //     this.getquiz()
-  //   );
+    this.router.navigateByUrl('quiz/create-quiz');
   }
 
 }

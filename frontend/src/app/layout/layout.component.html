@@ -1,0 +1,9 @@
+<div *ngIf="!(router.url =='/quiz/quiz-questions')" class="d-flex h-100 w-100"> 
+  <app-sidebar></app-sidebar>
+  <router-outlet></router-outlet>  
+</div>
+
+<div *ngIf="(router.url =='/quiz/quiz-questions')" class="d-flex h-100 w-100">
+  <app-quiz-sidebar></app-quiz-sidebar>
+  <router-outlet></router-outlet>  
+</div>

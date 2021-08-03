@@ -3,10 +3,10 @@ export interface Quiz {
   quizId: number,
   title: String,
   description: String,
-  quizType: number,
+  quizType: QuizType,
   creationDate: Date,
   authorId: number,
-  questions: [
+  questions?: [
     {
       questionId: number,
       questionText: String, 	// текст вопроса
@@ -24,4 +24,9 @@ export interface Quiz {
 }
 
 
-
+export enum QuizType {
+  history = "history",
+  science = "science",
+  geographical = "geographical",
+  mathematics = "mathematics"
+}
