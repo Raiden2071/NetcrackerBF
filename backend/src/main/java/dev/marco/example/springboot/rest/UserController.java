@@ -88,7 +88,7 @@ public class UserController implements RegexPatterns {
   }
 
   @PostMapping("/recover")
-  public void recoverPassword(@RequestBody String email) {
+  public void recoverPassword(@RequestParam String email) {
     try {
       User user = new UserImpl.UserBuilder()
           .setEmail(email)
@@ -123,12 +123,12 @@ public class UserController implements RegexPatterns {
   }
 
   @PostMapping("/confirm")
-  public void confirmEmail(@RequestBody String confirmationCode) {
+  public void confirmEmail(@RequestParam String code) {
     try {
-      if (StringUtils.isEmpty(confirmationCode)) {
+      if (StringUtils.isEmpty(code)) {
         throw new MailException(MessagesForException.EMAIL_ERROR);
       }
-      mailSenderService.confirmEmail(confirmationCode);
+      mailSenderService.confirmEmail(code);
     } catch (Exception e) {
       e.printStackTrace();
     }
