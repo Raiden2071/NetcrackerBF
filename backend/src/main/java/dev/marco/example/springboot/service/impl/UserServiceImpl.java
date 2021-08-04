@@ -46,12 +46,15 @@ public class UserServiceImpl implements UserService, RegexPatterns {
     mailSenderService.setTestConnection();
   }
 
+
   @Override
   public BigInteger buildNewUser(String email, String password, String firstName, String lastName)
       throws UserException, DAOLogicException {
     try {
       validateNewUser(email, password, firstName, lastName);
       log.debug("User with email=" + email + " was validated!");
+
+      BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
       try {
         if (userDAO.getUserByEmail(email) != null) {
@@ -65,7 +68,7 @@ public class UserServiceImpl implements UserService, RegexPatterns {
           .setFirstName(firstName)
           .setLastName(lastName)
           .setEmail(email)
-          .setPassword(password)
+          .setPassword(encoder.encode(password))
           .build();
       log.debug("User with email=" + email + " was build!");
       return userDAO.createUser(user);
@@ -76,10 +79,13 @@ public class UserServiceImpl implements UserService, RegexPatterns {
 
   }
 
+
   @Override
   public User authorize(User user)
       throws DAOLogicException, UserException, UserDoesNotExistException {
     try {
+
+
       if (user != null) {
         return userDAO.getAuthorizeUser(user.getEmail(), user.getPassword());
       }

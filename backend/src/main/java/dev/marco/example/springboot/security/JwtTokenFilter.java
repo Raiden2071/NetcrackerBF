@@ -2,6 +2,7 @@ package dev.marco.example.springboot.security;
 
 import dev.marco.example.springboot.exception.JwtAuthenticationException;
 import dev.marco.example.springboot.rest.UserController;
+import io.jsonwebtoken.MalformedJwtException;
 import org.apache.log4j.Logger;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -38,6 +39,8 @@ public class JwtTokenFilter extends GenericFilterBean {
             }
         } catch (JwtAuthenticationException e) {
             log.error("jwtGetAuthExc");
+        } catch (MalformedJwtException e) {
+            log.error("Invalid JWT Token");
         }
         filterChain.doFilter(servletRequest, servletResponse);
     }

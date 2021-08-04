@@ -64,8 +64,9 @@ public class JwtTokenProvider {
     }
 
     public Authentication getAuthentication(String token) {
+        log.debug("Email from token: " + getEmailFromToken(token));
         UserDetails userDetails = this.userDetailsService.loadUserByUsername(getEmailFromToken(token));
-        log.debug("JwtTokenProvider Authentication got username: " + userDetails.getUsername() + " " + userDetails.getPassword());
+        log.debug("JwtTokenProvider Authentication got username: " + userDetails.getUsername());
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 

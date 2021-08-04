@@ -27,13 +27,14 @@ public class JwtUserDetailService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         try {
             User user = userService.getUserByEmail(email);
+            log.debug("loadUserByUsername email: " + user.getEmail());
             if (user == null) {
                 log.error("JwtUserDetailsService user == null error");
                 throw new UsernameNotFoundException("User with email: " + email + " not found");
             }
 
             JwtUser jwtUser = JwtUserFactory.create(user);
-            log.info("IN loadUserByUsername - user with email:" + email + " successfully loaded");
+            log.info("IN loadUserByUsername - user with email:" + jwtUser.getUsername() + " successfully loaded");
             return jwtUser;
         } catch (UserDoesNotExistException e) {
             log.error("JwtUserDetailsService UserDoesNotExistException " + e.getCause(), e);
