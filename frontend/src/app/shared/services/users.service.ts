@@ -14,9 +14,9 @@ export class UserService extends AbstractCrudService<User>{
 
   subject$ = new BehaviorSubject(1);
   userInfo$ = this.subject$.pipe(
-
+    
     tap(v => console.log(v)),
-    switchMap((val) =>
+    switchMap((val) => 
       val ? this.getMe().pipe(
         switchMap(({ id }) => this.getOne(id))
       ) : of(null)

@@ -13,7 +13,7 @@ export class RegisterComponent implements OnInit {
 
   showPassword = false;
   showErrors = false;
-
+  
   registerForm: FormGroup = this.fb.group({
     username: ['1212'],
     firstName:        ['', [Validators.required]],
@@ -34,7 +34,7 @@ export class RegisterComponent implements OnInit {
   ngOnInit(): void {
     this.registerForm.valueChanges.subscribe(() => this.showErrors = false);
   }
-
+  
   onSubmit(): void {
     if(this.registerForm.valid) {
       this.authService.register(this.registerForm.value).subscribe(data => console.log(data));
@@ -43,7 +43,7 @@ export class RegisterComponent implements OnInit {
     else {
       this.showErrors = true;
       console.log('not valid');
-
+      
     }
   }
 

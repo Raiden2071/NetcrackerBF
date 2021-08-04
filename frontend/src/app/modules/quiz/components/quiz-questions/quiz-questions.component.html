@@ -1,0 +1,87 @@
+<form [formGroup]="questionsForm" (ngSubmit)="onSubmit()" class="m-5 w-100">
+  <h1 class="mb-5 text-center">Settings</h1>
+  <div class="d-flex justify-content-between">
+    <div>
+      <!-- forms + inputs -->
+      <div>
+
+
+        <!-- 
+                <ng-container formArrayName="aCars">
+        <tr *ngFor="let car of cars.controls; let i=index" [formGroupName]="i">
+          <td class="input-group input-group-sm">
+            <input formControlName="stateNumber" [attr.disabled]="mode==0 ? ownerForm.disabled : null">
+          </td>
+          <td>
+            <input formControlName="firm" [attr.disabled]="mode==0 ? ownerForm.disabled : null">
+          </td>
+          <td>
+            <input formControlName="model" [attr.disabled]="mode==0 ? ownerForm.disabled : null">
+          </td>
+          <td>
+            <input formControlName="productionYear" [attr.disabled]="mode==0 ? ownerForm.disabled : null">
+          </td>
+          <img src="/assets/image/delete_black.svg" (click)="deleteCar(i)">
+        </tr>
+      </ng-container>
+         -->
+
+
+
+
+
+        <!-- firstName -->
+        <div class="d-flex  mb-4">
+          <span class="h4 text__input me-4">
+            Write a question
+          </span>
+          <input type="text" class="form-control" formControlName="value">
+        </div>
+        <!-- first field -->
+        <div class="d-flex mb-4">
+          <span class="h4 text__input me-4">
+            Field 1
+          </span>
+          <input type="text" class="form-control" formControlName="value">
+          <!-- <input type="checkbox"> -->
+        </div>
+        <!-- second field -->
+        <div class="d-flex mb-4">
+          <span class="h4 text__input me-4">
+            Field 2
+          </span>
+          <input type="text" class="form-control" formControlName="value">
+        </div>
+        <!-- third field -->
+        <div class="d-flex mb-4">
+          <span class="h4 text__input me-4">
+            Field 3
+          </span>
+          <input type="text" class="form-control" formControlName="value">
+        </div>
+        <!-- four field -->
+        <div class="d-flex mb-4">
+          <span class="h4 text__input me-4">
+            Field 4
+          </span>
+          <input type="text" class="form-control" formControlName="value">
+        </div>
+
+      </div>
+    </div>
+  </div>
+</form>
+<!-- 
+<button (click)="click()">1</button>
+
+
+<div class="m-5">
+  <div>
+    <input type="radio" name="contact" value="phone">
+    Ответ 5
+  </div>
+  <div>
+    <input type="radio" name="contact" value="phone">
+    4
+  </div>
+</div> -->
