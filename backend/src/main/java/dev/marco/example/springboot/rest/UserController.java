@@ -199,8 +199,8 @@ public class UserController implements RegexPatterns {
     }
   }
 
-  @GetMapping("/user/acc_quiz")
-  public Set<QuizAccomplishedImpl> getAccomplishedQuizzes(@RequestParam BigInteger userId) {
+  @GetMapping("/user/acc_quiz/{userId}")
+  public Set<QuizAccomplishedImpl> getAccomplishedQuizzesByUser(@PathVariable BigInteger userId) {
     try {
       return userService.getAccomplishedQuizesByUser(userId);
     } catch (DAOLogicException e) {

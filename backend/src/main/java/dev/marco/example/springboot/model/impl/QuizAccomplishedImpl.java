@@ -82,6 +82,7 @@ public class QuizAccomplishedImpl {
     return "QuizAccomplishedImpl{" +
             "correctAnswers=" + correctAnswers +
             ", isFavourite=" + isFavourite +
+            ", dateOfQuiz=" + dateOfQuiz +
             ", quiz=" + quiz +
             '}';
   }
