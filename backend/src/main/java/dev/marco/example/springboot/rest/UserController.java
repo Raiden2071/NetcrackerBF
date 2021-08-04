@@ -85,9 +85,15 @@ public class UserController implements RegexPatterns {
         return "Test";
     }
 
+    @GetMapping("/testAdmin")
+    public String testAdmin() {
+        return "TestAdmin";
+    }
+
     @PostMapping("/auth/local")
     public ResponseEntity<Map<String, Object>> tryToAuthorize(@RequestBody UserImpl user) {
         try {
+            log.debug("WTF");
             if (StringUtils.isEmpty(user.getEmail()) || !user.getEmail().matches(mailPattern)) {
                 log.error("tryToAuthorize email not valid");
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
@@ -104,7 +110,7 @@ public class UserController implements RegexPatterns {
 
             Map<String, Object> response = new HashMap<>();
             response.put("user", receivedUser);
-            response.put("token", token);
+            response.put("jwt", token);
 
             return ResponseEntity.ok(response);
         } catch (DAOLogicException e) {
@@ -114,7 +120,7 @@ public class UserController implements RegexPatterns {
             log.error(e.getMessage());
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
         } catch (AuthenticationException e) {
-            log.error("WTF " + e.getMessage() + " " + e.getCause());
+            log.error("AuthenticationException " + e.getMessage() + " " + e.getCause());
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

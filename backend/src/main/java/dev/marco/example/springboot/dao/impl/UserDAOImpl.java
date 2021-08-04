@@ -328,7 +328,7 @@ public class UserDAOImpl implements UserDAO {
         throw new UserDoesNotExistException(MessagesForException.USERS_DOESNT_EXIT + email);
       }
 
-      return resultSet.getString(1);
+      return resultSet.getString("PASSWD");
 
     } catch (SQLException e) {
       log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
