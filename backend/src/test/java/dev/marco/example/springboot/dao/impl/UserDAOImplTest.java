@@ -436,4 +436,14 @@ class UserDAOImplTest {
       fail();
     }
   }
+
+  @Test
+  void testGetUserPasswordByEmail() {
+    try {
+      assertNotNull(userDAO.getUserPasswordByEmail("maksim.bataev.2016@gmail.com"));
+    } catch (UserDoesNotExistException | DAOLogicException e) {
+      log.error("Error while testing getUserPasswordByEmail " + e.getMessage());
+      fail();
+    }
+  }
 }

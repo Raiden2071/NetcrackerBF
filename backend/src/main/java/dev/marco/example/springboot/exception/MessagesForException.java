@@ -9,6 +9,7 @@ public interface MessagesForException {
   String PROPERTY_ERROR = "Property error";
   String MESSAGE_ERROR = "Message error";
   String ERROR_WHILE_RECOVERING_PASSWORD = "Error while recovering password";
+  String WRONG_PASSWORD = "Wrong password!";
 
   String ERROR_WHILE_SETTING_TEST_CONNECTION = "Error while setting test connection ";
   String DAO_LOGIC_EXCEPTION = "Dao logic exception ";
