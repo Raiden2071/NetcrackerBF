@@ -256,6 +256,13 @@ class UserControllerTest {
 
     @Test
     @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
+    void confirmEmailTest() throws Exception {
+        userService.buildNewUser("test@gmail.com", "Qwerty123", "testName", "testLastName");
+
+    }
+
+    @Test
+    @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
     void getAccomplishedQuizzesByUser() throws Exception {
         this.mockMvc
                 .perform(MockMvcRequestBuilders
