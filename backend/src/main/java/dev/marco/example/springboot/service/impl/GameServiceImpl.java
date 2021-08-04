@@ -97,6 +97,7 @@ public class GameServiceImpl implements GameService {
     @Override
     public void setIsFavorite(User user, QuizAccomplishedImpl quizAccomplished) throws DAOLogicException {
         int isFavorite = quizAccomplished.getIntFavourite();
+        isFavorite = (isFavorite == 0) ? 1 : 0;
         BigInteger userId = user.getId();
         BigInteger quizId = quizAccomplished.getQuiz().getId();
         userAccomplishedQuizDAO.setIsFavoriteQuiz(userId, quizId, isFavorite);

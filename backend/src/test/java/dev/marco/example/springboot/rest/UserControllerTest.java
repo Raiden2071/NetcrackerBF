@@ -253,4 +253,16 @@ class UserControllerTest {
 
         verify(userService).getFavoriteQuizesByUser(BigInteger.valueOf(1));
     }
+
+    @Test
+    @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
+    void getAccomplishedQuizzesByUser() throws Exception {
+        this.mockMvc
+                .perform(MockMvcRequestBuilders
+                        .get("/user/acc_quiz/2")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+
+        verify(userService).getAccomplishedQuizesByUser(BigInteger.TWO);
+    }
 }
