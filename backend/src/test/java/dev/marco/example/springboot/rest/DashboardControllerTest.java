@@ -32,19 +32,19 @@ public class DashboardControllerTest {
     @MockBean
     private DashboardService dashboardService;
 
-//    @Test
-//    @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
-//    void generateDashboard() throws Exception {
-//        User user = new UserImpl.UserBuilder()
-//                .setId(BigInteger.valueOf(3))
-//                .build();
-//
-//        this.mockMvc
-//                .perform(MockMvcRequestBuilders
-//                        .get("/dashboard/3")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                .andExpect(MockMvcResultMatchers.status().isOk());
-//
-//        verify(dashboardService).generateDashboard(user.getId());
-//    }
+    @Test
+    @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
+    void generateDashboard() throws Exception {
+        User user = new UserImpl.UserBuilder()
+                .setId(BigInteger.valueOf(3))
+                .build();
+
+        this.mockMvc
+                .perform(MockMvcRequestBuilders
+                        .get("/dashboard/3")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+
+        verify(dashboardService).generateDashboard(user.getId());
+    }
 }
