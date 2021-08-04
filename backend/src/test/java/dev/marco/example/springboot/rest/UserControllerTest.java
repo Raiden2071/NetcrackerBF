@@ -174,9 +174,7 @@ class UserControllerTest {
 
         this.mockMvc
                 .perform(MockMvcRequestBuilders
-                        .get("/user")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("1"))
+                        .get("/user/{idUser}", BigInteger.ONE))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(BigInteger.ONE))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.firstName").value("Golum"))
@@ -225,9 +223,7 @@ class UserControllerTest {
                 .thenThrow(UserDoesNotExistException.class);
 
         this.mockMvc.perform(MockMvcRequestBuilders
-                        .get("/user")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("1"))
+                        .get("/user/{idUser}", BigInteger.ONE))
                 .andExpect(result -> assertTrue(result.getResolvedException() instanceof ResponseStatusException))
                 .andExpect(result -> assertEquals(HttpStatus.NOT_FOUND.value(), result.getResponse().getStatus()));
     }
@@ -240,9 +236,7 @@ class UserControllerTest {
                 .thenThrow(DAOLogicException.class);
 
         this.mockMvc.perform(MockMvcRequestBuilders
-                        .get("/user")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("1"))
+                        .get("/user/{idUser}", BigInteger.ONE))
                 .andExpect(result -> assertTrue(result.getResolvedException() instanceof ResponseStatusException))
                 .andExpect(result -> assertEquals(HttpStatus.INTERNAL_SERVER_ERROR.value(), result.getResponse().getStatus()));
     }
