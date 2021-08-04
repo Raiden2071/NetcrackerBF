@@ -1,6 +1,8 @@
 package dev.marco.example.springboot.service.impl;
 
+import dev.marco.example.springboot.dao.AnswerDAO;
 import dev.marco.example.springboot.dao.QuestionDAO;
+import dev.marco.example.springboot.model.Answer;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,15 +26,22 @@ public class QuizServiceImpl implements QuizService {
 
     private static final Logger log = Logger.getLogger(QuizServiceImpl.class);
 
-    @Autowired
-    private QuizDAO quizDAO;
+    private final QuizDAO quizDAO;
+    private final QuestionDAO questionDAO;
+    private final AnswerDAO answerDAO;
 
     @Autowired
-    private QuestionDAO questionDAO;
+    public QuizServiceImpl(QuizDAO quizDAO, QuestionDAO questionDAO, AnswerDAO answerDAO) {
+        this.quizDAO = quizDAO;
+        this.questionDAO = questionDAO;
+        this.answerDAO = answerDAO;
+    }
 
     @Override
     public void setTestConnection() throws DAOConfigException {
         quizDAO.setTestConnection();
+        questionDAO.setTestConnection();
+        answerDAO.setTestConnection();
     }
 
 
@@ -57,6 +66,16 @@ public class QuizServiceImpl implements QuizService {
                     .build();
 
             validateNewQuiz(title, description, questions, userId);
+
+//            for (Question question : questions) {
+//                questionDAO.createQuestion(question, quiz.getId());
+//
+//                List<Answer> answers = answerDAO.getAnswersByQuestionId(question.getId());
+//                for (Answer answer : answers) {
+//                    answerDAO.createAnswer(answer);
+//                }
+//            }
+
 
             return quizDAO.createQuiz(quiz);
 
