@@ -1,6 +1,7 @@
 package dev.marco.example.springboot.rest;
 
 import dev.marco.example.springboot.model.impl.QuizImpl;
+import dev.marco.example.springboot.service.UserService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,7 @@ import dev.marco.example.springboot.service.QuizService;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -24,8 +26,12 @@ public class QuizController {
     private QuizService quizService;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     public void setTestConnection() throws DAOConfigException {
         quizService.setTestConnection();
+        userService.setTestConnection();
     }
 
     private static final Logger log = Logger.getLogger(QuizController.class);
@@ -71,14 +77,29 @@ public class QuizController {
     }
 
     @PostMapping("/")
-    public Quiz createQuiz(@RequestBody QuizImpl quiz) throws DAOLogicException, UserException, QuizException, QuestionException {
-        return quizService.buildNewQuiz(
-                quiz.getTitle(),
-                quiz.getDescription(),
-                quiz.getQuizType(),
-                quiz.getCreatorId(),
-                quiz.getQuestions()
-                );
+    public Quiz createQuiz(@RequestBody QuizImpl quiz) {
+        try {
+            return quizService.buildNewQuiz(
+                    quiz.getTitle(),
+                    quiz.getDescription(),
+                    quiz.getQuizType(),
+                    quiz.getCreatorId(),
+                    quiz.getQuestions()
+            );
+        } catch (DAOLogicException e) {
+            log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e.getCause());
+        } catch (QuestionException e) {
+            log.error(QUESTION_NOT_FOUND + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
+        } catch (UserException e) {
+            log.error(USER_NOT_FOUND_EXCEPTION + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
+        } catch (QuizException e) {
+            log.error(QUIZ_NOT_FOUND_EXCEPTION + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
+        }
+
     }
 
 
@@ -132,19 +153,28 @@ public class QuizController {
 
 
     @GetMapping("/filter")
-    public List<Quiz> showAllFilterQuizzes(@RequestBody User user, Filter filter) {
+    public List<Quiz> showAllFilterQuizzes(@RequestBody User user,
+                                           @RequestParam Filter filter) throws DAOLogicException, QuizDoesNotExistException {
+        List<Quiz> filterQuizzes = new ArrayList<>();
         switch (filter) {
             case DATE:
+                filterQuizzes = quizService.getLastCreatedQuizzes(BigInteger.valueOf(10));
                 break;
             case QUIZTYPE:
+                //??????????????????????????
+
                 break;
             case COMPLETED:
+                //return List?
+                //filterQuizzes = userService.getAccomplishedQuizesByUser(user.getId());
                 break;
             case FAVORITES:
+                //return List?
+                //filterQuizzes = userService.getFavoriteQuizesByUser(user.getId());
                 break;
             default:
         }
-        return null;
+        return filterQuizzes;
     }
 
     @GetMapping("/game/{id}")
