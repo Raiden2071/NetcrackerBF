@@ -95,7 +95,7 @@ class QuizServiceImplTest {
 
             updatedQuiz.setCreationDate(new Date(System.currentTimeMillis()));
 
-            quizService.updateQuiz(updatedQuiz);
+            quizService.updateQuiz(quiz.getId(), updatedQuiz);
             log.info("Quiz with id " + updatedQuiz.getId() + " was updated");
 
             assertNotEquals(quiz.getCreationDate(), updatedQuiz.getCreationDate());

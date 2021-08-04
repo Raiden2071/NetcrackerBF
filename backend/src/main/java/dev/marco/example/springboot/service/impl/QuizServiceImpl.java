@@ -92,14 +92,14 @@ public class QuizServiceImpl implements QuizService {
     }
 
     @Override
-    public void updateQuiz(Quiz quiz) throws QuizDoesNotExistException, DAOLogicException {
+    public void updateQuiz(BigInteger id, Quiz quiz) throws QuizDoesNotExistException, DAOLogicException {
 
-        Quiz quizFromDAO = quizDAO.getQuizById(quiz.getId());
+        Quiz quizFromDAO = quizDAO.getQuizById(id);
 
         if (quizFromDAO != null) {
 //            List<Question> questions = questionDAO.getAllQuestions(quiz.getId());
 //            quiz.setQuestions(questions);
-            quizDAO.updateQuiz(quiz);
+            quizDAO.updateQuiz(id, quiz);
         } else {
             log.error(QUIZ_NOT_FOUND_EXCEPTION + " in updateQuiz");
             throw new QuizDoesNotExistException(QUIZ_NOT_FOUND_EXCEPTION);

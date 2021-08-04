@@ -15,7 +15,7 @@ public interface QuizService {
 
     Quiz buildNewQuiz(String title, String description, QuizType quizType, BigInteger userId, List<Question> questions) throws QuizException, DAOLogicException, UserException, QuestionException;
 
-    void updateQuiz(Quiz updatedQuiz) throws QuizDoesNotExistException, DAOLogicException, QuestionDoesNotExistException;
+    void updateQuiz(BigInteger id, Quiz updatedQuiz) throws QuizDoesNotExistException, DAOLogicException, QuestionDoesNotExistException;
 
     void deleteQuiz(Quiz quiz) throws QuizDoesNotExistException, DAOLogicException, UserDoesNotExistException, UserException;
 

@@ -128,7 +128,7 @@ class QuizDAOImplTest {
 
             updatedQuiz.setCreationDate(new Date(System.currentTimeMillis()));
 
-            quizDAO.updateQuiz(updatedQuiz);
+            quizDAO.updateQuiz(quiz.getId(), updatedQuiz);
             log.info("Quiz with id " + updatedQuiz.getId() + " was updated");
 
             assertNotEquals(quiz.getCreationDate(), updatedQuiz.getCreationDate());

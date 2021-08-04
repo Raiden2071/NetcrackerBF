@@ -83,18 +83,19 @@ public class QuizController {
 
 
     //done
-    @PutMapping("/")
-    public Quiz updateQuiz(@RequestBody QuizImpl quiz) {
+    @PutMapping("/{id}")
+    public Quiz updateQuiz(@PathVariable BigInteger id,
+                           @RequestBody QuizImpl updatedQuiz) {
         try {
-            //Quiz quiz = quizService.getQuizById(id);
+            Quiz quiz = quizService.getQuizById(id);
             if (quiz == null) {
                 log.error(QUIZ_NOT_FOUND_EXCEPTION);
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND);
             }
-            quizService.updateQuiz(quiz);
-            return quiz;
+            quizService.updateQuiz(id, updatedQuiz);
+            return updatedQuiz;
 
-        } catch (QuizDoesNotExistException e) {
+        } catch (QuizDoesNotExistException | QuizException e) {
             log.error(QUIZ_NOT_FOUND_EXCEPTION + e.getMessage());
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
         } catch (DAOLogicException e) {

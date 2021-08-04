@@ -35,7 +35,7 @@ public interface QuizDAO {
 
     Quiz createQuiz(Quiz quiz) throws DAOLogicException, UserDoesNotExistException;
 
-    void updateQuiz(Quiz quiz) throws QuizDoesNotExistException, DAOLogicException;
+    void updateQuiz(BigInteger id, Quiz quiz) throws QuizDoesNotExistException, DAOLogicException;
 
     void deleteQuiz(Quiz quiz) throws QuizDoesNotExistException, DAOLogicException;
 

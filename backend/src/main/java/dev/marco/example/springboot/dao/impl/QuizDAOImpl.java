@@ -93,7 +93,7 @@ public class QuizDAOImpl implements QuizDAO {
 
 
     @Override
-    public void updateQuiz(Quiz quiz) throws QuizDoesNotExistException, DAOLogicException {
+    public void updateQuiz(BigInteger id, Quiz quiz) throws QuizDoesNotExistException, DAOLogicException {
 
         try (PreparedStatement preparedStatement =
                      connection.prepareStatement(properties.getProperty(UPDATE_QUIZ))) {
@@ -104,7 +104,7 @@ public class QuizDAOImpl implements QuizDAO {
             preparedStatement.setLong(3, quiz.getQuizType().ordinal());
             preparedStatement.setLong(4, quiz.getCreatorId().longValue());
             //preparedStatement.setLong(5, quiz.getQuestionsId().longValue());
-            preparedStatement.setLong(5, quiz.getId().longValue());
+            preparedStatement.setLong(5, id.longValue());
 
             preparedStatement.executeUpdate();
 
