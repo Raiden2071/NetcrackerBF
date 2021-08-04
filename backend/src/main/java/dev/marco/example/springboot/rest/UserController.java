@@ -1,11 +1,15 @@
 package dev.marco.example.springboot.rest;
 
+import dev.marco.example.springboot.security.JwtTokenProvider;
 import org.apache.commons.lang3.StringUtils;
 import dev.marco.example.springboot.model.impl.QuizAccomplishedImpl;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 import dev.marco.example.springboot.exception.*;
 import dev.marco.example.springboot.model.User;
@@ -16,6 +20,8 @@ import dev.marco.example.springboot.util.RegexPatterns;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigInteger;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import static dev.marco.example.springboot.exception.MessagesForException.*;
@@ -30,6 +36,12 @@ public class UserController implements RegexPatterns {
 
   @Autowired
   private MailSenderService mailSenderService;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
 
   @Autowired
   public void setTestConnection() throws DAOConfigException {
@@ -68,24 +80,56 @@ public class UserController implements RegexPatterns {
     }
   }
 
-  @PostMapping("/auth/local")
-  public ResponseEntity<User> tryToAuthorize(@RequestBody UserImpl user) {
-    try {
-      if (!user.getEmail().matches(mailPattern)) {
-        throw new UserException(MessagesForException.INVALID_EMAIL);
-      }
-      if (!user.getPassword().matches(passPattern)) {
-        throw new UserException(MessagesForException.INVALID_PASSWORD);
-      }
-      User receivedUser = userService.authorize(user);
+    @PostMapping("/auth/local")
+    public ResponseEntity<Map<String, Object>> tryToAuthorize(@RequestBody UserImpl user) {
+        try {
+            if(StringUtils.isEmpty(user.getEmail()) || !user.getEmail().matches(mailPattern)) {
+                log.error("tryToAuthorize email not valid");
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            }
+            if(StringUtils.isEmpty(user.getPassword())/* || !user.getPassword().matches(passPattern)*/) {
+                log.error("tryToAuthorize password not valid");
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            }
 
-      return ResponseEntity.ok(receivedUser);
-    } catch (DAOLogicException | UserException | UserDoesNotExistException e) {
-      log.error(e.getMessage());
-      return ResponseEntity.badRequest().build();
+            User receivedUser = userService.authorize(user);
+
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
+            String token = jwtTokenProvider.createToken(user.getEmail());
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("user", receivedUser);
+            response.put("token", token);
+
+            return ResponseEntity.ok(response);
+        } catch (DAOLogicException e) {
+            log.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e.getCause());
+        } catch (UserException | UserDoesNotExistException e) {
+            log.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
+        } catch (AuthenticationException e) {
+            log.error("WTF " + e.getMessage() + " " + e.getCause());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
-  }
 
+    @PostMapping("/auth/recover")
+    public void recoverPassword(@RequestBody UserImpl user) {
+        try {
+            if(StringUtils.isEmpty(user.getEmail()) || !user.getEmail().matches(mailPattern)) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            }
+            userService.recoverPassword(user);
+
+        } catch (DAOLogicException | MailException e) {
+            log.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e.getCause());
+        } catch (UserException e) {
+            log.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
+        }
+    }
   @PostMapping("/recover")
   public ResponseEntity<Object> recoverPassword(@RequestBody String email) {
     try {
