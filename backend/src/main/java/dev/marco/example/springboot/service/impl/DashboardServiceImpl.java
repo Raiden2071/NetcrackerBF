@@ -55,11 +55,6 @@ public class DashboardServiceImpl implements DashboardService {
         List<Announcement> popularAnnouncement =
                 announcementService.getPopularAnnouncements(DASHBOARD_COUNT_POPULAR_ANNOUNCEMENT);
 
-        if(popularAnnouncement.isEmpty()) {
-            log.error(ANNOUNCEMENT_NOT_FOUND_EXCEPTION + popularAnnouncement);
-            throw new AnnouncementDoesNotExistException(ANNOUNCEMENT_NOT_FOUND_EXCEPTION);
-        }
-
         Set<Announcement> likedAnnouncement = announcementService.getAnnouncementsLikedByUser(id);
 
         return new DashboardImpl(lastQuizzes, popularAnnouncement, likedAnnouncement);

@@ -71,10 +71,16 @@ public class QuizController {
     }
 
     @PostMapping("/")
-    public Quiz createQuiz(String title, String description, QuizType quizType,
-                           List<Question> questions, BigInteger creatorId) throws DAOLogicException, UserException, QuizException, QuestionException {
-        return quizService.buildNewQuiz(title, description, quizType, questions, creatorId);
+    public Quiz createQuiz(@RequestBody QuizImpl quiz) throws DAOLogicException, UserException, QuizException, QuestionException {
+        return quizService.buildNewQuiz(
+                quiz.getTitle(),
+                quiz.getDescription(),
+                quiz.getQuizType(),
+                quiz.getCreatorId(),
+                quiz.getQuestions()
+                );
     }
+
 
     //done
     @PutMapping("/")

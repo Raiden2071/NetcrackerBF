@@ -68,11 +68,10 @@ public class UserAnnouncementDAOImpl implements UserAnnouncementDAO {
                     properties.getProperty(SELECT_ANNOUNCEMENT_LIKED_BY_USER));
             preparedStatement.setLong(1, idUser.longValue());
             ResultSet resultSet = preparedStatement.executeQuery();
-            if(!resultSet.isBeforeFirst()){
-                log.info(ANNOUNCEMENT_HAS_NOT_BEEN_RECEIVED + MESSAGE_FOR_GET_ANNOUNCEMENTS_LIKED_BY_USER);
-                throw new AnnouncementDoesNotExistException(ANNOUNCEMENT_NOT_FOUND_EXCEPTION);
-            }
             Set<Announcement> announcements = new HashSet<>();
+            if(!resultSet.isBeforeFirst()){
+                return announcements;
+            }
             while (resultSet.next()) {
                 Announcement announcement = new AnnouncementImpl.AnnouncementBuilder()
                         .setId(BigInteger.valueOf(resultSet.getLong(ID_ANNOUNCEMENT)))

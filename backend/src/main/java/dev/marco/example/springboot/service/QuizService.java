@@ -13,7 +13,7 @@ public interface QuizService {
     int MIN_LENGTH_TITLE = 2;
     int MIN_LENGTH_DESCRIPTION = 5;
 
-    Quiz buildNewQuiz(String title, String description, QuizType quizType, List<Question> questions, BigInteger userId) throws QuizException, DAOLogicException, UserException, QuestionException;
+    Quiz buildNewQuiz(String title, String description, QuizType quizType, BigInteger userId, List<Question> questions) throws QuizException, DAOLogicException, UserException, QuestionException;
 
     void updateQuiz(Quiz updatedQuiz) throws QuizDoesNotExistException, DAOLogicException, QuestionDoesNotExistException;
 

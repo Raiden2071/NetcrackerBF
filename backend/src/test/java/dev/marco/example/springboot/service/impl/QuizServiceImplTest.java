@@ -51,8 +51,8 @@ class QuizServiceImplTest {
                     "Math",
                     "Math quiz",
                     QuizType.MATHEMATICS,
-                    questions,
-                    BigInteger.valueOf(1));
+                    BigInteger.valueOf(1),
+                    questions);
 
             log.info("Quiz with id " + quiz.getId() + " was created");
             assertNotNull(quiz);

@@ -38,7 +38,7 @@ public class QuizServiceImpl implements QuizService {
 
     @Override
     public Quiz buildNewQuiz(String title, String description, QuizType quizType,
-                             List<Question> questions, BigInteger userId) throws QuizException, DAOLogicException, QuestionException {
+                             BigInteger userId, List<Question> questions) throws QuizException, DAOLogicException, QuestionException {
         try {
             boolean isExist = quizDAO.existQuizByTitle(title);
 
@@ -52,8 +52,8 @@ public class QuizServiceImpl implements QuizService {
                     .setDescription(description)
                     .setQuizType(quizType)
                     .setCreationDate(new Date(System.currentTimeMillis()))
-                    .setQuestions(questions)
                     .setCreatorId(userId)
+                    .setQuestions(questions)
                     .build();
 
             validateNewQuiz(title, description, questions, userId);
