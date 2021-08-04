@@ -7,7 +7,7 @@ import java.math.BigInteger;
 
 public interface DashboardService {
 
-    Dashboard generateDashboard(BigInteger id) throws DAOLogicException, QuizDoesNotExistException, AnnouncementDoesNotExistException, AnnouncementException;
+    Dashboard generateDashboard(BigInteger id) throws DAOLogicException, QuizDoesNotExistException, AnnouncementDoesNotExistException, AnnouncementException, UserDoesNotExistException;
 
     void setTestConnection() throws DAOConfigException;
 }

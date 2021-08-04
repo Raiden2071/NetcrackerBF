@@ -32,8 +32,14 @@ public class DashboardController {
         } catch (DAOLogicException e) {
             log.error(MessagesForException.DAO_LOGIC_EXCEPTION);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e.getCause());
-        } catch (QuizDoesNotExistException | AnnouncementDoesNotExistException | AnnouncementException e) {
+        } catch (QuizDoesNotExistException e) {
             log.error(MessagesForException.MESSAGE_ERROR);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
+        } catch (UserDoesNotExistException e) {
+            log.error(MessagesForException.USER_NOT_FOUND_EXCEPTION);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
+        } catch (AnnouncementDoesNotExistException | AnnouncementException e) {
+            log.error(MessagesForException.ANNOUNCEMENT_NOT_FOUND_EXCEPTION);
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
         }
     }

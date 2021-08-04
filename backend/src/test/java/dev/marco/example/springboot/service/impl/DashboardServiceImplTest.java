@@ -56,7 +56,7 @@ public class DashboardServiceImplTest {
         } catch (QuizDoesNotExistException e) {
             log.error(QUIZ_NOT_FOUND_EXCEPTION + " in generateDashboard");
             throw new DAOLogicException(QUIZ_NOT_FOUND_EXCEPTION);
-        } catch (UserException e) {
+        } catch (UserException | UserDoesNotExistException e) {
             log.error(USER_NOT_FOUND_EXCEPTION + " in generateDashboard");
             throw new DAOLogicException(USER_NOT_FOUND_EXCEPTION);
         }
