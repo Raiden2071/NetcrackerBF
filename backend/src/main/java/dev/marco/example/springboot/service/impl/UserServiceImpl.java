@@ -203,10 +203,13 @@ public class UserServiceImpl implements UserService, RegexPatterns {
   public void updateUsersPassword(BigInteger id, String newPassword)
       throws DAOLogicException, UserDoesNotExistException {
     User userFromDAO = userDAO.getUserById(id);
+
+    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
     if (userFromDAO == null) {
       throw new UserDoesNotExistException(USER_NOT_FOUND_EXCEPTION);
     }
-    userDAO.updateUsersPassword(id, newPassword);
+    userDAO.updateUsersPassword(id, encoder.encode(newPassword));
   }
 
   @Override

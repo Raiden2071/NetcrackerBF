@@ -31,8 +31,7 @@ public class JwtTokenProvider {
     private JwtUserDetailService userDetailsService;
 
     public String createToken(String email) {
-        Claims claims = Jwts.claims().setSubject(email);
-        Date date = Date.from(LocalDate.now().plusDays(15).atStartOfDay(ZoneId.systemDefault()).toInstant());
+        Date date = Date.from(LocalDate.now().plusDays(expiresInMillis).atStartOfDay(ZoneId.systemDefault()).toInstant());
 
         return Jwts.builder()
                 .setSubject(email)
@@ -44,18 +43,14 @@ public class JwtTokenProvider {
     public String resolveToken(HttpServletRequest req) {
         String bearerToken = req.getHeader("Authorization");
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7, bearerToken.length());
+            return bearerToken.substring(7);
         }
         return null;
     }
 
-    public boolean validateToken(String token) throws JwtAuthenticationException {
+    public boolean validateToken(String token) {
         Jws<Claims> claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
-
-        if (claims.getBody().getExpiration().before(new Date())) {
-            return false;
-        }
-        return true;
+        return !claims.getBody().getExpiration().before(new Date());
     }
 
     public String getEmailFromToken(String token) {
@@ -66,7 +61,7 @@ public class JwtTokenProvider {
     public Authentication getAuthentication(String token) {
         log.debug("Email from token: " + getEmailFromToken(token));
         UserDetails userDetails = this.userDetailsService.loadUserByUsername(getEmailFromToken(token));
-        log.debug("JwtTokenProvider Authentication got username: " + userDetails.getUsername());
+        log.debug("JwtTokenProvider Authentication got email: " + userDetails.getUsername());
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 

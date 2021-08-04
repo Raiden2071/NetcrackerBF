@@ -19,6 +19,9 @@ import javax.sql.DataSource;
 @Configuration
 public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
+    private final String GET_USERNAME_QUERY = "SELECT email, passwd, isActive from USR where email = ?";
+    private final String GET_AUTHORITY_QUERY = "SELECT U.email, R.usr_role FROM USR U, USR_ROLES R where U.email = ? AND U.USR_ROLE = R.ID_USR_ROLE";
+
     private final JwtTokenProvider jwtTokenProvider;
     private final DataSource dataSource;
 
@@ -43,16 +46,8 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.jdbcAuthentication()
                 .dataSource(dataSource)
-                .usersByUsernameQuery("SELECT email, passwd, isActive from USR where email = ?")
-                .authoritiesByUsernameQuery("SELECT U.email, R.usr_role FROM USR U, USR_ROLES R where U.email = ? AND U.USR_ROLE = R.ID_USR_ROLE");
-        /*
-        auth.inMemoryAuthentication()
-                .passwordEncoder(encoder)
-                .withUser("kk@gmail.com")
-                .password(encoder.encode("testPassword5-"))
-                .roles("USER");
-
-         */
+                .usersByUsernameQuery(GET_USERNAME_QUERY)
+                .authoritiesByUsernameQuery(GET_AUTHORITY_QUERY);
     }
 
     @Override
@@ -79,19 +74,4 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
                     .and()
                 .apply(new JwtConfigurer(jwtTokenProvider));
     }
-
-    /*
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http
-                .csrf().disable() // disabled due insomnia testing
-                .authorizeRequests()
-                .antMatchers("/private/**")
-                .authenticated()
-                .antMatchers("/public/**")
-                .permitAll()
-                .and()
-                .httpBasic();
-    }
-     */
 }
