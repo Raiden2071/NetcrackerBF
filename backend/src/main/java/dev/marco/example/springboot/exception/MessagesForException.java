@@ -49,6 +49,7 @@ public interface MessagesForException {
   String QUESTION_EMPTY = "Question title is empty";
 
   String ANSWER_EMPTY = "Answer title is empty";
+  String ANSWER_NOT_FOUND = "AnswerDoesNotExistException ";
 
   String getAnswerByIdNotFoundErr = "AnswerDoesNotExistException in getAnswerById, answerId = %d";
   String getAnswerByIdNotFoundExc = "getAnswerById() not found answer by answerId = %d";

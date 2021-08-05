@@ -147,4 +147,21 @@ public class QuizControllerTest {
   }
 
 
+  @Test
+  @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
+  void quizGameTest() throws Exception {
+
+  }
+
+  @Test
+  @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
+  void finishQuizTest() throws Exception {
+
+  }
+
+  @Test
+  @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
+  void setLikeOnQuizTest() throws Exception {
+
+  }
 }
