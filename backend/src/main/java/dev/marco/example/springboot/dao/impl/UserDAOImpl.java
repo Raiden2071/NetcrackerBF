@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 import dev.marco.example.springboot.dao.UserDAO;
 import dev.marco.example.springboot.exception.*;
@@ -200,25 +201,30 @@ public class UserDAOImpl implements UserDAO {
 
   @Override
   public User getAuthorizeUser(String email, String password)
-      throws UserDoesNotExistException, UserDoesNotConfirmedEmailException, DAOLogicException {
+          throws UserDoesNotExistException, UserDoesNotConfirmedEmailException, DAOLogicException, UserException {
     try (PreparedStatement statement = connection
         .prepareStatement(properties.getProperty(SEARCH_USER_AUTHORIZE))) {
+
+      BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+      String dbPassword = getUserPasswordByEmail(email);
+      if(!encoder.matches(password, dbPassword)){
+        throw new UserException(MessagesForException.WRONG_PASSWORD);
+      }
+
       statement.setString(1, email);
-      statement.setString(2, password);
-
       ResultSet resultSet = statement.executeQuery();
-
       if (!resultSet.next()) {
         throw new UserDoesNotExistException(
             MessagesForException.USERS_DOESNT_EXIT + email + password);
       }
-
-      if (resultSet.getInt(properties.getProperty(USER_ACTIVE)) == UserActive.NOT_ACTIVE
-          .ordinal()) {
-        throw new UserDoesNotConfirmedEmailException(
-            MessagesForException.USERS_DOESNT_EXIT + email + password);
-      }
-
+//      CHECK SQL SQRIPT, REMOVE isactive='1'
+//
+//      if (resultSet.getInt(properties.getProperty(USER_ACTIVE)) == UserActive.NOT_ACTIVE
+//          .ordinal()) {
+//        throw new UserDoesNotConfirmedEmailException(
+//            MessagesForException.USERS_DOESNT_EXIT + email + password);
+//      }
       return new UserImpl.UserBuilder()
           .setId(BigInteger.valueOf(resultSet.getLong(properties.getProperty(USER_ID))))
           .setFirstName(resultSet.getString(properties.getProperty(USER_FIRST_NAME)))
@@ -233,7 +239,7 @@ public class UserDAOImpl implements UserDAO {
           .setDescription(resultSet.getString(properties.getProperty(USER_DESCRIPTION)))
           .build();
 
-    } catch (SQLException | UserException e) {
+    } catch (SQLException e) {
       log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
       throw new DAOLogicException(
           MessagesForException.DAO_LOGIC_EXCEPTION + email + password, e);
@@ -308,6 +314,26 @@ public class UserDAOImpl implements UserDAO {
       throw new DAOLogicException(MessagesForException.DAO_LOGIC_EXCEPTION + code, e);
     }
 
+  }
+
+  @Override
+  public String getUserPasswordByEmail(String email)
+      throws UserDoesNotExistException, DAOLogicException {
+    try (PreparedStatement statement = connection
+        .prepareStatement(properties.getProperty(SEARCH_PASSWORD_BY_EMAIL))) {
+      statement.setString(1, email);
+      ResultSet resultSet = statement.executeQuery();
+
+      if (!resultSet.next()) {
+        throw new UserDoesNotExistException(MessagesForException.USERS_DOESNT_EXIT + email);
+      }
+
+      return resultSet.getString("PASSWD");
+
+    } catch (SQLException e) {
+      log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
+      throw new DAOLogicException(MessagesForException.DAO_LOGIC_EXCEPTION + email, e);
+    }
   }
 
   @Override

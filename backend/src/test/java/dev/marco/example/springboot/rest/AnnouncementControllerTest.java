@@ -118,5 +118,14 @@ class AnnouncementControllerTest {
         verify(announcementService).editAnnouncement(any(AnnouncementImpl.class));
     }
 
-
+    @Test
+    void likeAnnouncement() throws Exception {
+        this.mockMvc.perform(MockMvcRequestBuilders
+                .post("/announcement/like")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{ \"idUser\" : 1, " +
+                         "  \"idAnnouncement\": 1 }"))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+        verify(announcementService).setLikeAnnouncement(BigInteger.ONE, BigInteger.ONE);
+    }
 }

@@ -1,9 +1,6 @@
 package dev.marco.example.springboot.dao;
 
-import dev.marco.example.springboot.exception.DAOConfigException;
-import dev.marco.example.springboot.exception.DAOLogicException;
-import dev.marco.example.springboot.exception.UserDoesNotConfirmedEmailException;
-import dev.marco.example.springboot.exception.UserDoesNotExistException;
+import dev.marco.example.springboot.exception.*;
 import dev.marco.example.springboot.model.User;
 
 import dev.marco.example.springboot.model.UserRoles;
@@ -28,12 +25,14 @@ public interface UserDAO {
       throws DAOLogicException, UserDoesNotExistException;
 
   User getAuthorizeUser(String email, String password)
-      throws UserDoesNotExistException, UserDoesNotConfirmedEmailException, DAOLogicException;
+          throws UserDoesNotExistException, UserDoesNotConfirmedEmailException, DAOLogicException, UserException;
 
   void updateUsersDescription(BigInteger id, String newDescription)
       throws DAOLogicException, UserDoesNotExistException;
 
   User getUserByEmailCode(String code) throws UserDoesNotExistException, DAOLogicException;
+
+  String getUserPasswordByEmail(String email) throws UserDoesNotExistException, DAOLogicException;
 
   void updateUsersEmailCode(BigInteger id, String newCode)
       throws DAOLogicException, UserDoesNotExistException;
@@ -68,6 +67,7 @@ public interface UserDAO {
   String UPDATE_USER_NAME = "UPDATE_USER_NAME";
   String UPDATE_USER_PASSWORD = "UPDATE_USER_PASSWORD";
   String SEARCH_USER_AUTHORIZE = "SEARCH_USER_AUTHORIZE";
+  String SEARCH_PASSWORD_BY_EMAIL = "SEARCH_PASSWORD_BY_EMAIL";
   String UPDATE_USER_DESCRIPTION = "UPDATE_USER_DESCRIPTION";
   String UPDATE_USER_EMAIL_CODE = "UPDATE_USER_EMAIL_CODE";
   String SEARCH_USER_BY_EMAIL_CODE = "SEARCH_USER_BY_EMAIL_CODE";

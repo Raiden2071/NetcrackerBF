@@ -3,6 +3,7 @@ package dev.marco.example.springboot.service.impl;
 import java.io.InputStream;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import dev.marco.example.springboot.dao.UserDAO;
 import dev.marco.example.springboot.exception.*;
@@ -149,8 +150,11 @@ public class MailSenderServiceImpl implements MailSenderService {
   public boolean generateNewPassword(String email) throws MailException {
     try {
       log.debug("Starting to generateNewPassword() with email=" + email);
+
+      BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
       String newPassword = generateCode();
-      userDAO.updateUsersPassword(userDAO.getUserByEmail(email).getId(), newPassword);
+      userDAO.updateUsersPassword(userDAO.getUserByEmail(email).getId(), encoder.encode(newPassword));
 
       Properties properties = new Properties();
       setProperties(properties);
