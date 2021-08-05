@@ -146,6 +146,9 @@ class UserControllerTest {
     void recoverTest() throws Exception {
         String content = "{\n\t\"email\":\"Olvik@gmail.com\"\n}";
 
+        when(userService.getUserById(any(BigInteger.class)))
+            .thenThrow(UserDoesNotExistException.class);
+
         this.mockMvc.perform(post("/auth/recover")
                 .content(content)
                 .contentType(MediaType.APPLICATION_JSON)
