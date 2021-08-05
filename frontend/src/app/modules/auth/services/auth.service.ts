@@ -26,7 +26,7 @@ export class AuthService {
   }
 
   forgotPassword(email: string): Observable<string> {
-    return this.http.post<string>('auth/forgot-password', email);
+    return this.http.post<string>('auth/recover', email);
   }
   
   setTokens(authResponse: AuthResponse, remember: boolean): void {

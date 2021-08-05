@@ -10,11 +10,11 @@ import { AbstractCrudService } from '../abstracts/abstract-crud.service';
 })
 export class UserService extends AbstractCrudService<User>{
 
-  path = 'users';
+  path = 'user';
+  userId: number;
 
   subject$ = new BehaviorSubject(1);
   userInfo$ = this.subject$.pipe(
-    
     tap(v => console.log(v)),
     switchMap((val) => 
       val ? this.getMe().pipe(
@@ -29,7 +29,8 @@ export class UserService extends AbstractCrudService<User>{
   }
 
   getMe(): Observable<User> {
-    return this.http.get<User>('users/me');
+    // ${this.userId}
+    return this.http.get<User>(`user/182`);
   }
 
 }

@@ -22,6 +22,6 @@ export class SidebarComponent implements OnInit {
   getUser() {
     this.userService.userInfo$.subscribe(user => this.user = user);
   }
-
+  
 
 }

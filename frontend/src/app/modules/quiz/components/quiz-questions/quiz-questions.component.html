@@ -1,0 +1,157 @@
+<!-- quiz sidebar -->
+<form [formGroup]="questionsForm" (ngSubmit)="onSubmit()" class="d-flex justify-content-between h-100">
+  <div class="d-flex h-100" style="width: 180px; background-color: '#F8F8F8';">
+    <div class="d-flex flex-column justify-content-between mb-5 w-100">
+      <div class="d-flex flex-column">
+        <!-- question 1 of 10 -->
+        <div class="text-center blue py-3 mb-4">
+          Question 1 of 10
+        </div>
+
+        <a routerLink="/profile" class="p-2 mb-5 text-center return">return to profile</a>
+
+
+        <!-- <tr *ngFor="let car of cars.controls; let i=index" [formGroupName]="i">
+          <td class="input-group input-group-sm">
+            <input formControlName="stateNumber" [attr.disabled]="mode==0 ? ownerForm.disabled : null">
+          </td> -->
+
+        <div formArrayName="questions">
+          <!-- quiz number -->
+          <div class="d-flex align-items-center flex-wrap w-100 mb-5">
+            <div *ngFor="let quiz of questionArray.controls; let i=index" [formGroupName]="i"
+              class="col-4 d-flex justify-content-center mb-4">
+              <input (click)="currentQuiz=i" [ngClass]="{size__color: currentQuiz==i}" class="size"
+                formControlName="questionId">
+              <!-- <div class="size"></div> -->
+            </div>
+          </div>
+          <!-- type of quiz -->
+
+          <div class="text-center">
+            <div class="mb-1">
+              Select the type of quiz:
+            </div>
+            <!--  formControlName="quizType" -->
+            <div *ngFor="let quiz of questionArray.controls; let i=index" [formGroupName]="i">
+              <!-- определяем какой будет отображаться questionType -->
+              <div *ngIf="currentQuiz==i">
+                <select class="w-75" formControlName="questionType">
+                  <option *ngFor="let type of questionTypes | keyvalue">
+                    {{ type.value }}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- settings, logout -->
+      <ul class="nav nav-pills flex-column">
+        <li class="mb-2">
+          <a routerLink="/settings" routerLinkActive="active" class="nav-link link-dark">
+            <img src="\assets\images\icons\settings_black_24dp.svg" alt="image">
+            Settings
+          </a>
+        </li>
+
+        <li class="mb-2">
+          <a routerLink="/auth/login" class="nav-link link-dark">
+            <img src="\assets\images\icons\logout_black_24dp.svg" alt="image">
+            Log out
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <!--  -->
+
+  <div class="m-5 w-100">
+    <h1 class="mb-5 text-center">Settings</h1>
+    <div class="d-flex justify-content-between">
+      <div>
+        <!-- forms + inputs -->
+        <div>
+
+
+          <!-- 
+                <ng-container formArrayName="aCars">
+        <tr *ngFor="let car of cars.controls; let i=index" [formGroupName]="i">
+          <td class="input-group input-group-sm">
+            <input formControlName="stateNumber" [attr.disabled]="mode==0 ? ownerForm.disabled : null">
+          </td>
+          <td>
+            <input formControlName="firm" [attr.disabled]="mode==0 ? ownerForm.disabled : null">
+          </td>
+          <td>
+            <input formControlName="model" [attr.disabled]="mode==0 ? ownerForm.disabled : null">
+          </td>
+          <td>
+            <input formControlName="productionYear" [attr.disabled]="mode==0 ? ownerForm.disabled : null">
+          </td>
+          <img src="/assets/image/delete_black.svg" (click)="deleteCar(i)">
+        </tr>
+      </ng-container>
+         -->
+
+
+
+
+
+          <!-- answerId -->
+          <div class="d-flex mb-4" formArrayName="questions">
+            <span class="h4 text__input me-4">
+              Write a question
+            </span>
+
+            <!--  formControlName="quizType" -->
+            <div *ngFor="let quiz of questionArray.controls; let i=index" [formGroupName]="i">
+              <!-- определяем какой будет отображаться questionType -->
+              <div *ngIf="currentQuiz==i">
+                <select class="w-75" formControlName="questionType">
+                  <option *ngFor="let type of questionTypes | keyvalue">
+                    {{ type.value }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <!--  -->
+            <!-- <div *ngFor="let quiz of questionArray.controls; let i=index" [formGroupName]="i">
+              <div *ngIf="currentQuiz==i">
+                <input type="text" class="form-control" formControlName="questionText">
+              </div>
+            </div> -->
+
+            <!-- first field -->
+            <!-- <div formArrayName="answers">
+              <div *ngFor="let answer of answerArray.controls; let i=index;" class="d-flex mb-4">
+                <span class="h4 text__input me-4">
+                  Field {{i}}
+                </span>
+                <input type="text" class="form-control" formControlName="value">
+                <input type="checkbox">
+              </div>
+            </div> -->
+          </div>
+          <button type="submit">Next</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- radio buttons -->
+  <!-- 
+<button (click)="click()">1</button>
+
+
+<div class="m-5">
+  <div>
+    <input type="radio" name="contact" value="phone">
+    Ответ 5
+  </div>
+  <div>
+    <input type="radio" name="contact" value="phone">
+    4
+  </div>
+</div> -->
+</form>
