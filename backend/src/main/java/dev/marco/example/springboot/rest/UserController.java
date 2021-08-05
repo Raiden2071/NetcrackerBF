@@ -296,7 +296,7 @@ public class UserController implements RegexPatterns {
     }
 
     @GetMapping("/user/favorite/{id}")
-    public Set<QuizAccomplishedImpl> getFavoriteQuizesByUser(@PathVariable BigInteger id) {
+    public Set<QuizAccomplishedImpl> getFavoriteQuizzesByUser(@PathVariable BigInteger id) {
         try {
             return userService.getFavoriteQuizesByUser(id);
         } catch (DAOLogicException e) {
