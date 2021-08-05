@@ -5,6 +5,8 @@ import dev.marco.example.springboot.model.impl.AnnouncementImpl;
 import dev.marco.example.springboot.service.AnnouncementService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -21,7 +23,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
-
+@EnableAutoConfiguration(exclude = SecurityAutoConfiguration.class)
 @SpringBootTest
 @AutoConfigureMockMvc
 class AnnouncementControllerTest {

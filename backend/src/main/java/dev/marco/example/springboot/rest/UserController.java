@@ -128,6 +128,7 @@ public class UserController implements RegexPatterns {
         }
     }
 
+    /*
     @PostMapping("/auth/recover")
     public void recoverPassword1(@RequestBody UserImpl user) {
         try {
@@ -160,11 +161,12 @@ public class UserController implements RegexPatterns {
             log.error("Error while recoverPassword() with email=" + email + " " + e.getMessage());
             return ResponseEntity.badRequest().build();
         }
-
     }
 
+     */
+
     @PostMapping("/auth/recover")
-    public ResponseEntity<Object> recoverPassword3(@RequestBody UserImpl receivedUser) {
+    public ResponseEntity<Object> recoverPassword(@RequestBody UserImpl receivedUser) {
         try {
             User user = new UserImpl.UserBuilder()
                     .setEmail(receivedUser.getEmail())

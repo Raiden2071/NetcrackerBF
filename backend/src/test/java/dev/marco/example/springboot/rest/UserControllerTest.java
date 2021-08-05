@@ -175,7 +175,6 @@ class UserControllerTest {
     }
 
     @Test
-    @WithMockUser(username="kk@gmail.com", password = "$2a$04$B1NyyzfmSl3tdYCN2YmKs..mVnqrJdeocFaNRtTRnqC.9KA/04Tne",roles={"ADMIN"})
     @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
     void getUserTest() throws Exception {
         when(userService.getUserById(BigInteger.ONE))
