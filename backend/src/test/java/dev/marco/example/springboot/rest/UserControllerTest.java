@@ -146,6 +146,9 @@ class UserControllerTest {
     void recoverTest() throws Exception {
         String content = "{\n\t\"email\":\"Olvik@gmail.com\"\n}";
 
+        when(userService.getUserById(any(BigInteger.class)))
+            .thenThrow(UserDoesNotExistException.class);
+
         this.mockMvc.perform(post("/auth/recover")
                 .content(content)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -251,6 +254,13 @@ class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk());
 
         verify(userService).getFavoriteQuizesByUser(BigInteger.valueOf(1));
+    }
+
+    @Test
+    @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
+    void confirmEmailTest() throws Exception {
+        userService.buildNewUser("test@gmail.com", "Qwerty123", "testName", "testLastName");
+
     }
 
     @Test

@@ -86,11 +86,11 @@ public class UserController implements RegexPatterns {
     }
   }
 
-  @PostMapping("/recover")
-  public ResponseEntity<Object> recoverPassword(@RequestBody String email) {
+  @PostMapping("/auth/recover")
+  public ResponseEntity<Object> recoverPassword(@RequestBody UserImpl receivedUser) {
     try {
       User user = new UserImpl.UserBuilder()
-          .setEmail(email)
+          .setEmail(receivedUser.getEmail())
           .build();
       if (!userService.recoverPassword(user)) {
         log.error(MessagesForException.EMAIL_ERROR);
@@ -98,7 +98,7 @@ public class UserController implements RegexPatterns {
       }
       return ResponseEntity.ok().build();
     } catch (DAOLogicException | MailException | UserException e) {
-      log.error("Error while recoverPassword() with email=" + email + " " + e.getMessage());
+      log.error("Error while recoverPassword() with email=" + receivedUser.getEmail() + " " + e.getMessage());
       return ResponseEntity.badRequest().build();
     }
   }

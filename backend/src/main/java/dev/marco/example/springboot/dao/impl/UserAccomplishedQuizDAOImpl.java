@@ -85,7 +85,8 @@ public class UserAccomplishedQuizDAOImpl implements UserAccomplishedQuizDAO {
             }
             return quizzes;
         } catch (SQLException | QuizException e) {
-            throw new DAOLogicException("DaoLogic exception", e);
+            log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
+            throw new DAOLogicException(DAO_LOGIC_EXCEPTION, e);
         }
     }
 
