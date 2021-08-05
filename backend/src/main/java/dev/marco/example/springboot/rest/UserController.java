@@ -93,7 +93,6 @@ public class UserController implements RegexPatterns {
     @PostMapping("/auth/local")
     public ResponseEntity<Map<String, Object>> tryToAuthorize(@RequestBody UserImpl user) {
         try {
-            log.debug("WTF");
             if (StringUtils.isEmpty(user.getEmail()) || !user.getEmail().matches(mailPattern)) {
                 log.error("tryToAuthorize email not valid");
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
@@ -120,8 +119,9 @@ public class UserController implements RegexPatterns {
             log.error(e.getMessage());
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
         } catch (AuthenticationException e) {
-            log.error("AuthenticationException " + e.getMessage() + " " + e.getCause());
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+            log.error("AuthenticationException " + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
+            //throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
     }
 

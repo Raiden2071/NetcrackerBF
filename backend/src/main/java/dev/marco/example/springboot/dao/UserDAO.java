@@ -1,9 +1,6 @@
 package dev.marco.example.springboot.dao;
 
-import dev.marco.example.springboot.exception.DAOConfigException;
-import dev.marco.example.springboot.exception.DAOLogicException;
-import dev.marco.example.springboot.exception.UserDoesNotConfirmedEmailException;
-import dev.marco.example.springboot.exception.UserDoesNotExistException;
+import dev.marco.example.springboot.exception.*;
 import dev.marco.example.springboot.model.User;
 
 import dev.marco.example.springboot.model.UserRoles;
@@ -28,7 +25,7 @@ public interface UserDAO {
       throws DAOLogicException, UserDoesNotExistException;
 
   User getAuthorizeUser(String email, String password)
-      throws UserDoesNotExistException, UserDoesNotConfirmedEmailException, DAOLogicException;
+          throws UserDoesNotExistException, UserDoesNotConfirmedEmailException, DAOLogicException, UserException;
 
   void updateUsersDescription(BigInteger id, String newDescription)
       throws DAOLogicException, UserDoesNotExistException;

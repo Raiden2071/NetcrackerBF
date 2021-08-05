@@ -84,8 +84,6 @@ public class UserServiceImpl implements UserService, RegexPatterns {
   public User authorize(User user)
       throws DAOLogicException, UserException, UserDoesNotExistException {
     try {
-
-
       if (user != null) {
         return userDAO.getAuthorizeUser(user.getEmail(), user.getPassword());
       }

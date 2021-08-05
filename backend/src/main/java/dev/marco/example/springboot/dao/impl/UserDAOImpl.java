@@ -201,7 +201,7 @@ public class UserDAOImpl implements UserDAO {
 
   @Override
   public User getAuthorizeUser(String email, String password)
-      throws UserDoesNotExistException, UserDoesNotConfirmedEmailException, DAOLogicException {
+          throws UserDoesNotExistException, UserDoesNotConfirmedEmailException, DAOLogicException, UserException {
     try (PreparedStatement statement = connection
         .prepareStatement(properties.getProperty(SEARCH_USER_AUTHORIZE))) {
 
@@ -239,7 +239,7 @@ public class UserDAOImpl implements UserDAO {
           .setDescription(resultSet.getString(properties.getProperty(USER_DESCRIPTION)))
           .build();
 
-    } catch (SQLException | UserException e) {
+    } catch (SQLException e) {
       log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
       throw new DAOLogicException(
           MessagesForException.DAO_LOGIC_EXCEPTION + email + password, e);

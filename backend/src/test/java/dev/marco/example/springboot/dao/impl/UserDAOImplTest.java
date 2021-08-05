@@ -231,7 +231,7 @@ class UserDAOImplTest {
       userDAO.activateUser(BigInteger.ONE);
       userDAO.updateUsersPassword(BigInteger.ONE, "testPassword");
       userDAO.getAuthorizeUser(userDAO.getUserById(BigInteger.ONE).getEmail(), "testPassword");
-    } catch (DAOLogicException | UserDoesNotExistException | UserDoesNotConfirmedEmailException e) {
+    } catch (DAOLogicException | UserDoesNotExistException | UserDoesNotConfirmedEmailException | UserException e) {
       log.error("Error while testing getAuthorizeActiveUser " + e.getMessage());
       fail();
     }
@@ -246,7 +246,7 @@ class UserDAOImplTest {
       userDAO.getAuthorizeUser(userDAO.getUserById(BigInteger.ONE).getEmail(), "testPassword");
     } catch (UserDoesNotConfirmedEmailException e) {
       assertTrue(true);
-    } catch (DAOLogicException | UserDoesNotExistException e) {
+    } catch (DAOLogicException | UserDoesNotExistException | UserException e) {
       log.error("Error while testing getAuthorizeNotActiveUser " + e.getMessage());
       fail();
     }

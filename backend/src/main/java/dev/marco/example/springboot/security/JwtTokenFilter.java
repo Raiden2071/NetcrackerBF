@@ -38,8 +38,6 @@ public class JwtTokenFilter extends GenericFilterBean implements MessagesForExce
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
             }
-        } catch (JwtAuthenticationException e) {
-            log.error(JWT_AUTH_EXC + e.getMessage());
         } catch (MalformedJwtException e) {
             log.error(JWT_TOKEN_INVALID + e.getMessage());
         }

@@ -19,8 +19,8 @@ import javax.sql.DataSource;
 @Configuration
 public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
-    private final String GET_USERNAME_QUERY = "SELECT email, passwd, isActive from USR where email = ?";
-    private final String GET_AUTHORITY_QUERY = "SELECT U.email, R.usr_role FROM USR U, USR_ROLES R where U.email = ? AND U.USR_ROLE = R.ID_USR_ROLE";
+    private final String GET_USERNAME_QUERY = "SELECT email, passwd, isActive from TEAM1_TEST.USR where email = ?";
+    private final String GET_AUTHORITY_QUERY = "SELECT U.email, R.usr_role FROM TEAM1_TEST.USR U, TEAM1_TEST.USR_ROLES R where U.email = ? AND U.USR_ROLE = R.ID_USR_ROLE";
 
     private final JwtTokenProvider jwtTokenProvider;
     private final DataSource dataSource;
