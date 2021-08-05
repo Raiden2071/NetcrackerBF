@@ -13,7 +13,7 @@ public interface Announcement {
   BigInteger getId();
   String getTitle();
   String getDescription();
-  BigInteger getOwner();
+  BigInteger getIdUser();
   Date getDate();
   String getAddress();
   Collection<BigInteger> getParticipants();
@@ -23,7 +23,7 @@ public interface Announcement {
   void setId(BigInteger id);
   void setTitle(String title);
   void setDescription(String description);
-  void setOwner(BigInteger owner);
+  void setIdUser(BigInteger idUser);
   void setDate(Date date);
   void setAddress(String address);
   void setParticipants(Collection<BigInteger> participants);

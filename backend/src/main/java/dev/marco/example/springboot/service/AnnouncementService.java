@@ -21,17 +21,17 @@ public interface AnnouncementService {
     BigInteger buildNewAnnouncement(Announcement announcement)
             throws AnnouncementException, DAOLogicException, UserException;
 
-    void editAnnouncement(Announcement announcement, BigInteger idUser)
-            throws AnnouncementException, DAOLogicException;
+    void editAnnouncement(Announcement announcement)
+            throws AnnouncementException, DAOLogicException, UserException, AnnouncementDoesNotExistException, UserDoesNotExistException;
 
     void deleteAnnouncement(BigInteger idAnnouncement, BigInteger idUser)
-            throws DAOLogicException, AnnouncementException;
+            throws DAOLogicException, UserException, AnnouncementDoesNotExistException, UserDoesNotExistException;
 
-    void toLikeAnnouncement(BigInteger idAnnouncement, BigInteger idUser)
-            throws AnnouncementException, DAOLogicException;
+    void setLikeAnnouncement(BigInteger idAnnouncement, BigInteger idUser)
+            throws AnnouncementException, DAOLogicException, AnnouncementDoesNotExistException, UserDoesNotExistException;
 
-    void toDisLikeAnnouncement(BigInteger idAnnouncement, BigInteger idUser)
-            throws AnnouncementException, DAOLogicException;
+//    void toDisLikeAnnouncement(BigInteger idAnnouncement, BigInteger idUser)
+//            throws AnnouncementException, DAOLogicException, AnnouncementDoesNotExistException;
 
     List<Announcement> getPopularAnnouncements(int numberAnnouncements)
             throws AnnouncementDoesNotExistException, DAOLogicException;

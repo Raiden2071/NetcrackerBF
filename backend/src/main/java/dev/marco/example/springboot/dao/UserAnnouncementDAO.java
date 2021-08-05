@@ -2,10 +2,7 @@ package dev.marco.example.springboot.dao;
 
 
 
-import dev.marco.example.springboot.exception.AnnouncementDoesNotExistException;
-import dev.marco.example.springboot.exception.AnnouncementException;
-import dev.marco.example.springboot.exception.DAOLogicException;
-import dev.marco.example.springboot.exception.UserDoesNotExistException;
+import dev.marco.example.springboot.exception.*;
 import dev.marco.example.springboot.model.Announcement;
 import dev.marco.example.springboot.model.User;
 
@@ -38,6 +35,8 @@ public interface UserAnnouncementDAO {
     String MESSAGE_FOR_GET_ANNOUNCEMENTS_LIKED_BY_USER = " in getAnnouncementsLikedByUser";
     String MESSAGE_FOR_GET_USERS_LIKED_ANNOUNCEMENT = " in getUsersLikedAnnouncement";
     String MESSAGE_FOR_GET_ALL_ANNOUNCEMENTS = " in getAllAnnouncement";
+
+    void setTestConnection() throws DAOConfigException;
 
     Set<Announcement> getAnnouncementsLikedByUser(BigInteger idUser) throws AnnouncementDoesNotExistException, DAOLogicException, AnnouncementException;
 
