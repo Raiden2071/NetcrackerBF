@@ -4,6 +4,9 @@
     <facet type="web" name="Web">
       <configuration>
         <webroots />
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/dist/frontend" />
+        </sourceRoots>
       </configuration>
     </facet>
     <facet type="Spring" name="Spring">
