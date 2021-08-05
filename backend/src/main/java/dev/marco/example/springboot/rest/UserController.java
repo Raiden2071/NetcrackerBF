@@ -216,10 +216,10 @@ public class UserController implements RegexPatterns {
     }
   }
 
-  @GetMapping("/user/favorite")
-  public Set<QuizAccomplishedImpl> getFavoriteQuizesByUser(@RequestBody UserImpl user) {
+  @GetMapping("/user/favorite/{id}")
+  public Set<QuizAccomplishedImpl> getFavoriteQuizesByUser(@PathVariable BigInteger id) {
     try {
-      return userService.getFavoriteQuizesByUser(user.getId());
+      return userService.getFavoriteQuizesByUser(id);
     } catch (DAOLogicException e) {
       log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
       throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(),
