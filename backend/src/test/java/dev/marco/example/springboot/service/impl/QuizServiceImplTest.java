@@ -1,6 +1,7 @@
 package dev.marco.example.springboot.service.impl;
 
 import dev.marco.example.springboot.model.impl.QuestionImpl;
+import dev.marco.example.springboot.model.impl.QuizImpl;
 import org.apache.log4j.Logger;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
@@ -47,17 +48,20 @@ class QuizServiceImplTest {
             BigInteger quizId = BigInteger.valueOf(1);
             List<QuestionImpl> questions = questionService.getQuestionsByQuiz(quizId);
 
-            Quiz quiz = quizService.buildNewQuiz(
-                    "Math",
-                    "Math quiz",
-                    QuizType.MATHEMATICS,
-                    BigInteger.valueOf(1),
-                    questions);
+            Quiz quiz = QuizImpl.QuizBuilder()
+                    .setTitle("Math")
+                    .setDescription("Math quiz")
+                    .setQuizType(QuizType.MATHEMATICS)
+                    .setCreatorId(BigInteger.valueOf(1))
+                    .setQuestions(questions)
+                    .build();
 
-            log.info("Quiz with id " + quiz.getId() + " was created");
-            assertNotNull(quiz);
-            log.info("Quiz with id " + quiz.getId() + " was deleted");
-            quizService.deleteQuiz(quiz);
+            Quiz buildedQuiz = quizService.buildNewQuiz(quiz);
+
+            log.info("Quiz with id " + buildedQuiz.getId() + " was created");
+            assertNotNull(buildedQuiz);
+            log.info("Quiz with id " + buildedQuiz.getId() + " was deleted");
+            quizService.deleteQuiz(buildedQuiz);
 
         } catch (QuizException | DAOLogicException | QuizDoesNotExistException |
                 QuestionDoesNotExistException | AnswerDoesNotExistException | UserException |

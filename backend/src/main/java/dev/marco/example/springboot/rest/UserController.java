@@ -31,17 +31,19 @@ public class UserController implements RegexPatterns {
 
     private static final Logger log = Logger.getLogger(UserController.class);
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+    private final MailSenderService mailSenderService;
+    private final AuthenticationManager authenticationManager;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Autowired
-    private MailSenderService mailSenderService;
-
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
-    private JwtTokenProvider jwtTokenProvider;
+    public UserController(UserService userService, MailSenderService mailSenderService,
+                          AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider) {
+        this.userService = userService;
+        this.mailSenderService = mailSenderService;
+        this.authenticationManager = authenticationManager;
+        this.jwtTokenProvider = jwtTokenProvider;
+    }
 
     @Autowired
     public void setTestConnection() throws DAOConfigException {
@@ -84,7 +86,7 @@ public class UserController implements RegexPatterns {
     public String test() {
         return "Test";
     }
-  
+
 
     @GetMapping("/testAdmin")
     public String testAdmin() {
@@ -158,24 +160,25 @@ public class UserController implements RegexPatterns {
             log.error("Error while recoverPassword() with email=" + email + " " + e.getMessage());
             return ResponseEntity.badRequest().build();
         }
-      
-  }
 
-  @PostMapping("/auth/recover")
-  public ResponseEntity<Object> recoverPassword3(@RequestBody UserImpl receivedUser) {
-    try {
-      User user = new UserImpl.UserBuilder()
-          .setEmail(receivedUser.getEmail())
-          .build();
-      if (!userService.recoverPassword(user)) {
-        log.error(MessagesForException.EMAIL_ERROR);
-        throw new MailException(MessagesForException.EMAIL_ERROR);
-      }
-      return ResponseEntity.ok().build();
-    } catch (DAOLogicException | MailException | UserException e) {
-      log.error("Error while recoverPassword() with email=" + receivedUser.getEmail() + " " + e.getMessage());
-      return ResponseEntity.badRequest().build();
-      
+    }
+
+    @PostMapping("/auth/recover")
+    public ResponseEntity<Object> recoverPassword3(@RequestBody UserImpl receivedUser) {
+        try {
+            User user = new UserImpl.UserBuilder()
+                    .setEmail(receivedUser.getEmail())
+                    .build();
+            if (!userService.recoverPassword(user)) {
+                log.error(MessagesForException.EMAIL_ERROR);
+                throw new MailException(MessagesForException.EMAIL_ERROR);
+            }
+            return ResponseEntity.ok().build();
+        } catch (DAOLogicException | MailException | UserException e) {
+            log.error("Error while recoverPassword() with email=" + receivedUser.getEmail() + " " + e.getMessage());
+            return ResponseEntity.badRequest().build();
+
+        }
     }
 
     @PutMapping("/updatePassword")
@@ -273,28 +276,29 @@ public class UserController implements RegexPatterns {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
         }
     }
-  }
 
-  @GetMapping("/user/acc_quiz/{userId}")
-  public Set<QuizAccomplishedImpl> getAccomplishedQuizzesByUser(@PathVariable BigInteger userId) {
-    try {
-      return userService.getAccomplishedQuizesByUser(userId);
-    } catch (DAOLogicException e) {
-      log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
-      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(),
-          e.getCause());
-    } catch (QuizDoesNotExistException e) {
-      log.error(QUIZ_NOT_FOUND_EXCEPTION + e.getMessage());
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
-    } catch (UserDoesNotExistException e) {
-      log.error(USER_NOT_FOUND_EXCEPTION + e.getMessage());
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
+
+    @GetMapping("/user/acc_quiz/{userId}")
+    public Set<QuizAccomplishedImpl> getAccomplishedQuizzesByUser(@PathVariable BigInteger userId) {
+        try {
+            return userService.getAccomplishedQuizesByUser(userId);
+        } catch (DAOLogicException e) {
+            log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(),
+                    e.getCause());
+        } catch (QuizDoesNotExistException e) {
+            log.error(QUIZ_NOT_FOUND_EXCEPTION + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
+        } catch (UserDoesNotExistException e) {
+            log.error(USER_NOT_FOUND_EXCEPTION + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
+        }
     }
 
-    @GetMapping("/user/favorite")
-    public Set<QuizAccomplishedImpl> getFavoriteQuizesByUser(@RequestBody UserImpl user) {
+    @GetMapping("/user/favorite/{id}")
+    public Set<QuizAccomplishedImpl> getFavoriteQuizesByUser(@PathVariable BigInteger id) {
         try {
-            return userService.getFavoriteQuizesByUser(user.getId());
+            return userService.getFavoriteQuizesByUser(id);
         } catch (DAOLogicException e) {
             log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(),

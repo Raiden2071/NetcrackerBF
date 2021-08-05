@@ -13,7 +13,7 @@ public interface QuizService {
     int MIN_LENGTH_TITLE = 2;
     int MIN_LENGTH_DESCRIPTION = 5;
 
-    Quiz buildNewQuiz(String title, String description, QuizType quizType, BigInteger userId, List<QuestionImpl> questions) throws QuizException, DAOLogicException, UserException, QuestionException, AnswerDoesNotExistException;
+    Quiz buildNewQuiz(Quiz quiz) throws QuizException, DAOLogicException, UserException, QuestionException, AnswerDoesNotExistException;
 
     void updateQuiz(BigInteger id, Quiz updatedQuiz) throws QuizDoesNotExistException, DAOLogicException, QuestionDoesNotExistException;
 
@@ -29,7 +29,7 @@ public interface QuizService {
 
     Quiz getQuizByTitle(String title) throws QuizDoesNotExistException, DAOLogicException, QuizException;
 
-    void validateNewQuiz(String title, String description, List<QuestionImpl> questions, BigInteger creatorId) throws QuizException, UserException, QuestionException;
+    void validateNewQuiz(Quiz quiz) throws QuizException, UserException, QuestionException;
 
     void setTestConnection() throws DAOConfigException;
 }
