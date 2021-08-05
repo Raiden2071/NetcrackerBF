@@ -229,7 +229,7 @@ class UserDAOImplTest {
   void getAuthorizeActiveUser() {
     try {
       userDAO.activateUser(BigInteger.ONE);
-      userDAO.updateUsersPassword(BigInteger.ONE, "testPassword");
+      userDAO.updateUsersPassword(BigInteger.ONE, "$2a$04$UegxIC3EpNJVeL9WUGuvK.K6GTeCfSgbfVUoC9ZUt9J.6OZF1r8Mq");
       userDAO.getAuthorizeUser(userDAO.getUserById(BigInteger.ONE).getEmail(), "testPassword");
     } catch (DAOLogicException | UserDoesNotExistException | UserDoesNotConfirmedEmailException | UserException e) {
       log.error("Error while testing getAuthorizeActiveUser " + e.getMessage());
@@ -242,7 +242,7 @@ class UserDAOImplTest {
   void getAuthorizeNotActiveUser() {
     try {
       userDAO.disactivateUser(BigInteger.ONE);
-      userDAO.updateUsersPassword(BigInteger.ONE, "testPassword");
+      userDAO.updateUsersPassword(BigInteger.ONE, "$2a$04$UegxIC3EpNJVeL9WUGuvK.K6GTeCfSgbfVUoC9ZUt9J.6OZF1r8Mq");
       userDAO.getAuthorizeUser(userDAO.getUserById(BigInteger.ONE).getEmail(), "testPassword");
     } catch (UserDoesNotConfirmedEmailException e) {
       assertTrue(true);
@@ -256,8 +256,8 @@ class UserDAOImplTest {
   @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
   void comparisonOfPasswordsTest() {
     try {
-      userDAO.updateUsersPassword(BigInteger.ONE, "testPassword");
-      assertTrue(userDAO.comparisonOfPasswords(BigInteger.ONE, "testPassword"));
+      userDAO.updateUsersPassword(BigInteger.ONE, "$2a$04$UegxIC3EpNJVeL9WUGuvK.K6GTeCfSgbfVUoC9ZUt9J.6OZF1r8Mq");
+      assertTrue(userDAO.comparisonOfPasswords(BigInteger.ONE, "$2a$04$UegxIC3EpNJVeL9WUGuvK.K6GTeCfSgbfVUoC9ZUt9J.6OZF1r8Mq"));
     } catch (DAOLogicException | UserDoesNotExistException e) {
       log.error("Error while testing comparisonOfPasswordsTest " + e.getMessage());
       fail();
@@ -440,7 +440,7 @@ class UserDAOImplTest {
   @Test
   void testGetUserPasswordByEmail() {
     try {
-      assertNotNull(userDAO.getUserPasswordByEmail("maksim.bataev.2016@gmail.com"));
+      assertNotNull(userDAO.getUserPasswordByEmail("kk@gmail.com"));
     } catch (UserDoesNotExistException | DAOLogicException e) {
       log.error("Error while testing getUserPasswordByEmail " + e.getMessage());
       fail();

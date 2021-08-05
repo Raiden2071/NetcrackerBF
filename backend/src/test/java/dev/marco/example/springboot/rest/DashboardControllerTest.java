@@ -7,6 +7,8 @@ import org.apache.log4j.Logger;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -20,6 +22,7 @@ import java.util.concurrent.TimeUnit;
 
 import static org.mockito.Mockito.verify;
 
+@EnableAutoConfiguration(exclude = SecurityAutoConfiguration.class)
 @SpringBootTest
 @AutoConfigureMockMvc
 public class DashboardControllerTest {
