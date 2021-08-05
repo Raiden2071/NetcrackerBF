@@ -4,6 +4,7 @@ import dev.marco.example.springboot.util.RegexPatterns;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import dev.marco.example.springboot.dao.UserAccomplishedQuizDAO;
 import dev.marco.example.springboot.dao.UserDAO;
@@ -45,12 +46,15 @@ public class UserServiceImpl implements UserService, RegexPatterns {
     mailSenderService.setTestConnection();
   }
 
+
   @Override
   public BigInteger buildNewUser(String email, String password, String firstName, String lastName)
       throws UserException, DAOLogicException {
     try {
       validateNewUser(email, password, firstName, lastName);
       log.debug("User with email=" + email + " was validated!");
+
+      BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
       try {
         if (userDAO.getUserByEmail(email) != null) {
@@ -64,7 +68,7 @@ public class UserServiceImpl implements UserService, RegexPatterns {
           .setFirstName(firstName)
           .setLastName(lastName)
           .setEmail(email)
-          .setPassword(password)
+          .setPassword(encoder.encode(password))
           .build();
       log.debug("User with email=" + email + " was build!");
       return userDAO.createUser(user);
@@ -74,6 +78,7 @@ public class UserServiceImpl implements UserService, RegexPatterns {
     }
 
   }
+
 
   @Override
   public User authorize(User user)
@@ -196,10 +201,13 @@ public class UserServiceImpl implements UserService, RegexPatterns {
   public void updateUsersPassword(BigInteger id, String newPassword)
       throws DAOLogicException, UserDoesNotExistException {
     User userFromDAO = userDAO.getUserById(id);
+
+    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
     if (userFromDAO == null) {
       throw new UserDoesNotExistException(USER_NOT_FOUND_EXCEPTION);
     }
-    userDAO.updateUsersPassword(id, newPassword);
+    userDAO.updateUsersPassword(id, encoder.encode(newPassword));
   }
 
   @Override

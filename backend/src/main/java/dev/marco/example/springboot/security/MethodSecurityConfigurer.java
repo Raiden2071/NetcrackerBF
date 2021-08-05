@@ -1,4 +1,4 @@
-package dev.marco.example.springboot.rest;
+package dev.marco.example.springboot.security;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;

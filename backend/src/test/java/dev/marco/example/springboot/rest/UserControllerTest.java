@@ -4,17 +4,26 @@ import dev.marco.example.springboot.exception.DAOLogicException;
 import dev.marco.example.springboot.exception.UserDoesNotExistException;
 import dev.marco.example.springboot.model.impl.QuizAccomplishedImpl;
 import dev.marco.example.springboot.model.impl.UserImpl;
+import dev.marco.example.springboot.security.JwtTokenFilter;
+import dev.marco.example.springboot.security.JwtTokenProvider;
 import dev.marco.example.springboot.service.UserService;
 import org.apache.log4j.Logger;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 import org.mockito.internal.matchers.Any;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -42,8 +51,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@EnableAutoConfiguration(exclude = SecurityAutoConfiguration.class)
 @SpringBootTest
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc()
 class UserControllerTest {
 
     private static final Logger log = Logger.getLogger(UserControllerTest.class);
@@ -54,11 +64,12 @@ class UserControllerTest {
     @MockBean
     private UserService userService;
 
+
     @Test
     @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
     void loginTest() {
         try {
-            String content = "{\n   \"email\":\"mark2@gmail.com\",\n   \"password\":\"testPassword2-\"\n}";
+            String content = "{\n   \"email\":\"kk@gmail.com\",\n   \"password\":\"testPassword5-\"\n}";
 
             this.mockMvc.perform(post("/auth/local")
                     .content(content)
@@ -76,13 +87,13 @@ class UserControllerTest {
     @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
     void loginBadRequestTest() {
         try {
-            String content = "{\n   \"email\":\"mark2@gmail.com\",\n   \"password\":\"notAPassword\"\n}";
+            String content = "{\n   \"email\":\"kk@gmail.com\",\n   \"password\":\"notAPassword\"\n}";
 
             this.mockMvc.perform(post("/auth/local")
                     .content(content)
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON))
-                    .andExpect(status().isBadRequest())
+                    .andExpect(status().isNotFound())
                     .andReturn();
 
         } catch (Exception e) {
@@ -164,6 +175,7 @@ class UserControllerTest {
     }
 
     @Test
+    @WithMockUser(username="kk@gmail.com", password = "$2a$04$B1NyyzfmSl3tdYCN2YmKs..mVnqrJdeocFaNRtTRnqC.9KA/04Tne",roles={"ADMIN"})
     @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
     void getUserTest() throws Exception {
         when(userService.getUserById(BigInteger.ONE))
