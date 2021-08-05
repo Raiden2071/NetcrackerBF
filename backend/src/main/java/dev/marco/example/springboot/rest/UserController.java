@@ -31,17 +31,19 @@ public class UserController implements RegexPatterns {
 
     private static final Logger log = Logger.getLogger(UserController.class);
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+    private final MailSenderService mailSenderService;
+    private final AuthenticationManager authenticationManager;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Autowired
-    private MailSenderService mailSenderService;
-
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
-    private JwtTokenProvider jwtTokenProvider;
+    public UserController(UserService userService, MailSenderService mailSenderService,
+                          AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider) {
+        this.userService = userService;
+        this.mailSenderService = mailSenderService;
+        this.authenticationManager = authenticationManager;
+        this.jwtTokenProvider = jwtTokenProvider;
+    }
 
     @Autowired
     public void setTestConnection() throws DAOConfigException {
@@ -196,6 +198,11 @@ public class UserController implements RegexPatterns {
         }
     }
 
+    public void registrationConfirm(User user) {
+        //free
+
+    }
+
     @PostMapping("/confirm")
     public ResponseEntity<User> confirmEmail(@RequestParam String code) {
         try {
@@ -290,10 +297,10 @@ public class UserController implements RegexPatterns {
         }
     }
 
-    @GetMapping("/user/favorite")
-    public Set<QuizAccomplishedImpl> getFavoriteQuizesByUser(@RequestBody UserImpl user) {
+    @GetMapping("/user/favorite/{id}")
+    public Set<QuizAccomplishedImpl> getFavoriteQuizesByUser(@PathVariable BigInteger id) {
         try {
-            return userService.getFavoriteQuizesByUser(user.getId());
+            return userService.getFavoriteQuizesByUser(id);
         } catch (DAOLogicException e) {
             log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(),

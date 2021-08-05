@@ -260,9 +260,8 @@ class UserControllerTest {
     void getFavoriteQuizesByUserTest() throws Exception {
         this.mockMvc
                 .perform(MockMvcRequestBuilders
-                        .get("/user/favorite")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{ \"id\": 1 }"))
+                        .get("/user/favorite/1")
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk());
 
         verify(userService).getFavoriteQuizesByUser(BigInteger.valueOf(1));
