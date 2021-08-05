@@ -1,0 +1,20 @@
+
+  <!-- Cards -->
+  <div class="row flex-wrap card-deck">
+    <div *ngFor="let quiz of quizzes | filter: term | paginate: { itemsPerPage: 12, currentPage: p }" class="col-12 col-xl-3 col-lg-4 col-md-6 mb-3 d-flex align-items-stretch">
+      <div class="card w-100 p-4">
+        <div class="card-body">
+          <h5 class="card-title text-center">{{quiz.title}} </h5>
+          <p class="card-text">-{{quiz.quizType}} </p>
+          <p class="card-text description"><small class="text-muted">{{quiz.description}} </small></p>
+        </div>
+        <div class="text-end">
+          <p>
+            <img src="/assets/images/icons/cup_black_24dp.svg">
+            12 Best result 
+          </p>
+          <button class="btn btn-outline-primary w-100">Play</button>
+      </div>
+      </div>
+    </div>
+  </div>
