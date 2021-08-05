@@ -128,46 +128,12 @@ public class UserController implements RegexPatterns {
         }
     }
 
-    /*
-    @PostMapping("/auth/recover")
-    public void recoverPassword1(@RequestBody UserImpl user) {
-        try {
-            if (StringUtils.isEmpty(user.getEmail()) || !user.getEmail().matches(mailPattern)) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-            }
-            userService.recoverPassword(user);
-
-        } catch (DAOLogicException | MailException e) {
-            log.error(e.getMessage());
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e.getCause());
-        } catch (UserException e) {
-            log.error(e.getMessage());
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
-        }
-    }
-
-    @PostMapping("/recover")
-    public ResponseEntity<Object> recoverPassword2(@RequestBody String email) {
-        try {
-            User user = new UserImpl.UserBuilder()
-                    .setEmail(email)
-                    .build();
-            if (!userService.recoverPassword(user)) {
-                log.error(MessagesForException.EMAIL_ERROR);
-                throw new MailException(MessagesForException.EMAIL_ERROR);
-            }
-            return ResponseEntity.ok().build();
-        } catch (DAOLogicException | MailException | UserException e) {
-            log.error("Error while recoverPassword() with email=" + email + " " + e.getMessage());
-            return ResponseEntity.badRequest().build();
-        }
-    }
-
-     */
-
     @PostMapping("/auth/recover")
     public ResponseEntity<Object> recoverPassword(@RequestBody UserImpl receivedUser) {
         try {
+            if (StringUtils.isEmpty(receivedUser.getEmail())) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            }
             User user = new UserImpl.UserBuilder()
                     .setEmail(receivedUser.getEmail())
                     .build();
