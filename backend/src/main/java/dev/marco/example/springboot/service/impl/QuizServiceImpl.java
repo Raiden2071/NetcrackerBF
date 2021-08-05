@@ -1,6 +1,9 @@
 package dev.marco.example.springboot.service.impl;
 
+import dev.marco.example.springboot.dao.AnswerDAO;
 import dev.marco.example.springboot.dao.QuestionDAO;
+import dev.marco.example.springboot.model.impl.AnswerImpl;
+import dev.marco.example.springboot.model.impl.QuestionImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,21 +27,28 @@ public class QuizServiceImpl implements QuizService {
 
     private static final Logger log = Logger.getLogger(QuizServiceImpl.class);
 
-    @Autowired
-    private QuizDAO quizDAO;
+    private final QuizDAO quizDAO;
+    private final QuestionDAO questionDAO;
+    private final AnswerDAO answerDAO;
 
     @Autowired
-    private QuestionDAO questionDAO;
+    public QuizServiceImpl(QuizDAO quizDAO, QuestionDAO questionDAO, AnswerDAO answerDAO) {
+        this.quizDAO = quizDAO;
+        this.questionDAO = questionDAO;
+        this.answerDAO = answerDAO;
+    }
 
     @Override
     public void setTestConnection() throws DAOConfigException {
         quizDAO.setTestConnection();
+        questionDAO.setTestConnection();
+        answerDAO.setTestConnection();
     }
 
 
     @Override
     public Quiz buildNewQuiz(String title, String description, QuizType quizType,
-                             BigInteger userId, List<Question> questions) throws QuizException, DAOLogicException, QuestionException {
+                             BigInteger userId, List<QuestionImpl> questions) throws QuizException, DAOLogicException, QuestionException, UserException, AnswerDoesNotExistException {
         try {
             boolean isExist = quizDAO.existQuizByTitle(title);
 
@@ -58,20 +68,38 @@ public class QuizServiceImpl implements QuizService {
 
             validateNewQuiz(title, description, questions, userId);
 
-            return quizDAO.createQuiz(quiz);
+            Quiz quizGame = quizDAO.createQuiz(quiz);
+
+            for (Question question : questions) {
+                Question questionWithId = questionDAO.createQuestion(question, quizGame.getId());
+                log.info("QUESTION WAS CREATED IN DAO " + question + "WITH QUIZ_ID " + quizGame.getId());
+
+                List<AnswerImpl> answers = questionWithId.getAnswers();
+                for (AnswerImpl answer : answers) {
+                    answer.setQuestionId(questionWithId.getId());
+                    BigInteger id = answerDAO.createAnswer(answer);
+                    answer.setId(id);
+                    log.info("ANSWER WAS CREATED IN DAO WITH ID: " + answer.getId() + " " + answer);
+                }
+            }
+            return quizGame;
 
         } catch (DAOLogicException e) {
             log.error(DAO_LOGIC_EXCEPTION + " in buildNewQuiz()");
             throw new DAOLogicException(DAO_LOGIC_EXCEPTION, e);
         } catch (UserDoesNotExistException | UserException e) {
             log.error(USER_NOT_FOUND_EXCEPTION + " in buildNewQuiz()");
-            throw new QuestionException(USER_NOT_FOUND_EXCEPTION, e);
+            throw new UserException(USER_NOT_FOUND_EXCEPTION, e);
+        } catch (QuestionDoesNotExistException e) {
+            throw new QuestionException(QUESTION_NOT_FOUND, e);
+        } catch (AnswerDoesNotExistException e) {
+            throw new AnswerDoesNotExistException(getAnswerByIdNotFoundErr, e);
         }
 
     }
 
     @Override
-    public void validateNewQuiz(String title, String description, List<Question> questions,
+    public void validateNewQuiz(String title, String description, List<QuestionImpl> questions,
                                 BigInteger creatorId) throws QuizException, UserException, QuestionException {
         if (StringUtils.isBlank(title) || StringUtils.length(title) < MIN_LENGTH_TITLE) {
             log.error(EMPTY_TITLE);
@@ -92,13 +120,13 @@ public class QuizServiceImpl implements QuizService {
     }
 
     @Override
-    public void updateQuiz(BigInteger id, Quiz quiz) throws QuizDoesNotExistException, DAOLogicException {
+    public void updateQuiz(BigInteger id, Quiz quiz) throws QuizDoesNotExistException, DAOLogicException, QuestionDoesNotExistException {
 
         Quiz quizFromDAO = quizDAO.getQuizById(id);
 
         if (quizFromDAO != null) {
-//            List<Question> questions = questionDAO.getAllQuestions(quiz.getId());
-//            quiz.setQuestions(questions);
+            List<QuestionImpl> questions = questionDAO.getAllQuestions(quiz.getId());
+            quiz.setQuestions(questions);
             quizDAO.updateQuiz(id, quiz);
         } else {
             log.error(QUIZ_NOT_FOUND_EXCEPTION + " in updateQuiz");
@@ -120,12 +148,15 @@ public class QuizServiceImpl implements QuizService {
     }
 
     @Override
-    public Quiz getQuizById(BigInteger id) throws QuizDoesNotExistException, DAOLogicException, QuizException {
+    public Quiz getQuizById(BigInteger id) throws QuizDoesNotExistException, DAOLogicException, QuizException, QuestionDoesNotExistException {
         if (id == null) {
             log.error(EMPTY_ID);
             throw new QuizException(EMPTY_ID);
         }
-        return quizDAO.getQuizById(id);
+        //List<QuestionImpl> questions = questionDAO.getAllQuestions(id);
+        Quiz quiz = quizDAO.getQuizById(id);
+        //quiz.setQuestions(questions);
+        return quiz;
     }
 
     @Override

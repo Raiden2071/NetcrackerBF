@@ -8,6 +8,7 @@ import dev.marco.example.springboot.model.Answer;
 import dev.marco.example.springboot.model.Question;
 import dev.marco.example.springboot.model.Quiz;
 import dev.marco.example.springboot.model.User;
+import dev.marco.example.springboot.model.impl.QuestionImpl;
 import dev.marco.example.springboot.model.impl.QuizAccomplishedImpl;
 import dev.marco.example.springboot.service.UserService;
 import org.apache.log4j.Logger;
@@ -61,7 +62,7 @@ public class GameServiceImplTest {
             assertEquals("Try this!", quiz.getDescription());
             assertEquals(BigInteger.TWO, quiz.getCreatorId());
 
-            List<Question> questions = quiz.getQuestions();
+            List<QuestionImpl> questions = quiz.getQuestions();
 
             assertNotNull(questions);
             assertEquals("Ukraine location?", questions.get(0).getQuestion());

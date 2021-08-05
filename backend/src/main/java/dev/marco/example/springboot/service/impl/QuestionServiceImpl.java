@@ -1,5 +1,7 @@
 package dev.marco.example.springboot.service.impl;
 
+import dev.marco.example.springboot.model.impl.AnswerImpl;
+import dev.marco.example.springboot.model.impl.QuestionImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +15,6 @@ import dev.marco.example.springboot.model.Question;
 import dev.marco.example.springboot.service.QuestionService;
 
 import java.math.BigInteger;
-import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -45,7 +46,7 @@ public class QuestionServiceImpl implements QuestionService, MessagesForExceptio
                 throw new QuestionException(ANSWER_EMPTY + "in createQuestion");
             }
         }
-        Collection<Question> questions = questionDAO.getAllQuestions(quizId);
+        List<QuestionImpl> questions = questionDAO.getAllQuestions(quizId);
         for (Question questionElement : questions) {
             if (StringUtils.equals(question.getQuestion(), questionElement.getQuestion())) {
                 log.error(QUESTION_EMPTY + " in QuestionService createQuestion question: " + question.toString());
@@ -91,11 +92,11 @@ public class QuestionServiceImpl implements QuestionService, MessagesForExceptio
     }
 
     @Override
-    public List<Question> getQuestionsByQuiz(BigInteger quizId)
+    public List<QuestionImpl> getQuestionsByQuiz(BigInteger quizId)
             throws DAOLogicException, QuestionDoesNotExistException, AnswerDoesNotExistException {
-        List<Question> questions = questionDAO.getAllQuestions(quizId);
+        List<QuestionImpl> questions = questionDAO.getAllQuestions(quizId);
         for (Question question : questions) {
-            Collection<Answer> answers = answerDAO.getAnswersByQuestionId(question.getId());
+            List<AnswerImpl> answers = answerDAO.getAnswersByQuestionId(question.getId());
             question.setAnswers(answers);
         }
         return questions;

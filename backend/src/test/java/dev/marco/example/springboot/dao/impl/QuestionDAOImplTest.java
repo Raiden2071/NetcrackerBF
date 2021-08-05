@@ -14,7 +14,7 @@ import dev.marco.example.springboot.model.impl.QuestionImpl;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -78,7 +78,7 @@ class QuestionDAOImplTest {
 
             questionDAO.createQuestion(questionModel, quizId);
             boolean isFound = false;
-            Collection<Question> questions = questionDAO.getAllQuestions(quizId);
+            List<QuestionImpl> questions = questionDAO.getAllQuestions(quizId);
             for (Question question : questions) {
                 if (question.getQuestion().equals("" + questionText)) {
                     isFound = true;
@@ -98,7 +98,7 @@ class QuestionDAOImplTest {
     @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
     void getQuestionsByQuizTest() {
         try {
-            Collection<Question> questions = questionDAO.getAllQuestions(BigInteger.valueOf(1));
+            List<QuestionImpl> questions = questionDAO.getAllQuestions(BigInteger.valueOf(1));
             for (Question question : questions) {
                 assertNotNull(question.getQuestion());
             }

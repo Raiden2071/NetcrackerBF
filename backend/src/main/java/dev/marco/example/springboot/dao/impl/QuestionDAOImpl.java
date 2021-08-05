@@ -1,5 +1,6 @@
 package dev.marco.example.springboot.dao.impl;
 
+import dev.marco.example.springboot.model.impl.AnswerImpl;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,7 +10,6 @@ import dev.marco.example.springboot.exception.DAOConfigException;
 import dev.marco.example.springboot.exception.DAOLogicException;
 import dev.marco.example.springboot.exception.MessagesForException;
 import dev.marco.example.springboot.exception.QuestionDoesNotExistException;
-import dev.marco.example.springboot.model.Answer;
 import dev.marco.example.springboot.model.Question;
 import dev.marco.example.springboot.model.QuestionType;
 import dev.marco.example.springboot.model.impl.QuestionImpl;
@@ -21,7 +21,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
 
@@ -60,7 +59,7 @@ public class QuestionDAOImpl implements QuestionDAO, MessagesForException {
     }
 
     @Override
-    public Question getQuestionById(BigInteger questionId, Collection<Answer> answers)
+    public Question getQuestionById(BigInteger questionId, List<AnswerImpl> answers)
             throws QuestionDoesNotExistException, DAOLogicException {
         try (PreparedStatement preparedStatement =
                      connection.prepareStatement(properties.getProperty(PROPERTY_GET_QUESTION_BY_ID))) {
@@ -167,7 +166,7 @@ public class QuestionDAOImpl implements QuestionDAO, MessagesForException {
     }
 
     @Override
-    public List<Question> getAllQuestions(BigInteger quizId)
+    public List<QuestionImpl> getAllQuestions(BigInteger quizId)
             throws QuestionDoesNotExistException, DAOLogicException {
         try (PreparedStatement preparedStatement =
                      connection.prepareStatement(properties.getProperty(PROPERTY_GET_ALL_QUESTIONS))) {
@@ -175,7 +174,7 @@ public class QuestionDAOImpl implements QuestionDAO, MessagesForException {
             preparedStatement.executeQuery();
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            List<Question> questions = new ArrayList<>();
+            List<QuestionImpl> questions = new ArrayList<>();
             while (resultSet.next()) {
                 questions.add(new QuestionImpl(
                         BigInteger.valueOf(resultSet.getLong(questionIdColumn)),

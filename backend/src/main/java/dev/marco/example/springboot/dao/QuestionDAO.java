@@ -5,11 +5,11 @@ package dev.marco.example.springboot.dao;
 import dev.marco.example.springboot.exception.DAOConfigException;
 import dev.marco.example.springboot.exception.DAOLogicException;
 import dev.marco.example.springboot.exception.QuestionDoesNotExistException;
-import dev.marco.example.springboot.model.Answer;
 import dev.marco.example.springboot.model.Question;
+import dev.marco.example.springboot.model.impl.AnswerImpl;
+import dev.marco.example.springboot.model.impl.QuestionImpl;
 
 import java.math.BigInteger;
-import java.util.Collection;
 import java.util.List;
 
 public interface QuestionDAO {
@@ -29,7 +29,7 @@ public interface QuestionDAO {
 
     void setTestConnection() throws DAOConfigException;
 
-    Question getQuestionById(BigInteger id, Collection<Answer> answers) throws QuestionDoesNotExistException, DAOLogicException;
+    Question getQuestionById(BigInteger id, List<AnswerImpl> answers) throws QuestionDoesNotExistException, DAOLogicException;
 
     Question getQuestionByData(String questionText, BigInteger quizId) throws QuestionDoesNotExistException, DAOLogicException;
 
@@ -37,7 +37,7 @@ public interface QuestionDAO {
 
     void deleteQuestion(Question question) throws QuestionDoesNotExistException, DAOLogicException;
 
-    List<Question> getAllQuestions(BigInteger id) throws QuestionDoesNotExistException, DAOLogicException;
+    List<QuestionImpl> getAllQuestions(BigInteger id) throws QuestionDoesNotExistException, DAOLogicException;
 
     void updateQuestion(Question question) throws DAOLogicException;
 

@@ -53,7 +53,7 @@ class AnnouncementServiceImplTest {
             BigInteger idAnnouncement = announcementService.buildNewAnnouncement(new AnnouncementImpl.AnnouncementBuilder()
                     .setTitle(TEST_TITLE)
                     .setDescription(TEST_DESCRIPTION)
-                    .setOwner(BigInteger.valueOf(5))
+                    .setIdUser(BigInteger.valueOf(5))
                     .setAddress(TEST_ADDRESS)
                     .build());
             assertNotNull(idAnnouncement);
@@ -61,12 +61,13 @@ class AnnouncementServiceImplTest {
                     ()-> announcementService.buildNewAnnouncement(new AnnouncementImpl.AnnouncementBuilder()
                             .setTitle(TEST_TITLE)
                             .setDescription(TEST_DESCRIPTION)
-                            .setOwner(BigInteger.valueOf(5))
+                            .setIdUser(BigInteger.valueOf(5))
                             .setAddress(TEST_ADDRESS)
                             .build()));
             assertNotNull(exception);
             announcementService.deleteAnnouncement(idAnnouncement, BigInteger.valueOf(5));
-        } catch (AnnouncementException | DAOLogicException | UserException e) {
+        } catch (AnnouncementException | DAOLogicException | UserException | AnnouncementDoesNotExistException |
+                UserDoesNotExistException e) {
             log.error(LOG_ERROR_CASE +"buildNewAnnouncement "+ e.getMessage());
             fail();
         }
@@ -94,7 +95,7 @@ class AnnouncementServiceImplTest {
             BigInteger idAnnouncement = announcementService.buildNewAnnouncement(new AnnouncementImpl.AnnouncementBuilder()
                     .setTitle(TEST_TITLE)
                     .setDescription(TEST_DESCRIPTION)
-                    .setOwner(BigInteger.valueOf(5))
+                    .setIdUser(BigInteger.valueOf(5))
                     .setAddress(TEST_ADDRESS)
                     .build());
             assertNotNull(idAnnouncement);
@@ -102,14 +103,16 @@ class AnnouncementServiceImplTest {
                     .setId(idAnnouncement)
                     .setTitle(TEST_NEW_TITLE)
                     .setDescription(TEST_NEW_DESCRIPTION)
+                    .setIdUser(BigInteger.valueOf(5))
                     .setAddress(TEST_NEW_ADDRESS)
-                    .build(), BigInteger.valueOf(5));
+                    .build());
             Announcement testAnnouncement = announcementDAO.getAnnouncementById(idAnnouncement);
             assertEquals(TEST_NEW_TITLE, testAnnouncement.getTitle());
             assertEquals(TEST_NEW_DESCRIPTION, testAnnouncement.getDescription());
             assertEquals(TEST_NEW_ADDRESS, testAnnouncement.getAddress());
             announcementService.deleteAnnouncement(idAnnouncement, BigInteger.valueOf(5));
-        } catch (DAOLogicException | AnnouncementException | AnnouncementDoesNotExistException | UserException e) {
+        } catch (DAOLogicException | AnnouncementException | AnnouncementDoesNotExistException | UserException |
+                UserDoesNotExistException e) {
             log.error(LOG_ERROR_CASE +"editAnnouncement "+ e.getMessage());
             fail();
         }
@@ -122,7 +125,7 @@ class AnnouncementServiceImplTest {
             BigInteger idAnnouncement = announcementService.buildNewAnnouncement(new AnnouncementImpl.AnnouncementBuilder()
                     .setTitle(TEST_TITLE)
                     .setDescription(TEST_DESCRIPTION)
-                    .setOwner(BigInteger.valueOf(5))
+                    .setIdUser(BigInteger.valueOf(5))
                     .setAddress(TEST_ADDRESS)
                     .build());
             assertNotNull(idAnnouncement);
@@ -130,7 +133,8 @@ class AnnouncementServiceImplTest {
             AnnouncementDoesNotExistException thrown = assertThrows(AnnouncementDoesNotExistException.class, () ->
                     announcementDAO.getAnnouncementById(idAnnouncement));
             assertNotNull(thrown);
-        } catch (DAOLogicException | AnnouncementException | UserException e) {
+        } catch (DAOLogicException | AnnouncementException | UserException | AnnouncementDoesNotExistException |
+                UserDoesNotExistException e) {
             log.error(LOG_ERROR_CASE +"deleteAnnouncement "+ e.getMessage());
             fail();
         }
@@ -140,12 +144,8 @@ class AnnouncementServiceImplTest {
     @Timeout(value = 10000, unit= TimeUnit.MILLISECONDS)
     void toLikeAndDisLikeAnnouncement() {
         try {
-            announcementService.toLikeAnnouncement(BigInteger.ONE, BigInteger.TWO);
-            assertThrows(AnnouncementException.class, () ->
-                    announcementService.toLikeAnnouncement(BigInteger.ONE, BigInteger.ONE));
-            announcementService.toDisLikeAnnouncement(BigInteger.ONE, BigInteger.TWO);
-
-        } catch (AnnouncementException | DAOLogicException e) {
+            announcementService.setLikeAnnouncement(BigInteger.ONE, BigInteger.ONE);
+        } catch (DAOLogicException | AnnouncementDoesNotExistException | UserDoesNotExistException e) {
             log.error(LOG_ERROR_CASE +"toLikeAndDisLikeAnnouncement "+ e.getMessage());
             fail();
         }

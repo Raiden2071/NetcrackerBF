@@ -69,8 +69,7 @@ class AnnouncementDAOImplTest {
             announcementDAO.createAnnouncement(new AnnouncementImpl.AnnouncementBuilder()
                     .setTitle(TEST_TITLE)
                     .setDescription(TEST_DESCRIPTION)
-                    .setOwner(BigInteger.ONE)
-                    .setDate(new Date())
+                    .setIdUser(BigInteger.ONE)
                     .setAddress(TEST_ADDRESS)
                     .build());
             Announcement announcement = announcementDAO.getByTitle(TEST_TITLE);
@@ -90,7 +89,7 @@ class AnnouncementDAOImplTest {
             Announcement newAnnouncement = new AnnouncementImpl.AnnouncementBuilder()
                     .setTitle(TEST_TITLE)
                     .setDescription(TEST_DESCRIPTION)
-                    .setOwner(BigInteger.ONE)
+                    .setIdUser(BigInteger.ONE)
                     .setDate(new Date())
                     .setAddress(TEST_ADDRESS)
                     .build();
@@ -111,7 +110,7 @@ class AnnouncementDAOImplTest {
             Announcement newAnnouncement = new AnnouncementImpl.AnnouncementBuilder()
                     .setTitle(TEST_TITLE)
                     .setDescription(TEST_DESCRIPTION)
-                    .setOwner(BigInteger.ONE)
+                    .setIdUser(BigInteger.ONE)
                     .setDate(new Date())
                     .setAddress(TEST_ADDRESS)
                     .build();
@@ -141,7 +140,7 @@ class AnnouncementDAOImplTest {
             Announcement newAnnouncement = new AnnouncementImpl.AnnouncementBuilder()
                     .setTitle(TEST_TITLE)
                     .setDescription(TEST_DESCRIPTION)
-                    .setOwner(BigInteger.ONE)
+                    .setIdUser(BigInteger.ONE)
                     .setDate(new Date())
                     .setAddress(TEST_ADDRESS)
                     .build();
@@ -191,7 +190,8 @@ class AnnouncementDAOImplTest {
             announcementDAO.toLike(BigInteger.ONE);
             assertEquals(likes + 1, announcementDAO.getAnnouncementById(BigInteger.ONE).getParticipantsCap());
         } catch (DAOLogicException | AnnouncementDoesNotExistException e) {
-            e.printStackTrace();
+            log.error("Error while testing toLike " + e.getMessage());
+            fail();
         }
     }
 
@@ -203,7 +203,19 @@ class AnnouncementDAOImplTest {
             announcementDAO.toDisLike(BigInteger.ONE);
             assertEquals(likes - 1, announcementDAO.getAnnouncementById(BigInteger.ONE).getParticipantsCap());
         } catch (DAOLogicException | AnnouncementDoesNotExistException e) {
-            e.printStackTrace();
+            log.error("Error while testing toDisLike " + e.getMessage());
+            fail();
+        }
+    }
+
+    @Test
+    @Timeout(value = 10000, unit= TimeUnit.MILLISECONDS)
+    void isAnnouncementById() {
+        try {
+            assertTrue(announcementDAO.isAnnouncementById(BigInteger.ONE));
+        } catch (DAOLogicException e) {
+            log.error("Error while testing isAnnouncementById " + e.getMessage());
+            fail();
         }
     }
 }

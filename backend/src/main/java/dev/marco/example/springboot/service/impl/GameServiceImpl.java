@@ -1,5 +1,7 @@
 package dev.marco.example.springboot.service.impl;
 
+import dev.marco.example.springboot.model.impl.AnswerImpl;
+import dev.marco.example.springboot.model.impl.QuestionImpl;
 import dev.marco.example.springboot.service.QuestionService;
 import dev.marco.example.springboot.service.QuizService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +48,7 @@ public class GameServiceImpl implements GameService {
             QuizException, QuestionDoesNotExistException, AnswerDoesNotExistException {
         Quiz quiz = quizService.getQuizByTitle(title);
         BigInteger quizId = quiz.getId();
-        List<Question> questionList = questionService.getQuestionsByQuiz(quizId);
+        List<QuestionImpl> questionList = questionService.getQuestionsByQuiz(quizId);
         quiz.setQuestions(questionList);
         return quiz;
     }
@@ -56,13 +58,13 @@ public class GameServiceImpl implements GameService {
             throws QuestionDoesNotExistException, DAOLogicException, AnswerDoesNotExistException, QuizDoesNotExistException, QuizException {
         BigInteger quizId = quiz.getId();
         BigInteger userId = user.getId();
-        List<Question> questions = questionDAO.getAllQuestions(quizId);
+        List<QuestionImpl> questions = questionDAO.getAllQuestions(quizId);
         int counterOfCorrectAnswers = 0;
         for (int i = 0; i < NUMBER_OF_QUESTIONS; i++) {
             Question question = questions.get(i);
             Answer answer = answers.get(i);
             if (question.getQuestionType().equals(QuestionType.FOUR_ANSWERS)) {
-                List<Answer> fourDefaultAnswers = answerDAO.getAnswersByQuestionId(question.getId());
+                List<AnswerImpl> fourDefaultAnswers = answerDAO.getAnswersByQuestionId(question.getId());
                 for (Answer defAnswer : fourDefaultAnswers) {
                     if(defAnswer.getValue().equals(answer.getValue()) && defAnswer.getAnswer()) {
                         counterOfCorrectAnswers++;
@@ -70,7 +72,7 @@ public class GameServiceImpl implements GameService {
                     }
                 }
             } else {
-                List<Answer> twoDefaultAnswers = answerDAO.getAnswersByQuestionId(question.getId());
+                List<AnswerImpl> twoDefaultAnswers = answerDAO.getAnswersByQuestionId(question.getId());
                 for (Answer defAnswer : twoDefaultAnswers) {
                     if(defAnswer.getValue().equals(answer.getValue()) && defAnswer.getAnswer()) {
                         counterOfCorrectAnswers++;
@@ -97,6 +99,7 @@ public class GameServiceImpl implements GameService {
     @Override
     public void setIsFavorite(User user, QuizAccomplishedImpl quizAccomplished) throws DAOLogicException {
         int isFavorite = quizAccomplished.getIntFavourite();
+        isFavorite = (isFavorite == 0) ? 1 : 0;
         BigInteger userId = user.getId();
         BigInteger quizId = quizAccomplished.getQuiz().getId();
         userAccomplishedQuizDAO.setIsFavoriteQuiz(userId, quizId, isFavorite);
