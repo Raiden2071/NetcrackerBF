@@ -69,7 +69,7 @@ public class AnnouncementDAOImpl implements AnnouncementDAO {
                     .setId(BigInteger.valueOf(resultSet.getLong(ID_ANNOUNCEMENT)))
                     .setTitle(resultSet.getString(TITLE))
                     .setDescription(resultSet.getString(DESCRIPTION))
-                    .setOwner(BigInteger.valueOf(resultSet.getLong(OWNER)))
+                    .setIdUser(BigInteger.valueOf(resultSet.getLong(OWNER)))
                     .setDate(resultSet.getDate(DATE_CREATE))
                     .setAddress(resultSet.getString(ADDRESS))
                     .setParticipantsCap(resultSet.getInt(LIKES))
@@ -110,7 +110,7 @@ public class AnnouncementDAOImpl implements AnnouncementDAO {
                         .setId(BigInteger.valueOf(resultSet.getLong(ID_ANNOUNCEMENT)))
                         .setTitle(resultSet.getString(TITLE))
                         .setDescription(resultSet.getString(DESCRIPTION))
-                        .setOwner(BigInteger.valueOf(resultSet.getLong(OWNER)))
+                        .setIdUser(BigInteger.valueOf(resultSet.getLong(OWNER)))
                         .setDate(resultSet.getDate(DATE_CREATE))
                         .setAddress(resultSet.getString(ADDRESS))
                         .setParticipantsCap(resultSet.getInt(LIKES))
@@ -131,7 +131,7 @@ public class AnnouncementDAOImpl implements AnnouncementDAO {
             PreparedStatement preparedStatement = connection.prepareStatement(properties.getProperty(CREATE_ANNOUNCEMENT), new String[]{ID_ANNOUNCEMENT});
             preparedStatement.setString(1, newAnnouncement.getTitle());
             preparedStatement.setString(2, newAnnouncement.getDescription());
-            preparedStatement.setLong(3, newAnnouncement.getOwner().longValue());
+            preparedStatement.setLong(3, newAnnouncement.getIdUser().longValue());
             preparedStatement.setDate(4,  new Date(System.currentTimeMillis()));
             preparedStatement.setString(5, newAnnouncement.getAddress());
             int idAnnouncement = preparedStatement.executeUpdate();
@@ -195,7 +195,7 @@ public class AnnouncementDAOImpl implements AnnouncementDAO {
                         .setId(BigInteger.valueOf(resultSet.getLong(ID_ANNOUNCEMENT)))
                         .setTitle(resultSet.getString(TITLE))
                         .setDescription(resultSet.getString(DESCRIPTION))
-                        .setOwner(BigInteger.valueOf(resultSet.getLong(OWNER)))
+                        .setIdUser(BigInteger.valueOf(resultSet.getLong(OWNER)))
                         .setDate(resultSet.getDate(DATE_CREATE))
                         .setAddress(resultSet.getString(ADDRESS))
                         .setParticipantsCap(resultSet.getInt(LIKES))
@@ -225,12 +225,25 @@ public class AnnouncementDAOImpl implements AnnouncementDAO {
                     .setId(BigInteger.valueOf(resultSet.getLong(ID_ANNOUNCEMENT)))
                     .setTitle(resultSet.getString(TITLE))
                     .setDescription(resultSet.getString(DESCRIPTION))
-                    .setOwner(BigInteger.valueOf(resultSet.getLong(OWNER)))
+                    .setIdUser(BigInteger.valueOf(resultSet.getLong(OWNER)))
                     .setDate(resultSet.getDate(DATE_CREATE))
                     .setAddress(resultSet.getString(ADDRESS))
                     .setParticipantsCap(resultSet.getInt(LIKES))
                     .build();
         } catch (SQLException | AnnouncementException throwables) {
+            log.error(DAO_LOGIC_EXCEPTION + throwables.getMessage());
+            throw new DAOLogicException(DAO_LOGIC_EXCEPTION, throwables);
+        }
+    }
+
+    @Override
+    public boolean isAnnouncementById(BigInteger idAnnouncement) throws DAOLogicException {
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(properties.getProperty(GET_ANNOUNCEMENT_BY_ID));
+            preparedStatement.setLong(1, idAnnouncement.longValue());
+            ResultSet resultSet = preparedStatement.executeQuery();
+            return resultSet.isBeforeFirst();
+        } catch (SQLException throwables) {
             log.error(DAO_LOGIC_EXCEPTION + throwables.getMessage());
             throw new DAOLogicException(DAO_LOGIC_EXCEPTION, throwables);
         }

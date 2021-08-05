@@ -18,7 +18,7 @@ public class AnnouncementImpl implements Announcement {
   private BigInteger id;
   private String title;
   private String description;
-  private BigInteger owner;
+  private BigInteger idUser;
   private Date date;
   private String address;
   private Collection<BigInteger> participants;
@@ -38,8 +38,8 @@ public class AnnouncementImpl implements Announcement {
     return description;
   }
   @Override
-  public BigInteger getOwner() {
-    return owner;
+  public BigInteger getIdUser() {
+    return idUser;
   }
   @Override
   public Date getDate() {
@@ -73,8 +73,8 @@ public class AnnouncementImpl implements Announcement {
     this.description = description;
   }
   @Override
-  public void setOwner(BigInteger owner) {
-    this.owner = owner;
+  public void setIdUser(BigInteger idUser) {
+    this.idUser = idUser;
   }
   @Override
   public void setDate(Date date) {
@@ -130,10 +130,10 @@ public class AnnouncementImpl implements Announcement {
       return this;
     }
 
-    public AnnouncementBuilder setOwner(BigInteger owner) throws AnnouncementException {
-      if(owner == null)
-        throw new AnnouncementException(OWNER_IS_NULL);
-      newAnnouncement.owner = owner;
+    public AnnouncementBuilder setIdUser(BigInteger idUser) throws AnnouncementException {
+      if(idUser == null)
+        throw new AnnouncementException(USER_IS_NULL);
+      newAnnouncement.idUser = idUser;
       return this;
     }
 
@@ -167,7 +167,7 @@ public class AnnouncementImpl implements Announcement {
     }
 
     public AnnouncementBuilder setIsLiked(boolean isLiked){
-      newAnnouncement.isLiked = !isLiked;
+      newAnnouncement.isLiked = isLiked;
       return this;
     }
 

@@ -2,6 +2,7 @@ package dev.marco.example.springboot.dao;
 
 
 import dev.marco.example.springboot.exception.AnnouncementDoesNotExistException;
+import dev.marco.example.springboot.exception.DAOConfigException;
 import dev.marco.example.springboot.exception.DAOLogicException;
 import dev.marco.example.springboot.model.Announcement;
 
@@ -41,6 +42,8 @@ public interface AnnouncementDAO {
     String MESSAGE_FOR_GET_POPULAR = " in getPopular";
     String MESSAGE_FOR_GET_ANNOUNCEMENT_BY_ID = " in createAnnouncement";
 
+    void setTestConnection() throws DAOConfigException;
+
     Announcement getAnnouncementById(BigInteger idAnnouncement) throws AnnouncementDoesNotExistException, DAOLogicException;
 
     void deleteAnnouncement(BigInteger idAnnouncement) throws DAOLogicException;
@@ -56,6 +59,8 @@ public interface AnnouncementDAO {
     List<Announcement> getPopular(int number) throws AnnouncementDoesNotExistException, DAOLogicException;
 
     boolean isAnnouncementByTitle(String title) throws DAOLogicException;
+
+    boolean isAnnouncementById(BigInteger idAnnouncement) throws DAOLogicException;
 
     void toLike(BigInteger idAnnouncement) throws DAOLogicException;
 

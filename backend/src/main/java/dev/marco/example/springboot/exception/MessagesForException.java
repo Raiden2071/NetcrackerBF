@@ -17,12 +17,13 @@ public interface MessagesForException {
   String EMPTY_DESCRIPTION = "Description field cannot be empty";
   String TITLE_TOO_LONG = "Length of the title field cannot exceed 50 characters";
   String DESCRIPTION_TOO_LONG = "Length of the description field cannot exceed 300 characters";
+  String USER_IS_NULL = "User field cannot be empty";
   String OWNER_IS_NULL = "Owner field cannot be empty";
 
   String ANNOUNCEMENT_NOT_FOUND_EXCEPTION = "Announcement does not exist!";
   String ANNOUNCEMENT_HAS_NOT_BEEN_RECEIVED = "Announcement has not been received";
   String EMPTY_ANNOUNCEMENT_ID = "IdAnnouncement field cannot be empty";
-  String ANNOUNCEMENT_ALREADY_EXISTS = "Announcement with the same name already exists";
+  String ANNOUNCEMENT_ALREADY_EXISTS = "Announcement with the same title already exists";
   String EMPTY_ANNOUNCEMENT_TITLE = "Title field cannot be empty";
   String EMPTY_ANNOUNCEMENT_DESCRIPTION = "Description field cannot be empty";
   String EMPTY_ANNOUNCEMENT_ADDRESS = "Address field cannot be empty";

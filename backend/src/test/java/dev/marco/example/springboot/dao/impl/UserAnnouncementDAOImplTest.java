@@ -99,7 +99,7 @@ class UserAnnouncementDAOImplTest {
             BigInteger idAnnouncement = announcementDAO.createAnnouncement(new AnnouncementImpl.AnnouncementBuilder()
                     .setTitle(TEST_TITLE)
                     .setDescription(TEST_DESCRIPTION)
-                    .setOwner(BigInteger.ONE)
+                    .setIdUser(BigInteger.ONE)
                     .setDate(new Date())
                     .setAddress(TEST_ADDRESS)
                     .setParticipantsCap(5)
