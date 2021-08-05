@@ -4,6 +4,7 @@ import dev.marco.example.springboot.exception.AnswerDoesNotExistException;
 import dev.marco.example.springboot.exception.DAOConfigException;
 import dev.marco.example.springboot.exception.DAOLogicException;
 import dev.marco.example.springboot.model.Answer;
+import dev.marco.example.springboot.model.impl.AnswerImpl;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -38,6 +39,6 @@ public interface AnswerDAO {
 
     BigInteger updateAnswer(Answer answer) throws DAOLogicException;
 
-    List<Answer> getAnswersByQuestionId(BigInteger questionId) throws DAOLogicException, AnswerDoesNotExistException;
+    List<AnswerImpl> getAnswersByQuestionId(BigInteger questionId) throws DAOLogicException, AnswerDoesNotExistException;
 
 }

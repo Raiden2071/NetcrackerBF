@@ -20,7 +20,7 @@ public class QuizImpl implements Quiz {
     private QuizType quizType;
     private Date creationDate;
     private BigInteger creatorId;
-    private List<Question> questions;
+    private List<QuestionImpl> questions;
 
     private QuizImpl() {
     }
@@ -86,12 +86,12 @@ public class QuizImpl implements Quiz {
     }
 
     @Override
-    public List<Question> getQuestions() {
+    public List<QuestionImpl> getQuestions() {
         return questions;
     }
 
     @Override
-    public void setQuestions(List<Question> questions) {
+    public void setQuestions(List<QuestionImpl> questions) {
         this.questions = questions;
     }
 
@@ -156,7 +156,7 @@ public class QuizImpl implements Quiz {
             return this;
         }
 
-        public Builder setQuestions(List<Question> questions) {
+        public Builder setQuestions(List<QuestionImpl> questions) {
             QuizImpl.this.questions = questions;
             return this;
         }

@@ -1,19 +1,21 @@
 package dev.marco.example.springboot.model.impl;
 
-import dev.marco.example.springboot.model.Answer;
 import dev.marco.example.springboot.model.Question;
 import dev.marco.example.springboot.model.QuestionType;
 
 import java.math.BigInteger;
-import java.util.Collection;
+import java.util.List;
 
 public class QuestionImpl implements Question {
+
+    private QuestionImpl() {
+    }
 
     public QuestionImpl(
             BigInteger idQuestion,
             String question,
             QuestionType questionType,
-            Collection<Answer> answers
+            List<AnswerImpl> answers
     ) {
         this.idQuestion = idQuestion;
         this.question = question;
@@ -42,7 +44,7 @@ public class QuestionImpl implements Question {
     private BigInteger idQuestion;
     private String question;
     private QuestionType questionType;
-    private Collection<Answer> answers;
+    private List<AnswerImpl> answers;
 
 
     @Override
@@ -66,12 +68,12 @@ public class QuestionImpl implements Question {
     }
 
     @Override
-    public void setAnswers(Collection<Answer> answers) {
+    public void setAnswers(List<AnswerImpl> answers) {
         this.answers = answers;
     }
 
     @Override
-    public Collection<Answer> getAnswers() {
+    public List<AnswerImpl> getAnswers() {
         return answers;
     }
 

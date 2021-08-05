@@ -150,7 +150,6 @@ public class QuizDAOImpl implements QuizDAO {
                     .setQuizType(QuizType.values()[resultSet.getInt(QUIZ_TYPE)])
                     .setCreationDate(resultSet.getDate(CREATION_DATE))
                     .setCreatorId(BigInteger.valueOf(resultSet.getInt(CREATOR)))
-                    //.setQuestionsId(BigInteger.valueOf(resultSet.getInt(QUESTIONS_ID)))
                     .build();
 
         } catch (SQLException | QuizException e) {

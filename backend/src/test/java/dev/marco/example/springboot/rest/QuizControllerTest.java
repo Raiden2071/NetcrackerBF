@@ -1,5 +1,6 @@
 package dev.marco.example.springboot.rest;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.marco.example.springboot.model.Quiz;
 import dev.marco.example.springboot.model.QuizType;
 import dev.marco.example.springboot.model.impl.QuizImpl;
@@ -18,12 +19,12 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.math.BigInteger;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -36,6 +37,14 @@ public class QuizControllerTest {
     @MockBean
     private QuizService quizService;
 
+    public static String asJsonString(final Object obj) {
+        try {
+            return new ObjectMapper().writeValueAsString(obj);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @Test
     @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
     void showAllQuizzesTest() throws Exception {
@@ -43,12 +52,6 @@ public class QuizControllerTest {
         List<Quiz> quizzes = quizService.getAllQuizzes();
         assertNotNull(quizzes);
         verify(quizService, Mockito.times(1)).getAllQuizzes();
-
-/////////////////////////
-//        this.mockMvc.perform(MockMvcRequestBuilders
-//                        .get("/quiz")
-//                        .accept(MediaType.APPLICATION_JSON))
-//                .andExpect(MockMvcResultMatchers.status().isOk());
 
     }
 
@@ -94,22 +97,31 @@ public class QuizControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
-    //@Test
-//    @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
-//    void updateQuizTest() throws Exception {
-//
-//        this.mockMvc.perform(MockMvcRequestBuilders
-//                        .put("/quiz")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content("{\"id\": 5," +
-//                                " \"title\":\"Testing your Light\"," +
-//                                " \"description\":\"Try this!\"," +
-//                                " \"quizType\":\"SCIENCE\"," +
-//                                " \"creationDate\":\"2020-01-21\"," +
-//                                " \"creatorId\":7," +
-//                                " \"questions\":null}"))
-//                .andExpect(MockMvcResultMatchers.status().isOk())
-//                .andReturn().getResponse().getContentAsString();
-//    }
+
+    @Test
+    @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
+    void updateQuizTest() throws Exception {
+
+        Quiz quiz = QuizImpl.QuizBuilder()
+                .setId(BigInteger.valueOf(2))
+                .setTitle("Testing your Light!!!")
+                .setDescription("Light!!!")
+                .setQuizType(QuizType.SCIENCE)
+                .setCreationDate(new Date(System.currentTimeMillis()))
+                .setCreatorId(BigInteger.valueOf(7))
+                .build();
+
+        when(quizService.getQuizById(BigInteger.valueOf(2)))
+                .thenReturn(quiz);
+
+        this.mockMvc.perform(MockMvcRequestBuilders
+                        .put("/quiz/{id}", 2)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(quiz))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+
+    }
+
 
 }

@@ -16,6 +16,7 @@ import dev.marco.example.springboot.service.QuestionService;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -74,7 +75,7 @@ class QuestionServiceImplTest {
                     QuestionType.TRUE_FALSE
             );
 
-            Collection<Answer> answers = new ArrayList<>();
+            List<AnswerImpl> answers = new ArrayList<>();
             answers.add(new AnswerImpl("America", false, BigInteger.valueOf(52)));
             answers.add(new AnswerImpl("Asia", false, BigInteger.valueOf(52)));
             answers.add(new AnswerImpl("Africa", false, BigInteger.valueOf(52)));
@@ -136,7 +137,7 @@ class QuestionServiceImplTest {
                     "Test location?",
                     QuestionType.FOUR_ANSWERS
             );
-            Collection<Answer> answers = new ArrayList<>();
+            List<AnswerImpl> answers = new ArrayList<>();
             answers.add(new AnswerImpl("America", false, BigInteger.valueOf(52)));
             answers.add(new AnswerImpl("Asia", false, BigInteger.valueOf(52)));
             answers.add(new AnswerImpl("Africa", false, BigInteger.valueOf(52)));
@@ -178,7 +179,7 @@ class QuestionServiceImplTest {
     void getQuestionsByQuizTest() {
         try {
             BigInteger quizId = BigInteger.valueOf(4);
-            ArrayList<Question> questions = (ArrayList<Question>) questionService.getQuestionsByQuiz(quizId);
+            List<QuestionImpl> questions = questionService.getQuestionsByQuiz(quizId);
             assertEquals(questions.size(), 10);
             assertNotNull(questions.get(3).getAnswers());
         } catch (DAOLogicException | AnswerDoesNotExistException | QuestionDoesNotExistException e) {
