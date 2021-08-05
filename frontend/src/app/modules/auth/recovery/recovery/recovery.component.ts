@@ -39,7 +39,7 @@ export class RecoveryComponent implements OnInit {
     if(this.recoveryForm.valid) {
       this.toastr.info(`Мы отправили ссылку для восстановления доступа к вашему аккаунту на адрес ${this.recoveryForm.value.email}.`, '', {
         timeOut: 2000,
-      });
+      });    
       if(!this.isModal) {
         this.router.navigateByUrl('/auth/login')
       }

@@ -1,9 +1,9 @@
 (self["webpackChunkfrontend"] = self["webpackChunkfrontend"] || []).push([["common"],{
 
-/***/ 9920:
-/*!**********************************************************************!*\
-  !*** ./src/app/modules/auth/recovery/recovery/recovery.component.ts ***!
-  \**********************************************************************/
+/***/ 7352:
+/*!************************************************************************!*\
+  !*** ./src/app/modules/auth/components/recovery/recovery.component.ts ***!
+  \************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -135,7 +135,7 @@ class RecoveryComponent {
             if (!this.isModal) {
                 this.router.navigateByUrl('/auth/login');
             }
-            // this.authService.forgotPassword(this.recoveryForm.value).subscribe(() => );
+            this.authService.forgotPassword(this.recoveryForm.value);
         }
         else {
             this.showErrors = true;

@@ -11503,7 +11503,7 @@ button.toast-close-button {
   }
 }
 html, body {
-  height: 100%;
+  height: 100% !important;
 }
 :host {
   width: 100%;

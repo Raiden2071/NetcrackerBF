@@ -43,5 +43,5 @@ export class CreateAnnouncementComponent implements OnInit {
   close(): void {
     this.activeModal.close();
   }
-
+  
 }

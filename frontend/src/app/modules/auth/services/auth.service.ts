@@ -26,9 +26,9 @@ export class AuthService {
   }
 
   forgotPassword(email: string): Observable<string> {
-    return this.http.post<string>('auth/forgot-password', email);
+    return this.http.post<string>('auth/recover', email);
   }
-
+  
   setTokens(authResponse: AuthResponse, remember: boolean): void {
     if(remember) {
       localStorage.setItem('access_token', authResponse.jwt);
@@ -45,5 +45,5 @@ export class AuthService {
   getToken(): string | null {
     return localStorage.getItem('access_token') ?? sessionStorage.getItem('access_token');
   }
-
+  
 }
