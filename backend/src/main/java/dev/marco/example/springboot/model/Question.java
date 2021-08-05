@@ -1,7 +1,9 @@
 package dev.marco.example.springboot.model;
 
+import dev.marco.example.springboot.model.impl.AnswerImpl;
+
 import java.math.BigInteger;
-import java.util.Collection;
+import java.util.List;
 
 public interface Question {
 
@@ -13,9 +15,9 @@ public interface Question {
 
     String getQuestion();
 
-    void setAnswers(Collection<Answer> answers);
+    void setAnswers(List<AnswerImpl> answers);
 
-    Collection<Answer> getAnswers();
+    List<AnswerImpl> getAnswers();
 
     void setQuestionType(QuestionType questionType);
 

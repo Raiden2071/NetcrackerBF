@@ -141,13 +141,13 @@ public class AnswerDAOImpl implements AnswerDAO, MessagesForException {
     }
 
     @Override
-    public List<Answer> getAnswersByQuestionId(BigInteger questionId) throws DAOLogicException, AnswerDoesNotExistException {
+    public List<AnswerImpl> getAnswersByQuestionId(BigInteger questionId) throws DAOLogicException, AnswerDoesNotExistException {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(properties.getProperty(GET_ANSWERS_BY_QUESTION_ID));
             preparedStatement.setLong(1, questionId.longValue());
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            List<Answer> answers = new ArrayList<>();
+            List<AnswerImpl> answers = new ArrayList<>();
             while (resultSet.next()) {
                 answers.add(new AnswerImpl(
                         BigInteger.valueOf(resultSet.getLong(SQL_ANSWER_ID)),

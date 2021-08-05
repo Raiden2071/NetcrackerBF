@@ -66,7 +66,7 @@ public class QuizController {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND);
             }
             return quiz;
-        } catch (QuizDoesNotExistException | QuizException e) {
+        } catch (QuizDoesNotExistException | QuizException | QuestionDoesNotExistException e) {
             log.error(QUIZ_NOT_FOUND_EXCEPTION + e.getMessage());
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
         } catch (DAOLogicException e) {
@@ -97,6 +97,9 @@ public class QuizController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
         } catch (QuizException e) {
             log.error(QUIZ_NOT_FOUND_EXCEPTION + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
+        } catch (AnswerDoesNotExistException e) {
+            log.error(getAnswerByIdNotFoundExc + e.getMessage());
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
         }
 
@@ -139,7 +142,7 @@ public class QuizController {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND);
             }
             quizService.deleteQuiz(quiz);
-        } catch (QuizDoesNotExistException | QuizException e) {
+        } catch (QuizDoesNotExistException | QuizException | QuestionDoesNotExistException e) {
             log.error(QUIZ_NOT_FOUND_EXCEPTION + e.getMessage());
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
         } catch (DAOLogicException e) {

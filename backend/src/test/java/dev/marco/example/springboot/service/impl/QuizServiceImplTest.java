@@ -1,12 +1,12 @@
 package dev.marco.example.springboot.service.impl;
 
+import dev.marco.example.springboot.model.impl.QuestionImpl;
 import org.apache.log4j.Logger;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import dev.marco.example.springboot.exception.*;
-import dev.marco.example.springboot.model.Question;
 import dev.marco.example.springboot.model.Quiz;
 import dev.marco.example.springboot.model.QuizType;
 import dev.marco.example.springboot.service.QuestionService;
@@ -45,7 +45,7 @@ class QuizServiceImplTest {
     void buildNewQuiz() {
         try {
             BigInteger quizId = BigInteger.valueOf(1);
-            List<Question> questions = questionService.getQuestionsByQuiz(quizId);
+            List<QuestionImpl> questions = questionService.getQuestionsByQuiz(quizId);
 
             Quiz quiz = quizService.buildNewQuiz(
                     "Math",
@@ -56,7 +56,6 @@ class QuizServiceImplTest {
 
             log.info("Quiz with id " + quiz.getId() + " was created");
             assertNotNull(quiz);
-
             log.info("Quiz with id " + quiz.getId() + " was deleted");
             quizService.deleteQuiz(quiz);
 
@@ -80,7 +79,7 @@ class QuizServiceImplTest {
 
             log.info("Quiz was found by id: " + quiz.getId());
 
-        } catch (QuizDoesNotExistException | DAOLogicException | QuizException e) {
+        } catch (QuizDoesNotExistException | DAOLogicException | QuizException | QuestionDoesNotExistException e) {
             log.error("Error while testing getQuizById in QuizService", e);
             fail();
         }

@@ -155,7 +155,7 @@ public class AnswerDAOImplTest {
         try {
             BigInteger questionId = BigInteger.TWO;
 
-            List<Answer> answersForSecondQuestion = answerDAO.getAnswersByQuestionId(questionId);
+            List<AnswerImpl> answersForSecondQuestion = answerDAO.getAnswersByQuestionId(questionId);
             assertEquals("America", answersForSecondQuestion.get(0).getValue());
             assertEquals("Asia", answersForSecondQuestion.get(1).getValue());
             assertEquals("Africa", answersForSecondQuestion.get(2).getValue());

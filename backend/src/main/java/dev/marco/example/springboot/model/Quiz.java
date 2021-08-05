@@ -1,5 +1,7 @@
 package dev.marco.example.springboot.model;
 
+import dev.marco.example.springboot.model.impl.QuestionImpl;
+
 import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
@@ -30,9 +32,9 @@ public interface Quiz {
 
     BigInteger getCreatorId();
 
-    List<Question> getQuestions();
+    List<QuestionImpl> getQuestions();
 
-    void setQuestions(List<Question> questions);
+    void setQuestions(List<QuestionImpl> questions);
 
 }
 

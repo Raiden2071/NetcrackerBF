@@ -2,6 +2,7 @@ package dev.marco.example.springboot.service;
 
 import dev.marco.example.springboot.exception.*;
 import dev.marco.example.springboot.model.Question;
+import dev.marco.example.springboot.model.impl.QuestionImpl;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -20,6 +21,6 @@ public interface QuestionService {
 
     Question getQuestionByData(String questionText, BigInteger quizId) throws DAOLogicException, QuestionDoesNotExistException, AnswerDoesNotExistException;
 
-    List<Question> getQuestionsByQuiz(BigInteger quizId) throws DAOLogicException, QuestionDoesNotExistException, AnswerDoesNotExistException;
+    List<QuestionImpl> getQuestionsByQuiz(BigInteger quizId) throws DAOLogicException, QuestionDoesNotExistException, AnswerDoesNotExistException;
 
 }

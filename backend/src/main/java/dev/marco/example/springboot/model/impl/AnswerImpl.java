@@ -11,6 +11,9 @@ public class AnswerImpl implements Answer {
     private Boolean answer;
     private BigInteger questionId;
 
+    private AnswerImpl() {
+    }
+
     public AnswerImpl(String value, Boolean answer, BigInteger questionId) {
         this.value = value;
         this.answer = answer;
