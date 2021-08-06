@@ -4,8 +4,6 @@ import { LayoutComponent } from './layout/layout.component';
 import { AuthGuard } from './modules/auth/auth.guard';
 import { QuizQuestionsComponent } from './modules/quiz/components/quiz-questions/quiz-questions.component';
 
-
-
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: '/auth/login' },
   {

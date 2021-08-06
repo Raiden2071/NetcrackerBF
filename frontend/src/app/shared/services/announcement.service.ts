@@ -8,11 +8,10 @@ import { AbstractCrudService } from '../abstracts/abstract-crud.service';
 })
 export class announcementService extends AbstractCrudService<Announcement>{
 
-  path = 'announcements';
+  path = 'announcement/all';
 
   constructor(protected http: HttpClient) {
     super(http);
   }
-
 
 }

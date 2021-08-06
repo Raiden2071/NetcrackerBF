@@ -15,4 +15,8 @@ export class LayoutComponent implements OnInit {
   ngOnInit(): void {    
   }
 
+  isTournamentRoute() {
+    return this.router.url.includes("/tournament");
+  }
+
 }

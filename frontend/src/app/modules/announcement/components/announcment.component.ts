@@ -4,6 +4,8 @@ import { switchMap, tap } from 'rxjs/operators';
 import { CreateAnnouncementComponent } from 'src/app/modals/create-announcement/components/create-announcement';
 import { Announcement } from 'src/app/models/announcements';
 import { announcementService } from 'src/app/shared/services/announcement.service';
+import { UserService } from 'src/app/shared/services/users.service';
+import { AuthService } from '../../auth/services/auth.service';
 
 @Component({
   selector: 'app-announcment',
@@ -12,7 +14,7 @@ import { announcementService } from 'src/app/shared/services/announcement.servic
 })
 export class AnnouncmentComponent implements OnInit {
 
-  announcements: Announcement[];
+  announcements: Announcement;
   // searchProject: FormControl = new FormControl('');
   term: any;
   p: number = 1;
@@ -20,6 +22,7 @@ export class AnnouncmentComponent implements OnInit {
   constructor(
     private modalService: NgbModal,
     private announcementService: announcementService,
+    private userService: UserService
   ) { }
 
   ngOnInit(): void {
@@ -27,7 +30,7 @@ export class AnnouncmentComponent implements OnInit {
   }
 
   getAnnouncement() {
-    this.announcementService.getList().subscribe(announcement => this.announcements = announcement);
+    this.announcementService.getOne(this.userService.userId).subscribe(announcement => this.announcements = announcement);
   }
 
   createAnnouncement(): void {

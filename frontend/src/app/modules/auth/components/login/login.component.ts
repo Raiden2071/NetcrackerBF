@@ -35,7 +35,7 @@ export class LoginComponent implements OnInit {
     if(this.loginForm.valid) {
       const data = this.loginForm.value;
       this.authService.login(data, data.remember).subscribe((userData) => {        
-        this.userService.userId = userData.user.id;
+        // this.userService.userId = userData.user.id;
         this.router.navigateByUrl('/profile')
       },err => {
         this.showErrors = true;

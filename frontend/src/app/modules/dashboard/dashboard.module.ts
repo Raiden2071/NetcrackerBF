@@ -1,8 +1,10 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, registerLocaleData } from '@angular/common';
 import { DashboardComponent } from './components/dashboard.component';
 import { DashboardRoutingModule } from './dashboard-routing.module';
+import localeRu from '@angular/common/locales/ru';
 
+registerLocaleData(localeRu, 'ru');
 
 
 @NgModule({

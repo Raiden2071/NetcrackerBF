@@ -7,5 +7,5 @@ export interface Announcement {
   owner: User,
   date: Date,
   address: String,
-  likes?: number
+  participantsCap?: number
 }

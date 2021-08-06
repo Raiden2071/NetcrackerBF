@@ -22,14 +22,18 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.getUser();
+    this.getDashboard();
   }
 
   getUser() {
     this.userService.userInfo$.subscribe(user => this.user = user);
   }
 
-  getDashboard(): void {
-    this.dashboardService.getOne(182).subscribe(dashboard => this.dashboard = dashboard );
+  getDashboard(): void {    
+    this.dashboardService.getOne(this.userService.userId).subscribe(dashboard => {
+      this.dashboard = dashboard
+      console.log(dashboard);
+    });
   }
 
 }
