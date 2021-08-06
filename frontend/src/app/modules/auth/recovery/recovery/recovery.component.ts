@@ -43,7 +43,7 @@ export class RecoveryComponent implements OnInit {
       if(!this.isModal) {
         this.router.navigateByUrl('/auth/login')
       }
-      // this.authService.forgotPassword(this.recoveryForm.value).subscribe(() => );
+      this.authService.forgotPassword(this.recoveryForm.value);
     }
     else {
       this.showErrors = true;

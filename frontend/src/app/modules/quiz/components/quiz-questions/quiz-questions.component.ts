@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Form, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { map, tap } from 'rxjs/operators';
 import { QuestionType, Quiz, QuizType } from 'src/app/models/quiz';
 
 @Component({
@@ -14,11 +13,22 @@ export class QuizQuestionsComponent implements OnInit {
   data: Quiz; //title, description, type of quiz
   quizTypes = QuizType;
   questionTypes = QuestionType;
-
-  currentQuiz = 0;
+  currentQuiz: number = 0;
+  quizId: number = 0;
 
   questionsForm: FormGroup = this.fb.group({
-    questions: this.fb.array([this.newQuestionForm()])
+    questions: this.fb.array([
+      this.newQuestionForm(),
+      this.newQuestionForm(),
+      this.newQuestionForm(),
+      this.newQuestionForm(),
+      this.newQuestionForm(),
+      this.newQuestionForm(),
+      this.newQuestionForm(),
+      this.newQuestionForm(),
+      this.newQuestionForm(),
+      this.newQuestionForm()
+    ])
   });
 
   constructor(
@@ -27,16 +37,8 @@ export class QuizQuestionsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.addQuestion();
-    this.addQuestion();
-    this.addQuestion();
-    this.addQuestion();
-    this.addAnswer();
-    this.addAnswer();
-
-    
     // поменяй any
-    // this.route.paramMap.subscribe((data: any) => this.data = JSON.parse(data.getAll('data')));
+    this.route.paramMap.subscribe((data: any) => this.data = JSON.parse(data.getAll('data')));
   }
 
   get questionArray(): FormArray {
@@ -44,15 +46,16 @@ export class QuizQuestionsComponent implements OnInit {
   }
 
   get answerArray(): FormArray {    
-    return this.questionsForm.get("questions")['controls'][4].get("answers");
+    return this.questionsForm.get("questions")['controls'][1].get("answers");
   }
 
   newQuestionForm(): FormGroup {
+      this.quizId++;
     return this.fb.group({
-      questionId:   ['', [Validators.required]],  // 0 до 9
+      questionId:   [this.quizId, [Validators.required]],  // 0 до 9
       questionText: ['', [Validators.required]],  // question title
-      questionType: ['', [Validators.required]],  // four answer
-      answers:      this.fb.array([])
+      questionType: [this.questionTypes.FOUR_ANSWERS, [Validators.required]],  // four answer
+      answers:      this.fb.array([this.newAnswerForm(),this.newAnswerForm(),this.newAnswerForm(),this.newAnswerForm()])
     });
   }
 
@@ -64,12 +67,20 @@ export class QuizQuestionsComponent implements OnInit {
     });
   }
 
-  addQuestion(): void {
-    this.questionArray.push(this.newQuestionForm())
+  // addQuestion(): void {
+  //   this.questionArray.push(this.newQuestionForm())
+  // }
+
+  // addAnswer(): void {  
+  //   this.answerArray.push(this.newAnswerForm())
+  // }
+
+  getQuestions(form) {
+    return form.controls.questions.controls;
   }
 
-  addAnswer(): void {  
-    this.answerArray.push(this.newAnswerForm())
+  getAnswers(form) {    
+    return form.controls.answers.controls;
   }
 
   click() {
@@ -77,10 +88,8 @@ export class QuizQuestionsComponent implements OnInit {
   }
 
   onSubmit(): void {
-    this.click();
-    console.log(this.currentQuiz);
-    
+    const data = Object.assign(this.data, this.questionsForm.value)    
+    console.log(data);
   }
-
 
 }
