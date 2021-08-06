@@ -152,6 +152,7 @@ class UserControllerTest {
                 .andReturn();
     }
 
+    //WTF?
     @Test
     @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
     void recoverTest() throws Exception {
@@ -202,9 +203,7 @@ class UserControllerTest {
 
         this.mockMvc
                 .perform(MockMvcRequestBuilders
-                        .delete("/user")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("1"))
+                        .delete("/user/{idUser}", BigInteger.ONE))
                 .andExpect(MockMvcResultMatchers.status().isOk());
 
         verify(userService).deleteUser(BigInteger.ONE);

@@ -97,11 +97,12 @@ class UserServiceImplTest {
   @Test
   void testAuthorizeActiveValidUser() {
     try {
-      String password = "testPassword";
+      String pass = "testPassword";
+      String password = "$2a$04$UegxIC3EpNJVeL9WUGuvK.K6GTeCfSgbfVUoC9ZUt9J.6OZF1r8Mq";
       userDAO.activateUser(BigInteger.TWO);
       userDAO.updateUsersPassword(BigInteger.TWO, password);
       User user = userDAO.getUserById(BigInteger.TWO);
-      user.setPassword(password);
+      user.setPassword(pass);
       assertNotNull(userService.authorize(user));
     } catch (DAOLogicException | UserException | UserDoesNotExistException e) {
       log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
@@ -112,9 +113,11 @@ class UserServiceImplTest {
   @Test
   void testAuthorizeNotActiveValidUser() {
     try {
-      userDAO.updateUsersPassword(BigInteger.TWO, "testPassword");
+      userDAO.updateUsersPassword(BigInteger.TWO, "$2a$04$UegxIC3EpNJVeL9WUGuvK.K6GTeCfSgbfVUoC9ZUt9J.6OZF1r8Mq");
       userDAO.disactivateUser(BigInteger.TWO);
-      userService.authorize(userDAO.getUserById(BigInteger.TWO));
+      User user = userDAO.getUserById(BigInteger.TWO);
+      user.setPassword("testPassword");
+      userService.authorize(user);
       log.error(MessagesForException.USERS_DOESNT_EXIT);
       fail();
     } catch (DAOLogicException | UserException | UserDoesNotExistException e) {

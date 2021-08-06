@@ -201,19 +201,19 @@ public class UserController implements RegexPatterns {
         }
     }
 
-    @DeleteMapping("/user")
-    public void deleteUser(@RequestBody BigInteger idUser) {
-        try {
-            userService.deleteUser(idUser);
-        } catch (DAOLogicException e) {
-            log.error(e.getMessage(), e);
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(),
-                    e.getCause());
-        } catch (UserDoesNotExistException e) {
-            log.error(e.getMessage(), e);
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
-        }
+  @DeleteMapping("/user/{idUser}")
+  public void deleteUser(@PathVariable BigInteger idUser) {
+    try {
+      userService.deleteUser(idUser);
+    } catch (DAOLogicException e) {
+      log.error(e.getMessage(), e);
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(),
+          e.getCause());
+    } catch (UserDoesNotExistException e) {
+      log.error(e.getMessage(), e);
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
     }
+  }
 
     @PutMapping("/user")
     public void editUser(@RequestBody UserImpl user) {

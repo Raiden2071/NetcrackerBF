@@ -237,6 +237,7 @@ class UserDAOImplTest {
     }
   }
 
+  //WTF?
   @Test
   @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
   void getAuthorizeNotActiveUser() {
