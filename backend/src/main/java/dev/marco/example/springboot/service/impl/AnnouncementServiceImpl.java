@@ -119,26 +119,10 @@ public class AnnouncementServiceImpl implements AnnouncementService {
         }
     }
 
-//    @Override
-//    public void toDisLikeAnnouncement(BigInteger idAnnouncement, BigInteger idUser)
-//            throws AnnouncementException, DAOLogicException, AnnouncementDoesNotExistException {
-//        try {
-//            if(!announcementDAO.isAnnouncementById(idAnnouncement))
-//                throw new AnnouncementDoesNotExistException(ANNOUNCEMENT_NOT_FOUND_EXCEPTION);
-//            if(!userAnnouncementDAO.isParticipant(idAnnouncement, idUser))
-//                throw new AnnouncementException(ANNOUNCEMENT_HAS_NOT_LIKED);
-//            userAnnouncementDAO.deleteParticipant(idAnnouncement, idUser);
-//            announcementDAO.toDisLike(idAnnouncement);
-//        } catch (DAOLogicException e) {
-//            log.error(DAO_LOGIC_EXCEPTION + MESSAGE_FOR_TO_DISLIKE_ANNOUNCEMENT);
-//            throw new DAOLogicException(DAO_LOGIC_EXCEPTION, e);
-//        }
-//    }
-
     @Override
-    public List<Announcement> getPopularAnnouncements(int numberAnnouncements)
+    public List<Announcement> getPopularAnnouncements(int numberAnnouncements, BigInteger idUser)
             throws AnnouncementDoesNotExistException, DAOLogicException {
-        return announcementDAO.getPopular(numberAnnouncements);
+        return announcementDAO.getPopular(numberAnnouncements, idUser);
     }
 
     @Override

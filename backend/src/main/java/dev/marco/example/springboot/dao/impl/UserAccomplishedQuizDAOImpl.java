@@ -107,11 +107,10 @@ public class UserAccomplishedQuizDAOImpl implements UserAccomplishedQuizDAO {
     @Override
     public void addAccomplishedQuiz(BigInteger idUser, QuizAccomplishedImpl quiz)
             throws DAOLogicException {
-        try {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(
+                properties.getProperty(ADD_ACCOMPLISHED_QUIZ))){
             if(isAccomplishedQuiz(idUser, quiz.getQuiz().getId()))
                 return;
-            PreparedStatement preparedStatement = connection.prepareStatement(
-                    properties.getProperty(ADD_ACCOMPLISHED_QUIZ));
             preparedStatement.setLong(1, idUser.longValue());
             preparedStatement.setDate(2, new Date(System.currentTimeMillis()));
             preparedStatement.setLong(3, quiz.getQuiz().getId().longValue());
@@ -127,9 +126,8 @@ public class UserAccomplishedQuizDAOImpl implements UserAccomplishedQuizDAO {
     @Override
     public void editAccomplishedQuiz(BigInteger idUser, QuizAccomplishedImpl newQuiz)
             throws DAOLogicException {
-        try {
-            PreparedStatement preparedStatement = connection
-                    .prepareStatement(properties.getProperty(UPDATE_ACCOMPLISHED_QUIZ));
+        try (PreparedStatement preparedStatement = connection
+                .prepareStatement(properties.getProperty(UPDATE_ACCOMPLISHED_QUIZ))){
             preparedStatement.setDate(1, new Date(System.currentTimeMillis()));
             preparedStatement.setInt(2, newQuiz.getCorrectAnswers());
             preparedStatement.setLong(3, idUser.longValue());
@@ -145,9 +143,8 @@ public class UserAccomplishedQuizDAOImpl implements UserAccomplishedQuizDAO {
     public void setIsFavoriteQuiz(BigInteger idUser, BigInteger idQuiz, int isFavourite)
             throws DAOLogicException {
 
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(
-                    properties.getProperty(SET_IS_FAVOURITE));
+        try (PreparedStatement preparedStatement = connection.prepareStatement(
+                properties.getProperty(SET_IS_FAVOURITE))){
             preparedStatement.setInt(1, isFavourite);
             preparedStatement.setLong(2, idUser.longValue());
             preparedStatement.setLong(3, idQuiz.longValue());
@@ -161,9 +158,8 @@ public class UserAccomplishedQuizDAOImpl implements UserAccomplishedQuizDAO {
     @Override
     public QuizAccomplishedImpl getAccomplishedQuizById(BigInteger idUser, BigInteger idQuiz)
             throws QuizDoesNotExistException, DAOLogicException {
-        try {
-            PreparedStatement preparedStatement = connection
-                    .prepareStatement(properties.getProperty(GET_ACCOMPLISHED_QUIZ));
+        try (PreparedStatement preparedStatement = connection
+                .prepareStatement(properties.getProperty(GET_ACCOMPLISHED_QUIZ))){
             preparedStatement.setLong(1, idUser.longValue());
             preparedStatement.setLong(2, idQuiz.longValue());
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -193,9 +189,8 @@ public class UserAccomplishedQuizDAOImpl implements UserAccomplishedQuizDAO {
     @Override
     public boolean isAccomplishedQuiz(BigInteger idUser, BigInteger idQuiz)
             throws DAOLogicException {
-        try {
-            PreparedStatement preparedStatement = connection
-                    .prepareStatement(properties.getProperty(GET_ACCOMPLISHED_QUIZ));
+        try (PreparedStatement preparedStatement = connection
+                .prepareStatement(properties.getProperty(GET_ACCOMPLISHED_QUIZ))){
             preparedStatement.setLong(1, idUser.longValue());
             preparedStatement.setLong(2, idQuiz.longValue());
             ResultSet resultSet = preparedStatement.executeQuery();

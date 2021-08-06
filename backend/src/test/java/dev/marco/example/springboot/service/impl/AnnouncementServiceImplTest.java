@@ -155,7 +155,7 @@ class AnnouncementServiceImplTest {
     @Timeout(value = 10000, unit= TimeUnit.MILLISECONDS)
     void getPopularAnnouncements() {
         try {
-            List<Announcement> announcements = announcementService.getPopularAnnouncements(4);
+            List<Announcement> announcements = announcementService.getPopularAnnouncements(4, BigInteger.ONE);
             assertNotNull(announcements);
             for(Announcement announcement: announcements)
                 assertNotNull(announcement);

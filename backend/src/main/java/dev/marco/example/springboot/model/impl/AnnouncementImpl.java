@@ -1,5 +1,6 @@
 package dev.marco.example.springboot.model.impl;
 
+import dev.marco.example.springboot.model.User;
 import org.apache.commons.lang3.StringUtils;
 import dev.marco.example.springboot.exception.AnnouncementException;
 import dev.marco.example.springboot.model.Announcement;
@@ -19,6 +20,7 @@ public class AnnouncementImpl implements Announcement {
   private String title;
   private String description;
   private BigInteger idUser;
+  private User user;
   private Date date;
   private String address;
   private Collection<BigInteger> participants;
@@ -41,6 +43,8 @@ public class AnnouncementImpl implements Announcement {
   public BigInteger getIdUser() {
     return idUser;
   }
+  @Override
+  public User getUser() {return user;}
   @Override
   public Date getDate() {
     return date;
@@ -134,6 +138,11 @@ public class AnnouncementImpl implements Announcement {
       if(idUser == null)
         throw new AnnouncementException(USER_IS_NULL);
       newAnnouncement.idUser = idUser;
+      return this;
+    }
+
+    public AnnouncementBuilder setUser(User user) {
+      newAnnouncement.user = user;
       return this;
     }
 

@@ -50,12 +50,12 @@ class AnnouncementDAOImplTest {
     @Timeout(value = 10000, unit= TimeUnit.MILLISECONDS)
     void getPopular() {
         try {
-            List<Announcement> popularAnnouncement = announcementDAO.getPopular(4);
+            List<Announcement> popularAnnouncement = announcementDAO.getPopular(4, BigInteger.valueOf(6));
             assertNotNull(popularAnnouncement);
             for(Announcement announcement : popularAnnouncement)
                 assertNotNull(announcement);
             assertEquals(4, popularAnnouncement.size());
-        } catch (AnnouncementDoesNotExistException | DAOLogicException e) {
+        } catch (DAOLogicException | AnnouncementDoesNotExistException e) {
             log.error("Error while testing getPopular" + e.getMessage());
             fail();
         }

@@ -33,6 +33,9 @@ public interface AnnouncementDAO {
     String DATE_CREATE = "DATE_CREATE";
     String ADDRESS = "ADDRESS";
     String LIKES = "LIKES";
+    String FIRST_NAME = "first_name";
+    String LAST_NAME = "last_name";
+    int COLUMN_IS_LIKED = 8;
 
     String ERROR_TEST_CONNECTION = "Error while setting test connection ";
 
@@ -56,7 +59,7 @@ public interface AnnouncementDAO {
 
     Set<Announcement> getSetByTitle(String title) throws AnnouncementDoesNotExistException, DAOLogicException;
 
-    List<Announcement> getPopular(int number) throws AnnouncementDoesNotExistException, DAOLogicException;
+    List<Announcement> getPopular(int number, BigInteger idUser) throws DAOLogicException, AnnouncementDoesNotExistException;
 
     boolean isAnnouncementByTitle(String title) throws DAOLogicException;
 

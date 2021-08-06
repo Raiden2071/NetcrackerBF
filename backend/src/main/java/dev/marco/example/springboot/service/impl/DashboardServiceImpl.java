@@ -65,7 +65,7 @@ public class DashboardServiceImpl implements DashboardService {
         }
 
         List<Announcement> popularAnnouncement =
-                announcementService.getPopularAnnouncements(DASHBOARD_COUNT_POPULAR_ANNOUNCEMENT);
+                announcementService.getPopularAnnouncements(DASHBOARD_COUNT_POPULAR_ANNOUNCEMENT, id);
 
         Set<Announcement> likedAnnouncement = announcementService.getAnnouncementsLikedByUser(id);
 

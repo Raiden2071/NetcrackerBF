@@ -29,6 +29,7 @@ public interface UserAnnouncementDAO {
     String USER_ACTIVE = "USER_ACTIVE";
     String USER_EMAIL_CODE = "USER_EMAIL_CODE";
     String USER_DESCRIPTION = "USER_DESCRIPTION";
+    int COLUMN_IS_LIKED = 8;
 
     String ERROR_TEST_CONNECTION = "Error while setting test connection ";
 
