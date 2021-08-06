@@ -201,39 +201,39 @@ public class UserController implements RegexPatterns {
         }
     }
 
-    @DeleteMapping("/user")
-    public void deleteUser(@RequestBody BigInteger idUser) {
-        try {
-            userService.deleteUser(idUser);
-        } catch (DAOLogicException e) {
-            log.error(e.getMessage(), e);
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(),
-                    e.getCause());
-        } catch (UserDoesNotExistException e) {
-            log.error(e.getMessage(), e);
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
-        }
+  @DeleteMapping("/user/{idUser}")
+  public void deleteUser(@PathVariable BigInteger idUser) {
+    try {
+      userService.deleteUser(idUser);
+    } catch (DAOLogicException e) {
+      log.error(e.getMessage(), e);
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(),
+          e.getCause());
+    } catch (UserDoesNotExistException e) {
+      log.error(e.getMessage(), e);
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
     }
+  }
 
-    @PutMapping("/user")
-    public void editUser(@RequestBody UserImpl user) {
+    @PutMapping("/user/{idUser}")
+    public void editUser(@RequestBody UserImpl user, @PathVariable BigInteger idUser) {
         try {
             if (StringUtils.isBlank(user.getFirstName()) || StringUtils.isBlank(user.getLastName())) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
             } else {
-                userService.updateUsersFullName(user.getId(), user.getFirstName(), user.getLastName());
+                userService.updateUsersFullName(idUser, user.getFirstName(), user.getLastName());
             }
 
             if (StringUtils.isBlank(user.getDescription())) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
             } else {
-                userService.updateUsersDescription(user.getId(), user.getDescription());
+                userService.updateUsersDescription(idUser, user.getDescription());
             }
 
             if (StringUtils.isBlank(user.getPassword())) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
             } else {
-                userService.updateUsersPassword(user.getId(), user.getPassword());
+                userService.updateUsersPassword(idUser, user.getPassword());
             }
         } catch (DAOLogicException e) {
             log.error(e.getMessage(), e);

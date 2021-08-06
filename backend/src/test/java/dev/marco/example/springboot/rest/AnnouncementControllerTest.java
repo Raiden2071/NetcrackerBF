@@ -72,9 +72,7 @@ class AnnouncementControllerTest {
                                 .build()));
 
         this.mockMvc.perform(MockMvcRequestBuilders
-                        .get("/announcement/all")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("1"))
+                        .get("/announcement/all/{idUser}", BigInteger.ONE))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(jsonPath("$[0].id").value(BigInteger.ONE))
                 .andExpect(jsonPath("$[0].title").value("TEST_TITLE1"))

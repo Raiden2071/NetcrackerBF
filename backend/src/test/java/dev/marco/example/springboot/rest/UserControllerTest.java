@@ -200,9 +200,7 @@ class UserControllerTest {
 
         this.mockMvc
                 .perform(MockMvcRequestBuilders
-                        .delete("/user")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("1"))
+                        .delete("/user/{idUser}", BigInteger.ONE))
                 .andExpect(MockMvcResultMatchers.status().isOk());
 
         verify(userService).deleteUser(BigInteger.ONE);
@@ -214,10 +212,9 @@ class UserControllerTest {
 
         this.mockMvc
                 .perform(MockMvcRequestBuilders
-                        .put("/user")
+                        .put("/user/{idUser}", BigInteger.ONE)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{ \"id\": 1,"+
-                                " \"firstName\":\"Leopold\"," +
+                        .content("{ \"firstName\":\"Leopold\"," +
                                 " \"lastName\":\"Kotanovich\"," +
                                 " \"description\":\"i like to play billiards\"," +
                                 " \"password\":\"12345Qwerty\"}"))
