@@ -218,23 +218,24 @@ public class UserController implements RegexPatterns {
     @PutMapping("/user/{idUser}")
     public void editUser(@RequestBody UserImpl user, @PathVariable BigInteger idUser) {
         try {
-            if (StringUtils.isBlank(user.getFirstName()) || StringUtils.isBlank(user.getLastName())) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-            } else {
-                userService.updateUsersFullName(idUser, user.getFirstName(), user.getLastName());
-            }
-
-            if (StringUtils.isBlank(user.getDescription())) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-            } else {
-                userService.updateUsersDescription(idUser, user.getDescription());
-            }
-
-            if (StringUtils.isBlank(user.getPassword())) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-            } else {
-                userService.updateUsersPassword(idUser, user.getPassword());
-            }
+            if(user.getFirstName()!=null && user.getLastName()!=null)
+                if (user.getFirstName().isBlank() || user.getLastName().isBlank()) {
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+                } else {
+                    userService.updateUsersFullName(idUser, user.getFirstName(), user.getLastName());
+                }
+            if(user.getDescription()!=null)
+                if (user.getDescription().isBlank()) {
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+                } else {
+                    userService.updateUsersDescription(idUser, user.getDescription());
+                }
+            if(user.getPassword() != null)
+                if (user.getPassword().isBlank()) {
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+                } else {
+                    userService.updateUsersPassword(idUser, user.getPassword());
+                }
         } catch (DAOLogicException e) {
             log.error(e.getMessage(), e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(),
