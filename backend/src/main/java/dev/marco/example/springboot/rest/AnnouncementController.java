@@ -55,8 +55,8 @@ public class AnnouncementController {
         }
     }
 
-    @GetMapping("/all")
-    public List<Announcement> getAllAnnouncement(@RequestBody BigInteger idUser) {
+    @GetMapping("/all/{idUser}")
+    public List<Announcement> getAllAnnouncement(@PathVariable BigInteger idUser) {
         try {
             return announcementService.getAllAnnouncements(idUser);
         } catch (AnnouncementDoesNotExistException e) {

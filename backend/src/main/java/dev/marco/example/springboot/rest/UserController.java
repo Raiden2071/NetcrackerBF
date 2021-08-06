@@ -215,25 +215,25 @@ public class UserController implements RegexPatterns {
     }
   }
 
-    @PutMapping("/user")
-    public void editUser(@RequestBody UserImpl user) {
+    @PutMapping("/user/{idUser}")
+    public void editUser(@RequestBody UserImpl user, @PathVariable BigInteger idUser) {
         try {
             if (StringUtils.isBlank(user.getFirstName()) || StringUtils.isBlank(user.getLastName())) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
             } else {
-                userService.updateUsersFullName(user.getId(), user.getFirstName(), user.getLastName());
+                userService.updateUsersFullName(idUser, user.getFirstName(), user.getLastName());
             }
 
             if (StringUtils.isBlank(user.getDescription())) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
             } else {
-                userService.updateUsersDescription(user.getId(), user.getDescription());
+                userService.updateUsersDescription(idUser, user.getDescription());
             }
 
             if (StringUtils.isBlank(user.getPassword())) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
             } else {
-                userService.updateUsersPassword(user.getId(), user.getPassword());
+                userService.updateUsersPassword(idUser, user.getPassword());
             }
         } catch (DAOLogicException e) {
             log.error(e.getMessage(), e);
