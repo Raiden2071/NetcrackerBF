@@ -19,17 +19,17 @@ export class EditProfileComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.getUser();
+    this.getUser(); 
     // подумай, как исправить
     this.editForm = this.fb.group({
-      firstName:   ['', [Validators.required]],
+      firstName:   ['', [Validators.required]], 
       lastName:    ['', [Validators.required]],
       email:       ['', [Validators.email, Validators.required]],
       description: ['', [Validators.required]]
-    });
+    });   
     setTimeout(() => {
       this.editForm = this.fb.group({
-        firstName:   [this.user?.firstName,   [Validators.required]],
+        firstName:   [this.user?.firstName,   [Validators.required]], 
         lastName:    [this.user?.lastName,    [Validators.required]],
         email:       [this.user?.email,       [Validators.email, Validators.required]],
         description: [this.user?.description, [Validators.required]]

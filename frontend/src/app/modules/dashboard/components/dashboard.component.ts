@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Dashboard } from 'src/app/models/dashboard';
+import { Quiz } from 'src/app/models/quiz';
 import { User } from 'src/app/models/user';
+import { DashboardService } from 'src/app/shared/services/dashboard.service';
 import { UserService } from 'src/app/shared/services/users.service';
 
 @Component({
@@ -10,25 +13,23 @@ import { UserService } from 'src/app/shared/services/users.service';
 export class DashboardComponent implements OnInit {
 
   user: User;
+  dashboard: Dashboard;
 
   constructor(
-    private userService: UserService
+    private userService: UserService,
+    private dashboardService: DashboardService
   ) { }
 
   ngOnInit(): void {
     this.getUser();
-    // (this.user as any) = {
-    //   firstName: "Slava",
-    //   lastName: "Danilchak",
-    //   description: "Slavik like marmalades",
-    //   email: "slava@gmail.com"
-    // };
   }
 
   getUser() {
-    // this.UserService.getMe().subscribe(user => this.user = user);
-
     this.userService.userInfo$.subscribe(user => this.user = user);
+  }
+
+  getDashboard(): void {
+    this.dashboardService.getOne(182).subscribe(dashboard => this.dashboard = dashboard );
   }
 
 }

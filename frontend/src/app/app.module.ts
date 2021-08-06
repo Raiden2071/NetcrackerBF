@@ -4,19 +4,21 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { LayoutComponent } from './layout/layout/layout.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { SidebarComponent } from './shared/sidebar/sidebar/sidebar.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TokenInterceptor } from './interceptor/token.interceptor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
+import { SidebarComponent } from './shared/components/sidebar/sidebar.component';
+import { QuizSidebarComponent } from './shared/components/quiz-sidebar/quiz-sidebar.component';
+import { LayoutComponent } from './layout/layout.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LayoutComponent,
     SidebarComponent,
+    QuizSidebarComponent
   ],
   imports: [
     BrowserModule,
