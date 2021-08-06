@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class MailSenderServiceImplTest {
 
-  private static final Logger log = Logger.getLogger(UserServiceImplTest.class);
+  private static final Logger log = Logger.getLogger(MailSenderServiceImplTest.class);
 
   private MailSenderServiceImpl mailSenderService;
   private UserDAOImpl userDAO;
@@ -37,7 +37,7 @@ class MailSenderServiceImplTest {
   }
 
   @Test
-  @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
+  @Timeout(value = 40000, unit = TimeUnit.MILLISECONDS)
   void testSendEmail() {
     try {
       try {
@@ -138,7 +138,7 @@ class MailSenderServiceImplTest {
   }
 
   @Test
-  @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
+  @Timeout(value = 40000, unit = TimeUnit.MILLISECONDS)
   void testGenerateNewPassword() {
     try {
       User user = userDAO.getUserById(BigInteger.TWO);
