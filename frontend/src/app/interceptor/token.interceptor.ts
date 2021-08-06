@@ -16,7 +16,7 @@ export class TokenInterceptor implements HttpInterceptor {
   constructor(private authService: AuthService) {
   }
 
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {    
     req = req.clone({
       url: environment.API_URL + req.url,
       setHeaders: this.authService.isAuthenticated() ? {

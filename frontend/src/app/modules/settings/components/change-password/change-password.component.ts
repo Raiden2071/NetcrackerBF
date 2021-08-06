@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { User } from 'src/app/models/user';
-import { RecoveryComponent } from 'src/app/modules/auth/recovery/recovery/recovery.component';
+import { RecoveryComponent } from 'src/app/modules/auth/components/recovery/recovery.component';
 import { MustMatch } from 'src/app/modules/auth/validators/must-match.validator';
 import { UserService } from 'src/app/shared/services/users.service';
 
@@ -16,7 +16,7 @@ export class ChangePasswordComponent implements OnInit {
 
   user: User;
   changeForm = this.fb.group({
-    oldPass:      ['', [Validators.required]],
+    oldPass:      ['', [Validators.required]], 
     newPass:      ['', [Validators.required]],
     confirmPass:  ['', [Validators.email, Validators.required]],
   }, {

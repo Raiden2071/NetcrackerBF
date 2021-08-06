@@ -64,7 +64,6 @@ class UserControllerTest {
     @MockBean
     private UserService userService;
 
-
     @Test
     @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
     void loginTest() {
@@ -101,8 +100,7 @@ class UserControllerTest {
         }
     }
 
-    /*
-    @Test
+    //@Test
     @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
     void registerTest() throws Exception {
         int num = new Random().nextInt(500000);
@@ -118,7 +116,6 @@ class UserControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
     }
-     */
 
     @Test
     @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)

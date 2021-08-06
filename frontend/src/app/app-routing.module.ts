@@ -1,25 +1,30 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { LayoutComponent } from './layout/layout/layout.component';
+import { LayoutComponent } from './layout/layout.component';
 import { AuthGuard } from './modules/auth/auth.guard';
+import { QuizQuestionsComponent } from './modules/quiz/components/quiz-questions/quiz-questions.component';
 
 
 
 const routes: Routes = [
-  { path: '', pathMatch: 'full', redirectTo: '/auth/login'},
+  { path: '', pathMatch: 'full', redirectTo: '/auth/login' },
   {
-    path: '',
+    path: '', 
     component: LayoutComponent,
+    // canActivateChild: [AuthGuard],
     children: [
       { path: '', pathMatch: 'full', redirectTo: 'test' },
       { path: 'profile', loadChildren: () => import('./modules/profile/profile/profile.module').then(m => m.ProfileModule) },
       { path: 'test', loadChildren: () => import('./modules/test/test.module').then(m => m.TestModule) },
       { path: 'dashboard', loadChildren: () => import('./modules/dashboard/dashboard.module').then(m => m.DashboardModule) },
       { path: 'announcment', loadChildren: () => import('./modules/announcement/announcment.module').then(m => m.AnnouncmentModule) },
-      { path: 'settings', loadChildren: () => import('./modules/settings/settings.module').then(m => m.SettingsModule) }
+      { path: 'settings', loadChildren: () => import('./modules/settings/settings.module').then(m => m.SettingsModule) },
+      { path: 'quiz', loadChildren: () => import('./modules/quiz/quiz.module').then(m => m.QuizModule) },
+      // sorry
+      { path: 'quiz/quiz-questions', component: QuizQuestionsComponent },
 
     ],
-    canActivate: [AuthGuard]
+    // canActivate: [AuthGuard]
   },
   {
     path: 'auth', loadChildren: () => import('./modules/auth/auth.module').then(m => m.AuthModule)
