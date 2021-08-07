@@ -30,10 +30,7 @@ public interface AnnouncementService {
     void setLikeAnnouncement(BigInteger idAnnouncement, BigInteger idUser)
             throws AnnouncementException, DAOLogicException, AnnouncementDoesNotExistException, UserDoesNotExistException;
 
-//    void toDisLikeAnnouncement(BigInteger idAnnouncement, BigInteger idUser)
-//            throws AnnouncementException, DAOLogicException, AnnouncementDoesNotExistException;
-
-    List<Announcement> getPopularAnnouncements(int numberAnnouncements)
+    List<Announcement> getPopularAnnouncements(int numberAnnouncements, BigInteger idUser)
             throws AnnouncementDoesNotExistException, DAOLogicException;
 
     Set<Announcement> getAnnouncementsLikedByUser(BigInteger idUser)

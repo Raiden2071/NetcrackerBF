@@ -1,14 +1,12 @@
 package dev.marco.example.springboot.dao.impl;
 
+import dev.marco.example.springboot.exception.*;
+import dev.marco.example.springboot.model.impl.UserImpl;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import dev.marco.example.springboot.dao.AnnouncementDAO;
-import dev.marco.example.springboot.exception.AnnouncementDoesNotExistException;
-import dev.marco.example.springboot.exception.AnnouncementException;
-import dev.marco.example.springboot.exception.DAOConfigException;
-import dev.marco.example.springboot.exception.DAOLogicException;
 import dev.marco.example.springboot.model.Announcement;
 import dev.marco.example.springboot.model.impl.AnnouncementImpl;
 import dev.marco.example.springboot.util.DAOUtil;
@@ -55,8 +53,7 @@ public class AnnouncementDAOImpl implements AnnouncementDAO {
 
     @Override
     public Announcement getByTitle(String title) throws AnnouncementDoesNotExistException, DAOLogicException {
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(properties.getProperty(SELECT_ANNOUNCEMENT_BY_TITLE));
+        try (PreparedStatement preparedStatement = connection.prepareStatement(properties.getProperty(SELECT_ANNOUNCEMENT_BY_TITLE))){
             preparedStatement.setString(1, title);
             ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -83,8 +80,7 @@ public class AnnouncementDAOImpl implements AnnouncementDAO {
 
     @Override
     public boolean isAnnouncementByTitle(String title) throws DAOLogicException {
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(properties.getProperty(SELECT_ANNOUNCEMENT_BY_TITLE));
+        try (PreparedStatement preparedStatement = connection.prepareStatement(properties.getProperty(SELECT_ANNOUNCEMENT_BY_TITLE))){
             preparedStatement.setString(1, title);
             ResultSet resultSet = preparedStatement.executeQuery();
             return resultSet.isBeforeFirst();
@@ -96,8 +92,7 @@ public class AnnouncementDAOImpl implements AnnouncementDAO {
 
     @Override
     public Set<Announcement> getSetByTitle(String title) throws AnnouncementDoesNotExistException, DAOLogicException {
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(properties.getProperty(SELECT_SET_ANNOUNCEMENT_BY_TITLE));
+        try (PreparedStatement preparedStatement = connection.prepareStatement(properties.getProperty(SELECT_SET_ANNOUNCEMENT_BY_TITLE))){
             preparedStatement.setString(1, title + "%");
             ResultSet resultSet = preparedStatement.executeQuery();
             if(!resultSet.isBeforeFirst()){
@@ -127,8 +122,8 @@ public class AnnouncementDAOImpl implements AnnouncementDAO {
     @Override
     public BigInteger createAnnouncement(Announcement newAnnouncement) throws DAOLogicException {
 
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(properties.getProperty(CREATE_ANNOUNCEMENT), new String[]{ID_ANNOUNCEMENT});
+        try (PreparedStatement preparedStatement = connection.prepareStatement(properties.getProperty(CREATE_ANNOUNCEMENT),
+                new String[]{ID_ANNOUNCEMENT})){
             preparedStatement.setString(1, newAnnouncement.getTitle());
             preparedStatement.setString(2, newAnnouncement.getDescription());
             preparedStatement.setLong(3, newAnnouncement.getIdUser().longValue());
@@ -151,8 +146,7 @@ public class AnnouncementDAOImpl implements AnnouncementDAO {
     @Override
     public void editAnnouncement(Announcement newAnnouncement) throws DAOLogicException {
 
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(properties.getProperty(UPDATE_ANNOUNCEMENT));
+        try (PreparedStatement preparedStatement = connection.prepareStatement(properties.getProperty(UPDATE_ANNOUNCEMENT))){
             preparedStatement.setString(1, newAnnouncement.getTitle());
             preparedStatement.setString(2, newAnnouncement.getDescription());
             preparedStatement.setString(3, newAnnouncement.getAddress());
@@ -167,8 +161,7 @@ public class AnnouncementDAOImpl implements AnnouncementDAO {
 
     @Override
     public void deleteAnnouncement(BigInteger idAnnouncement) throws DAOLogicException {
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(properties.getProperty(DELETE_ANNOUNCEMENT_BY_ID));
+        try (PreparedStatement preparedStatement = connection.prepareStatement(properties.getProperty(DELETE_ANNOUNCEMENT_BY_ID))){
             preparedStatement.setLong(1, idAnnouncement.longValue());
             preparedStatement.executeUpdate();
         } catch (SQLException throwables) {
@@ -178,33 +171,37 @@ public class AnnouncementDAOImpl implements AnnouncementDAO {
     }
 
     @Override
-    public List<Announcement> getPopular(int number) throws AnnouncementDoesNotExistException, DAOLogicException {
-
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(properties.getProperty(GET_POPULAR_ANNOUNCEMENT));
-            preparedStatement.setInt(1, number);
+    public List<Announcement> getPopular(int number, BigInteger idUser) throws DAOLogicException, AnnouncementDoesNotExistException {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(properties.getProperty(GET_POPULAR_ANNOUNCEMENT))){
+            preparedStatement.setLong(1, idUser.longValue());
+            preparedStatement.setInt(2, number);
             ResultSet resultSet = preparedStatement.executeQuery();
-            List<Announcement> popularAnnouncement = new ArrayList<>();
-
             if(!resultSet.isBeforeFirst()){
-                return popularAnnouncement;
+                log.error(ANNOUNCEMENT_HAS_NOT_BEEN_RECEIVED + MESSAGE_FOR_GET_POPULAR);
+                throw new AnnouncementDoesNotExistException(ANNOUNCEMENT_NOT_FOUND_EXCEPTION);
             }
-
+            List<Announcement> popularAnnouncement = new ArrayList<>();
             while (resultSet.next()) {
                 Announcement announcement = new AnnouncementImpl.AnnouncementBuilder()
                         .setId(BigInteger.valueOf(resultSet.getLong(ID_ANNOUNCEMENT)))
                         .setTitle(resultSet.getString(TITLE))
                         .setDescription(resultSet.getString(DESCRIPTION))
                         .setIdUser(BigInteger.valueOf(resultSet.getLong(OWNER)))
+                        .setUser(new UserImpl.UserBuilder()
+                                .setId(BigInteger.valueOf(resultSet.getLong(OWNER)))
+                                .setFirstName(resultSet.getString(FIRST_NAME))
+                                .setLastName(resultSet.getString(LAST_NAME))
+                                .build())
                         .setDate(resultSet.getDate(DATE_CREATE))
                         .setAddress(resultSet.getString(ADDRESS))
                         .setParticipantsCap(resultSet.getInt(LIKES))
+                        .setBlank(BigInteger.valueOf(resultSet.getLong(COLUMN_IS_LIKED)))
+                        .setIsLiked(!resultSet.wasNull())
                         .build();
-
                 popularAnnouncement.add(announcement);
             }
             return popularAnnouncement;
-        } catch (SQLException | AnnouncementException throwables) {
+        } catch (SQLException | AnnouncementException | UserException throwables) {
             log.error(DAO_LOGIC_EXCEPTION + throwables.getMessage());
             throw new DAOLogicException(DAO_LOGIC_EXCEPTION, throwables);
         }
@@ -212,8 +209,7 @@ public class AnnouncementDAOImpl implements AnnouncementDAO {
 
     @Override
     public Announcement getAnnouncementById(BigInteger idAnnouncement) throws AnnouncementDoesNotExistException, DAOLogicException {
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(properties.getProperty(GET_ANNOUNCEMENT_BY_ID));
+        try (PreparedStatement preparedStatement = connection.prepareStatement(properties.getProperty(GET_ANNOUNCEMENT_BY_ID))){
             preparedStatement.setLong(1, idAnnouncement.longValue());
             ResultSet resultSet = preparedStatement.executeQuery();
             if(!resultSet.isBeforeFirst()){
@@ -238,8 +234,7 @@ public class AnnouncementDAOImpl implements AnnouncementDAO {
 
     @Override
     public boolean isAnnouncementById(BigInteger idAnnouncement) throws DAOLogicException {
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(properties.getProperty(GET_ANNOUNCEMENT_BY_ID));
+        try ( PreparedStatement preparedStatement = connection.prepareStatement(properties.getProperty(GET_ANNOUNCEMENT_BY_ID))){
             preparedStatement.setLong(1, idAnnouncement.longValue());
             ResultSet resultSet = preparedStatement.executeQuery();
             return resultSet.isBeforeFirst();
@@ -251,8 +246,7 @@ public class AnnouncementDAOImpl implements AnnouncementDAO {
 
     @Override
     public void toLike(BigInteger idAnnouncement) throws DAOLogicException {
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(properties.getProperty(SET_LIKE));
+        try (PreparedStatement preparedStatement = connection.prepareStatement(properties.getProperty(SET_LIKE))){
             preparedStatement.setLong(1, idAnnouncement.longValue());
             preparedStatement.executeUpdate();
         } catch (SQLException throwables) {
@@ -263,8 +257,7 @@ public class AnnouncementDAOImpl implements AnnouncementDAO {
 
     @Override
     public void toDisLike(BigInteger idAnnouncement) throws DAOLogicException {
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(properties.getProperty(UNSET_LIKE));
+        try (PreparedStatement preparedStatement = connection.prepareStatement(properties.getProperty(UNSET_LIKE))){
             preparedStatement.setLong(1, idAnnouncement.longValue());
             preparedStatement.executeUpdate();
         } catch (SQLException throwables) {

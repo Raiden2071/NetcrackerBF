@@ -1,5 +1,6 @@
 package dev.marco.example.springboot.dao.impl;
 
+import dev.marco.example.springboot.dao.AnnouncementDAO;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -58,20 +59,18 @@ public class UserAnnouncementDAOImpl implements UserAnnouncementDAO {
         }
     }
 
-
     @Override
     public Set<Announcement> getAnnouncementsLikedByUser(BigInteger idUser)
-            throws AnnouncementDoesNotExistException,
-            DAOLogicException, AnnouncementException {
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(
-                    properties.getProperty(SELECT_ANNOUNCEMENT_LIKED_BY_USER));
+            throws AnnouncementDoesNotExistException, DAOLogicException, AnnouncementException {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(
+                properties.getProperty(SELECT_ANNOUNCEMENT_LIKED_BY_USER))){
             preparedStatement.setLong(1, idUser.longValue());
             ResultSet resultSet = preparedStatement.executeQuery();
-            Set<Announcement> announcements = new HashSet<>();
             if(!resultSet.isBeforeFirst()){
-                return announcements;
+                log.error(ANNOUNCEMENT_HAS_NOT_BEEN_RECEIVED + MESSAGE_FOR_GET_ANNOUNCEMENTS_LIKED_BY_USER);
+                throw new AnnouncementDoesNotExistException(ANNOUNCEMENT_NOT_FOUND_EXCEPTION);
             }
+            Set<Announcement> announcements = new HashSet<>();
             while (resultSet.next()) {
                 Announcement announcement = new AnnouncementImpl.AnnouncementBuilder()
                         .setId(BigInteger.valueOf(resultSet.getLong(ID_ANNOUNCEMENT)))
@@ -81,6 +80,7 @@ public class UserAnnouncementDAOImpl implements UserAnnouncementDAO {
                         .setDate(resultSet.getDate(DATE_CREATE))
                         .setAddress(resultSet.getString(ADDRESS))
                         .setParticipantsCap(resultSet.getInt(LIKES))
+                        .setIsLiked(true)
                         .build();
                 announcements.add(announcement);
             }
@@ -94,10 +94,8 @@ public class UserAnnouncementDAOImpl implements UserAnnouncementDAO {
     @Override
     public Set<User> getUsersLikedAnnouncement(BigInteger idAnnouncement)
             throws UserDoesNotExistException, DAOLogicException {
-
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(
-                    properties.getProperty(SELECT_USERS_LIKED_ANNOUNCEMENT));
+        try (PreparedStatement preparedStatement = connection.prepareStatement(
+                properties.getProperty(SELECT_USERS_LIKED_ANNOUNCEMENT))){
             preparedStatement.setLong(1, idAnnouncement.longValue());
             ResultSet resultSet = preparedStatement.executeQuery();
             if(!resultSet.isBeforeFirst()){
@@ -131,9 +129,8 @@ public class UserAnnouncementDAOImpl implements UserAnnouncementDAO {
     @Override
     public boolean isParticipant(BigInteger idAnnouncement, BigInteger idUser)
             throws DAOLogicException {
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(
-                    properties.getProperty(GET_PARTICIPANT_BY_ID));
+        try (PreparedStatement preparedStatement = connection.prepareStatement(
+                properties.getProperty(GET_PARTICIPANT_BY_ID))){
             preparedStatement.setLong(1, idAnnouncement.longValue());
             preparedStatement.setLong(2, idUser.longValue());
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -149,9 +146,8 @@ public class UserAnnouncementDAOImpl implements UserAnnouncementDAO {
 
     @Override
     public void addParticipant(BigInteger idAnnouncement, BigInteger idUser) throws DAOLogicException {
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(
-                    properties.getProperty(ADD_PARTICIPANT));
+        try (PreparedStatement preparedStatement = connection.prepareStatement(
+                properties.getProperty(ADD_PARTICIPANT))){
             preparedStatement.setLong(1, idAnnouncement.longValue());
             preparedStatement.setLong(2, idUser.longValue());
             preparedStatement.executeUpdate();
@@ -164,8 +160,7 @@ public class UserAnnouncementDAOImpl implements UserAnnouncementDAO {
     @Override
     public void deleteParticipant(BigInteger idAnnouncement, BigInteger idUser) throws DAOLogicException {
 
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(properties.getProperty(DELETE_PARTICIPANT));
+        try (PreparedStatement preparedStatement = connection.prepareStatement(properties.getProperty(DELETE_PARTICIPANT))){
             preparedStatement.setLong(1, idAnnouncement.longValue());
             preparedStatement.setLong(2, idUser.longValue());
             preparedStatement.executeUpdate();
@@ -178,9 +173,8 @@ public class UserAnnouncementDAOImpl implements UserAnnouncementDAO {
     @Override
     public List<Announcement> getAllAnnouncements(BigInteger idUser)
             throws AnnouncementDoesNotExistException, DAOLogicException, AnnouncementException {
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(
-                    properties.getProperty(SELECT_ALL_ANNOUNCEMENT));
+        try (PreparedStatement preparedStatement = connection.prepareStatement(
+                properties.getProperty(SELECT_ALL_ANNOUNCEMENT))){
             preparedStatement.setLong(1, idUser.longValue());
             ResultSet resultSet = preparedStatement.executeQuery();
             if(!resultSet.isBeforeFirst()){
@@ -197,7 +191,7 @@ public class UserAnnouncementDAOImpl implements UserAnnouncementDAO {
                         .setDate(resultSet.getDate(DATE_CREATE))
                         .setAddress(resultSet.getString(ADDRESS))
                         .setParticipantsCap(resultSet.getInt(LIKES))
-                        .setBlank(BigInteger.valueOf(resultSet.getLong(8)))
+                        .setBlank(BigInteger.valueOf(resultSet.getLong(COLUMN_IS_LIKED)))
                         .setIsLiked(resultSet.wasNull())
                         .build();
                 announcements.add(announcement);

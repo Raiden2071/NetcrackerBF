@@ -14,6 +14,7 @@ public interface Announcement {
   String getTitle();
   String getDescription();
   BigInteger getIdUser();
+  User getUser();
   Date getDate();
   String getAddress();
   Collection<BigInteger> getParticipants();
