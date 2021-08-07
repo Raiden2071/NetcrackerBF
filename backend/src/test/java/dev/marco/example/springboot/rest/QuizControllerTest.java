@@ -1,8 +1,9 @@
 package dev.marco.example.springboot.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dev.marco.example.springboot.model.Quiz;
-import dev.marco.example.springboot.model.QuizType;
+import dev.marco.example.springboot.model.*;
+import dev.marco.example.springboot.model.impl.AnswerImpl;
+import dev.marco.example.springboot.model.impl.QuestionImpl;
 import dev.marco.example.springboot.model.impl.QuizImpl;
 import dev.marco.example.springboot.service.QuizService;
 import org.apache.log4j.Logger;
@@ -21,6 +22,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -124,6 +126,39 @@ public class QuizControllerTest {
         .content(asJsonString(quiz))
         .accept(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isOk());
+
+  }
+
+  @Test
+  @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
+  void buildNewQuizTest() throws Exception {
+
+    List<QuestionImpl> questions = new ArrayList<>();
+    QuestionImpl question = new QuestionImpl(BigInteger.valueOf(1),"Ukraine location?", QuestionType.TRUE_FALSE);
+
+    List<AnswerImpl> answers = new ArrayList<>();
+    answers.add(new AnswerImpl(BigInteger.valueOf(1),"America", false, question.getId()));
+    answers.add(new AnswerImpl(BigInteger.valueOf(2),"Europe", true, question.getId()));
+
+    question.setAnswers(answers);
+    questions.add(question);
+
+    Quiz quiz = QuizImpl.QuizBuilder()
+            .setTitle("QuizBuild!")
+            .setDescription("Light!")
+            .setQuizType(QuizType.SCIENCE)
+            .setCreatorId(BigInteger.valueOf(7))
+            .setQuestions(questions)
+            .build();
+
+      this.mockMvc.perform(MockMvcRequestBuilders
+                      .post("/quiz/")
+                      .contentType(MediaType.APPLICATION_JSON)
+                      .content(asJsonString(quiz))
+                      .accept(MediaType.APPLICATION_JSON))
+              .andExpect(MockMvcResultMatchers.status().isOk());
+
+      verify(quizService).buildNewQuiz(any(Quiz.class));
 
   }
 
