@@ -45,7 +45,7 @@ public class UserController implements RegexPatterns {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
-    @Autowired
+    //@Autowired
     public void setTestConnection() throws DAOConfigException {
         userService.setTestConnection();
         mailSenderService.setTestConnection();

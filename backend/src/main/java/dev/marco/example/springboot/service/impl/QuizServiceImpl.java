@@ -147,13 +147,13 @@ public class QuizServiceImpl implements QuizService {
     }
 
     @Override
-    public Quiz getQuizById(BigInteger id) throws QuizDoesNotExistException, DAOLogicException, QuizException, QuestionDoesNotExistException {
+    public QuizImpl getQuizById(BigInteger id) throws QuizDoesNotExistException, DAOLogicException, QuizException, QuestionDoesNotExistException {
         if (id == null) {
             log.error(EMPTY_ID);
             throw new QuizException(EMPTY_ID);
         }
         //List<QuestionImpl> questions = questionDAO.getAllQuestions(id);
-        Quiz quiz = quizDAO.getQuizById(id);
+        QuizImpl quiz = quizDAO.getQuizById(id);
         //quiz.setQuestions(questions);
         return quiz;
     }

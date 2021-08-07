@@ -6,6 +6,7 @@ import dev.marco.example.springboot.exception.QuizDoesNotExistException;
 import dev.marco.example.springboot.exception.UserDoesNotExistException;
 import dev.marco.example.springboot.model.Quiz;
 import dev.marco.example.springboot.model.QuizType;
+import dev.marco.example.springboot.model.impl.QuizImpl;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -39,7 +40,7 @@ public interface QuizDAO {
 
     void deleteQuiz(Quiz quiz) throws QuizDoesNotExistException, DAOLogicException;
 
-    Quiz getQuizById(BigInteger id) throws QuizDoesNotExistException, DAOLogicException;
+    QuizImpl getQuizById(BigInteger id) throws QuizDoesNotExistException, DAOLogicException;
 
     boolean existQuizByTitle(String title) throws DAOLogicException;
 

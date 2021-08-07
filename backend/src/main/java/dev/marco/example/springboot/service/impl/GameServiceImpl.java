@@ -2,6 +2,7 @@ package dev.marco.example.springboot.service.impl;
 
 import dev.marco.example.springboot.model.impl.AnswerImpl;
 import dev.marco.example.springboot.model.impl.QuestionImpl;
+import dev.marco.example.springboot.model.impl.QuizImpl;
 import dev.marco.example.springboot.service.QuestionService;
 import dev.marco.example.springboot.service.QuizService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,7 +91,7 @@ public class GameServiceImpl implements GameService {
                 userAccomplishedQuizDAO.editAccomplishedQuiz(userId, existedQuizAccomplished);
             }
         } else {
-            Quiz newQuiz = quizService.getQuizById(quizId);
+            QuizImpl newQuiz = quizService.getQuizById(quizId);
             QuizAccomplishedImpl quizAccomplished = new QuizAccomplishedImpl(counterOfCorrectAnswers, newQuiz);
             userAccomplishedQuizDAO.addAccomplishedQuiz(userId, quizAccomplished);
         }

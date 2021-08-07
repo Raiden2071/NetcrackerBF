@@ -5,7 +5,6 @@ import dev.marco.example.springboot.dao.QuizDAO;
 import dev.marco.example.springboot.dao.UserAccomplishedQuizDAO;
 import dev.marco.example.springboot.exception.*;
 import dev.marco.example.springboot.model.Answer;
-import dev.marco.example.springboot.model.Question;
 import dev.marco.example.springboot.model.Quiz;
 import dev.marco.example.springboot.model.User;
 import dev.marco.example.springboot.model.impl.QuestionImpl;

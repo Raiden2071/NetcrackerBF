@@ -132,7 +132,7 @@ public class QuizDAOImpl implements QuizDAO {
 
 
     @Override
-    public Quiz getQuizById(BigInteger id) throws QuizDoesNotExistException, DAOLogicException {
+    public QuizImpl getQuizById(BigInteger id) throws QuizDoesNotExistException, DAOLogicException {
         try (PreparedStatement preparedStatement =
                      connection.prepareStatement(properties.getProperty(SELECT_QUIZ_BY_ID))) {
             preparedStatement.setLong(1, id.longValue());

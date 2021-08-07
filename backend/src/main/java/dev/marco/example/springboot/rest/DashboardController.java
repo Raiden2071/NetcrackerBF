@@ -21,7 +21,7 @@ public class DashboardController {
     @Autowired
     private DashboardService dashboardService;
 
-    @Autowired
+    //@Autowired
     public void setTestConnection() throws DAOConfigException {
         dashboardService.setTestConnection();
     }

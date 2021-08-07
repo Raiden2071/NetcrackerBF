@@ -39,7 +39,7 @@ public class QuizController {
         this.gameService = gameService;
     }
 
-  @Autowired
+    //@Autowired
   public void setTestConnection() throws DAOConfigException {
     quizService.setTestConnection();
     userService.setTestConnection();
@@ -197,10 +197,10 @@ public class QuizController {
 
     // without tests
     @PostMapping("/game/end")
-    public void finishQuiz(String title, User user, List<Answer> answers) {
+    public void finishQuiz(@RequestBody ParamsInFinishQuiz params) {
         try {
-            Quiz quizByTitle = quizService.getQuizByTitle(title);
-            gameService.validateAnswers(quizByTitle, user, answers);
+            Quiz quizByTitle = quizService.getQuizByTitle(params.title);
+            gameService.validateAnswers(quizByTitle, params.user, params.answers);
         } catch (QuizDoesNotExistException | QuizException e) {
             log.error(QUIZ_NOT_FOUND_EXCEPTION + e.getMessage());
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
@@ -229,5 +229,17 @@ public class QuizController {
           log.error(USERS_DOESNT_EXIT + e.getMessage());
           throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
       }
+    }
+
+    static class ParamsInFinishQuiz {
+        String title;
+        User user;
+        List<Answer> answers;
+
+        public ParamsInFinishQuiz(String title, User user, List<Answer> answers) {
+            this.title = title;
+            this.user = user;
+            this.answers = answers;
+        }
     }
 }

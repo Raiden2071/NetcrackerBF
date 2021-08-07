@@ -9,22 +9,22 @@ public class QuizAccomplishedImpl {
   private int correctAnswers;
   private Boolean isFavourite;
   private Date dateOfQuiz;
-  private Quiz quiz;
+  private QuizImpl quiz;
 
-  public QuizAccomplishedImpl(int correctAnswers, Boolean isFavourite, Quiz quiz) {
+  public QuizAccomplishedImpl(int correctAnswers, Boolean isFavourite, QuizImpl quiz) {
     this.correctAnswers = correctAnswers;
     this.isFavourite = isFavourite;
     this.quiz = quiz;
   }
 
-  public QuizAccomplishedImpl(int correctAnswers, Boolean isFavourite, Date dateOfQuiz, Quiz quiz) {
+  public QuizAccomplishedImpl(int correctAnswers, Boolean isFavourite, Date dateOfQuiz, QuizImpl quiz) {
     this.correctAnswers = correctAnswers;
     this.isFavourite = isFavourite;
     this.dateOfQuiz = dateOfQuiz;
     this.quiz = quiz;
   }
 
-  public QuizAccomplishedImpl(int correctAnswers, Quiz quiz) {
+  public QuizAccomplishedImpl(int correctAnswers, QuizImpl quiz) {
     this.isFavourite = false;
     this.correctAnswers = correctAnswers;
     this.quiz = quiz;
@@ -65,7 +65,7 @@ public class QuizAccomplishedImpl {
     return quiz;
   }
 
-  public void setQuiz(Quiz quiz) {
+  public void setQuiz(QuizImpl quiz) {
     this.quiz = quiz;
   }
 

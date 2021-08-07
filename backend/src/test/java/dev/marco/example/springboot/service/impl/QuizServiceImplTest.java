@@ -1,7 +1,6 @@
 package dev.marco.example.springboot.service.impl;
 
 import dev.marco.example.springboot.model.impl.QuestionImpl;
-import dev.marco.example.springboot.model.impl.QuizImpl;
 import org.apache.log4j.Logger;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
@@ -48,7 +47,7 @@ class QuizServiceImplTest {
             BigInteger quizId = BigInteger.valueOf(1);
             List<QuestionImpl> questions = questionService.getQuestionsByQuiz(quizId);
 
-            Quiz quiz = QuizImpl.QuizBuilder()
+            Quiz quiz = dev.marco.example.springboot.model.impl.QuizImpl.QuizBuilder()
                     .setTitle("Math")
                     .setDescription("Math quiz")
                     .setQuizType(QuizType.MATHEMATICS)

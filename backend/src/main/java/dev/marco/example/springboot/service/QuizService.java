@@ -4,6 +4,7 @@ import dev.marco.example.springboot.exception.*;
 import dev.marco.example.springboot.model.Quiz;
 import dev.marco.example.springboot.model.QuizType;
 import dev.marco.example.springboot.model.impl.QuestionImpl;
+import dev.marco.example.springboot.model.impl.QuizImpl;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -19,7 +20,7 @@ public interface QuizService {
 
     void deleteQuiz(Quiz quiz) throws QuizDoesNotExistException, DAOLogicException, UserDoesNotExistException, UserException;
 
-    Quiz getQuizById(BigInteger id) throws QuizDoesNotExistException, DAOLogicException, QuizException, QuestionDoesNotExistException;
+    QuizImpl getQuizById(BigInteger id) throws QuizDoesNotExistException, DAOLogicException, QuizException, QuestionDoesNotExistException;
 
     List<Quiz> getQuizzesByType(QuizType quizType) throws QuizDoesNotExistException, DAOLogicException;
 

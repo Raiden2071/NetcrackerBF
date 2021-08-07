@@ -29,7 +29,7 @@ public class AnnouncementController {
         this.announcementService = announcementService;
     }
 
-    @Autowired
+    //@Autowired
     public void setTestConnection() throws DAOConfigException {
         announcementService.setTestConnection();
     }
