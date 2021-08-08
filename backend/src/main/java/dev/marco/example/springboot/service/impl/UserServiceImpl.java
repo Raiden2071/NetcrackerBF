@@ -133,7 +133,7 @@ public class UserServiceImpl implements UserService, RegexPatterns {
       log.error(EMPTY_PASSWORD);
       throw new UserException(INVALID_USERS_EMAIL);
     }
-    if (!password.matches(passPattern)) {
+    if (StringUtils.isEmpty(password)) { //!password.matches(passPattern)
       log.error(EMPTY_PASSWORD);
       throw new UserException(INVALID_USERS_EMAIL);
     }

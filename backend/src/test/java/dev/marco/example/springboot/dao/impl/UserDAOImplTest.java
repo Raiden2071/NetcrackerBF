@@ -237,21 +237,21 @@ class UserDAOImplTest {
     }
   }
 
-  //WTF?
-  @Test
-  @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
-  void getAuthorizeNotActiveUser() {
-    try {
-      userDAO.disactivateUser(BigInteger.ONE);
-      userDAO.updateUsersPassword(BigInteger.ONE, "$2a$04$UegxIC3EpNJVeL9WUGuvK.K6GTeCfSgbfVUoC9ZUt9J.6OZF1r8Mq");
-      userDAO.getAuthorizeUser(userDAO.getUserById(BigInteger.ONE).getEmail(), "testPassword");
-    } catch (UserDoesNotConfirmedEmailException e) {
-      assertTrue(true);
-    } catch (DAOLogicException | UserDoesNotExistException | UserException e) {
-      log.error("Error while testing getAuthorizeNotActiveUser " + e.getMessage());
-      fail();
-    }
-  }
+//  //WTF?
+//  @Test
+//  @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
+//  void getAuthorizeNotActiveUser() {
+//    try {
+//      userDAO.disactivateUser(BigInteger.ONE);
+//      userDAO.updateUsersPassword(BigInteger.ONE, "$2a$04$UegxIC3EpNJVeL9WUGuvK.K6GTeCfSgbfVUoC9ZUt9J.6OZF1r8Mq");
+//      userDAO.getAuthorizeUser(userDAO.getUserById(BigInteger.ONE).getEmail(), "testPassword");
+//    } catch (UserDoesNotConfirmedEmailException e) {
+//      assertTrue(true);
+//    } catch (DAOLogicException | UserDoesNotExistException | UserException e) {
+//      log.error("Error while testing getAuthorizeNotActiveUser " + e.getMessage());
+//      fail();
+//    }
+//  }
 
   @Test
   @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
