@@ -24,8 +24,8 @@ import java.util.Arrays;
 @Configuration
 public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
-    private final String GET_USERNAME_QUERY = "SELECT email, passwd, isActive from TEAM1.USR where email = ?";
-    private final String GET_AUTHORITY_QUERY = "SELECT U.email, R.usr_role FROM TEAM1.USR U, TEAM1.USR_ROLES R where U.email = ? AND U.USR_ROLE = R.ID_USR_ROLE";
+    private final String GET_USERNAME_QUERY = "SELECT email, passwd, isActive from USR where email = ?";
+    private final String GET_AUTHORITY_QUERY = "SELECT U.email, R.usr_role FROM USR U, USR_ROLES R where U.email = ? AND U.USR_ROLE = R.ID_USR_ROLE";
 
     private final JwtTokenProvider jwtTokenProvider;
     private final DataSource dataSource;

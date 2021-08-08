@@ -668,7 +668,6 @@ class LoginComponent {
                 password: (0,js_sha256__WEBPACK_IMPORTED_MODULE_0__.sha256)(this.loginForm.value.password),
                 remember: this.loginForm.value.remember
             };
-            console.log(data);
             this.authService.login(data, data.remember).subscribe((userData) => {
                 this.userService.userId = userData.user.id;
                 this.router.navigateByUrl('/profile');
@@ -800,7 +799,7 @@ class RegisterComponent {
             firstName: ['', [_angular_forms__WEBPACK_IMPORTED_MODULE_4__.Validators.required]],
             lastName: ['', [_angular_forms__WEBPACK_IMPORTED_MODULE_4__.Validators.required]],
             email: ['', [_angular_forms__WEBPACK_IMPORTED_MODULE_4__.Validators.email, _angular_forms__WEBPACK_IMPORTED_MODULE_4__.Validators.required]],
-            password: ['', [_angular_forms__WEBPACK_IMPORTED_MODULE_4__.Validators.pattern('^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$'), _angular_forms__WEBPACK_IMPORTED_MODULE_4__.Validators.required]],
+            password: ['', [_angular_forms__WEBPACK_IMPORTED_MODULE_4__.Validators.minLength(5), _angular_forms__WEBPACK_IMPORTED_MODULE_4__.Validators.required]],
             confirmPassword: ['', [_angular_forms__WEBPACK_IMPORTED_MODULE_4__.Validators.required]]
         }, {
             validator: (0,_validators_must_match_validator__WEBPACK_IMPORTED_MODULE_1__.MustMatch)('password', 'confirmPassword')
