@@ -20,7 +20,6 @@ export class QuizGuard implements CanActivate {
       this.router.navigateByUrl('/quiz');
       return false;
     }
-    this.router.navigateByUrl('/quiz/quiz-questions');
     return true;
   }
 

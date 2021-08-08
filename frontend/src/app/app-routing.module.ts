@@ -10,7 +10,6 @@ const routes: Routes = [
   {
     path: '', 
     component: LayoutComponent,
-    // canActivateChild: [AuthGuard],
     children: [
       { path: '', pathMatch: 'full', redirectTo: 'test' },
       { path: 'profile', loadChildren: () => import('./modules/profile/profile/profile.module').then(m => m.ProfileModule) },
@@ -18,8 +17,7 @@ const routes: Routes = [
       { path: 'dashboard', loadChildren: () => import('./modules/dashboard/dashboard.module').then(m => m.DashboardModule) },
       { path: 'announcement', loadChildren: () => import('./modules/announcement/announcment.module').then(m => m.AnnouncmentModule) },
       { path: 'settings', loadChildren: () => import('./modules/settings/settings.module').then(m => m.SettingsModule) },
-      { path: 'quiz', loadChildren: () => import('./modules/quiz/quiz.module').then(m => m.QuizModule) },
-      { path: 'quiz/quiz-questions', component: QuizQuestionsComponent },
+      { path: 'quiz', loadChildren: () => import('./modules/quiz/quiz.module').then(m => m.QuizModule) }
     ],
     // canActivate: [AuthGuard]
   },

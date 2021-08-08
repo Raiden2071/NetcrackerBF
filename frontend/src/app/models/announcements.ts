@@ -4,8 +4,8 @@ export interface Announcement {
   id: number,
   title: String,
   description: String,
-  owner: User,
+  user: User,
   date: Date,
   address: String,
-  participantsCap?: number
+  participantsCap: number
 }
