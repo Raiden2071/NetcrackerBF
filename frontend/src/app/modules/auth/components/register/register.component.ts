@@ -19,7 +19,7 @@ export class RegisterComponent implements OnInit {
     firstName:        ['', [Validators.required]],
     lastName:         ['', [Validators.required]],
     email:            ['', [Validators.email, Validators.required]],
-    password:         ['', [Validators.pattern('^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$'), Validators.required]],
+    password:         ['', [Validators.minLength(5) ,Validators.required]],
     confirmPassword:  ['', [Validators.required]]
   }, {
     validator:  MustMatch('password', 'confirmPassword')
@@ -43,7 +43,7 @@ export class RegisterComponent implements OnInit {
         email:            this.registerForm.value.email,    
         password:         sha256(this.registerForm.value.password),
         confirmPassword:  sha256(this.registerForm.value.confirmPassword)
-      };      
+      };            
       this.authService.register(data).subscribe(data => console.log(data));
       this.router.navigateByUrl('/auth/login');
     }
