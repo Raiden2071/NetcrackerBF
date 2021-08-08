@@ -29,7 +29,7 @@ export class UserService extends AbstractCrudService<User>{
   }
 
   getMe(): Observable<User> {
-    this.userId = 182;
+    // this.userId = 182;
     return this.http.get<User>(`user/${this.userId}`);
   }
 
