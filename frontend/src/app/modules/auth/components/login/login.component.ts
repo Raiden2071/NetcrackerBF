@@ -34,13 +34,13 @@ export class LoginComponent implements OnInit {
 
   onSubmit(): void {
     if(this.loginForm.valid) {
-      
+      //sha256
       const data = {
         email:    this.loginForm.value.email,
-        password: sha256(this.loginForm.value.password),
+        password: (this.loginForm.value.password),
         remember: this.loginForm.value.remember
       };
-      this.authService.login(data, data.remember).subscribe((userData) => {        
+      this.authService.login(data, data.remember).subscribe((userData) => {
         this.userService.userId = userData.user.id;
         this.router.navigateByUrl('/profile')
       },err => {
@@ -50,7 +50,7 @@ export class LoginComponent implements OnInit {
     else {
       this.showErrors = true;
     }
-    
+
   }
 
 }
