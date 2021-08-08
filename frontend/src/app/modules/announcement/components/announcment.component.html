@@ -14,7 +14,7 @@
   <!-- Cards -->
   <div *ngIf="announcements" class="row flex-wrap card-deck">
     <div *ngFor="let annoucement of announcements | filter: term | paginate: { itemsPerPage: 3, currentPage: p }"
-      class="col-12 col-lg-6 col-xl-4 mb-3 d-flex align-items-stretch">
+      class="col-12 col-lg-6 col-xl-4 mb-3 d-flex align-items-stretch full_card">
       <div class="card w-100">
         <div class="card-body d-flex body">
           <!-- first half of the card -->

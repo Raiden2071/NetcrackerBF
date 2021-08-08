@@ -13,9 +13,10 @@
           <div class="d-flex align-items-center flex-wrap w-100 mb-5">
             <div *ngFor="let quiz of questionArray.controls; let i=index" [formGroupName]="i"
               class="col-4 d-flex justify-content-center mb-4">
-              <input (click)="currentQuiz=i" [ngClass]="{size__color: currentQuiz==i}" class="size"
-                formControlName="questionId">
-              <!-- <div class="size"></div> -->
+              <!-- <input (click)="currentQuiz=i" [ngClass]="{size__color: currentQuiz==i}" class="size text-center"
+                formControlName="questionId"> -->
+                
+              <div class="size" (click)="currentQuiz=i" [ngClass]="{size__color: currentQuiz==i}"></div>
             </div>
           </div>
           <!-- type of quiz -->
@@ -28,7 +29,7 @@
               <!-- определяем какой будет отображаться questionType -->
               <div *ngIf="currentQuiz==i">
                 <select class="w-75" formControlName="questionType">
-                  <option *ngFor="let type of questionTypes | keyvalue">
+                  <option *ngFor="let type of questionTypes | keyvalue" [value]="type.value">
                     {{ type.value }}
                   </option>
                 </select>
