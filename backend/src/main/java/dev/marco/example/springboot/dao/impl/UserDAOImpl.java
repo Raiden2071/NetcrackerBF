@@ -215,6 +215,7 @@ public class UserDAOImpl implements UserDAO {
       statement.setString(1, email);
       ResultSet resultSet = statement.executeQuery();
       if (!resultSet.next()) {
+        log.error("resultSet user not found");
         throw new UserDoesNotExistException(
             MessagesForException.USERS_DOESNT_EXIT + email + password);
       }

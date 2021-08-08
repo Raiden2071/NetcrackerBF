@@ -53,7 +53,7 @@ public class UserController implements RegexPatterns {
 
     @PostMapping("/auth/local/register")
     public ResponseEntity<Object> createUser(@RequestBody UserImpl user) {
-        log.info("mail: " + user.getEmail() + "firstName: " + user.getFirstName());
+        log.debug("New user email: " + user.getEmail() + ", " + user.getFirstName());
         try {
             userService.validateNewUser(
                     user.getEmail(),
