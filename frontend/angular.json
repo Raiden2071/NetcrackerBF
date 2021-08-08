@@ -13,8 +13,8 @@
           "skipTests": true
         },
         "@schematics/angular:component": {
-          "styleext": "scss"
-      }
+          "styleext": "scss"       
+      }  
       },
       "root": "",
       "sourceRoot": "src",

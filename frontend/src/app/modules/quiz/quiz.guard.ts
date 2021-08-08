@@ -10,7 +10,7 @@ export class QuizGuard implements CanActivate {
   data = false;
 
   constructor(private authService: AuthService, private router: Router) {}
-  
+
   canActivate(): boolean {
     if(!this.authService.isAuthenticated) {
       this.router.navigateByUrl('/auth/login');
@@ -24,5 +24,5 @@ export class QuizGuard implements CanActivate {
     return true;
   }
 
-  
+
 }

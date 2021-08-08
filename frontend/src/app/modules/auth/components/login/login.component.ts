@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { sha256 } from 'js-sha256';
 import { UserService } from 'src/app/shared/services/users.service';
 import { AuthService } from '../../services/auth.service';
 
@@ -33,7 +34,15 @@ export class LoginComponent implements OnInit {
 
   onSubmit(): void {
     if(this.loginForm.valid) {
-      const data = this.loginForm.value;
+      
+      const data = {
+        email:    this.loginForm.value.email,
+        password: sha256(this.loginForm.value.password),
+        remember: this.loginForm.value.remember
+      };
+      console.log(data);
+
+
       this.authService.login(data, data.remember).subscribe((userData) => {        
         this.userService.userId = userData.user.id;
         this.router.navigateByUrl('/profile')

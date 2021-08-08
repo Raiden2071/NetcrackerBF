@@ -36,6 +36,8 @@ export class RecoveryComponent implements OnInit {
   }
 
   onSubmit(): void {
+    console.log(this.recoveryForm);
+    
     if(this.recoveryForm.valid) {
       this.toastr.info(`Мы отправили ссылку для восстановления доступа к вашему аккаунту на адрес ${this.recoveryForm.value.email}.`, '', {
         timeOut: 2000,
@@ -43,7 +45,7 @@ export class RecoveryComponent implements OnInit {
       if(!this.isModal) {
         this.router.navigateByUrl('/auth/login')
       }
-      this.authService.forgotPassword(this.recoveryForm.value);
+      this.authService.forgotPassword(this.recoveryForm.value).subscribe();
     }
     else {
       this.showErrors = true;

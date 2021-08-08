@@ -66,11 +66,10 @@ public class UserAnnouncementDAOImpl implements UserAnnouncementDAO {
                 properties.getProperty(SELECT_ANNOUNCEMENT_LIKED_BY_USER))){
             preparedStatement.setLong(1, idUser.longValue());
             ResultSet resultSet = preparedStatement.executeQuery();
-            if(!resultSet.isBeforeFirst()){
-                log.error(ANNOUNCEMENT_HAS_NOT_BEEN_RECEIVED + MESSAGE_FOR_GET_ANNOUNCEMENTS_LIKED_BY_USER);
-                throw new AnnouncementDoesNotExistException(ANNOUNCEMENT_NOT_FOUND_EXCEPTION);
-            }
             Set<Announcement> announcements = new HashSet<>();
+            if(!resultSet.isBeforeFirst()){
+                return announcements;
+            }
             while (resultSet.next()) {
                 Announcement announcement = new AnnouncementImpl.AnnouncementBuilder()
                         .setId(BigInteger.valueOf(resultSet.getLong(ID_ANNOUNCEMENT)))
@@ -98,11 +97,10 @@ public class UserAnnouncementDAOImpl implements UserAnnouncementDAO {
                 properties.getProperty(SELECT_USERS_LIKED_ANNOUNCEMENT))){
             preparedStatement.setLong(1, idAnnouncement.longValue());
             ResultSet resultSet = preparedStatement.executeQuery();
-            if(!resultSet.isBeforeFirst()){
-                log.info(USER_HAS_NOT_BEEN_RECEIVED + MESSAGE_FOR_GET_USERS_LIKED_ANNOUNCEMENT);
-                throw new UserDoesNotExistException(USER_NOT_FOUND_EXCEPTION);
-            }
             Set<User> users = new HashSet<>();
+            if(!resultSet.isBeforeFirst()){
+                return users;
+            }
             while (resultSet.next()) {
                 User user = new UserImpl.UserBuilder()
                         .setId(BigInteger.valueOf(resultSet.getLong(properties.getProperty(USER_ID))))

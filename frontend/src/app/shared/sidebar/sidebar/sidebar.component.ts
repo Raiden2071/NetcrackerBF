@@ -16,6 +16,7 @@ export class SidebarComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.logOut();
     this.getUser();
   }
 
@@ -23,5 +24,11 @@ export class SidebarComponent implements OnInit {
     this.userService.userInfo$.subscribe(user => this.user = user);
   }
 
+  logOut() {    
+    console.log(123);
+    
+    localStorage.removeItem('access_token');
+    sessionStorage.removeItem('access_token');
+  }
 
 }

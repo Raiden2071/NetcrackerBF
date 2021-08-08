@@ -128,6 +128,7 @@ class RecoveryComponent {
         this.router.navigateByUrl('/auth/login');
     }
     onSubmit() {
+        console.log(this.recoveryForm);
         if (this.recoveryForm.valid) {
             this.toastr.info(`Мы отправили ссылку для восстановления доступа к вашему аккаунту на адрес ${this.recoveryForm.value.email}.`, '', {
                 timeOut: 2000,
@@ -135,7 +136,7 @@ class RecoveryComponent {
             if (!this.isModal) {
                 this.router.navigateByUrl('/auth/login');
             }
-            this.authService.forgotPassword(this.recoveryForm.value);
+            this.authService.forgotPassword(this.recoveryForm.value).subscribe();
         }
         else {
             this.showErrors = true;

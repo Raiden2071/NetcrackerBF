@@ -176,11 +176,10 @@ public class AnnouncementDAOImpl implements AnnouncementDAO {
             preparedStatement.setLong(1, idUser.longValue());
             preparedStatement.setInt(2, number);
             ResultSet resultSet = preparedStatement.executeQuery();
-            if(!resultSet.isBeforeFirst()){
-                log.error(ANNOUNCEMENT_HAS_NOT_BEEN_RECEIVED + MESSAGE_FOR_GET_POPULAR);
-                throw new AnnouncementDoesNotExistException(ANNOUNCEMENT_NOT_FOUND_EXCEPTION);
-            }
             List<Announcement> popularAnnouncement = new ArrayList<>();
+            if(!resultSet.isBeforeFirst()){
+                return popularAnnouncement;
+            }
             while (resultSet.next()) {
                 Announcement announcement = new AnnouncementImpl.AnnouncementBuilder()
                         .setId(BigInteger.valueOf(resultSet.getLong(ID_ANNOUNCEMENT)))

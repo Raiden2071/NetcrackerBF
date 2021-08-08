@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { QuizType } from 'src/app/models/quiz';
+import { QuizGuard } from '../../quiz.guard';
 
 @Component({
   selector: 'app-create-quiz-title',
@@ -21,14 +22,21 @@ export class CreateQuizTitleComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private quizGuard: QuizGuard
   ) { }
 
   ngOnInit(): void {    
   }
 
   onSubmit(): void {
-    this.router.navigate(['/quiz/quiz-questions', {data: JSON.stringify(this.createQuizForm.value)}])
+    if(this.createQuizForm.valid) {
+      this.quizGuard.data = true;
+      this.router.navigate(['/quiz/quiz-questions', {data: JSON.stringify(this.createQuizForm.value)}])
+    }
+    else {
+      console.log('not valid');
+    }
   }
 
 }
