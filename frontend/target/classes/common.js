@@ -1,9 +1,9 @@
 (self["webpackChunkfrontend"] = self["webpackChunkfrontend"] || []).push([["common"],{
 
-/***/ 9920:
-/*!**********************************************************************!*\
-  !*** ./src/app/modules/auth/recovery/recovery/recovery.component.ts ***!
-  \**********************************************************************/
+/***/ 7352:
+/*!************************************************************************!*\
+  !*** ./src/app/modules/auth/components/recovery/recovery.component.ts ***!
+  \************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -128,6 +128,7 @@ class RecoveryComponent {
         this.router.navigateByUrl('/auth/login');
     }
     onSubmit() {
+        console.log(this.recoveryForm);
         if (this.recoveryForm.valid) {
             this.toastr.info(`Мы отправили ссылку для восстановления доступа к вашему аккаунту на адрес ${this.recoveryForm.value.email}.`, '', {
                 timeOut: 2000,
@@ -135,7 +136,7 @@ class RecoveryComponent {
             if (!this.isModal) {
                 this.router.navigateByUrl('/auth/login');
             }
-            // this.authService.forgotPassword(this.recoveryForm.value).subscribe(() => );
+            this.authService.forgotPassword(this.recoveryForm.value).subscribe();
         }
         else {
             this.showErrors = true;

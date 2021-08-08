@@ -41,8 +41,10 @@ export class LoginComponent implements OnInit {
         remember: this.loginForm.value.remember
       };
       console.log(data);
+
+
       this.authService.login(data, data.remember).subscribe((userData) => {        
-        // this.userService.userId = userData.user.id;
+        this.userService.userId = userData.user.id;
         this.router.navigateByUrl('/profile')
       },err => {
         this.showErrors = true;
