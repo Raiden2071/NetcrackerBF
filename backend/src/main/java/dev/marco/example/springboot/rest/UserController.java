@@ -82,17 +82,6 @@ public class UserController implements RegexPatterns {
         }
     }
 
-    @GetMapping("/test")
-    public String test() {
-        return "Test";
-    }
-
-
-    @GetMapping("/testAdmin")
-    public String testAdmin() {
-        return "TestAdmin";
-    }
-
     @PostMapping("/auth/local")
     public ResponseEntity<Map<String, Object>> tryToAuthorize(@RequestBody UserImpl user) {
         try {
