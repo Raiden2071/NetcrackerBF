@@ -100,12 +100,10 @@ class UserAnnouncementDAOImplTest {
                     .setTitle(TEST_TITLE)
                     .setDescription(TEST_DESCRIPTION)
                     .setIdUser(BigInteger.ONE)
-                    .setDate(new Date())
                     .setAddress(TEST_ADDRESS)
-                    .setParticipantsCap(5)
                     .build()
             );
-            userDAO.createUser(
+            BigInteger idUser = userDAO.createUser(
                     new UserImpl.UserBuilder()
                             .setFirstName("testFirstName")
                             .setLastName("testLastName")
@@ -115,17 +113,16 @@ class UserAnnouncementDAOImplTest {
                             .setEmailCode("testEmailCode")
                             .build()
             );
-            assertNotNull(announcementDAO.getAnnouncementById(idAnnouncement));
-            User user = userDAO.getUserByEmail("test@gmail.com");
-            assertNotNull(user);
-            userAnnouncementDAO.addParticipant(idAnnouncement, user.getId());
-            assertTrue(userAnnouncementDAO.isParticipant(idAnnouncement, user.getId()));
-            userAnnouncementDAO.deleteParticipant(idAnnouncement, user.getId());
-            assertFalse(userAnnouncementDAO.isParticipant(idAnnouncement, user.getId()));
+            assertNotNull(idAnnouncement);
+            assertNotNull(idUser);
+            userAnnouncementDAO.addParticipant(idAnnouncement, idUser);
+            assertTrue(userAnnouncementDAO.isParticipant(idAnnouncement, idUser));
+            userAnnouncementDAO.deleteParticipant(idAnnouncement, idUser);
+            assertFalse(userAnnouncementDAO.isParticipant(idAnnouncement, idUser));
             announcementDAO.deleteAnnouncement(idAnnouncement);
-            userDAO.deleteUser(user.getId());
+            userDAO.deleteUser(idUser);
 
-        } catch (DAOLogicException | AnnouncementDoesNotExistException | UserDoesNotExistException | AnnouncementException | UserException e) {
+        } catch (DAOLogicException | AnnouncementException | UserException e) {
             log.error("Error while testing addAndGetParticipantById" + e.getMessage());
             fail();
         }
