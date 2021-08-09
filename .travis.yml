@@ -1,3 +1,6 @@
+branches:
+  only:
+    - repoMerge
 jdk:
   - oraclejdk11
 language: java
