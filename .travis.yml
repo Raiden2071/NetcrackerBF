@@ -1,0 +1,6 @@
+jdk:
+  - oraclejdk11
+language: java
+before_install:
+  - "chmod +x mvnw"
+  - "mvn clean install"

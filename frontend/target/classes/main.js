@@ -621,7 +621,6 @@ class QuizGuard {
             this.router.navigateByUrl('/quiz');
             return false;
         }
-        this.router.navigateByUrl('/quiz/quiz-questions');
         return true;
     }
 }
