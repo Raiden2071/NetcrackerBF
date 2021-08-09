@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { switchMap, tap } from 'rxjs/operators';
@@ -22,7 +23,8 @@ export class AnnouncmentComponent implements OnInit {
   constructor(
     private modalService: NgbModal,
     private announcementService: announcementService,
-    private userService: UserService
+    private userService: UserService,
+    private http: HttpClient
   ) { }
 
   ngOnInit(): void {
@@ -32,11 +34,11 @@ export class AnnouncmentComponent implements OnInit {
   getAnnouncement() {
     this.announcementService.getOne(this.userService.userId).subscribe(announcement => this.announcements = announcement);
   }
-
+// this.http.post('announcement/create').subscribe((announcement) => this.announcements = announcement);
   createAnnouncement(): void {
     const modalRef = this.modalService.open(CreateAnnouncementComponent, { centered: true });
     modalRef.closed.pipe(
-      switchMap(announcement => this.announcementService.createOne(announcement))
+      switchMap(announcement => this.http.post<Announcement>('announcement/create', announcement))
     ).subscribe(() =>
       this.getAnnouncement()
     );

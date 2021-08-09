@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Dashboard } from 'src/app/models/dashboard';
-import { Quiz } from 'src/app/models/quiz';
 import { User } from 'src/app/models/user';
 import { DashboardService } from 'src/app/shared/services/dashboard.service';
 import { UserService } from 'src/app/shared/services/users.service';

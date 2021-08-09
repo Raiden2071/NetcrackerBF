@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { QuestionType, Quiz, QuizType } from 'src/app/models/quiz';
 
 @Component({
@@ -49,7 +49,7 @@ export class QuizQuestionsComponent implements OnInit {
     return this.questionsForm.get("questions")['controls'][1].get("answers");
   }
 
-  newQuestionForm(): FormGroup {
+  newQuestionForm(): FormGroup {    
       this.quizId++;
     return this.fb.group({
       questionId:   [this.quizId, [Validators.required]],  // 0 до 9
@@ -61,33 +61,53 @@ export class QuizQuestionsComponent implements OnInit {
 
   newAnswerForm(): FormGroup {
     return this.fb.group({
-      answerId: ['', [Validators.required]],
+      // answerId: ['', [Validators.required]],
 			value:    ['', [Validators.required]],  // текст ответа
 			answer:   [false]
     });
   }
 
-  // addQuestion(): void {
-  //   this.questionArray.push(this.newQuestionForm())
-  // }
-
-  // addAnswer(): void {  
-  //   this.answerArray.push(this.newAnswerForm())
-  // }
-
   getQuestions(form) {
     return form.controls.questions.controls;
   }
 
-  getAnswers(form) {    
+  getAnswers(form) {        
     return form.controls.answers.controls;
   }
 
-  click() {
-    console.log(this.questionArray.controls[this.currentQuiz].value);
+  previous():void {    
+    if(this.currentQuiz>=1) {this.currentQuiz--;}
   }
 
-  onSubmit(): void {
+  next(): void {
+    if(this.currentQuiz<=8) {this.currentQuiz++;}
+  }
+
+  click(val) {
+    console.log(val);
+    
+    
+    // console.log(this.questionArray.controls[this.currentQuiz].value);
+  }
+
+  onChangeType(quiz): void {
+    if(quiz.questionType==="true/false") {
+      quiz.answers=[{
+        value: true,
+        answer: false
+      },
+      {
+        value: false,
+        answer: false
+      }
+    ];
+    } 
+    else {
+      this.newAnswerForm();
+    }
+  }
+
+  onSubmit(): void {    
     const data = Object.assign(this.data, this.questionsForm.value)    
     console.log(data);
   }
