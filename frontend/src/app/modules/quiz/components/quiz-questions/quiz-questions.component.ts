@@ -49,7 +49,7 @@ export class QuizQuestionsComponent implements OnInit {
     return this.questionsForm.get("questions")['controls'][1].get("answers");
   }
 
-  newQuestionForm(): FormGroup {
+  newQuestionForm(): FormGroup {    
       this.quizId++;
     return this.fb.group({
       questionId:   [this.quizId, [Validators.required]],  // 0 до 9
@@ -81,6 +81,14 @@ export class QuizQuestionsComponent implements OnInit {
 
   getAnswers(form) {    
     return form.controls.answers.controls;
+  }
+
+  previous():void {    
+    if(this.currentQuiz>=1) {this.currentQuiz--;}
+  }
+
+  next(): void {
+    if(this.currentQuiz<=8) {this.currentQuiz++;}
   }
 
   click() {
