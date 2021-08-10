@@ -164,7 +164,7 @@ class UserServiceImplTest {
   @Test
   void testNotValidPasswordValidateNewUser() {
     try {
-      userService.validateNewUser("max.bataiev@gmail.com", "qwer", "testFirstName", "testLastName");
+      userService.validateNewUser("max.bataiev@gmail.com", "", "testFirstName", "testLastName");
       fail();
     } catch (UserException e) {
       assertTrue(true);
