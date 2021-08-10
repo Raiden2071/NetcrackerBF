@@ -12,7 +12,7 @@ import java.util.Properties;
 
 public interface MailSenderService {
 
-  String SYMBOLS = "1234567890qwertyuiopasdfghjklzxcvbnm";
+  String SYMBOLS = "1234567890qwertyuiopasdfghjklzxcvbnmQWERRTYUIOPASDFGHJKL";
   String EMAIL_SUBJECT = "Email confirmation for quiz";
   String PASSWORD_SUBJECT = "Recover password";
   String TEXT_PASSWORD = "New password is: %s";

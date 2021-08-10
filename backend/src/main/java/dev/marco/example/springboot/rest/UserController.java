@@ -155,13 +155,8 @@ public class UserController implements RegexPatterns {
         }
     }
 
-    public void registrationConfirm(User user) {
-        //free
-
-    }
-
     @PostMapping("/confirm")
-    public ResponseEntity confirmEmail(@RequestParam String code) {
+    public ResponseEntity<Object> confirmEmail(@RequestParam String code) {
         try {
             if (StringUtils.isEmpty(code)) {
                 throw new MailException(MessagesForException.EMAIL_ERROR);

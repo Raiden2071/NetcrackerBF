@@ -177,7 +177,7 @@ public class MailSenderServiceImpl implements MailSenderService {
         }
       });
 
-      Message message = prepareMessage(session, from, to, EMAIL_SUBJECT,
+      Message message = prepareMessage(session, from, to, PASSWORD_SUBJECT,
           String.format(TEXT_PASSWORD, newPassword));
       Transport.send(message);
       log.debug("Password was successfully recovered");
