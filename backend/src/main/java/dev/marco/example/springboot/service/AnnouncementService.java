@@ -19,7 +19,7 @@ public interface AnnouncementService {
             throws AnnouncementDoesNotExistException, DAOLogicException, AnnouncementException;
 
     BigInteger buildNewAnnouncement(Announcement announcement)
-            throws AnnouncementException, DAOLogicException, UserException;
+            throws AnnouncementException, DAOLogicException;
 
     void editAnnouncement(Announcement announcement)
             throws AnnouncementException, DAOLogicException, UserException, AnnouncementDoesNotExistException, UserDoesNotExistException;

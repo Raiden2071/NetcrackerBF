@@ -1,24 +1,21 @@
 package dev.marco.example.springboot.dao.impl;
 
-import org.apache.log4j.Logger;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Timeout;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import dev.marco.example.springboot.exception.AnnouncementDoesNotExistException;
 import dev.marco.example.springboot.exception.AnnouncementException;
 import dev.marco.example.springboot.exception.DAOConfigException;
 import dev.marco.example.springboot.exception.DAOLogicException;
 import dev.marco.example.springboot.model.Announcement;
 import dev.marco.example.springboot.model.impl.AnnouncementImpl;
-
+import org.apache.log4j.Logger;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import java.math.BigInteger;
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -66,7 +63,7 @@ class AnnouncementDAOImplTest {
     @Timeout(value = 10000, unit= TimeUnit.MILLISECONDS)
     void getByTitle() {
         try {
-            announcementDAO.createAnnouncement(new AnnouncementImpl.AnnouncementBuilder()
+            BigInteger idAnnouncement = announcementDAO.createAnnouncement(new AnnouncementImpl.AnnouncementBuilder()
                     .setTitle(TEST_TITLE)
                     .setDescription(TEST_DESCRIPTION)
                     .setIdUser(BigInteger.ONE)
@@ -75,7 +72,7 @@ class AnnouncementDAOImplTest {
             Announcement announcement = announcementDAO.getByTitle(TEST_TITLE);
             assertNotNull(announcement);
             assertEquals(TEST_TITLE, announcement.getTitle());
-            announcementDAO.deleteAnnouncement(announcement.getId());
+            announcementDAO.deleteAnnouncement(idAnnouncement);
         } catch (AnnouncementDoesNotExistException | DAOLogicException | AnnouncementException e) {
             log.error("Error while testing getByTitle " + e.getMessage());
             fail();
@@ -90,7 +87,6 @@ class AnnouncementDAOImplTest {
                     .setTitle(TEST_TITLE)
                     .setDescription(TEST_DESCRIPTION)
                     .setIdUser(BigInteger.ONE)
-                    .setDate(new Date())
                     .setAddress(TEST_ADDRESS)
                     .build();
             BigInteger idAnnouncement = announcementDAO.createAnnouncement(newAnnouncement);
@@ -111,7 +107,6 @@ class AnnouncementDAOImplTest {
                     .setTitle(TEST_TITLE)
                     .setDescription(TEST_DESCRIPTION)
                     .setIdUser(BigInteger.ONE)
-                    .setDate(new Date())
                     .setAddress(TEST_ADDRESS)
                     .build();
             BigInteger idAnnouncement = announcementDAO.createAnnouncement(newAnnouncement);
@@ -122,9 +117,9 @@ class AnnouncementDAOImplTest {
             announcement.setAddress(TEST_NEW_ADDRESS);
             announcementDAO.editAnnouncement(announcement);
             Announcement testAnnouncement = announcementDAO.getAnnouncementById(idAnnouncement);
-            assertEquals(announcement.getTitle(), testAnnouncement.getTitle());
-            assertEquals(announcement.getDescription(), testAnnouncement.getDescription());
-            assertEquals(announcement.getAddress(), testAnnouncement.getAddress());
+            assertEquals(TEST_NEW_TITLE, testAnnouncement.getTitle());
+            assertEquals(TEST_NEW_DESCRIPTION, testAnnouncement.getDescription());
+            assertEquals(TEST_NEW_ADDRESS, testAnnouncement.getAddress());
             announcementDAO.deleteAnnouncement(idAnnouncement);
         } catch (DAOLogicException | AnnouncementDoesNotExistException | AnnouncementException e) {
             log.error("Error while testing editAnnouncement " + e.getMessage());
@@ -141,16 +136,15 @@ class AnnouncementDAOImplTest {
                     .setTitle(TEST_TITLE)
                     .setDescription(TEST_DESCRIPTION)
                     .setIdUser(BigInteger.ONE)
-                    .setDate(new Date())
                     .setAddress(TEST_ADDRESS)
                     .build();
             BigInteger idAnnouncement = announcementDAO.createAnnouncement(newAnnouncement);
-            assertNotNull(announcementDAO.getAnnouncementById(idAnnouncement));
+            assertNotNull(idAnnouncement);
             announcementDAO.deleteAnnouncement(idAnnouncement);
             AnnouncementDoesNotExistException thrown = assertThrows(AnnouncementDoesNotExistException.class, () ->
                 announcementDAO.getAnnouncementById(idAnnouncement));
             assertNotNull(thrown);
-        } catch (DAOLogicException | AnnouncementDoesNotExistException | AnnouncementException e) {
+        } catch (DAOLogicException | AnnouncementException e) {
             log.error("Error while testing deleteAnnouncement " + e.getMessage());
             fail();
         }
