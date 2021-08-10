@@ -64,8 +64,8 @@ public class MailSenderServiceImpl implements MailSenderService {
         }
       });
 
-      Message message = prepareMessage(session, from, to, EMAIL_SUBJECT,
-          String.format(TEXT_HTML, code));
+      Message message = prepareMessage(session, from, to, EMAIL_SUBJECT, TEXT_HTML+
+          String.format(TEXT_INPUT, code));
       Transport.send(message);
       return true;
     } catch (DAOLogicException | UserDoesNotExistException | MessagingException e) {

@@ -15,10 +15,10 @@ import java.util.Set;
 
 public enum Filter {
   DATE,
-  QUIZTYPE_MATH,
-  QUIZTYPE_HISTORIC,
-  QUIZTYPE_SCIENCE,
-  QUIZTYPE_GEOGRAPHICAL,
+  MATHEMATICS,
+  HISTORIC,
+  SCIENCE,
+  GEOGRAPHICAL,
   COMPLETED,
   FAVORITES;
 
@@ -30,16 +30,16 @@ public enum Filter {
       case DATE:
         filterQuizzes = quizService.getLastCreatedQuizzes(BigInteger.valueOf(10));
         break;
-      case QUIZTYPE_MATH:
+      case MATHEMATICS:
         filterQuizzes = quizService.getQuizzesByType(QuizType.MATHEMATICS);
         break;
-      case QUIZTYPE_SCIENCE:
+      case SCIENCE:
         filterQuizzes = quizService.getQuizzesByType(QuizType.SCIENCE);
         break;
-      case QUIZTYPE_HISTORIC:
+      case HISTORIC:
         filterQuizzes = quizService.getQuizzesByType(QuizType.HISTORIC);
         break;
-      case QUIZTYPE_GEOGRAPHICAL:
+      case GEOGRAPHICAL:
         filterQuizzes = quizService.getQuizzesByType(QuizType.GEOGRAPHICAL);
         break;
       case COMPLETED:

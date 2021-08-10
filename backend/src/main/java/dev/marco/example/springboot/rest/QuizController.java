@@ -156,7 +156,6 @@ public class QuizController {
     }
 
 
-    //    Done without tests
     @GetMapping("/filter")
     public List<Quiz> showAllFilterQuizzes(@RequestParam BigInteger id, @RequestParam Filter filter) {
         try {

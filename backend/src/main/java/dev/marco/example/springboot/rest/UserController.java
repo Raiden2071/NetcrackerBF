@@ -161,7 +161,7 @@ public class UserController implements RegexPatterns {
     }
 
     @PostMapping("/confirm")
-    public ResponseEntity<User> confirmEmail(@RequestParam String code) {
+    public ResponseEntity confirmEmail(@RequestParam String code) {
         try {
             if (StringUtils.isEmpty(code)) {
                 throw new MailException(MessagesForException.EMAIL_ERROR);
@@ -171,7 +171,7 @@ public class UserController implements RegexPatterns {
 
             if (user == null)
                 throw new MailException(EMAIL_ERROR);
-            return ResponseEntity.ok(user);
+            return ResponseEntity.ok().build();
         } catch (DAOLogicException | MailException | UserException e) {
             log.error(EMAIL_ERROR);
             return ResponseEntity.badRequest().build();
