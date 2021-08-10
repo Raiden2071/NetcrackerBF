@@ -57,7 +57,7 @@ public interface AnnouncementDAO {
 
     Announcement getByTitle(String title) throws AnnouncementDoesNotExistException, DAOLogicException;
 
-    Set<Announcement> getSetByTitle(String title) throws AnnouncementDoesNotExistException, DAOLogicException;
+    Set<Announcement> getSetByTitle(String title) throws DAOLogicException;
 
     List<Announcement> getPopular(int number, BigInteger idUser) throws DAOLogicException, AnnouncementDoesNotExistException;
 

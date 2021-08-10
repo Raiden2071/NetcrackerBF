@@ -131,5 +131,9 @@ public class AnnouncementServiceImpl implements AnnouncementService {
         return userAnnouncementDAO.getAnnouncementsLikedByUser(idUser);
     }
 
-
+    @Override
+    public Set<Announcement> getSetByTitle(String title)
+            throws DAOLogicException {
+        return announcementDAO.getSetByTitle(title);
+    }
 }

@@ -91,15 +91,13 @@ public class AnnouncementDAOImpl implements AnnouncementDAO {
     }
 
     @Override
-    public Set<Announcement> getSetByTitle(String title) throws AnnouncementDoesNotExistException, DAOLogicException {
+    public Set<Announcement> getSetByTitle(String title) throws DAOLogicException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(properties.getProperty(SELECT_SET_ANNOUNCEMENT_BY_TITLE))){
-            preparedStatement.setString(1, title + "%");
+            preparedStatement.setString(1, "%" + title + "%");
             ResultSet resultSet = preparedStatement.executeQuery();
-            if(!resultSet.isBeforeFirst()){
-                log.error(ANNOUNCEMENT_HAS_NOT_BEEN_RECEIVED + MESSAGE_FOR_GET_SET_BY_TITLE);
-                throw new AnnouncementDoesNotExistException(ANNOUNCEMENT_NOT_FOUND_EXCEPTION);
-            }
             Set<Announcement> announcements = new HashSet<>();
+            if(!resultSet.isBeforeFirst())
+                return announcements;
             while (resultSet.next()) {
                 Announcement announcement = new AnnouncementImpl.AnnouncementBuilder()
                         .setId(BigInteger.valueOf(resultSet.getLong(ID_ANNOUNCEMENT)))
