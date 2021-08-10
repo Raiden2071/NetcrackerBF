@@ -71,6 +71,7 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
                     .antMatchers("/quiz/**").hasRole("USER")
                     .antMatchers("/announcement/**").hasRole("USER")
                     .antMatchers("/updatePassword").hasRole("USER")
+                    .antMatchers("/dashboard/**").hasRole("USER")
                     .antMatchers("/toAdmin").hasRole("ADMIN")
                     .antMatchers("/admin/**").hasRole("ADMIN")
                     .antMatchers("/confirm").permitAll()

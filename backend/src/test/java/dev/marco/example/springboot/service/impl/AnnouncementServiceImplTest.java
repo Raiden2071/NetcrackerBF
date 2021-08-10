@@ -178,4 +178,17 @@ class AnnouncementServiceImplTest {
             fail();
         }
     }
+
+    @Test
+    void getSetByTitle() {
+        try {
+            Set<Announcement> announcementSet = announcementService.getSetByTitle("gath", BigInteger.ONE);
+            assertNotNull(announcementSet);
+            for (Announcement announcement : announcementSet)
+                assertNotNull(announcement);
+        } catch (DAOLogicException e) {
+            log.error(LOG_ERROR_CASE + "getAnnouncementsLikedByUser " + e.getMessage());
+            fail();
+        }
+    }
 }

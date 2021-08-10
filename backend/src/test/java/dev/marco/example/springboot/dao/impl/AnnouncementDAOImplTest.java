@@ -55,7 +55,7 @@ class AnnouncementDAOImplTest {
             for(Announcement announcement : popularAnnouncement)
                 assertNotNull(announcement);
             assertEquals(4, popularAnnouncement.size());
-        } catch (DAOLogicException | AnnouncementDoesNotExistException e) {
+        } catch (DAOLogicException e) {
             log.error("Error while testing getPopular" + e.getMessage());
             fail();
         }
@@ -171,12 +171,12 @@ class AnnouncementDAOImplTest {
     @Timeout(value = 10000, unit= TimeUnit.MILLISECONDS)
     void getSetByTitle() {
         try {
-            Set<Announcement> announcements = announcementDAO.getSetByTitle("gath");
+            Set<Announcement> announcements = announcementDAO.getSetByTitle("gath", BigInteger.ONE);
             assertNotNull(announcements);
             for(Announcement announcement : announcements){
                 assertNotNull(announcement);
             }
-        } catch (AnnouncementDoesNotExistException | DAOLogicException e) {
+        } catch (DAOLogicException e) {
             log.error("Error while testing getSetByTitle " + e.getMessage());
             fail();
         }
@@ -215,6 +215,21 @@ class AnnouncementDAOImplTest {
             assertTrue(announcementDAO.isAnnouncementById(BigInteger.ONE));
         } catch (DAOLogicException e) {
             log.error("Error while testing isAnnouncementById " + e.getMessage());
+            fail();
+        }
+    }
+
+    @Test
+    @Timeout(value = 10000, unit= TimeUnit.MILLISECONDS)
+    void getAllAnnouncementByIdUser() {
+        try {
+            List<Announcement> allAnnouncement = announcementDAO.getAllAnnouncements(BigInteger.ONE);
+            assertNotNull(allAnnouncement);
+            for(Announcement announcement: allAnnouncement){
+                assertNotNull(announcement);
+            }
+        } catch (DAOLogicException e) {
+            log.error("Error while testing addAndGetParticipantById" + e.getMessage());
             fail();
         }
     }

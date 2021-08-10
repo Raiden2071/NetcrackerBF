@@ -91,29 +91,34 @@ public class AnnouncementDAOImpl implements AnnouncementDAO {
     }
 
     @Override
-    public Set<Announcement> getSetByTitle(String title) throws AnnouncementDoesNotExistException, DAOLogicException {
+    public Set<Announcement> getSetByTitle(String title, BigInteger idUser) throws DAOLogicException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(properties.getProperty(SELECT_SET_ANNOUNCEMENT_BY_TITLE))){
-            preparedStatement.setString(1, title + "%");
+            preparedStatement.setLong(1, idUser.longValue());
+            preparedStatement.setString(2, "%" + title + "%");
             ResultSet resultSet = preparedStatement.executeQuery();
-            if(!resultSet.isBeforeFirst()){
-                log.error(ANNOUNCEMENT_HAS_NOT_BEEN_RECEIVED + MESSAGE_FOR_GET_SET_BY_TITLE);
-                throw new AnnouncementDoesNotExistException(ANNOUNCEMENT_NOT_FOUND_EXCEPTION);
-            }
             Set<Announcement> announcements = new HashSet<>();
+            if(!resultSet.isBeforeFirst())
+                return announcements;
             while (resultSet.next()) {
                 Announcement announcement = new AnnouncementImpl.AnnouncementBuilder()
                         .setId(BigInteger.valueOf(resultSet.getLong(ID_ANNOUNCEMENT)))
                         .setTitle(resultSet.getString(TITLE))
                         .setDescription(resultSet.getString(DESCRIPTION))
-                        .setIdUser(BigInteger.valueOf(resultSet.getLong(OWNER)))
+                        .setUser(new UserImpl.UserBuilder()
+                                .setId(BigInteger.valueOf(resultSet.getLong(OWNER)))
+                                .setFirstName(resultSet.getString(FIRST_NAME))
+                                .setLastName(resultSet.getString(LAST_NAME))
+                                .build())
                         .setDate(resultSet.getDate(DATE_CREATE))
                         .setAddress(resultSet.getString(ADDRESS))
                         .setParticipantsCap(resultSet.getInt(LIKES))
+                        .setBlank(BigInteger.valueOf(resultSet.getLong(COLUMN_IS_LIKED)))
+                        .setIsLiked(!resultSet.wasNull())
                         .build();
                 announcements.add(announcement);
             }
             return announcements;
-        } catch (SQLException | AnnouncementException throwables) {
+        } catch (SQLException | AnnouncementException | UserException throwables) {
             log.error(DAO_LOGIC_EXCEPTION + throwables.getMessage());
             throw new DAOLogicException(DAO_LOGIC_EXCEPTION, throwables);
         }
@@ -171,7 +176,42 @@ public class AnnouncementDAOImpl implements AnnouncementDAO {
     }
 
     @Override
-    public List<Announcement> getPopular(int number, BigInteger idUser) throws DAOLogicException, AnnouncementDoesNotExistException {
+    public List<Announcement> getAllAnnouncements(BigInteger idUser)
+            throws DAOLogicException {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(
+                properties.getProperty(SELECT_ALL_ANNOUNCEMENT))){
+            preparedStatement.setLong(1, idUser.longValue());
+            ResultSet resultSet = preparedStatement.executeQuery();
+            List<Announcement> announcements = new ArrayList<>();
+            if(!resultSet.isBeforeFirst())
+                return announcements;
+            while (resultSet.next()) {
+                Announcement announcement = new AnnouncementImpl.AnnouncementBuilder()
+                        .setId(BigInteger.valueOf(resultSet.getLong(ID_ANNOUNCEMENT)))
+                        .setTitle(resultSet.getString(TITLE))
+                        .setDescription(resultSet.getString(DESCRIPTION))
+                        .setUser(new UserImpl.UserBuilder()
+                                .setId(BigInteger.valueOf(resultSet.getLong(OWNER)))
+                                .setFirstName(resultSet.getString(FIRST_NAME))
+                                .setLastName(resultSet.getString(LAST_NAME))
+                                .build())
+                        .setDate(resultSet.getDate(DATE_CREATE))
+                        .setAddress(resultSet.getString(ADDRESS))
+                        .setParticipantsCap(resultSet.getInt(LIKES))
+                        .setBlank(BigInteger.valueOf(resultSet.getLong(COLUMN_IS_LIKED)))
+                        .setIsLiked(resultSet.wasNull())
+                        .build();
+                announcements.add(announcement);
+            }
+            return announcements;
+        } catch (SQLException | AnnouncementException | UserException throwables) {
+            log.error(throwables.getMessage(), throwables);
+            throw new DAOLogicException(DAO_LOGIC_EXCEPTION, throwables);
+        }
+    }
+
+    @Override
+    public List<Announcement> getPopular(int number, BigInteger idUser) throws DAOLogicException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(properties.getProperty(GET_POPULAR_ANNOUNCEMENT))){
             preparedStatement.setLong(1, idUser.longValue());
             preparedStatement.setInt(2, number);
@@ -185,7 +225,6 @@ public class AnnouncementDAOImpl implements AnnouncementDAO {
                         .setId(BigInteger.valueOf(resultSet.getLong(ID_ANNOUNCEMENT)))
                         .setTitle(resultSet.getString(TITLE))
                         .setDescription(resultSet.getString(DESCRIPTION))
-                        .setIdUser(BigInteger.valueOf(resultSet.getLong(OWNER)))
                         .setUser(new UserImpl.UserBuilder()
                                 .setId(BigInteger.valueOf(resultSet.getLong(OWNER)))
                                 .setFirstName(resultSet.getString(FIRST_NAME))

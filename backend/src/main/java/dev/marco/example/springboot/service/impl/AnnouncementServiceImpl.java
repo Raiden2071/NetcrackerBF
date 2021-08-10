@@ -45,7 +45,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     @Override
     public List<Announcement> getAllAnnouncements(BigInteger idUser)
             throws AnnouncementDoesNotExistException, DAOLogicException, AnnouncementException {
-        return userAnnouncementDAO.getAllAnnouncements(idUser);
+        return announcementDAO.getAllAnnouncements(idUser);
     }
 
     @Override
@@ -131,5 +131,9 @@ public class AnnouncementServiceImpl implements AnnouncementService {
         return userAnnouncementDAO.getAnnouncementsLikedByUser(idUser);
     }
 
-
+    @Override
+    public Set<Announcement> getSetByTitle(String title, BigInteger idUser)
+            throws DAOLogicException {
+        return announcementDAO.getSetByTitle(title, idUser);
+    }
 }

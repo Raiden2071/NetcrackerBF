@@ -168,36 +168,4 @@ public class UserAnnouncementDAOImpl implements UserAnnouncementDAO {
         }
     }
 
-    @Override
-    public List<Announcement> getAllAnnouncements(BigInteger idUser)
-            throws AnnouncementDoesNotExistException, DAOLogicException, AnnouncementException {
-        try (PreparedStatement preparedStatement = connection.prepareStatement(
-                properties.getProperty(SELECT_ALL_ANNOUNCEMENT))){
-            preparedStatement.setLong(1, idUser.longValue());
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if(!resultSet.isBeforeFirst()){
-                log.info(ANNOUNCEMENT_HAS_NOT_BEEN_RECEIVED + MESSAGE_FOR_GET_ALL_ANNOUNCEMENTS);
-                throw new AnnouncementDoesNotExistException(ANNOUNCEMENT_NOT_FOUND_EXCEPTION);
-            }
-            List<Announcement> announcements = new ArrayList<>();
-            while (resultSet.next()) {
-                Announcement announcement = new AnnouncementImpl.AnnouncementBuilder()
-                        .setId(BigInteger.valueOf(resultSet.getLong(ID_ANNOUNCEMENT)))
-                        .setTitle(resultSet.getString(TITLE))
-                        .setDescription(resultSet.getString(DESCRIPTION))
-                        .setIdUser(BigInteger.valueOf(resultSet.getLong(OWNER)))
-                        .setDate(resultSet.getDate(DATE_CREATE))
-                        .setAddress(resultSet.getString(ADDRESS))
-                        .setParticipantsCap(resultSet.getInt(LIKES))
-                        .setBlank(BigInteger.valueOf(resultSet.getLong(COLUMN_IS_LIKED)))
-                        .setIsLiked(resultSet.wasNull())
-                        .build();
-                announcements.add(announcement);
-            }
-            return announcements;
-        } catch (SQLException throwables) {
-            log.error(throwables.getMessage(), throwables);
-            throw new DAOLogicException(DAO_LOGIC_EXCEPTION, throwables);
-        }
-    }
 }

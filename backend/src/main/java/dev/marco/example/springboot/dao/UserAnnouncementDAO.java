@@ -1,13 +1,9 @@
 package dev.marco.example.springboot.dao;
 
-
-
 import dev.marco.example.springboot.exception.*;
 import dev.marco.example.springboot.model.Announcement;
 import dev.marco.example.springboot.model.User;
-
 import java.math.BigInteger;
-import java.util.List;
 import java.util.Set;
 
 public interface UserAnnouncementDAO {
@@ -17,7 +13,7 @@ public interface UserAnnouncementDAO {
     String GET_PARTICIPANT_BY_ID = "GET_PARTICIPANT_BY_ID";
     String ADD_PARTICIPANT = "ADD_PARTICIPANT";
     String DELETE_PARTICIPANT = "DELETE_PARTICIPANT";
-    String SELECT_ALL_ANNOUNCEMENT = "SELECT_ALL_ANNOUNCEMENT";
+
 
 
     String USER_ID = "USER_ID";
@@ -29,13 +25,7 @@ public interface UserAnnouncementDAO {
     String USER_ACTIVE = "USER_ACTIVE";
     String USER_EMAIL_CODE = "USER_EMAIL_CODE";
     String USER_DESCRIPTION = "USER_DESCRIPTION";
-    int COLUMN_IS_LIKED = 8;
-
     String ERROR_TEST_CONNECTION = "Error while setting test connection ";
-
-    String MESSAGE_FOR_GET_ANNOUNCEMENTS_LIKED_BY_USER = " in getAnnouncementsLikedByUser";
-    String MESSAGE_FOR_GET_USERS_LIKED_ANNOUNCEMENT = " in getUsersLikedAnnouncement";
-    String MESSAGE_FOR_GET_ALL_ANNOUNCEMENTS = " in getAllAnnouncement";
 
     void setTestConnection() throws DAOConfigException;
 
@@ -48,8 +38,5 @@ public interface UserAnnouncementDAO {
     void addParticipant(BigInteger idAnnouncement, BigInteger idUser) throws DAOLogicException;
 
     void deleteParticipant(BigInteger idAnnouncement, BigInteger idUser) throws DAOLogicException;
-
-    List<Announcement> getAllAnnouncements(BigInteger idUser)
-            throws AnnouncementDoesNotExistException, DAOLogicException, AnnouncementException;
 
 }
