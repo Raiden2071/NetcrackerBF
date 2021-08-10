@@ -8,6 +8,8 @@ import dev.marco.example.springboot.security.JwtTokenProvider;
 import dev.marco.example.springboot.service.MailSenderService;
 import dev.marco.example.springboot.service.UserService;
 import dev.marco.example.springboot.util.RegexPatterns;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -190,36 +192,51 @@ public class UserController implements RegexPatterns {
         }
     }
 
-  @DeleteMapping("/user/{idUser}")
-  public void deleteUser(@PathVariable BigInteger idUser) {
-    try {
-      userService.deleteUser(idUser);
-    } catch (DAOLogicException e) {
-      log.error(e.getMessage(), e);
-      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(),
-          e.getCause());
-    } catch (UserDoesNotExistException e) {
-      log.error(e.getMessage(), e);
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
+    @GetMapping("/user/me")
+    public User getUserByToken(@RequestHeader (name="Authorization") String token) {
+        try {
+            String email = jwtTokenProvider.getEmailFromToken(token.substring(7));
+            return userService.getUserByEmail(email);
+        } catch (UserDoesNotExistException e) {
+            log.error(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
+        } catch (DAOLogicException e) {
+            log.error(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(),
+                    e.getCause());
+        }
     }
-  }
+
+    @DeleteMapping("/user/{idUser}")
+    public void deleteUser(@PathVariable BigInteger idUser) {
+        try {
+            userService.deleteUser(idUser);
+        } catch (DAOLogicException e) {
+            log.error(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(),
+                    e.getCause());
+        } catch (UserDoesNotExistException e) {
+            log.error(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
+        }
+    }
 
     @PutMapping("/user/{idUser}")
     public void editUser(@RequestBody UserImpl user, @PathVariable BigInteger idUser) {
         try {
-            if(user.getFirstName()!=null && user.getLastName()!=null)
+            if (user.getFirstName() != null && user.getLastName() != null)
                 if (user.getFirstName().isBlank() || user.getLastName().isBlank()) {
                     throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
                 } else {
                     userService.updateUsersFullName(idUser, user.getFirstName(), user.getLastName());
                 }
-            if(user.getDescription()!=null)
+            if (user.getDescription() != null)
                 if (user.getDescription().isBlank()) {
                     throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
                 } else {
                     userService.updateUsersDescription(idUser, user.getDescription());
                 }
-            if(user.getPassword() != null)
+            if (user.getPassword() != null)
                 if (user.getPassword().isBlank()) {
                     throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
                 } else {
@@ -269,4 +286,5 @@ public class UserController implements RegexPatterns {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
         }
     }
+
 }
