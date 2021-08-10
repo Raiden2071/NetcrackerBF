@@ -2,6 +2,7 @@ package dev.marco.example.springboot.dao;
 
 
 import dev.marco.example.springboot.exception.AnnouncementDoesNotExistException;
+import dev.marco.example.springboot.exception.AnnouncementException;
 import dev.marco.example.springboot.exception.DAOConfigException;
 import dev.marco.example.springboot.exception.DAOLogicException;
 import dev.marco.example.springboot.model.Announcement;
@@ -22,6 +23,7 @@ public interface AnnouncementDAO {
     String UPDATE_ANNOUNCEMENT = "UPDATE_ANNOUNCEMENT";
     String DELETE_ANNOUNCEMENT_BY_ID = "DELETE_ANNOUNCEMENT_BY_ID";
     String GET_POPULAR_ANNOUNCEMENT = "GET_POPULAR_ANNOUNCEMENT";
+    String SELECT_ALL_ANNOUNCEMENT = "SELECT_ALL_ANNOUNCEMENT";
     String GET_ANNOUNCEMENT_BY_ID = "GET_ANNOUNCEMENT_BY_ID";
     String SET_LIKE = "SET_LIKE";
     String UNSET_LIKE = "UNSET_LIKE";
@@ -38,11 +40,8 @@ public interface AnnouncementDAO {
     int COLUMN_IS_LIKED = 8;
 
     String ERROR_TEST_CONNECTION = "Error while setting test connection ";
-
     String MESSAGE_FOR_GET_BY_TITLE = " in getByTitle";
-    String MESSAGE_FOR_GET_SET_BY_TITLE = " in getSetByTitle";
     String MESSAGE_FOR_CREATE_ANNOUNCEMENT = " in createAnnouncement";
-    String MESSAGE_FOR_GET_POPULAR = " in getPopular";
     String MESSAGE_FOR_GET_ANNOUNCEMENT_BY_ID = " in createAnnouncement";
 
     void setTestConnection() throws DAOConfigException;
@@ -57,7 +56,10 @@ public interface AnnouncementDAO {
 
     Announcement getByTitle(String title) throws AnnouncementDoesNotExistException, DAOLogicException;
 
-    Set<Announcement> getSetByTitle(String title) throws DAOLogicException;
+    Set<Announcement> getSetByTitle(String title, BigInteger idUser) throws DAOLogicException;
+
+    List<Announcement> getAllAnnouncements(BigInteger idUser)
+            throws AnnouncementDoesNotExistException, DAOLogicException, AnnouncementException;
 
     List<Announcement> getPopular(int number, BigInteger idUser) throws DAOLogicException, AnnouncementDoesNotExistException;
 

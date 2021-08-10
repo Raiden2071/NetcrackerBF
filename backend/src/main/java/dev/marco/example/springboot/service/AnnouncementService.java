@@ -13,7 +13,6 @@ public interface AnnouncementService {
     String MESSAGE_FOR_EDIT_ANNOUNCEMENT = " in editAnnouncement()";
     String MESSAGE_FOR_DELETE_ANNOUNCEMENT = " in deleteAnnouncement()";
     String MESSAGE_FOR_TO_LIKE_ANNOUNCEMENT = " in toLikeAnnouncement()";
-    String MESSAGE_FOR_TO_DISLIKE_ANNOUNCEMENT = " in toDisLikeAnnouncement()";
 
     List<Announcement> getAllAnnouncements(BigInteger idUser)
             throws AnnouncementDoesNotExistException, DAOLogicException, AnnouncementException;
@@ -38,5 +37,5 @@ public interface AnnouncementService {
 
     void setTestConnection() throws DAOConfigException;
 
-    Set<Announcement> getSetByTitle(String title) throws DAOLogicException;
+    Set<Announcement> getSetByTitle(String title, BigInteger idUser) throws DAOLogicException;
 }

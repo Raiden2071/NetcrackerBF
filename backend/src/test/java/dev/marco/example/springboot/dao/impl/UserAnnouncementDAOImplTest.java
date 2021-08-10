@@ -130,19 +130,4 @@ class UserAnnouncementDAOImplTest {
             fail();
         }
     }
-
-    @Test
-    @Timeout(value = 10000, unit= TimeUnit.MILLISECONDS)
-    void getAllAnnouncementByIdUser() {
-        try {
-            List<Announcement> allAnnouncement = userAnnouncementDAO.getAllAnnouncements(BigInteger.ONE);
-            assertNotNull(allAnnouncement);
-            for(Announcement announcement: allAnnouncement){
-                assertNotNull(announcement);
-            }
-        } catch (AnnouncementDoesNotExistException | DAOLogicException | AnnouncementException e) {
-            log.error("Error while testing addAndGetParticipantById" + e.getMessage());
-            fail();
-        }
-    }
 }

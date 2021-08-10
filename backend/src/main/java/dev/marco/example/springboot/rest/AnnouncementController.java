@@ -134,8 +134,9 @@ public class AnnouncementController {
     @PostMapping("/search")
     public Set<Announcement> searchAnnouncement(@RequestBody JsonNode requestBody){
         String titleForSearch = requestBody.get("searchProject").asText();
+        BigInteger idUser = BigInteger.valueOf(requestBody.get("idUser").asLong());
         try {
-            return announcementService.getSetByTitle(titleForSearch);
+            return announcementService.getSetByTitle(titleForSearch, idUser);
         } catch (DAOLogicException e) {
             log.error(e.getMessage(), e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);

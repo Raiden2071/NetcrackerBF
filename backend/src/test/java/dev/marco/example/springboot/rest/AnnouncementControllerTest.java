@@ -2,6 +2,7 @@ package dev.marco.example.springboot.rest;
 
 import dev.marco.example.springboot.model.Announcement;
 import dev.marco.example.springboot.model.impl.AnnouncementImpl;
+import dev.marco.example.springboot.model.impl.UserImpl;
 import dev.marco.example.springboot.service.AnnouncementService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -131,13 +132,17 @@ class AnnouncementControllerTest {
 
     @Test
     void getSetByTitle() throws Exception {
-        when(announcementService.getSetByTitle("title")).thenReturn(
+        when(announcementService.getSetByTitle("title", BigInteger.ONE)).thenReturn(
                 new HashSet<>(Arrays.asList(
                         new AnnouncementImpl.AnnouncementBuilder()
                                 .setId(BigInteger.ONE)
                                 .setTitle("TEST_TITLE1")
                                 .setDescription("TEST_DESCRIPTION1")
-                                .setIdUser(BigInteger.TEN)
+                                .setUser(new UserImpl.UserBuilder()
+                                        .setId(BigInteger.ONE)
+                                        .setFirstName("Aboba")
+                                        .setLastName("Abobus")
+                                        .build())
                                 .setAddress("TEST_ADDRESS1")
                                 .setParticipantsCap(5)
                                 .setIsLiked(true)
@@ -146,16 +151,19 @@ class AnnouncementControllerTest {
         this.mockMvc.perform(MockMvcRequestBuilders
                         .post("/announcement/search")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{ \"searchProject\":\"title\"}"))
+                        .content("{ \"searchProject\":\"title\"," +
+                                 "  \"idUser\":1}"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(jsonPath("$[0].id").value(BigInteger.ONE))
                 .andExpect(jsonPath("$[0].title").value("TEST_TITLE1"))
                 .andExpect(jsonPath("$[0].description").value("TEST_DESCRIPTION1"))
-                .andExpect(jsonPath("$[0].idUser").value(BigInteger.TEN))
+                .andExpect(jsonPath("$[0].user.id").value(BigInteger.ONE))
+                .andExpect(jsonPath("$[0].user.firstName").value("Aboba"))
+                .andExpect(jsonPath("$[0].user.lastName").value("Abobus"))
                 .andExpect(jsonPath("$[0].address").value("TEST_ADDRESS1"))
                 .andExpect(jsonPath("$[0].participantsCap").value(5))
                 .andExpect(jsonPath("$[0].isLiked").value(true));
 
-        verify(announcementService).getSetByTitle("title");
+        verify(announcementService).getSetByTitle("title", BigInteger.ONE);
     }
 }
