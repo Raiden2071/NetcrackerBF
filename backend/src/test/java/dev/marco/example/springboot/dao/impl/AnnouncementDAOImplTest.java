@@ -176,7 +176,7 @@ class AnnouncementDAOImplTest {
             for(Announcement announcement : announcements){
                 assertNotNull(announcement);
             }
-        } catch (AnnouncementDoesNotExistException | DAOLogicException e) {
+        } catch (DAOLogicException e) {
             log.error("Error while testing getSetByTitle " + e.getMessage());
             fail();
         }

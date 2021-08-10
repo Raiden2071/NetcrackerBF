@@ -37,4 +37,6 @@ public interface AnnouncementService {
             throws AnnouncementDoesNotExistException, DAOLogicException, AnnouncementException;
 
     void setTestConnection() throws DAOConfigException;
+
+    Set<Announcement> getSetByTitle(String title) throws DAOLogicException;
 }
