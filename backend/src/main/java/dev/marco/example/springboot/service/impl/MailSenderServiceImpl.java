@@ -67,8 +67,8 @@ public class MailSenderServiceImpl implements MailSenderService {
         }
       });
 
-      Message message = prepareMessage(session, from, to, EMAIL_SUBJECT,
-          String.format(TEXT_HTML, code));
+      Message message = prepareMessage(session, from, to, EMAIL_SUBJECT, TEXT_HTML+
+          String.format(TEXT_INPUT, code));
       Transport.send(message);
       return true;
     } catch (DAOLogicException | UserDoesNotExistException | MessagingException e) {
@@ -198,7 +198,7 @@ public class MailSenderServiceImpl implements MailSenderService {
         }
       });
 
-      Message message = prepareMessage(session, from, to, EMAIL_SUBJECT,
+      Message message = prepareMessage(session, from, to, PASSWORD_SUBJECT,
           String.format(TEXT_PASSWORD, newPassword));
       Transport.send(message);
       log.debug("Password was successfully recovered");
