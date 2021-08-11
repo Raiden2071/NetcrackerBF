@@ -20,6 +20,8 @@ public interface MessagesForException {
   String DESCRIPTION_TOO_LONG = "Length of the description field cannot exceed 300 characters";
   String USER_IS_NULL = "User field cannot be empty";
   String OWNER_IS_NULL = "Owner field cannot be empty";
+  String LONG_TITLE = "Long title";
+  String LONG_DESCRIPTION = "Long description";
 
   String ANNOUNCEMENT_NOT_FOUND_EXCEPTION = "Announcement does not exist!";
   String ANNOUNCEMENT_HAS_NOT_BEEN_RECEIVED = "Announcement has not been received";

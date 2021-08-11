@@ -149,7 +149,7 @@ class QuizServiceImplTest {
     @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
     void getLastCreatedQuizzesTest() {
         try {
-            List<Quiz> quizList = quizService.getLastCreatedQuizzes(BigInteger.valueOf(3));
+            List<Quiz> quizList = quizService.getLastCreatedQuizzes(3);
 
             if (!quizList.isEmpty()) {
                 assertNotNull(quizList);
@@ -161,5 +161,4 @@ class QuizServiceImplTest {
             fail();
         }
     }
-
 }
