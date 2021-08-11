@@ -1,5 +1,6 @@
 package dev.marco.example.springboot.rest;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import dev.marco.example.springboot.exception.*;
 import dev.marco.example.springboot.model.User;
 import dev.marco.example.springboot.model.impl.QuizAccomplishedImpl;
@@ -8,8 +9,6 @@ import dev.marco.example.springboot.security.JwtTokenProvider;
 import dev.marco.example.springboot.service.MailSenderService;
 import dev.marco.example.springboot.service.UserService;
 import dev.marco.example.springboot.util.RegexPatterns;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -140,18 +139,26 @@ public class UserController implements RegexPatterns {
         }
     }
 
-    @PutMapping("/updatePassword")
-    public void updatePassword(BigInteger id, String newPassword) throws UserException {
+    @PutMapping("/updatePassword/{id}")
+    public void updatePassword(@PathVariable BigInteger id, @RequestBody JsonNode requestBody) throws UserException {
+        String oldPassword = requestBody.get("oldPass").asText();
+        String newPassword = requestBody.get("newPass").asText();
+        String confirmPassword = requestBody.get("confirmPass").asText();
         try {
-            if (id == null) {
+            if(!newPassword.equals(confirmPassword))
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            if(id == null)
                 throw new UserDoesNotExistException(MessagesForException.USER_NOT_FOUND_EXCEPTION);
-            }
-            if (!newPassword.matches(passPattern)) {
+            if(StringUtils.isBlank(newPassword))
                 throw new UserException(MessagesForException.INVALID_PASSWORD);
-            }
-            userService.updateUsersPassword(id, newPassword);
-        } catch (DAOLogicException | UserDoesNotExistException e) {
-            e.printStackTrace();
+            userService.updateUsersPassword(id, oldPassword, newPassword);
+        } catch (DAOLogicException e) {
+            log.error(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(),
+                    e.getCause());
+        } catch (UserDoesNotExistException e) {
+            log.error(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
         }
     }
 
@@ -230,12 +237,6 @@ public class UserController implements RegexPatterns {
                     throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
                 } else {
                     userService.updateUsersDescription(idUser, user.getDescription());
-                }
-            if (user.getPassword() != null)
-                if (user.getPassword().isBlank()) {
-                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-                } else {
-                    userService.updateUsersPassword(idUser, user.getPassword());
                 }
         } catch (DAOLogicException e) {
             log.error(e.getMessage(), e);

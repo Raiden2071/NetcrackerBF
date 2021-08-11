@@ -33,8 +33,8 @@ public interface UserService {
   void updateUsersFullName(BigInteger id, String newFirstName, String newLastName)
           throws DAOLogicException, UserDoesNotExistException;
 
-  void updateUsersPassword(BigInteger id, String newPassword)
-          throws DAOLogicException, UserDoesNotExistException;
+  void updateUsersPassword(BigInteger id, String oldPassword, String newPassword)
+          throws DAOLogicException, UserDoesNotExistException, UserException;
 
   void updateUsersDescription(BigInteger id, String newDescription)
           throws DAOLogicException, UserDoesNotExistException;

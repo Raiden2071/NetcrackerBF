@@ -216,13 +216,11 @@ class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{ \"firstName\":\"Leopold\"," +
                                 " \"lastName\":\"Kotanovich\"," +
-                                " \"description\":\"i like to play billiards\"," +
-                                " \"password\":\"12345Qwerty\"}"))
+                                " \"description\":\"i like to play billiards\",}"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
 
         verify(userService).updateUsersFullName(BigInteger.ONE, "Leopold", "Kotanovich");
         verify(userService).updateUsersDescription(BigInteger.ONE, "i like to play billiards");
-        verify(userService).updateUsersPassword(BigInteger.ONE, "12345Qwerty");
     }
 
     @Test

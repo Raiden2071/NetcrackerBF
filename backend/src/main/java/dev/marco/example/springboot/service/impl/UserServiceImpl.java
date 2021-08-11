@@ -198,14 +198,13 @@ public class UserServiceImpl implements UserService, RegexPatterns {
   }
 
   @Override
-  public void updateUsersPassword(BigInteger id, String newPassword)
-      throws DAOLogicException, UserDoesNotExistException {
+  public void updateUsersPassword(BigInteger id, String oldPassword, String newPassword)
+          throws DAOLogicException, UserDoesNotExistException, UserException {
     User userFromDAO = userDAO.getUserById(id);
-
+    String dbPass = userDAO.getUserPasswordByEmail(userFromDAO.getEmail());
     BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-
-    if (userFromDAO == null) {
-      throw new UserDoesNotExistException(USER_NOT_FOUND_EXCEPTION);
+    if(!encoder.matches(oldPassword, dbPass)){
+      throw new UserException(MessagesForException.WRONG_PASSWORD);
     }
     userDAO.updateUsersPassword(id, encoder.encode(newPassword));
   }
