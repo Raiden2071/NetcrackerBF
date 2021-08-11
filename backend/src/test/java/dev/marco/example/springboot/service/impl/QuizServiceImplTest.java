@@ -15,6 +15,7 @@ import dev.marco.example.springboot.service.QuizService;
 import java.math.BigInteger;
 import java.sql.Date;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -47,8 +48,10 @@ class QuizServiceImplTest {
             BigInteger quizId = BigInteger.valueOf(1);
             List<QuestionImpl> questions = questionService.getQuestionsByQuiz(quizId);
 
+            String quizTitle = "Quiz №" + new Random().nextInt(500000);
+
             Quiz quiz = dev.marco.example.springboot.model.impl.QuizImpl.QuizBuilder()
-                    .setTitle("Math")
+                    .setTitle(quizTitle)
                     .setDescription("Math quiz")
                     .setQuizType(QuizType.MATHEMATICS)
                     .setCreatorId(BigInteger.valueOf(1))

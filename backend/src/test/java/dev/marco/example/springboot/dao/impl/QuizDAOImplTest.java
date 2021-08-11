@@ -62,7 +62,7 @@ class QuizDAOImplTest {
 
             quizDAO.deleteQuiz(newQuiz);
             log.info("Test Quiz with id: " + newQuiz.getId() + " was deleted");
-        } catch (QuizDoesNotExistException | UserDoesNotExistException | DAOLogicException | QuizException e) {
+        } catch (QuizDoesNotExistException | DAOLogicException | QuizException e) {
             log.error("Error while testing createQuiz ", e);
             fail();
         }
@@ -112,7 +112,7 @@ class QuizDAOImplTest {
             log.info("Quiz with id " + newQuiz.getId() + " was deleted");
 
 
-        } catch (QuizDoesNotExistException | UserDoesNotExistException | DAOLogicException | QuizException e) {
+        } catch (QuizDoesNotExistException | DAOLogicException | QuizException e) {
             log.error("Error while testing deleteQuiz ", e);
             fail();
         }

@@ -54,7 +54,7 @@ public class QuizDAOImpl implements QuizDAO {
 
 
     @Override
-    public Quiz createQuiz(Quiz quiz) throws DAOLogicException, UserDoesNotExistException {
+    public Quiz createQuiz(Quiz quiz) throws DAOLogicException {
         try {
             PreparedStatement preparedStatement =
                     connection.prepareStatement(properties.getProperty(INSERT_INTO_QUIZ));

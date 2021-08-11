@@ -15,6 +15,9 @@ import javax.mail.Message.RecipientType;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Properties;
 
 @Service
@@ -146,15 +149,33 @@ public class MailSenderServiceImpl implements MailSenderService {
     }
   }
 
+  private static String bytesToHex(byte[] hash) {
+    StringBuilder hexString = new StringBuilder(2 * hash.length);
+    for (int i = 0; i < hash.length; i++) {
+      String hex = Integer.toHexString(0xff & hash[i]);
+      if(hex.length() == 1) {
+        hexString.append('0');
+      }
+      hexString.append(hex);
+    }
+    return hexString.toString();
+  }
+
   @Override
   public boolean generateNewPassword(String email) throws MailException {
     try {
       log.debug("Starting to generateNewPassword() with email=" + email);
 
       BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+      MessageDigest digest = MessageDigest.getInstance("SHA-256");
 
       String newPassword = generateCode();
-      userDAO.updateUsersPassword(userDAO.getUserByEmail(email).getId(), encoder.encode(newPassword));
+      byte[] encodedhash = digest.digest(
+              newPassword.getBytes(StandardCharsets.UTF_8));
+      String hashPassword = bytesToHex(encodedhash);
+
+
+      userDAO.updateUsersPassword(userDAO.getUserByEmail(email).getId(), encoder.encode(hashPassword));
 
       Properties properties = new Properties();
       setProperties(properties);
@@ -182,7 +203,7 @@ public class MailSenderServiceImpl implements MailSenderService {
       Transport.send(message);
       log.debug("Password was successfully recovered");
       return true;
-    } catch (DAOLogicException | UserDoesNotExistException | MessagingException e) {
+    } catch (DAOLogicException | UserDoesNotExistException | MessagingException | NoSuchAlgorithmException e) {
       log.error(MessagesForException.ERROR_WHILE_RECOVERING_PASSWORD + e.getMessage());
       throw new MailException(MessagesForException.ERROR_WHILE_RECOVERING_PASSWORD, e);
     }
