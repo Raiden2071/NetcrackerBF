@@ -5,6 +5,7 @@ import dev.marco.example.springboot.dao.UserAnnouncementDAO;
 import dev.marco.example.springboot.dao.UserDAO;
 import dev.marco.example.springboot.exception.*;
 import dev.marco.example.springboot.model.Announcement;
+import dev.marco.example.springboot.model.AnnouncementComment;
 import dev.marco.example.springboot.model.UserRoles;
 import dev.marco.example.springboot.service.AnnouncementService;
 import org.apache.log4j.Logger;
@@ -136,4 +137,11 @@ public class AnnouncementServiceImpl implements AnnouncementService {
             throws DAOLogicException {
         return announcementDAO.getSetByTitle(title, idUser);
     }
+
+    @Override
+    public List<AnnouncementComment> getComments(BigInteger AnnouncementId, BigInteger lastCommentId, int count)
+            throws AnnouncementDoesNotExistException, DAOLogicException {
+        return announcementDAO.getComments(AnnouncementId, lastCommentId, count);
+    }
+
 }

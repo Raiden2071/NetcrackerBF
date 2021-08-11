@@ -2,6 +2,7 @@ package dev.marco.example.springboot.service;
 
 import dev.marco.example.springboot.exception.*;
 import dev.marco.example.springboot.model.Announcement;
+import dev.marco.example.springboot.model.AnnouncementComment;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -36,6 +37,8 @@ public interface AnnouncementService {
             throws AnnouncementDoesNotExistException, DAOLogicException, AnnouncementException;
 
     void setTestConnection() throws DAOConfigException;
+
+    List<AnnouncementComment> getComments(BigInteger AnnouncementId, BigInteger lastCommentId, int count) throws AnnouncementDoesNotExistException, DAOLogicException;
 
     Set<Announcement> getSetByTitle(String title, BigInteger idUser) throws DAOLogicException;
 }

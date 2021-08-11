@@ -1,40 +1,5 @@
 (self["webpackChunkfrontend"] = self["webpackChunkfrontend"] || []).push([["src_app_modules_settings_settings_module_ts"],{
 
-/***/ 6779:
-/*!*************************************************************!*\
-  !*** ./src/app/modules/settings/Settings-routing.module.ts ***!
-  \*************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "SettingsRoutingModule": () => (/* binding */ SettingsRoutingModule)
-/* harmony export */ });
-/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/router */ 9895);
-/* harmony import */ var _components_change_password_change_password_component__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/change-password/change-password.component */ 3879);
-/* harmony import */ var _components_edit_profile_edit_profile_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/edit-profile/edit-profile.component */ 6826);
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ 7716);
-
-
-
-
-
-const routes = [
-    { path: '', redirectTo: 'edit' },
-    { path: 'password', component: _components_change_password_change_password_component__WEBPACK_IMPORTED_MODULE_0__.ChangePasswordComponent },
-    { path: 'edit', component: _components_edit_profile_edit_profile_component__WEBPACK_IMPORTED_MODULE_1__.EditProfileComponent }
-];
-class SettingsRoutingModule {
-}
-SettingsRoutingModule.ɵfac = function SettingsRoutingModule_Factory(t) { return new (t || SettingsRoutingModule)(); };
-SettingsRoutingModule.ɵmod = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdefineNgModule"]({ type: SettingsRoutingModule });
-SettingsRoutingModule.ɵinj = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdefineInjector"]({ imports: [[_angular_router__WEBPACK_IMPORTED_MODULE_3__.RouterModule.forChild(routes)], _angular_router__WEBPACK_IMPORTED_MODULE_3__.RouterModule] });
-(function () { (typeof ngJitMode === "undefined" || ngJitMode) && _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵsetNgModuleScope"](SettingsRoutingModule, { imports: [_angular_router__WEBPACK_IMPORTED_MODULE_3__.RouterModule], exports: [_angular_router__WEBPACK_IMPORTED_MODULE_3__.RouterModule] }); })();
-
-
-/***/ }),
-
 /***/ 3879:
 /*!******************************************************************************************!*\
   !*** ./src/app/modules/settings/components/change-password/change-password.component.ts ***!
@@ -352,6 +317,41 @@ SelectionMenuComponent.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MOD
 
 /***/ }),
 
+/***/ 3590:
+/*!*************************************************************!*\
+  !*** ./src/app/modules/settings/settings-routing.module.ts ***!
+  \*************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "SettingsRoutingModule": () => (/* binding */ SettingsRoutingModule)
+/* harmony export */ });
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/router */ 9895);
+/* harmony import */ var _components_change_password_change_password_component__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/change-password/change-password.component */ 3879);
+/* harmony import */ var _components_edit_profile_edit_profile_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/edit-profile/edit-profile.component */ 6826);
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ 7716);
+
+
+
+
+
+const routes = [
+    { path: '', redirectTo: 'edit' },
+    { path: 'password', component: _components_change_password_change_password_component__WEBPACK_IMPORTED_MODULE_0__.ChangePasswordComponent },
+    { path: 'edit', component: _components_edit_profile_edit_profile_component__WEBPACK_IMPORTED_MODULE_1__.EditProfileComponent }
+];
+class SettingsRoutingModule {
+}
+SettingsRoutingModule.ɵfac = function SettingsRoutingModule_Factory(t) { return new (t || SettingsRoutingModule)(); };
+SettingsRoutingModule.ɵmod = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdefineNgModule"]({ type: SettingsRoutingModule });
+SettingsRoutingModule.ɵinj = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdefineInjector"]({ imports: [[_angular_router__WEBPACK_IMPORTED_MODULE_3__.RouterModule.forChild(routes)], _angular_router__WEBPACK_IMPORTED_MODULE_3__.RouterModule] });
+(function () { (typeof ngJitMode === "undefined" || ngJitMode) && _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵsetNgModuleScope"](SettingsRoutingModule, { imports: [_angular_router__WEBPACK_IMPORTED_MODULE_3__.RouterModule], exports: [_angular_router__WEBPACK_IMPORTED_MODULE_3__.RouterModule] }); })();
+
+
+/***/ }),
+
 /***/ 3402:
 /*!*****************************************************!*\
   !*** ./src/app/modules/settings/settings.module.ts ***!
@@ -364,7 +364,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "SettingsModule": () => (/* binding */ SettingsModule)
 /* harmony export */ });
 /* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/common */ 8583);
-/* harmony import */ var _Settings_routing_module__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Settings-routing.module */ 6779);
+/* harmony import */ var _settings_routing_module__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./settings-routing.module */ 3590);
 /* harmony import */ var _components_edit_profile_edit_profile_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/edit-profile/edit-profile.component */ 6826);
 /* harmony import */ var _components_change_password_change_password_component__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/change-password/change-password.component */ 3879);
 /* harmony import */ var _components_selection_menu_selection_menu_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/selection-menu/selection-menu.component */ 2518);
@@ -386,12 +386,12 @@ SettingsModule.ɵfac = function SettingsModule_Factory(t) { return new (t || Set
 SettingsModule.ɵmod = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵdefineNgModule"]({ type: SettingsModule });
 SettingsModule.ɵinj = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵdefineInjector"]({ providers: [_ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_5__.NgbActiveModal], imports: [[
             _angular_common__WEBPACK_IMPORTED_MODULE_6__.CommonModule,
-            _Settings_routing_module__WEBPACK_IMPORTED_MODULE_0__.SettingsRoutingModule,
+            _settings_routing_module__WEBPACK_IMPORTED_MODULE_0__.SettingsRoutingModule,
             _angular_forms__WEBPACK_IMPORTED_MODULE_7__.FormsModule,
             _angular_forms__WEBPACK_IMPORTED_MODULE_7__.ReactiveFormsModule
         ]] });
 (function () { (typeof ngJitMode === "undefined" || ngJitMode) && _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵsetNgModuleScope"](SettingsModule, { declarations: [_components_edit_profile_edit_profile_component__WEBPACK_IMPORTED_MODULE_1__.EditProfileComponent, _components_change_password_change_password_component__WEBPACK_IMPORTED_MODULE_2__.ChangePasswordComponent, _components_selection_menu_selection_menu_component__WEBPACK_IMPORTED_MODULE_3__.SelectionMenuComponent], imports: [_angular_common__WEBPACK_IMPORTED_MODULE_6__.CommonModule,
-        _Settings_routing_module__WEBPACK_IMPORTED_MODULE_0__.SettingsRoutingModule,
+        _settings_routing_module__WEBPACK_IMPORTED_MODULE_0__.SettingsRoutingModule,
         _angular_forms__WEBPACK_IMPORTED_MODULE_7__.FormsModule,
         _angular_forms__WEBPACK_IMPORTED_MODULE_7__.ReactiveFormsModule] }); })();
 
