@@ -30,7 +30,7 @@ public class DashboardServiceImpl implements DashboardService {
     private static final Logger log = Logger.getLogger(DashboardServiceImpl.class);
 
     private static final int DASHBOARD_COUNT_POPULAR_ANNOUNCEMENT = 2;
-    private static final BigInteger DASHBOARD_COUNT_LAST_CREATED_QUIZZES = BigInteger.valueOf(3);
+    private static final int DASHBOARD_COUNT_LAST_CREATED_QUIZZES = 3;
 
     @Autowired
     public DashboardServiceImpl(QuizService quizService, AnnouncementService announcementService,

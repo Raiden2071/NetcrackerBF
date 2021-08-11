@@ -28,7 +28,7 @@ public enum Filter {
     List<Quiz> filterQuizzes = Collections.emptyList();
     switch (filter) {
       case DATE:
-        filterQuizzes = quizService.getLastCreatedQuizzes(BigInteger.valueOf(10));
+        filterQuizzes = quizService.getLastCreatedQuizzes(10);
         break;
       case MATHEMATICS:
         filterQuizzes = quizService.getQuizzesByType(QuizType.MATHEMATICS);

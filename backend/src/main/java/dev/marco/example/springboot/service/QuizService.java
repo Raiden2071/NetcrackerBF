@@ -11,7 +11,9 @@ import java.util.List;
 public interface QuizService {
 
     int MIN_LENGTH_TITLE = 2;
+    int MAX_LENGTH_TITLE = 30;
     int MIN_LENGTH_DESCRIPTION = 5;
+    int MAX_LENGTH_DESCRIPTION = 500;
 
     Quiz buildNewQuiz(Quiz quiz) throws QuizException, DAOLogicException, UserException, QuestionException, AnswerDoesNotExistException;
 
@@ -25,7 +27,7 @@ public interface QuizService {
 
     List<Quiz> getAllQuizzes() throws QuizDoesNotExistException, DAOLogicException;
 
-    List<Quiz> getLastCreatedQuizzes(BigInteger count) throws QuizDoesNotExistException, DAOLogicException;
+    List<Quiz> getLastCreatedQuizzes(int count) throws QuizDoesNotExistException, DAOLogicException;
 
     Quiz getQuizByTitle(String title) throws QuizDoesNotExistException, DAOLogicException, QuizException;
 
@@ -35,6 +37,6 @@ public interface QuizService {
 
     List<Quiz> getQuizzes(int page) throws QuizException;
 
-    int getCountOfPagesQuiz() throws QuizException;
+    int getCountOfPagesQuiz() throws DAOLogicException, QuizDoesNotExistException;
 
 }

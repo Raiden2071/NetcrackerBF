@@ -15,8 +15,7 @@ import java.sql.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
 import static dev.marco.example.springboot.exception.MessagesForException.ERROR_WHILE_SETTING_TEST_CONNECTION;
@@ -194,7 +193,7 @@ class QuizDAOImplTest {
     @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
     void getLastCreatedQuizzesTest() {
         try {
-            List<Quiz> quizList = quizDAO.getLastCreatedQuizzes(BigInteger.valueOf(3));
+            List<Quiz> quizList = quizDAO.getLastCreatedQuizzes(3);
 
             if (!quizList.isEmpty()) {
                 assertNotNull(quizList);
