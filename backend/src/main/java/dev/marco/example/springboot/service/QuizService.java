@@ -3,7 +3,6 @@ package dev.marco.example.springboot.service;
 import dev.marco.example.springboot.exception.*;
 import dev.marco.example.springboot.model.Quiz;
 import dev.marco.example.springboot.model.QuizType;
-import dev.marco.example.springboot.model.impl.QuestionImpl;
 import dev.marco.example.springboot.model.impl.QuizImpl;
 
 import java.math.BigInteger;
@@ -33,4 +32,9 @@ public interface QuizService {
     void validateNewQuiz(Quiz quiz) throws QuizException, UserException, QuestionException;
 
     void setTestConnection() throws DAOConfigException;
+
+    List<Quiz> getQuizzes(int page) throws QuizException;
+
+    int getCountOfPagesQuiz() throws QuizException;
+
 }

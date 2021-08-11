@@ -41,6 +41,7 @@ public interface MessagesForException {
   String GET_QUIZ_BY_TITLE_EXCEPTION = "SQL Exception while getQuizByTitle in QuizDAOImpl";
   String GET_QUIZZES_BY_TYPE_EXCEPTION = "SQL Exception while getQuizzesByType in QuizDAOImpl";
   String ACCOMPLISHED_QUIZ_HAS_NOT_BEEN_FOUNDED = "Accomplished quiz has not been founded";
+  String PAGE_DOES_NOT_EXIST = "Page does not exist";
 
   String TEST_CONNECTION_ERR = "Error while setting test connection %s";
   String TEST_CONNECTION_EXC = "Error while setting test connection";

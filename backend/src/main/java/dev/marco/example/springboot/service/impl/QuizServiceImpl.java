@@ -45,7 +45,6 @@ public class QuizServiceImpl implements QuizService {
         answerDAO.setTestConnection();
     }
 
-    //String title, String description, QuizType quizType,BigInteger userId, List<QuestionImpl> questions
     @Override
     public Quiz buildNewQuiz(Quiz quiz) throws QuizException, DAOLogicException, QuestionException, UserException, AnswerDoesNotExistException {
         try {
@@ -72,14 +71,12 @@ public class QuizServiceImpl implements QuizService {
             List<QuestionImpl> questions = newQuiz.getQuestions();
             for (Question question : questions) {
                 Question questionWithId = questionDAO.createQuestion(question, quizGame.getId());
-                log.info("QUESTION WAS CREATED IN DAO " + question + "WITH QUIZ_ID " + quizGame.getId());
 
                 List<AnswerImpl> answers = questionWithId.getAnswers();
                 for (AnswerImpl answer : answers) {
                     answer.setQuestionId(questionWithId.getId());
                     BigInteger id = answerDAO.createAnswer(answer);
                     answer.setId(id);
-                    log.info("ANSWER WAS CREATED IN DAO WITH ID: " + answer.getId() + " " + answer);
                 }
             }
             return quizGame;
@@ -182,6 +179,16 @@ public class QuizServiceImpl implements QuizService {
             throw new QuizException(EMPTY_TITLE);
         }
         return quizDAO.getQuizByTitle(title);
+    }
+
+    @Override
+    public List<Quiz> getQuizzes(int page) throws QuizException {
+        return quizDAO.getQuizzes(page);
+    }
+
+    @Override
+    public int getCountOfPagesQuiz() throws QuizException {
+        return quizDAO.getCountOfPagesQuiz();
     }
 
 }

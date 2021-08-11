@@ -1,9 +1,6 @@
 package dev.marco.example.springboot.dao;
 
-import dev.marco.example.springboot.exception.DAOConfigException;
-import dev.marco.example.springboot.exception.DAOLogicException;
-import dev.marco.example.springboot.exception.QuizDoesNotExistException;
-import dev.marco.example.springboot.exception.UserDoesNotExistException;
+import dev.marco.example.springboot.exception.*;
 import dev.marco.example.springboot.model.Quiz;
 import dev.marco.example.springboot.model.QuizType;
 import dev.marco.example.springboot.model.impl.QuizImpl;
@@ -33,6 +30,10 @@ public interface QuizDAO {
     String SELECT_QUIZ_BY_TITLE = "SELECT_QUIZ_BY_TITLE";
     String SELECT_QUIZZES_BY_TYPE = "SELECT_QUIZZES_BY_TYPE";
     String SELECT_LAST_CREATED_QUIZZES = "SELECT_LAST_CREATED_QUIZZES";
+    String SELECT_QUIZZES_BY_ROWS = "SELECT_QUIZZES_BY_ROWS";
+    String SELECT_COUNT_OF_QUIZZES = "SELECT_COUNT_OF_QUIZZES";
+
+    int COUNT_OF_QUIZZES_ON_PAGE = 6;
 
     Quiz createQuiz(Quiz quiz) throws DAOLogicException, UserDoesNotExistException;
 
@@ -53,4 +54,9 @@ public interface QuizDAO {
     Quiz getQuizByTitle(String title) throws QuizDoesNotExistException, DAOLogicException;
 
     void setTestConnection() throws DAOConfigException;
+
+    List<Quiz> getQuizzes(int page) throws QuizException;
+
+    int getCountOfPagesQuiz() throws QuizException;
+
 }

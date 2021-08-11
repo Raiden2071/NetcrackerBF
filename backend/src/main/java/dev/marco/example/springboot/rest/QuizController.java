@@ -4,7 +4,6 @@ import dev.marco.example.springboot.model.impl.QuizAccomplishedImpl;
 import dev.marco.example.springboot.model.impl.QuizImpl;
 import dev.marco.example.springboot.service.UserService;
 import dev.marco.example.springboot.service.GameService;
-import java.util.Set;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,13 +14,9 @@ import dev.marco.example.springboot.service.QuizService;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import static dev.marco.example.springboot.exception.MessagesForException.*;
-import static dev.marco.example.springboot.rest.Filter.FAVORITES;
-
 @RestController
 @RequestMapping("/quiz")
 public class QuizController {
@@ -40,14 +35,14 @@ public class QuizController {
     }
 
     //@Autowired
-  public void setTestConnection() throws DAOConfigException {
-    quizService.setTestConnection();
-    userService.setTestConnection();
-    gameService.setTestConnection();
-  }
+    public void setTestConnection() throws DAOConfigException {
+        quizService.setTestConnection();
+        userService.setTestConnection();
+        gameService.setTestConnection();
+    }
 
 
-    @GetMapping("/")
+    @GetMapping("/all")
     public List<Quiz> showAllQuizzes() {
         try {
             List<Quiz> quizzes = quizService.getAllQuizzes();
@@ -63,8 +58,34 @@ public class QuizController {
             log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e.getCause());
         }
-
     }
+
+    @GetMapping
+    public List<Quiz> showQuizzesByPage(@RequestParam int page) {
+        try {
+            List<Quiz> quizzes = quizService.getQuizzes(page);
+            //int count = quizService.getCountOfPagesQuiz();
+
+            if (quizzes.isEmpty()) {
+                log.error(QUIZ_NOT_FOUND_EXCEPTION);
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            }
+            return quizzes;
+        } catch (QuizException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
+        }
+    }
+
+    @GetMapping("/countOfPages")
+    public int getCountOfPages() {
+        try {
+            return quizService.getCountOfPagesQuiz();
+        } catch (QuizException e) {
+            log.error(PAGE_DOES_NOT_EXIST + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
+        }
+    }
+
 
     @GetMapping("/{id}")
     public Quiz getQuizById(@PathVariable BigInteger id) {
@@ -218,16 +239,16 @@ public class QuizController {
     // without tests
     @PutMapping("/like/{id}")
     public void setLikeOnQuiz(@PathVariable BigInteger id, @RequestBody QuizAccomplishedImpl quizAccomplished) {
-      try {
-          User user = userService.getUserById(id);
-          gameService.setIsFavorite(user, quizAccomplished);
-      } catch (DAOLogicException e) {
-        log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
-        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e.getCause());
-      } catch (UserDoesNotExistException e) {
-          log.error(USERS_DOESNT_EXIT + e.getMessage());
-          throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
-      }
+        try {
+            User user = userService.getUserById(id);
+            gameService.setIsFavorite(user, quizAccomplished);
+        } catch (DAOLogicException e) {
+            log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e.getCause());
+        } catch (UserDoesNotExistException e) {
+            log.error(USERS_DOESNT_EXIT + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
+        }
     }
 
     static class ParamsInFinishQuiz {

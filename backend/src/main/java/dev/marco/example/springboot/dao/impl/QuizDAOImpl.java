@@ -292,4 +292,61 @@ public class QuizDAOImpl implements QuizDAO {
             throw new DAOLogicException(GET_QUIZZES_BY_TYPE_EXCEPTION, e);
         }
     }
+
+    @Override
+    public List<Quiz> getQuizzes(int page) throws QuizException {
+
+        try (PreparedStatement preparedStatement =
+                     connection.prepareStatement(properties.getProperty(SELECT_QUIZZES_BY_ROWS))) {
+            if (page < 1 || page > getCountOfPagesQuiz()) {
+                log.error(PAGE_DOES_NOT_EXIST);
+                throw new QuizException(PAGE_DOES_NOT_EXIST);
+            }
+            preparedStatement.setInt(1, --page * COUNT_OF_QUIZZES_ON_PAGE);
+            preparedStatement.setInt(2, COUNT_OF_QUIZZES_ON_PAGE);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            List<Quiz> quizzes = new ArrayList<>();
+
+            while (resultSet.next()) {
+
+                Quiz quiz = QuizImpl.QuizBuilder()
+                        .setId(BigInteger.valueOf(resultSet.getLong(ID_QUIZ)))
+                        .setTitle(resultSet.getString(TITLE))
+                        .setDescription(resultSet.getString(DESCRIPTION))
+                        .setQuizType(QuizType.values()[resultSet.getInt(QUIZ_TYPE)])
+                        .setCreationDate(resultSet.getDate(CREATION_DATE))
+                        .setCreatorId(BigInteger.valueOf(resultSet.getInt(CREATOR)))
+                        .build();
+
+                quizzes.add(quiz);
+            }
+
+            return quizzes;
+        } catch (SQLException | QuizException e) {
+            log.error(QUIZ_NOT_FOUND_EXCEPTION);
+            throw new QuizException(QUIZ_NOT_FOUND_EXCEPTION + e.getMessage());
+        }
+    }
+
+    public int getCountOfPagesQuiz() throws QuizException {
+
+        try (PreparedStatement preparedStatement =
+                     connection.prepareStatement(properties.getProperty(SELECT_COUNT_OF_QUIZZES))) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if(!resultSet.next()) {
+                throw new QuizException(QUIZ_NOT_FOUND_EXCEPTION);
+            }
+
+            int count = resultSet.getInt(1);
+            int result = count / COUNT_OF_QUIZZES_ON_PAGE + ((count % COUNT_OF_QUIZZES_ON_PAGE == 0) ? 0 : 1);
+            return result;
+
+        } catch (SQLException | QuizException e) {
+            log.error(QUIZ_NOT_FOUND_EXCEPTION);
+            throw new QuizException(QUIZ_NOT_FOUND_EXCEPTION + e.getMessage());
+        }
+
+    }
 }
