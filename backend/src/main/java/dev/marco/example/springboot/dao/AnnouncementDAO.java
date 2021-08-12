@@ -6,6 +6,7 @@ import dev.marco.example.springboot.exception.AnnouncementException;
 import dev.marco.example.springboot.exception.DAOConfigException;
 import dev.marco.example.springboot.exception.DAOLogicException;
 import dev.marco.example.springboot.model.Announcement;
+import dev.marco.example.springboot.model.AnnouncementComment;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -27,6 +28,9 @@ public interface AnnouncementDAO {
     String GET_ANNOUNCEMENT_BY_ID = "GET_ANNOUNCEMENT_BY_ID";
     String SET_LIKE = "SET_LIKE";
     String UNSET_LIKE = "UNSET_LIKE";
+    String GET_ANNOUNCEMENT_COMMENTARIES_ASC = "GET_ANNOUNCEMENT_COMMENTARIES_ASC";
+    String GET_ANNOUNCEMENT_COMMENTARIES_DESC = "GET_ANNOUNCEMENT_COMMENTARIES_DESC";
+    String CREATE_COMMENTARY = "CREATE_COMMENTARY";
 
     String ID_ANNOUNCEMENT = "ID_ANNOUNCEMENT";
     String TITLE = "TITLE";
@@ -38,6 +42,7 @@ public interface AnnouncementDAO {
     String FIRST_NAME = "first_name";
     String LAST_NAME = "last_name";
     int COLUMN_IS_LIKED = 8;
+    String ID_COMMENTARY = "ID_COMMENTARY";
 
     String ERROR_TEST_CONNECTION = "Error while setting test connection ";
     String MESSAGE_FOR_GET_BY_TITLE = " in getByTitle";
@@ -70,4 +75,8 @@ public interface AnnouncementDAO {
     void toLike(BigInteger idAnnouncement) throws DAOLogicException;
 
     void toDisLike(BigInteger idAnnouncement) throws DAOLogicException;
+
+    List<AnnouncementComment> getComments(BigInteger AnnouncementId, BigInteger lastCommentId, int count) throws AnnouncementDoesNotExistException, DAOLogicException;
+
+    void createComment(String commentContent, BigInteger  announcementId, BigInteger userId) throws DAOLogicException;
 }

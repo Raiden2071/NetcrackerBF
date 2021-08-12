@@ -5,8 +5,10 @@ import dev.marco.example.springboot.dao.UserAnnouncementDAO;
 import dev.marco.example.springboot.dao.UserDAO;
 import dev.marco.example.springboot.exception.*;
 import dev.marco.example.springboot.model.Announcement;
+import dev.marco.example.springboot.model.AnnouncementComment;
 import dev.marco.example.springboot.model.UserRoles;
 import dev.marco.example.springboot.service.AnnouncementService;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -135,5 +137,29 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     public Set<Announcement> getSetByTitle(String title, BigInteger idUser)
             throws DAOLogicException {
         return announcementDAO.getSetByTitle(title, idUser);
+    }
+
+    @Override
+    public List<AnnouncementComment> getComments(BigInteger AnnouncementId, BigInteger lastCommentId, int count)
+            throws AnnouncementDoesNotExistException, DAOLogicException {
+        return announcementDAO.getComments(AnnouncementId, lastCommentId, count);
+    }
+
+    @Override
+    public void createComment(String commentContent, BigInteger announcementId, BigInteger userId)
+            throws DAOLogicException, AnnouncementException {
+        if(StringUtils.isEmpty(commentContent)) {
+            log.error("Comment contents is empty or null");
+            throw new AnnouncementException("");
+        }
+        if(announcementId == null || announcementId.equals(BigInteger.ZERO)) {
+            log.error("announcementId is 0 or null");
+            throw new AnnouncementException(ANNOUNCEMENT_NOT_FOUND_EXCEPTION);
+        }
+        if(userId == null || userId.equals(BigInteger.ZERO)) {
+            log.error("announcementId is 0 or null");
+            throw new AnnouncementException(USER_IS_NULL);
+        }
+        announcementDAO.createComment(commentContent, announcementId, userId);
     }
 }

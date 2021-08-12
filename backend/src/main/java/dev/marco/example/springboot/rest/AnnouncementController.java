@@ -3,6 +3,8 @@ package dev.marco.example.springboot.rest;
 import com.fasterxml.jackson.databind.JsonNode;
 import dev.marco.example.springboot.exception.*;
 import dev.marco.example.springboot.model.Announcement;
+import dev.marco.example.springboot.model.AnnouncementComment;
+import dev.marco.example.springboot.model.impl.AnnouncementCommentImpl;
 import dev.marco.example.springboot.model.impl.AnnouncementImpl;
 import dev.marco.example.springboot.service.AnnouncementService;
 import org.apache.log4j.Logger;
@@ -20,6 +22,9 @@ public class AnnouncementController {
 
     private final static String ID_USER = "idUser";
     private final static String ID_ANNOUNCEMENT = "idAnnouncement";
+    private final static String ID_LAST_COMMENT = "idLastComment";
+    private final static String PAGINATION_SIZE = "paginationSize";
+    private final static String COMMENT_CONTENT = "commentContent";
     private static final Logger log = Logger.getLogger(AnnouncementController.class);
     private final AnnouncementService announcementService;
 
@@ -128,6 +133,39 @@ public class AnnouncementController {
         } catch (AnnouncementDoesNotExistException | UserDoesNotExistException e) {
             log.error(e.getMessage(), e);
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/commentaries")
+    public List<AnnouncementComment> getCommentaries(@RequestBody JsonNode requestBody) {
+        try {
+            BigInteger idAnnouncement = BigInteger.valueOf(requestBody.get(ID_ANNOUNCEMENT).asLong());
+            BigInteger idLastComment = BigInteger.valueOf(requestBody.get(ID_LAST_COMMENT).asLong());
+            int paginationSize = requestBody.get(PAGINATION_SIZE).asInt();
+
+            return announcementService.getComments(idAnnouncement, idLastComment, paginationSize);
+        } catch (DAOLogicException e) {
+            log.error(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (AnnouncementDoesNotExistException e) {
+            log.error(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PostMapping("/commentaries")
+    public void createCommentary(@RequestBody JsonNode requestBody) {
+        try {
+            BigInteger idAnnouncement = BigInteger.valueOf(requestBody.get(ID_ANNOUNCEMENT).asLong());
+            BigInteger idUser = BigInteger.valueOf(requestBody.get(ID_USER).asLong());
+            String commentContent = requestBody.get(COMMENT_CONTENT).asText();
+            announcementService.createComment(commentContent, idAnnouncement, idUser);
+        } catch (DAOLogicException e) {
+            log.error(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (AnnouncementException e) {
+            log.error(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
     }
 

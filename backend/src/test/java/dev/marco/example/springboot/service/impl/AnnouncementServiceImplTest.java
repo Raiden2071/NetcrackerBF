@@ -1,5 +1,6 @@
 package dev.marco.example.springboot.service.impl;
 
+import dev.marco.example.springboot.model.AnnouncementComment;
 import org.apache.log4j.Logger;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
@@ -12,6 +13,7 @@ import dev.marco.example.springboot.model.impl.AnnouncementImpl;
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -190,5 +192,33 @@ class AnnouncementServiceImplTest {
             log.error(LOG_ERROR_CASE + "getAnnouncementsLikedByUser " + e.getMessage());
             fail();
         }
+    }
+
+    @Test
+    @Timeout(value = 10000, unit= TimeUnit.MILLISECONDS)
+    void createComment() {
+        try {
+            String commentContent = "" + new Random().nextInt(500000);
+            announcementService.createComment(commentContent, BigInteger.ONE, BigInteger.ONE);
+
+            List<AnnouncementComment> comments = announcementService.getComments(
+                    BigInteger.ONE,
+                    BigInteger.ONE,
+                    999999);
+
+            assertEquals(comments.get(0).getContent(),  commentContent);
+        } catch (AnnouncementDoesNotExistException | DAOLogicException | AnnouncementException e) {
+            log.error(LOG_ERROR_CASE +"getAnnouncementsLikedByUser "+ e.getMessage());
+            fail();
+        }
+    }
+
+    @Test
+    @Timeout(value = 10000, unit= TimeUnit.MILLISECONDS)
+    void createCommentFail() {
+        String commentContent = "" + new Random().nextInt(500000);
+        assertThrows(AnnouncementException.class,
+                () -> announcementService.createComment(commentContent, BigInteger.ZERO, null)
+        );
     }
 }
