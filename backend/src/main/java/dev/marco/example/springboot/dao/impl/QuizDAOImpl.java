@@ -204,11 +204,11 @@ public class QuizDAOImpl implements QuizDAO {
     }
 
     @Override
-    public List<Quiz> getLastCreatedQuizzes(BigInteger count) throws DAOLogicException {
+    public List<Quiz> getLastCreatedQuizzes(int count) throws DAOLogicException {
         try (PreparedStatement preparedStatement =
                      connection.prepareStatement(properties.getProperty(SELECT_LAST_CREATED_QUIZZES))) {
 
-            preparedStatement.setLong(1, count.longValue());
+            preparedStatement.setInt(1, count);
             ResultSet resultSet = preparedStatement.executeQuery();
 
             List<Quiz> quizzes = new ArrayList<>();
@@ -298,7 +298,7 @@ public class QuizDAOImpl implements QuizDAO {
 
         try (PreparedStatement preparedStatement =
                      connection.prepareStatement(properties.getProperty(SELECT_QUIZZES_BY_ROWS))) {
-            if (page < 1 || page > getCountOfPagesQuiz()) {
+            if (page < 1) {
                 log.error(PAGE_DOES_NOT_EXIST);
                 throw new QuizException(PAGE_DOES_NOT_EXIST);
             }
@@ -329,24 +329,36 @@ public class QuizDAOImpl implements QuizDAO {
         }
     }
 
-    public int getCountOfPagesQuiz() throws QuizException {
+    @Override
+    public List<Quiz> getQuizzesLikeTitle(String title) throws QuizException {
 
         try (PreparedStatement preparedStatement =
-                     connection.prepareStatement(properties.getProperty(SELECT_COUNT_OF_QUIZZES))) {
+                     connection.prepareStatement(properties.getProperty(SELECT_QUIZZES_LIKE_TITLE))) {
+
+            preparedStatement.setString(1, title.toLowerCase() + "%");
+
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            if(!resultSet.next()) {
-                throw new QuizException(QUIZ_NOT_FOUND_EXCEPTION);
+            List<Quiz> quizzes = new ArrayList<>();
+
+            while (resultSet.next()) {
+
+                Quiz quiz = QuizImpl.QuizBuilder()
+                        .setId(BigInteger.valueOf(resultSet.getLong(ID_QUIZ)))
+                        .setTitle(resultSet.getString(TITLE))
+                        .setDescription(resultSet.getString(DESCRIPTION))
+                        .setQuizType(QuizType.values()[resultSet.getInt(QUIZ_TYPE)])
+                        .setCreationDate(resultSet.getDate(CREATION_DATE))
+                        .setCreatorId(BigInteger.valueOf(resultSet.getInt(CREATOR)))
+                        .build();
+
+                quizzes.add(quiz);
             }
 
-            int count = resultSet.getInt(1);
-            int result = count / COUNT_OF_QUIZZES_ON_PAGE + ((count % COUNT_OF_QUIZZES_ON_PAGE == 0) ? 0 : 1);
-            return result;
-
+            return quizzes;
         } catch (SQLException | QuizException e) {
             log.error(QUIZ_NOT_FOUND_EXCEPTION);
             throw new QuizException(QUIZ_NOT_FOUND_EXCEPTION + e.getMessage());
         }
-
     }
 }

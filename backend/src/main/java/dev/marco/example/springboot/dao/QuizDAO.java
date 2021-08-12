@@ -31,7 +31,7 @@ public interface QuizDAO {
     String SELECT_QUIZZES_BY_TYPE = "SELECT_QUIZZES_BY_TYPE";
     String SELECT_LAST_CREATED_QUIZZES = "SELECT_LAST_CREATED_QUIZZES";
     String SELECT_QUIZZES_BY_ROWS = "SELECT_QUIZZES_BY_ROWS";
-    String SELECT_COUNT_OF_QUIZZES = "SELECT_COUNT_OF_QUIZZES";
+    String SELECT_QUIZZES_LIKE_TITLE = "SELECT_QUIZZES_LIKE_TITLE";
 
     int COUNT_OF_QUIZZES_ON_PAGE = 6;
 
@@ -49,7 +49,7 @@ public interface QuizDAO {
 
     List<Quiz> getAllQuizzes() throws QuizDoesNotExistException, DAOLogicException;
 
-    List<Quiz> getLastCreatedQuizzes(BigInteger count) throws DAOLogicException, QuizDoesNotExistException;
+    List<Quiz> getLastCreatedQuizzes(int count) throws DAOLogicException, QuizDoesNotExistException;
 
     Quiz getQuizByTitle(String title) throws QuizDoesNotExistException, DAOLogicException;
 
@@ -57,6 +57,6 @@ public interface QuizDAO {
 
     List<Quiz> getQuizzes(int page) throws QuizException;
 
-    int getCountOfPagesQuiz() throws QuizException;
+    List<Quiz> getQuizzesLikeTitle(String title) throws QuizException;
 
 }

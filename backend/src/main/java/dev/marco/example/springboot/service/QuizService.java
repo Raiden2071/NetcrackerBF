@@ -37,6 +37,6 @@ public interface QuizService {
 
     List<Quiz> getQuizzes(int page) throws QuizException;
 
-    int getCountOfPagesQuiz() throws DAOLogicException, QuizDoesNotExistException;
+    List<Quiz> getQuizzesLikeTitle(String title) throws QuizException;
 
 }

@@ -101,9 +101,17 @@ public class QuizServiceImpl implements QuizService {
             log.error(EMPTY_TITLE);
             throw new QuizException(EMPTY_TITLE);
         }
+        if (StringUtils.length(quiz.getTitle()) > MAX_LENGTH_TITLE) {
+            log.error(LONG_TITLE);
+            throw new QuizException(LONG_TITLE);
+        }
         if (StringUtils.isBlank(quiz.getDescription()) || StringUtils.length(quiz.getDescription()) < MIN_LENGTH_DESCRIPTION) {
             log.error(EMPTY_DESCRIPTION);
             throw new QuizException(EMPTY_DESCRIPTION);
+        }
+        if (StringUtils.length(quiz.getDescription()) > MAX_LENGTH_DESCRIPTION) {
+            log.error(LONG_DESCRIPTION);
+            throw new QuizException(LONG_DESCRIPTION);
         }
         if (quiz.getQuestions().isEmpty()) {
             log.error(QUESTION_EMPTY);
@@ -149,10 +157,7 @@ public class QuizServiceImpl implements QuizService {
             log.error(EMPTY_ID);
             throw new QuizException(EMPTY_ID);
         }
-        //List<QuestionImpl> questions = questionDAO.getAllQuestions(id);
-        QuizImpl quiz = quizDAO.getQuizById(id);
-        //quiz.setQuestions(questions);
-        return quiz;
+        return quizDAO.getQuizById(id);
     }
 
     @Override
@@ -167,7 +172,7 @@ public class QuizServiceImpl implements QuizService {
     }
 
     @Override
-    public List<Quiz> getLastCreatedQuizzes(BigInteger count) throws QuizDoesNotExistException, DAOLogicException {
+    public List<Quiz> getLastCreatedQuizzes(int count) throws QuizDoesNotExistException, DAOLogicException {
         return quizDAO.getLastCreatedQuizzes(count);
     }
 
@@ -187,8 +192,8 @@ public class QuizServiceImpl implements QuizService {
     }
 
     @Override
-    public int getCountOfPagesQuiz() throws QuizException {
-        return quizDAO.getCountOfPagesQuiz();
+    public List<Quiz> getQuizzesLikeTitle(String title) throws QuizException {
+        return quizDAO.getQuizzesLikeTitle(title);
     }
 
 }

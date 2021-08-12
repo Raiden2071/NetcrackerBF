@@ -17,6 +17,7 @@ import java.math.BigInteger;
 import java.util.List;
 
 import static dev.marco.example.springboot.exception.MessagesForException.*;
+
 @RestController
 @RequestMapping("/quiz")
 public class QuizController {
@@ -64,8 +65,6 @@ public class QuizController {
     public List<Quiz> showQuizzesByPage(@RequestParam int page) {
         try {
             List<Quiz> quizzes = quizService.getQuizzes(page);
-            //int count = quizService.getCountOfPagesQuiz();
-
             if (quizzes.isEmpty()) {
                 log.error(QUIZ_NOT_FOUND_EXCEPTION);
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND);
@@ -76,12 +75,12 @@ public class QuizController {
         }
     }
 
-    @GetMapping("/countOfPages")
-    public int getCountOfPages() {
+    @GetMapping("/search")
+    public List<Quiz> getQuizzesLikeTitle(@RequestParam String title) {
         try {
-            return quizService.getCountOfPagesQuiz();
+            return quizService.getQuizzesLikeTitle(title);
         } catch (QuizException e) {
-            log.error(PAGE_DOES_NOT_EXIST + e.getMessage());
+            log.error(QUIZ_NOT_FOUND_EXCEPTION);
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
         }
     }
@@ -110,9 +109,6 @@ public class QuizController {
     public Quiz createQuiz(@RequestBody QuizImpl quiz) {
         try {
             return quizService.buildNewQuiz(quiz);
-        } catch (DAOLogicException e) {
-            log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e.getCause());
         } catch (QuestionException e) {
             log.error(QUESTION_NOT_FOUND + e.getMessage());
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
@@ -125,8 +121,10 @@ public class QuizController {
         } catch (AnswerDoesNotExistException e) {
             log.error(getAnswerByIdNotFoundExc + e.getMessage());
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
+        } catch (DAOLogicException e) {
+            log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e.getCause());
         }
-
     }
 
 
@@ -145,12 +143,12 @@ public class QuizController {
         } catch (QuizDoesNotExistException | QuizException e) {
             log.error(QUIZ_NOT_FOUND_EXCEPTION + e.getMessage());
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
-        } catch (DAOLogicException e) {
-            log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e.getCause());
         } catch (QuestionDoesNotExistException e) {
             log.error(QUESTION_NOT_FOUND + e.getMessage());
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
+        } catch (DAOLogicException e) {
+            log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e.getCause());
         }
 
     }
@@ -164,15 +162,18 @@ public class QuizController {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND);
             }
             quizService.deleteQuiz(quiz);
-        } catch (QuizDoesNotExistException | QuizException | QuestionDoesNotExistException e) {
+        } catch (QuizDoesNotExistException | QuizException e) {
             log.error(QUIZ_NOT_FOUND_EXCEPTION + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
+        } catch (UserException | UserDoesNotExistException e) {
+            log.error(USER_NOT_FOUND_EXCEPTION + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
+        } catch (QuestionDoesNotExistException e) {
+            log.error(QUESTION_NOT_FOUND + e.getMessage());
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
         } catch (DAOLogicException e) {
             log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e.getCause());
-        } catch (UserException | UserDoesNotExistException e) {
-            log.error(USER_NOT_FOUND_EXCEPTION + e.getMessage());
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
         }
     }
 
@@ -213,7 +214,7 @@ public class QuizController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
         }
 
-  }
+    }
 
     // without tests
     @PostMapping("/game/end")
