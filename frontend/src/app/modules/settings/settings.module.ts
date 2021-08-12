@@ -9,7 +9,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 // ChangePasswordComponent
 @NgModule({
-  declarations: [EditProfileComponent, ChangePasswordComponent, SelectionMenuComponent, ],
+  declarations: [EditProfileComponent, ChangePasswordComponent, SelectionMenuComponent],
   imports: [
     CommonModule,
     SettingsRoutingModule,

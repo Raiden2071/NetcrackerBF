@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { switchMap, tap } from 'rxjs/operators';
@@ -5,7 +6,6 @@ import { CreateAnnouncementComponent } from 'src/app/modals/create-announcement/
 import { Announcement } from 'src/app/models/announcements';
 import { announcementService } from 'src/app/shared/services/announcement.service';
 import { UserService } from 'src/app/shared/services/users.service';
-import { AuthService } from '../../auth/services/auth.service';
 
 @Component({
   selector: 'app-announcment',
@@ -18,28 +18,30 @@ export class AnnouncmentComponent implements OnInit {
   // searchProject: FormControl = new FormControl('');
   term: any;
   p: number = 1;
-
+  userId: number;
   constructor(
     private modalService: NgbModal,
     private announcementService: announcementService,
-    private userService: UserService
+    private userService: UserService,
+    private http: HttpClient
   ) { }
 
-  ngOnInit(): void {
+  ngOnInit(): void {    
     this.getAnnouncement();
   }
 
   getAnnouncement() {
-    this.announcementService.getOne(this.userService.userId).subscribe(announcement => this.announcements = announcement);
+    this.userService.userInfo$.pipe(
+      switchMap(({id}) => this.announcementService.getOne(id)),
+    ).subscribe(announcement => this.announcements = announcement);
   }
 
   createAnnouncement(): void {
     const modalRef = this.modalService.open(CreateAnnouncementComponent, { centered: true });
     modalRef.closed.pipe(
-      switchMap(announcement => this.announcementService.createOne(announcement))
+      switchMap(announcement => this.http.post<Announcement>('announcement/create', announcement))
     ).subscribe(() =>
       this.getAnnouncement()
     );
   }
-
 }

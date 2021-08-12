@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { switchMap, tap } from 'rxjs/operators';
+import { Announcement } from 'src/app/models/announcements';
 import { Dashboard } from 'src/app/models/dashboard';
 import { User } from 'src/app/models/user';
 import { DashboardService } from 'src/app/shared/services/dashboard.service';
@@ -20,19 +23,14 @@ export class DashboardComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.getUser();
-    this.getDashboard();
+    this.userService.userInfo$.pipe(
+      tap(user => this.user = user),
+      switchMap(({id}) => this.dashboardService.getOne(id))
+    ).subscribe(dashboard => this.dashboard = dashboard);
   }
 
-  getUser() {
-    this.userService.userInfo$.subscribe(user => this.user = user);
-  }
-
-  getDashboard(): void {    
-    this.dashboardService.getOne(this.userService.userId).subscribe(dashboard => {
-      this.dashboard = dashboard
-      console.log(dashboard);
-    });
-  }
+  // getDashboard(id): void {
+  //   this.dashboardService.getOne(id).subscribe(dashboard => this.dashboard = dashboard);
+  // }
 
 }

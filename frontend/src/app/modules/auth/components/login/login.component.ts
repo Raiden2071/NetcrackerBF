@@ -14,6 +14,7 @@ export class LoginComponent implements OnInit {
 
   showPassword = false;
   showErrors = false;
+  userId: number;
 
   loginForm: FormGroup = this.fb.group({
     email:    ['', [Validators.email, Validators.required]],
@@ -29,7 +30,12 @@ export class LoginComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
+    this.getUser();
     this.loginForm.valueChanges.subscribe(() => this.showErrors = false);
+  }
+
+  getUser(): void {
+    this.userService.userInfo$.subscribe(({id}) => this.userId = id);
   }
 
   onSubmit(): void {
@@ -40,7 +46,7 @@ export class LoginComponent implements OnInit {
         remember: this.loginForm.value.remember
       };
       this.authService.login(data, data.remember).subscribe((userData) => {
-        this.userService.userId = userData.user.id;
+        this.userId = userData.user.id;
         this.router.navigateByUrl('/profile')
       },err => {
         this.showErrors = true;

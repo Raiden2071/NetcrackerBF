@@ -22,6 +22,10 @@ export class SidebarComponent implements OnInit {
   getUser() {
     this.userService.userInfo$.subscribe(user => this.user = user);
   }
-  
+
+  logOut() {        
+    localStorage.removeItem('access_token');
+    sessionStorage.removeItem('access_token');
+  }
 
 }
