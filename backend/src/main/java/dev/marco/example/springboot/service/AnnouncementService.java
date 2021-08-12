@@ -40,5 +40,7 @@ public interface AnnouncementService {
 
     List<AnnouncementComment> getComments(BigInteger AnnouncementId, BigInteger lastCommentId, int count) throws AnnouncementDoesNotExistException, DAOLogicException;
 
+    void createComment(String commentContent, BigInteger  announcementId, BigInteger userId) throws DAOLogicException, AnnouncementException;
+
     Set<Announcement> getSetByTitle(String title, BigInteger idUser) throws DAOLogicException;
 }

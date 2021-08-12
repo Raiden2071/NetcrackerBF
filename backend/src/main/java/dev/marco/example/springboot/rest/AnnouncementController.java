@@ -24,6 +24,7 @@ public class AnnouncementController {
     private final static String ID_ANNOUNCEMENT = "idAnnouncement";
     private final static String ID_LAST_COMMENT = "idLastComment";
     private final static String PAGINATION_SIZE = "paginationSize";
+    private final static String COMMENT_CONTENT = "commentContent";
     private static final Logger log = Logger.getLogger(AnnouncementController.class);
     private final AnnouncementService announcementService;
 
@@ -149,6 +150,22 @@ public class AnnouncementController {
         } catch (AnnouncementDoesNotExistException e) {
             log.error(e.getMessage(), e);
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PostMapping("/commentaries")
+    public void createCommentary(@RequestBody JsonNode requestBody) {
+        try {
+            BigInteger idAnnouncement = BigInteger.valueOf(requestBody.get(ID_ANNOUNCEMENT).asLong());
+            BigInteger idUser = BigInteger.valueOf(requestBody.get(ID_USER).asLong());
+            String commentContent = requestBody.get(COMMENT_CONTENT).asText();
+            announcementService.createComment(commentContent, idAnnouncement, idUser);
+        } catch (DAOLogicException e) {
+            log.error(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (AnnouncementException e) {
+            log.error(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
     }
 

@@ -30,6 +30,7 @@ public interface AnnouncementDAO {
     String UNSET_LIKE = "UNSET_LIKE";
     String GET_ANNOUNCEMENT_COMMENTARIES_ASC = "GET_ANNOUNCEMENT_COMMENTARIES_ASC";
     String GET_ANNOUNCEMENT_COMMENTARIES_DESC = "GET_ANNOUNCEMENT_COMMENTARIES_DESC";
+    String CREATE_COMMENTARY = "CREATE_COMMENTARY";
 
     String ID_ANNOUNCEMENT = "ID_ANNOUNCEMENT";
     String TITLE = "TITLE";
@@ -76,4 +77,6 @@ public interface AnnouncementDAO {
     void toDisLike(BigInteger idAnnouncement) throws DAOLogicException;
 
     List<AnnouncementComment> getComments(BigInteger AnnouncementId, BigInteger lastCommentId, int count) throws AnnouncementDoesNotExistException, DAOLogicException;
+
+    void createComment(String commentContent, BigInteger  announcementId, BigInteger userId) throws DAOLogicException;
 }

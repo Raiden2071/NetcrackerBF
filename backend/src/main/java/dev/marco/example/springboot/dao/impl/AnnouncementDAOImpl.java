@@ -309,7 +309,7 @@ public class AnnouncementDAOImpl implements AnnouncementDAO {
     @Override
     public List<AnnouncementComment> getComments(BigInteger announcementId, BigInteger lastCommentId, int count) throws AnnouncementDoesNotExistException, DAOLogicException {
         try (PreparedStatement preparedStatement
-                     = connection.prepareStatement(properties.getProperty(GET_ANNOUNCEMENT_COMMENTARIES_ASC))) {
+                     = connection.prepareStatement(properties.getProperty(GET_ANNOUNCEMENT_COMMENTARIES_DESC))) {
             preparedStatement.setLong(1, announcementId.longValue());
             preparedStatement.setLong(2, lastCommentId.longValue());
             preparedStatement.setInt(3, count);
@@ -325,12 +325,27 @@ public class AnnouncementDAOImpl implements AnnouncementDAO {
                 AnnouncementComment comment = new AnnouncementCommentImpl(
                         BigInteger.valueOf(resultSet.getLong(ID_COMMENTARY)),
                         resultSet.getString(DESCRIPTION),
-                        resultSet.getString(FIRST_NAME) + resultSet.getString(LAST_NAME),
+                        resultSet.getString(FIRST_NAME) + " " + resultSet.getString(LAST_NAME),
                         resultSet.getTime(DATE_CREATE)
                         );
                 comments.add(comment);
             }
             return comments;
+        } catch (SQLException throwables) {
+            log.error(DAO_LOGIC_EXCEPTION + throwables.getMessage());
+            throw new DAOLogicException(DAO_LOGIC_EXCEPTION, throwables);
+        }
+    }
+
+    @Override
+    public void createComment(String commentContent, BigInteger announcementId, BigInteger userId) throws DAOLogicException {
+        try (PreparedStatement preparedStatement
+                     = connection.prepareStatement(properties.getProperty(CREATE_COMMENTARY))){
+            preparedStatement.setLong(1, announcementId.longValue());
+            preparedStatement.setLong(2, userId.longValue());
+            preparedStatement.setString(3, commentContent);
+            preparedStatement.setTimestamp(4, new Timestamp(System.currentTimeMillis()));
+            preparedStatement.executeUpdate();
         } catch (SQLException throwables) {
             log.error(DAO_LOGIC_EXCEPTION + throwables.getMessage());
             throw new DAOLogicException(DAO_LOGIC_EXCEPTION, throwables);

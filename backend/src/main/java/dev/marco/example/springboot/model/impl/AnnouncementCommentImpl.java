@@ -19,6 +19,12 @@ public class AnnouncementCommentImpl implements AnnouncementComment {
         this.creationTime = creationTime;
     }
 
+    public AnnouncementCommentImpl(BigInteger commentId, String content, Time creationTime) {
+        this.commentId = commentId;
+        this.content = content;
+        this.creationTime = creationTime;
+    }
+
     @Override
     public void setId(BigInteger id) {
         this.commentId = id;

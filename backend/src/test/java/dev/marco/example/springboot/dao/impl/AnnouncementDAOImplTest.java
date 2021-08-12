@@ -1,8 +1,10 @@
 package dev.marco.example.springboot.dao.impl;
 
+import dev.marco.example.springboot.model.AnnouncementComment;
 import org.apache.log4j.Logger;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
+import org.junit.platform.commons.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -16,6 +18,7 @@ import dev.marco.example.springboot.model.impl.AnnouncementImpl;
 import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -230,6 +233,41 @@ class AnnouncementDAOImplTest {
             }
         } catch (DAOLogicException e) {
             log.error("Error while testing addAndGetParticipantById" + e.getMessage());
+            fail();
+        }
+    }
+
+    @Test
+    @Timeout(value = 10000, unit= TimeUnit.MILLISECONDS)
+    void getCommentaries() {
+        try {
+            List<AnnouncementComment> comments = announcementDAO.getComments(
+                    BigInteger.ONE,
+                    BigInteger.ZERO,
+                    15);
+            assertNotNull(comments.get(0));
+            assertTrue(StringUtils.isNotBlank(comments.get(0).getContent()));
+        } catch (DAOLogicException | AnnouncementDoesNotExistException e) {
+            log.error("Error while testing getCommentaries " + e.getMessage());
+            fail();
+        }
+    }
+
+    @Test
+    @Timeout(value = 10000, unit= TimeUnit.MILLISECONDS)
+    void createComment() {
+        try {
+            String commentContent = "" + new Random().nextInt(500000);
+            announcementDAO.createComment(commentContent, BigInteger.ONE, BigInteger.ONE);
+
+            List<AnnouncementComment> comments = announcementDAO.getComments(
+                    BigInteger.ONE,
+                    BigInteger.ONE,
+                    999999);
+
+            assertEquals(comments.get(0).getContent(),  commentContent);
+        } catch (DAOLogicException | AnnouncementDoesNotExistException e) {
+            log.error("Error while testing createComment " + e.getMessage());
             fail();
         }
     }
