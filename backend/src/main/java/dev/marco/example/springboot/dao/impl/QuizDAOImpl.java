@@ -335,7 +335,7 @@ public class QuizDAOImpl implements QuizDAO {
         try (PreparedStatement preparedStatement =
                      connection.prepareStatement(properties.getProperty(SELECT_QUIZZES_LIKE_TITLE))) {
 
-            preparedStatement.setString(1, title.toLowerCase() + "%");
+            preparedStatement.setString(1, "%" + title.toLowerCase() + "%");
 
             ResultSet resultSet = preparedStatement.executeQuery();
 

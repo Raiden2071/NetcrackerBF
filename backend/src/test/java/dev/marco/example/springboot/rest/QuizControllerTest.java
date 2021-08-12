@@ -28,226 +28,325 @@ import java.util.concurrent.TimeUnit;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @EnableAutoConfiguration(exclude = SecurityAutoConfiguration.class)
 @SpringBootTest
 @AutoConfigureMockMvc
 public class QuizControllerTest {
 
-  private static final Logger log = Logger.getLogger(QuizControllerTest.class);
+    private static final Logger log = Logger.getLogger(QuizControllerTest.class);
 
-  @Autowired
-  private MockMvc mockMvc;
+    @Autowired
+    private MockMvc mockMvc;
 
-  @MockBean
-  private QuizService quizService;
+    @MockBean
+    private QuizService quizService;
 
-  @MockBean
-  private GameService gameService;
+    @MockBean
+    private GameService gameService;
 
-  public static String asJsonString(final Object obj) {
-    try {
-      return new ObjectMapper().writeValueAsString(obj);
-    } catch (Exception e) {
-      throw new RuntimeException(e);
+    public static String asJsonString(final Object obj) {
+        try {
+            return new ObjectMapper().writeValueAsString(obj);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
-  }
 
-  @Test
-  @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
-  void showAllQuizzesTest() throws Exception {
+    @Test
+    @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
+    void showAllQuizzesTest() throws Exception {
 
-    List<Quiz> quizzes = quizService.getAllQuizzes();
-    assertNotNull(quizzes);
-    verify(quizService, Mockito.times(1)).getAllQuizzes();
+        when(quizService.getAllQuizzes())
+                .thenReturn(
+                        Arrays.asList(
+                                QuizImpl.QuizBuilder()
+                                        .setId(BigInteger.valueOf(1))
+                                        .setTitle("Quiz1")
+                                        .setDescription("Quiz1")
+                                        .setQuizType(QuizType.MATHEMATICS)
+                                        .setCreatorId(BigInteger.valueOf(1))
+                                        .build(),
+                                QuizImpl.QuizBuilder()
+                                        .setId(BigInteger.valueOf(2))
+                                        .setTitle("Quiz2")
+                                        .setDescription("Quiz2")
+                                        .setQuizType(QuizType.HISTORIC)
+                                        .setCreatorId(BigInteger.valueOf(4))
+                                        .build()
+                        )
+                );
 
-  }
+        this.mockMvc.perform(MockMvcRequestBuilders
+                        .get("/quiz/all"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(jsonPath("$[0].id").value(BigInteger.valueOf(1)))
+                .andExpect(jsonPath("$[0].title").value("Quiz1"))
 
-  @Test
-  @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
-  void getQuizByIdTest() throws Exception {
-    when(quizService.getQuizById(BigInteger.valueOf(1)))
-        .thenReturn(QuizImpl.QuizBuilder()
-            .setId(BigInteger.valueOf(1))
-            .setTitle("NewQuiz")
-            .setDescription("Description of NewQuiz")
-            .setCreatorId(BigInteger.valueOf(3))
-            .setQuizType(QuizType.MATHEMATICS)
-            .build());
+                .andExpect(jsonPath("$[1].id").value(BigInteger.valueOf(2)))
+                .andExpect(jsonPath("$[1].title").value("Quiz2"));
 
-    this.mockMvc
-        .perform(MockMvcRequestBuilders
-            .get("/quiz/1")
-            .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isOk())
-        .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(BigInteger.ONE))
-        .andExpect(MockMvcResultMatchers.jsonPath("$.title").value("NewQuiz"));
+        verify(quizService).getAllQuizzes();
+    }
 
-  }
+    @Test
+    @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
+    void showQuizzesByFirstPageTest() throws Exception {
 
-  @Test
-  @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
-  void deleteQuizTest() throws Exception {
+        when(quizService.getQuizzesByPage(1))
+                .thenReturn(
+                        Arrays.asList(
+                                QuizImpl.QuizBuilder()
+                                        .setId(BigInteger.valueOf(1))
+                                        .setTitle("Quiz1 on page 1")
+                                        .setDescription("Quiz1")
+                                        .setQuizType(QuizType.MATHEMATICS)
+                                        .setCreatorId(BigInteger.valueOf(1))
+                                        .build(),
+                                QuizImpl.QuizBuilder()
+                                        .setId(BigInteger.valueOf(2))
+                                        .setTitle("Quiz2 on page 1")
+                                        .setDescription("Quiz2")
+                                        .setQuizType(QuizType.HISTORIC)
+                                        .setCreatorId(BigInteger.valueOf(4))
+                                        .build()
+                        )
+                );
 
-    when(quizService.getQuizById(BigInteger.valueOf(1)))
-        .thenReturn(QuizImpl.QuizBuilder()
-            .setId(BigInteger.valueOf(1))
-            .setTitle("NewQuiz")
-            .setDescription("Description of NewQuiz")
-            .setCreatorId(BigInteger.valueOf(3))
-            .setQuizType(QuizType.MATHEMATICS)
-            .build());
+        this.mockMvc.perform(MockMvcRequestBuilders
+                        .get("/quiz?page=1"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(jsonPath("$[0].id").value(BigInteger.valueOf(1)))
+                .andExpect(jsonPath("$[0].title").value("Quiz1 on page 1"))
 
-    this.mockMvc
-        .perform(MockMvcRequestBuilders
-            .delete("/quiz/1")
-            .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isOk());
-  }
+                .andExpect(jsonPath("$[1].id").value(BigInteger.valueOf(2)))
+                .andExpect(jsonPath("$[1].title").value("Quiz2 on page 1"));
 
+        verify(quizService).getQuizzesByPage(1);
+    }
 
-  @Test
-  @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
-  void updateQuizTest() throws Exception {
+    @Test
+    @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
+    void searchQuizzesLikeTitleTest() throws Exception {
+        String title = "quiz";
+        when(quizService.getQuizzesLikeTitle(title))
+                .thenReturn(
+                        Arrays.asList(
+                                QuizImpl.QuizBuilder()
+                                        .setId(BigInteger.valueOf(1))
+                                        .setTitle("Test Quiz1")
+                                        .setDescription("Quiz1")
+                                        .setQuizType(QuizType.MATHEMATICS)
+                                        .setCreatorId(BigInteger.valueOf(1))
+                                        .build(),
+                                QuizImpl.QuizBuilder()
+                                        .setId(BigInteger.valueOf(2))
+                                        .setTitle("Test Quiz2")
+                                        .setDescription("Quiz2")
+                                        .setQuizType(QuizType.HISTORIC)
+                                        .setCreatorId(BigInteger.valueOf(4))
+                                        .build()
+                        )
+                );
 
-    QuizImpl quiz = QuizImpl.QuizBuilder()
-        .setId(BigInteger.valueOf(2))
-        .setTitle("Testing your Light!!!")
-        .setDescription("Light!!!")
-        .setQuizType(QuizType.SCIENCE)
-        .setCreationDate(new Date(System.currentTimeMillis()))
-        .setCreatorId(BigInteger.valueOf(7))
-        .build();
+        this.mockMvc.perform(MockMvcRequestBuilders
+                        .get("/quiz/search?title={title}", title))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(jsonPath("$[0].id").value(BigInteger.valueOf(1)))
+                .andExpect(jsonPath("$[0].title").value("Test Quiz1"))
 
-    when(quizService.getQuizById(BigInteger.valueOf(2)))
-        .thenReturn(quiz);
+                .andExpect(jsonPath("$[1].id").value(BigInteger.valueOf(2)))
+                .andExpect(jsonPath("$[1].title").value("Test Quiz2"));
 
-    this.mockMvc.perform(MockMvcRequestBuilders
-        .put("/quiz/{id}", 2)
-        .contentType(MediaType.APPLICATION_JSON)
-        .content(asJsonString(quiz))
-        .accept(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isOk());
+        verify(quizService).getQuizzesLikeTitle(title);
+    }
 
-  }
+    @Test
+    @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
+    void getQuizByIdTest() throws Exception {
+        when(quizService.getQuizById(BigInteger.valueOf(1)))
+                .thenReturn(QuizImpl.QuizBuilder()
+                        .setId(BigInteger.valueOf(1))
+                        .setTitle("NewQuiz")
+                        .setDescription("Description of NewQuiz")
+                        .setCreatorId(BigInteger.valueOf(3))
+                        .setQuizType(QuizType.MATHEMATICS)
+                        .build());
 
-  @Test
-  @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
-  void buildNewQuizTest() throws Exception {
+        this.mockMvc
+                .perform(MockMvcRequestBuilders
+                        .get("/quiz/1")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(BigInteger.ONE))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.title").value("NewQuiz"));
 
-    List<QuestionImpl> questions = new ArrayList<>();
-    QuestionImpl question = new QuestionImpl(BigInteger.valueOf(1),"Ukraine location?", QuestionType.TRUE_FALSE);
+    }
 
-    List<AnswerImpl> answers = new ArrayList<>();
-    answers.add(new AnswerImpl(BigInteger.valueOf(1),"America", false, question.getId()));
-    answers.add(new AnswerImpl(BigInteger.valueOf(2),"Europe", true, question.getId()));
+    @Test
+    @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
+    void deleteQuizTest() throws Exception {
 
-    question.setAnswers(answers);
-    questions.add(question);
+        when(quizService.getQuizById(BigInteger.valueOf(1)))
+                .thenReturn(QuizImpl.QuizBuilder()
+                        .setId(BigInteger.valueOf(1))
+                        .setTitle("NewQuiz")
+                        .setDescription("Description of NewQuiz")
+                        .setCreatorId(BigInteger.valueOf(3))
+                        .setQuizType(QuizType.MATHEMATICS)
+                        .build());
 
-    Quiz quiz = QuizImpl.QuizBuilder()
-            .setTitle("QuizBuild!")
-            .setDescription("Light!")
-            .setQuizType(QuizType.SCIENCE)
-            .setCreatorId(BigInteger.valueOf(7))
-            .setQuestions(questions)
-            .build();
-
-      this.mockMvc.perform(MockMvcRequestBuilders
-                      .post("/quiz/")
-                      .contentType(MediaType.APPLICATION_JSON)
-                      .content(asJsonString(quiz))
-                      .accept(MediaType.APPLICATION_JSON))
-              .andExpect(MockMvcResultMatchers.status().isOk());
-
-      verify(quizService).buildNewQuiz(any(Quiz.class));
-
-  }
-
-  @Test
-  @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
-  void showAllFilterQuizzes() throws Exception {
-    when(quizService.getQuizById(BigInteger.valueOf(1)))
-        .thenReturn(QuizImpl.QuizBuilder()
-            .setId(BigInteger.valueOf(1))
-            .setTitle("NewQuiz")
-            .setDescription("Description of NewQuiz")
-            .setCreatorId(BigInteger.valueOf(3))
-            .setQuizType(QuizType.MATHEMATICS)
-            .build());
-
-    this.mockMvc
-        .perform(MockMvcRequestBuilders
-            .get("/quiz/filter?id=1&filter=DATE")
-            .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isOk());
-  }
+        this.mockMvc
+                .perform(MockMvcRequestBuilders
+                        .delete("/quiz/1")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
 
 
-  @Test
-  @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
-  void quizGameTest() throws Exception {
-    String quizName = "NewQuiz";
+    @Test
+    @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
+    void updateQuizTest() throws Exception {
 
-    when(gameService.sendGameQuiz(quizName))
-            .thenReturn(QuizImpl.QuizBuilder()
-                    .setId(BigInteger.valueOf(1))
-                    .setTitle(quizName)
-                    .setDescription("Desc of new quiz")
-                    .setCreatorId(BigInteger.valueOf(7))
-                    .setQuizType(QuizType.HISTORIC)
-                    .build());
+        QuizImpl quiz = QuizImpl.QuizBuilder()
+                .setId(BigInteger.valueOf(2))
+                .setTitle("Testing your Light!!!")
+                .setDescription("Light!!!")
+                .setQuizType(QuizType.SCIENCE)
+                .setCreationDate(new Date(System.currentTimeMillis()))
+                .setCreatorId(BigInteger.valueOf(7))
+                .build();
 
-    this.mockMvc
-            .perform(MockMvcRequestBuilders
-            .get("/quiz/game/{title}", quizName)
-            .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isOk())
-        .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(BigInteger.ONE))
-        .andExpect(MockMvcResultMatchers.jsonPath("$.title").value(quizName));
-  }
+        when(quizService.getQuizById(BigInteger.valueOf(2)))
+                .thenReturn(quiz);
 
-  @Test
-  @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
-  void finishQuizTest() throws Exception {
-    String title = "NewQuiz";
-    User user = new UserImpl.UserBuilder()
-            .setId(BigInteger.valueOf(2036))
-            .setEmail("JohnTitor@gmail.com")
-            .setFirstName("John")
-            .setLastName("Titor")
-            .setDescription("Future")
-            .build();
-    List<Answer> userAnswers = new ArrayList<>();
+        this.mockMvc.perform(MockMvcRequestBuilders
+                        .put("/quiz/{id}", 2)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(quiz))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk());
 
-    ObjectMapper mapper = new ObjectMapper();
-    mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+    }
 
-    this.mockMvc.perform(MockMvcRequestBuilders
-            .post("/quiz/game/end")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(mapper.writeValueAsString(new QuizController.ParamsInFinishQuiz(title, user, userAnswers)))
-            .accept(MediaType.APPLICATION_JSON))
-            .andExpect(MockMvcResultMatchers.status().isOk());
-  }
+    @Test
+    @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
+    void buildNewQuizTest() throws Exception {
 
-  @Test
-  @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
-  void setLikeOnQuizTest() throws Exception {
-    QuizImpl quiz = QuizImpl.QuizBuilder()
-            .setId(BigInteger.ONE)
-            .setTitle("NewQuiz")
-            .setDescription("Desc of NewQuiz")
-            .setCreatorId(BigInteger.ONE)
-            .build();
-    QuizAccomplishedImpl quizAccomplished = new QuizAccomplishedImpl(5, false, quiz);
+        List<QuestionImpl> questions = new ArrayList<>();
+        QuestionImpl question = new QuestionImpl(BigInteger.valueOf(1), "Ukraine location?", QuestionType.TRUE_FALSE);
 
-    this.mockMvc.perform(MockMvcRequestBuilders
-            .put("/quiz/like/{id}", BigInteger.ONE)
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(asJsonString(quizAccomplished))
-            .accept(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isOk());
+        List<AnswerImpl> answers = new ArrayList<>();
+        answers.add(new AnswerImpl(BigInteger.valueOf(1), "America", false, question.getId()));
+        answers.add(new AnswerImpl(BigInteger.valueOf(2), "Europe", true, question.getId()));
 
-  }
+        question.setAnswers(answers);
+        questions.add(question);
+
+        Quiz quiz = QuizImpl.QuizBuilder()
+                .setTitle("QuizBuild!")
+                .setDescription("Light!")
+                .setQuizType(QuizType.SCIENCE)
+                .setCreatorId(BigInteger.valueOf(7))
+                .setQuestions(questions)
+                .build();
+
+        this.mockMvc.perform(MockMvcRequestBuilders
+                        .post("/quiz/")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(quiz))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+
+        verify(quizService).buildNewQuiz(any(Quiz.class));
+
+    }
+
+    @Test
+    @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
+    void showAllFilterQuizzes() throws Exception {
+        when(quizService.getQuizById(BigInteger.valueOf(1)))
+                .thenReturn(QuizImpl.QuizBuilder()
+                        .setId(BigInteger.valueOf(1))
+                        .setTitle("NewQuiz")
+                        .setDescription("Description of NewQuiz")
+                        .setCreatorId(BigInteger.valueOf(3))
+                        .setQuizType(QuizType.MATHEMATICS)
+                        .build());
+
+        this.mockMvc
+                .perform(MockMvcRequestBuilders
+                        .get("/quiz/filter?id=1&filter=DATE")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+
+    @Test
+    @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
+    void quizGameTest() throws Exception {
+        String quizName = "NewQuiz";
+
+        when(gameService.sendGameQuiz(quizName))
+                .thenReturn(QuizImpl.QuizBuilder()
+                        .setId(BigInteger.valueOf(1))
+                        .setTitle(quizName)
+                        .setDescription("Desc of new quiz")
+                        .setCreatorId(BigInteger.valueOf(7))
+                        .setQuizType(QuizType.HISTORIC)
+                        .build());
+
+        this.mockMvc
+                .perform(MockMvcRequestBuilders
+                        .get("/quiz/game/{title}", quizName)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(BigInteger.ONE))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.title").value(quizName));
+    }
+
+    @Test
+    @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
+    void finishQuizTest() throws Exception {
+        String title = "NewQuiz";
+        User user = new UserImpl.UserBuilder()
+                .setId(BigInteger.valueOf(2036))
+                .setEmail("JohnTitor@gmail.com")
+                .setFirstName("John")
+                .setLastName("Titor")
+                .setDescription("Future")
+                .build();
+        List<Answer> userAnswers = new ArrayList<>();
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+
+        this.mockMvc.perform(MockMvcRequestBuilders
+                        .post("/quiz/game/end")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(new QuizController.ParamsInFinishQuiz(title, user, userAnswers)))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
+    void setLikeOnQuizTest() throws Exception {
+        QuizImpl quiz = QuizImpl.QuizBuilder()
+                .setId(BigInteger.ONE)
+                .setTitle("NewQuiz")
+                .setDescription("Desc of NewQuiz")
+                .setCreatorId(BigInteger.ONE)
+                .build();
+        QuizAccomplishedImpl quizAccomplished = new QuizAccomplishedImpl(5, false, quiz);
+
+        this.mockMvc.perform(MockMvcRequestBuilders
+                        .put("/quiz/like/{id}", BigInteger.ONE)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(quizAccomplished))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+
+    }
 }
