@@ -148,7 +148,7 @@ public class UserController implements RegexPatterns {
             if(!newPassword.equals(confirmPassword))
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
             if(id == null)
-                throw new UserDoesNotExistException(MessagesForException.USER_NOT_FOUND_EXCEPTION);
+                throw new UserDoesNotExistException(USERS_DOESNT_EXIT);
             if(StringUtils.isBlank(newPassword))
                 throw new UserException(MessagesForException.INVALID_PASSWORD);
             userService.updateUsersPassword(id, oldPassword, newPassword);

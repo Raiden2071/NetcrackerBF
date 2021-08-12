@@ -2,18 +2,12 @@ package dev.marco.example.springboot.rest;
 
 import dev.marco.example.springboot.exception.DAOLogicException;
 import dev.marco.example.springboot.exception.UserDoesNotExistException;
-import dev.marco.example.springboot.model.impl.QuizAccomplishedImpl;
 import dev.marco.example.springboot.model.impl.UserImpl;
-import dev.marco.example.springboot.security.JwtTokenFilter;
-import dev.marco.example.springboot.security.JwtTokenProvider;
 import dev.marco.example.springboot.service.UserService;
 import org.apache.log4j.Logger;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
-import org.mockito.internal.matchers.Any;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -21,34 +15,19 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.web.HttpMediaTypeException;
 import org.springframework.web.server.ResponseStatusException;
-
 import java.math.BigInteger;
-import java.util.HashSet;
 import java.util.Random;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import static dev.marco.example.springboot.exception.MessagesForException.INVALID_USERS_EMAIL;
-import static dev.marco.example.springboot.model.User.EMAIL_PATTERN;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @EnableAutoConfiguration(exclude = SecurityAutoConfiguration.class)
@@ -216,7 +195,7 @@ class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{ \"firstName\":\"Leopold\"," +
                                 " \"lastName\":\"Kotanovich\"," +
-                                " \"description\":\"i like to play billiards\",}"))
+                                " \"description\":\"i like to play billiards\"}"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
 
         verify(userService).updateUsersFullName(BigInteger.ONE, "Leopold", "Kotanovich");
@@ -277,5 +256,18 @@ class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk());
 
         verify(userService).getAccomplishedQuizesByUser(BigInteger.TWO);
+    }
+
+    @Test
+    void updatePasswordTest() throws Exception {
+        this.mockMvc
+                .perform(MockMvcRequestBuilders
+                        .put("/updatePassword/{id}", BigInteger.ONE)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{ \"oldPass\":\"somePassword\"," +
+                                 "  \"newPass\":\"newSomePassword\"," +
+                                 "  \"confirmPass\":\"newSomePassword\" }"))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+        verify(userService).updateUsersPassword(BigInteger.ONE, "somePassword", "newSomePassword");
     }
 }
