@@ -1,7 +1,8 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { QuestionType, Quiz, QuizType } from 'src/app/models/quiz';
+import { QuestionType, Quiz } from 'src/app/models/quiz';
 
 @Component({
   selector: 'app-quiz-questions',
@@ -11,7 +12,6 @@ import { QuestionType, Quiz, QuizType } from 'src/app/models/quiz';
 export class QuizQuestionsComponent implements OnInit {
 
   data: Quiz; //title, description, type of quiz
-  quizTypes = QuizType;
   questionTypes = QuestionType;
   currentQuiz: number = 0;
   quizId: number = 0;
@@ -33,7 +33,8 @@ export class QuizQuestionsComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private http: HttpClient
   ) { }
 
   ngOnInit(): void {
@@ -52,8 +53,8 @@ export class QuizQuestionsComponent implements OnInit {
   newQuestionForm(): FormGroup {    
       this.quizId++;
     return this.fb.group({
-      questionId:   [this.quizId, [Validators.required]],  // 0 до 9
-      questionText: ['', [Validators.required]],  // question title
+      // questionId:   [this.quizId, [Validators.required]],  // 0 до 9
+      question: ['', [Validators.required]],  // question title
       questionType: [this.questionTypes.FOUR_ANSWERS, [Validators.required]],  // four answer
       answers:      this.fb.array([this.newAnswerForm(),this.newAnswerForm(),this.newAnswerForm(),this.newAnswerForm()])
     });
@@ -61,7 +62,6 @@ export class QuizQuestionsComponent implements OnInit {
 
   newAnswerForm(): FormGroup {
     return this.fb.group({
-      // answerId: ['', [Validators.required]],
 			value:    ['', [Validators.required]],  // текст ответа
 			answer:   [false]
     });
@@ -85,31 +85,44 @@ export class QuizQuestionsComponent implements OnInit {
 
   click(val) {
     console.log(val);
-    
-    
-    // console.log(this.questionArray.controls[this.currentQuiz].value);
+  }
+
+  logOut() {        
+    localStorage.removeItem('access_token');
+    sessionStorage.removeItem('access_token');
   }
 
   onChangeType(quiz): void {
+    // переделай 
     if(quiz.questionType==="true/false") {
+      quiz=='true' ?
+      quiz.answers=[{
+        value: true,
+        answer: true
+      },
+      {
+        value: false,
+        answer: false
+      }] : 
       quiz.answers=[{
         value: true,
         answer: false
       },
       {
         value: false,
-        answer: false
-      }
-    ];
+        answer: true
+      }];
     } 
     else {
       this.newAnswerForm();
     }
   }
 
-  onSubmit(): void {    
-    const data = Object.assign(this.data, this.questionsForm.value)    
-    console.log(data);
+  onSubmit(): void {        
+    // if(this.answerArray.valid) {
+      const data = Object.assign(this.data, this.questionsForm.value);
+      this.http.post('quiz/', data).subscribe((v)=> console.log(v));
+    // }
   }
 
 }

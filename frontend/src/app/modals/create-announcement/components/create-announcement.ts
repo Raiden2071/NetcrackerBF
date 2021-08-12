@@ -15,7 +15,7 @@ export class CreateAnnouncementComponent implements OnInit {
 
   annoucementForm: FormGroup;
   showErrors = false;
-
+  userId: number;
   constructor(
     private fb: FormBuilder,
     private activeModal: NgbActiveModal,
@@ -23,19 +23,21 @@ export class CreateAnnouncementComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log(1);
-    
+    this.getUser();
     this.annoucementForm = this.fb.group({
       title:       ['', [Validators.required]],
       description: ['', [Validators.required]],
       address:     ['', [Validators.required]],
-      idUser:      [this.userService.userId]
+      idUser:      [this.userId]
     });
     this.annoucementForm.valueChanges.subscribe(() => this.showErrors = false);
   }
 
+  getUser(): void {
+    this.userService.userInfo$.subscribe(({id}) => this.userId = id);
+  }
+
   addAnnouncement() {
-    console.log(this.annoucementForm.value);
     if(this.annoucementForm.valid) {
       this.activeModal.close(this.annoucementForm.value);
     }

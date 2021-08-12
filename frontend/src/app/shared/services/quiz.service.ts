@@ -8,7 +8,7 @@ import { AbstractCrudService } from '../abstracts/abstract-crud.service';
 })
 export class quizService extends AbstractCrudService<Quiz>{
 
-  path = 'quiz/';
+  path = 'quiz/all';
 
   constructor(protected http: HttpClient) {
     super(http);

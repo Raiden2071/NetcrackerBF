@@ -11,16 +11,16 @@ import { AbstractCrudService } from '../abstracts/abstract-crud.service';
 export class UserService extends AbstractCrudService<User>{
 
   path = 'user';
-  userId: number;
+  // userId: number;
 
   subject$ = new BehaviorSubject(1);
   userInfo$ = this.subject$.pipe(
-    tap(v => console.log(v)),
     switchMap((val) => 
       val ? this.getMe().pipe(
         switchMap(({ id }) => this.getOne(id))
       ) : of(null)
     ),
+    // tap(user => this.userId = user.id),
     shareReplay({refCount: true, bufferSize: 1})
   )
 
@@ -29,8 +29,7 @@ export class UserService extends AbstractCrudService<User>{
   }
 
   getMe(): Observable<User> {
-    // this.userId = 182;
-    return this.http.get<User>(`user/${this.userId}`);
+    return this.http.get<User>('user/me');
   }
 
 }

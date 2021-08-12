@@ -15,9 +15,9 @@ export class CreateQuizTitleComponent implements OnInit {
 
   createQuizForm: FormGroup = this.fb.group({
     title:       ['', [Validators.required]],
-    quizType:    [this.quizTypes.HISTORIC, [Validators.required]],
+    quizType:    [this.quizTypes.GEOGRAPHICAL, [Validators.required]],
     description: ['', [Validators.required]],
-    // authorId: [this.user]
+    authorId:    [401]
   });
 
   constructor(

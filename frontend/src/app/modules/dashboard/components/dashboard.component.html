@@ -1,4 +1,4 @@
-<div *ngIf="user" class="m-5">
+<div *ngIf="dashboard" class="m-5">
   <h3 class="mb-4">Hello, {{user.firstName}} {{user.lastName}}</h3>
   <h3 class="mb-4">Last quizzes</h3>
   <!-- quiz -->
@@ -18,7 +18,9 @@
               <img src="/assets/images/icons/cup_black_24dp.svg">
               12 Best result
             </p>
-            <button class="btn btn-outline-primary w-100">Play</button>
+            <button [routerLink]="quiz.title" class="btn btn-outline-primary w-100">
+              Play
+            </button>
           </div>
         </div>
       </div>

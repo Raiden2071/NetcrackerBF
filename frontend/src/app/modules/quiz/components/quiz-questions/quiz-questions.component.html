@@ -57,7 +57,7 @@
             Settings
           </a>
         </li>
-        <li class="mb-2">
+        <li class="mb-2" (click)="logOut()">
           <a routerLink="/auth/login" class="nav-link link-dark">
             <img src="\assets\images\icons\logout_black_24dp.svg" alt="image">
             Log out
@@ -82,18 +82,18 @@
                     Question
                   </span>
                   <!-- определяем какой будет отображаться questionType -->
-                  <input type="text" formControlName="questionText" class="mb-4">
+                  <input type="text" formControlName="question" class="mb-4">
                 </div>
                 <!-- answers value -->
                 <div class="d-flex flex-column" formArrayName="answers">
                   <!-- radio true/false -->
                   <div *ngIf="quiz.value.questionType=='true/false'">
                     <div>
-                      <input type="radio" name="questionType" value="questionType" formControlName="value">
+                      <input type="radio" name="question" value="true" (change)="onChangeType($event.target.value)">
                       true
                     </div>
                     <div>
-                      <input type="radio" name="questionType" value="questionType" formControlName="value">
+                      <input type="radio" name="question" value="false" (change)="onChangeType($event.target.value)">
                       false
                     </div>
                   </div>
@@ -103,7 +103,10 @@
                         <div class="text__input me-4">
                           Answer {{j+1}}
                         </div>
-                        <input type="text" formControlName="value">
+                        <input type="text" class="me-4" formControlName="value">
+                        <div class="d-flex align-items-center">
+                          <input type="checkbox" value="false" formControlName="answer">
+                        </div>
                       </div>
                     </div>
                   </div>

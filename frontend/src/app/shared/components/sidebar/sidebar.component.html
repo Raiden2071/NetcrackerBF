@@ -1,57 +1,59 @@
 <div *ngIf="user" class="d-flex h-100" style="width: 180px; background-color: '#F8F8F8';">
-  <div class="d-flex flex-column justify-content-between my-5 w-100">
-    <div class="d-flex flex-column">
-      <div class="d-flex align-items-center flex-column mb-5">
-        <img src="/assets/user.jpg" alt="user image" class="profileImg mb-3">
-        {{user.firstName}} {{user.lastName}}
+  <div class="position">
+    <div class="d-flex flex-column justify-content-between  my-5 w-100">
+      <div class="d-flex flex-column">
+        <div class="d-flex align-items-center flex-column mb-5">
+          <img src="/assets/user.jpg" alt="user image" class="profileImg mb-3">
+          {{user.firstName}} {{user.lastName}}
+        </div>
+
+        <ul class="nav nav-pills flex-column mb-auto">
+          <li class="mb-2">
+            <a routerLink="/profile" routerLinkActive="active" class="nav-link link-dark">
+              <img src="\assets\images\icons\account_circle_black_24dp.svg" alt="image">
+              Profile
+            </a>
+          </li>
+
+          <li class="mb-2">
+            <a routerLink="/dashboard" routerLinkActive="active" class="nav-link link-dark">
+              <img src="\assets\images\icons\dashboard_black_24dp.svg" alt="image">
+              Dashboard
+            </a>
+          </li>
+
+          <li class="mb-2">
+            <a routerLink="/announcement" routerLinkActive="active" class="nav-link link-dark">
+              <img src="\assets\images\icons\info_black_24dp.svg" alt="image">
+              Announcment
+            </a>
+          </li>
+
+          <li class="mb-2">
+            <a routerLink="/quiz" routerLinkActive="active" class="nav-link link-dark">
+              <img src="\assets\images\icons\quiz_black_24dp.svg" alt="image">
+              Quiz
+            </a>
+          </li>
+        </ul>
       </div>
-
-      <ul class="nav nav-pills flex-column mb-auto">
+      <!-- settings, logout -->
+      <ul class="nav nav-pills flex-column">
         <li class="mb-2">
-          <a routerLink="/profile" routerLinkActive="active" class="nav-link link-dark">
-            <img src="\assets\images\icons\account_circle_black_24dp.svg" alt="image">
-            Profile
+          <a routerLink="/settings" routerLinkActive="active" class="nav-link link-dark">
+            <img src="\assets\images\icons\settings_black_24dp.svg" alt="image">
+            Settings
           </a>
         </li>
 
-        <li class="mb-2">
-          <a routerLink="/dashboard" routerLinkActive="active" class="nav-link link-dark">
-            <img src="\assets\images\icons\dashboard_black_24dp.svg" alt="image">
-            Dashboard
-          </a>
-        </li>
-
-        <li class="mb-2">
-          <a routerLink="/announcement" routerLinkActive="active" class="nav-link link-dark">
-            <img src="\assets\images\icons\info_black_24dp.svg" alt="image">
-            Announcment
-          </a>
-        </li>
-
-        <li class="mb-2">
-          <a routerLink="/quiz" routerLinkActive="active" class="nav-link link-dark">
-            <img src="\assets\images\icons\quiz_black_24dp.svg" alt="image">
-            Quiz
+        <li class="mb-2" (click)="logOut()">
+          <a routerLink="/auth/login" class="nav-link link-dark">
+            <img src="\assets\images\icons\logout_black_24dp.svg" alt="image">
+            Log out
           </a>
         </li>
       </ul>
     </div>
-    <!-- settings, logout -->
-    <ul class="nav nav-pills flex-column">
-      <li class="mb-2">
-        <a routerLink="/settings" routerLinkActive="active" class="nav-link link-dark">
-          <img src="\assets\images\icons\settings_black_24dp.svg" alt="image">
-          Settings
-        </a>
-      </li>
-
-      <li class="mb-2">
-        <a routerLink="/auth/login" class="nav-link link-dark">
-          <img src="\assets\images\icons\logout_black_24dp.svg" alt="image">
-          Log out
-        </a>
-      </li>
-    </ul>
   </div>
 </div>
 

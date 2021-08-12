@@ -8,6 +8,8 @@ import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import localeRu from '@angular/common/locales/ru';
 import { CreateQuizTitleComponent } from './components/create-quiz-title/create-quiz-title.component';
 import { QuizQuestionsComponent } from './components/quiz-questions/quiz-questions.component';
+import { CategoriesBtnComponent } from 'src/app/shared/components/categories-btn/categories-btn.component';
+import { QuizGameComponent } from './components/quiz-game/quiz-game.component';
 
 registerLocaleData(localeRu, 'ru');
 
@@ -15,7 +17,9 @@ registerLocaleData(localeRu, 'ru');
   declarations: [
     QuizComponent,
     CreateQuizTitleComponent,
-    QuizQuestionsComponent
+    QuizQuestionsComponent,
+    CategoriesBtnComponent,
+    QuizGameComponent
     ],
   imports: [
     CommonModule,
