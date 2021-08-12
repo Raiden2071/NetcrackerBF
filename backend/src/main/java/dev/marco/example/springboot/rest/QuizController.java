@@ -195,7 +195,6 @@ public class QuizController {
         }
     }
 
-    // without tests
     @GetMapping("/game/{title}")
     public Quiz quizGame(@PathVariable String title) {
         try {
@@ -216,12 +215,11 @@ public class QuizController {
 
     }
 
-    // without tests
     @PostMapping("/game/end")
     public void finishQuiz(@RequestBody ParamsInFinishQuiz params) {
         try {
-            Quiz quizByTitle = quizService.getQuizByTitle(params.title);
-            gameService.validateAnswers(quizByTitle, params.user, params.answers);
+            Quiz quiz = quizService.getQuizById(params.quizId);
+            gameService.validateAnswers(quiz, params.user, params.answers);
         } catch (QuizDoesNotExistException | QuizException e) {
             log.error(QUIZ_NOT_FOUND_EXCEPTION + e.getMessage());
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
@@ -237,7 +235,6 @@ public class QuizController {
         }
     }
 
-    // without tests
     @PutMapping("/like/{id}")
     public void setLikeOnQuiz(@PathVariable BigInteger id, @RequestBody QuizAccomplishedImpl quizAccomplished) {
         try {
@@ -253,12 +250,12 @@ public class QuizController {
     }
 
     static class ParamsInFinishQuiz {
-        String title;
+        BigInteger quizId;
         User user;
         List<Answer> answers;
 
-        public ParamsInFinishQuiz(String title, User user, List<Answer> answers) {
-            this.title = title;
+        public ParamsInFinishQuiz(BigInteger quizId, User user, List<Answer> answers) {
+            this.quizId = quizId;
             this.user = user;
             this.answers = answers;
         }

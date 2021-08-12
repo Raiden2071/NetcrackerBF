@@ -306,29 +306,28 @@ public class QuizControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.title").value(quizName));
     }
 
-    @Test
-    @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
-    void finishQuizTest() throws Exception {
-        String title = "NewQuiz";
-        User user = new UserImpl.UserBuilder()
-                .setId(BigInteger.valueOf(2036))
-                .setEmail("JohnTitor@gmail.com")
-                .setFirstName("John")
-                .setLastName("Titor")
-                .setDescription("Future")
-                .build();
-        List<Answer> userAnswers = new ArrayList<>();
+  @Test
+  @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
+  void finishQuizTest() throws Exception {
+    User user = new UserImpl.UserBuilder()
+            .setId(BigInteger.valueOf(2036))
+            .setEmail("JohnTitor@gmail.com")
+            .setFirstName("John")
+            .setLastName("Titor")
+            .setDescription("Future")
+            .build();
+    List<Answer> userAnswers = new ArrayList<>();
 
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+    ObjectMapper mapper = new ObjectMapper();
+    mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 
-        this.mockMvc.perform(MockMvcRequestBuilders
-                        .post("/quiz/game/end")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(mapper.writeValueAsString(new QuizController.ParamsInFinishQuiz(title, user, userAnswers)))
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk());
-    }
+    this.mockMvc.perform(MockMvcRequestBuilders
+            .post("/quiz/game/end")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(mapper.writeValueAsString(new QuizController.ParamsInFinishQuiz(BigInteger.valueOf(1), user, userAnswers)))
+            .accept(MediaType.APPLICATION_JSON))
+            .andExpect(MockMvcResultMatchers.status().isOk());
+  }
 
     @Test
     @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)

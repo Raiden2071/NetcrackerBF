@@ -6,6 +6,7 @@ import dev.marco.example.springboot.model.Quiz;
 import dev.marco.example.springboot.model.User;
 import dev.marco.example.springboot.model.impl.QuizAccomplishedImpl;
 
+import java.math.BigInteger;
 import java.util.List;
 
 public interface GameService {
