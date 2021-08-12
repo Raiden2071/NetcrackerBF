@@ -4,6 +4,7 @@ import dev.marco.example.springboot.model.impl.QuizAccomplishedImpl;
 import dev.marco.example.springboot.model.impl.QuizImpl;
 import dev.marco.example.springboot.service.UserService;
 import dev.marco.example.springboot.service.GameService;
+import dev.marco.example.springboot.util.ApiAddresses;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,10 +18,11 @@ import java.math.BigInteger;
 import java.util.List;
 
 import static dev.marco.example.springboot.exception.MessagesForException.*;
+import static dev.marco.example.springboot.util.ApiAddresses.API_QUIZ;
 
 @RestController
-@RequestMapping("/quiz")
-public class QuizController {
+@RequestMapping(API_QUIZ)
+public class QuizController implements ApiAddresses {
 
     private final QuizService quizService;
     private final UserService userService;
@@ -35,15 +37,13 @@ public class QuizController {
         this.gameService = gameService;
     }
 
-    //@Autowired
     public void setTestConnection() throws DAOConfigException {
         quizService.setTestConnection();
         userService.setTestConnection();
         gameService.setTestConnection();
     }
 
-
-    @GetMapping("/all")
+    @GetMapping(API_ALL_QUIZZES)
     public List<Quiz> showAllQuizzes() {
         try {
             List<Quiz> quizzes = quizService.getAllQuizzes();
@@ -75,7 +75,7 @@ public class QuizController {
         }
     }
 
-    @GetMapping("/search")
+    @GetMapping(API_GET_QUIZ_BY_TITLE)
     public List<Quiz> getQuizzesLikeTitle(@RequestParam String title) {
         try {
             return quizService.getQuizzesLikeTitle(title);
@@ -85,8 +85,7 @@ public class QuizController {
         }
     }
 
-
-    @GetMapping("/{id}")
+    @GetMapping(API_GET_QUIZ_BY_ID)
     public Quiz getQuizById(@PathVariable BigInteger id) {
         try {
             Quiz quiz = quizService.getQuizById(id);
@@ -102,7 +101,6 @@ public class QuizController {
             log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e.getCause());
         }
-
     }
 
     @PostMapping("/")
@@ -127,8 +125,7 @@ public class QuizController {
         }
     }
 
-
-    @PutMapping("/{id}")
+    @PutMapping(API_UPDATE_QUIZ)
     public Quiz updateQuiz(@PathVariable BigInteger id,
                            @RequestBody QuizImpl updatedQuiz) {
         try {
@@ -153,7 +150,7 @@ public class QuizController {
 
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping(API_DELETE_QUIZ)
     public void deleteQuiz(@PathVariable BigInteger id) {
         try {
             Quiz quiz = quizService.getQuizById(id);
@@ -177,11 +174,10 @@ public class QuizController {
         }
     }
 
-
-    @GetMapping("/filter")
+    @GetMapping(API_SHOW_ALL_FILTER_QUIZZES)
     public List<Quiz> showAllFilterQuizzes(@RequestParam BigInteger id, @RequestParam Filter filter) {
         try {
-            return Filter.getQuziesByFilter(filter, id, quizService, userService);
+            return Filter.getQuzziesByFilter(filter, id, quizService, userService);
         } catch (UserDoesNotExistException e) {
             log.error(USERS_DOESNT_EXIT + e.getMessage());
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
@@ -195,7 +191,7 @@ public class QuizController {
         }
     }
 
-    @GetMapping("/game/{title}")
+    @GetMapping(API_QUIZ_GAME)
     public Quiz quizGame(@PathVariable String title) {
         try {
             return gameService.sendGameQuiz(title);
@@ -212,10 +208,9 @@ public class QuizController {
             log.error(ANSWER_NOT_FOUND + e.getMessage());
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
         }
-
     }
 
-    @PostMapping("/game/end")
+    @PostMapping(API_FINISH_QUIZ)
     public void finishQuiz(@RequestBody ParamsInFinishQuiz params) {
         try {
             Quiz quiz = quizService.getQuizById(params.quizId);
@@ -235,7 +230,7 @@ public class QuizController {
         }
     }
 
-    @PutMapping("/like/{id}")
+    @PutMapping(API_LIKE_QUIZ)
     public void setLikeOnQuiz(@PathVariable BigInteger id, @RequestBody QuizAccomplishedImpl quizAccomplished) {
         try {
             User user = userService.getUserById(id);
