@@ -187,8 +187,8 @@ public class QuizServiceImpl implements QuizService {
     }
 
     @Override
-    public List<Quiz> getQuizzes(int page) throws QuizException {
-        return quizDAO.getQuizzes(page);
+    public List<Quiz> getQuizzesByPage(int page) throws QuizException {
+        return quizDAO.getQuizzesByPage(page);
     }
 
     @Override

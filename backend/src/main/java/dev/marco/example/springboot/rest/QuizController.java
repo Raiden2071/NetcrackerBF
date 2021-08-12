@@ -64,7 +64,7 @@ public class QuizController {
     @GetMapping
     public List<Quiz> showQuizzesByPage(@RequestParam int page) {
         try {
-            List<Quiz> quizzes = quizService.getQuizzes(page);
+            List<Quiz> quizzes = quizService.getQuizzesByPage(page);
             if (quizzes.isEmpty()) {
                 log.error(QUIZ_NOT_FOUND_EXCEPTION);
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND);

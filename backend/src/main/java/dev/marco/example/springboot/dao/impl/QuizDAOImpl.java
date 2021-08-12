@@ -294,7 +294,7 @@ public class QuizDAOImpl implements QuizDAO {
     }
 
     @Override
-    public List<Quiz> getQuizzes(int page) throws QuizException {
+    public List<Quiz> getQuizzesByPage(int page) throws QuizException {
 
         try (PreparedStatement preparedStatement =
                      connection.prepareStatement(properties.getProperty(SELECT_QUIZZES_BY_ROWS))) {

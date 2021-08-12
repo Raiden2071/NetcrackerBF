@@ -35,7 +35,7 @@ public interface QuizService {
 
     void setTestConnection() throws DAOConfigException;
 
-    List<Quiz> getQuizzes(int page) throws QuizException;
+    List<Quiz> getQuizzesByPage(int page) throws QuizException;
 
     List<Quiz> getQuizzesLikeTitle(String title) throws QuizException;
 
