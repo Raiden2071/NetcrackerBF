@@ -54,7 +54,6 @@ public class UserController implements RegexPatterns, ApiAddresses {
 
   @PostMapping(API_REGISTER_USER)
   public ResponseEntity<Object> createUser(@RequestBody UserImpl user) {
-    log.debug("New user email: " + user.getEmail() + ", " + user.getFirstName());
     try {
       userService.validateNewUser(
           user.getEmail(),
