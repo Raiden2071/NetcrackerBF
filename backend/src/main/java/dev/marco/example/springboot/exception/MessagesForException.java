@@ -92,6 +92,7 @@ public interface MessagesForException {
   String INVALID_EMAIL = "Invalid user email";
   String INVALID_PASSWORD = "Invalid password";
   String DAO_CONFIG_EXCEPTION = "Dao config exception";
+  String CONTROLLER_CONFIG_EXCEPTION = "Controller config exception";
 
   String JWT_AUTH_EXC = "JwtTokenFilter doFilter JwtAuthenticationException ";
   String JWT_TOKEN_INVALID = "JwtTokenFilter doFilter Invalid JWT Token ";

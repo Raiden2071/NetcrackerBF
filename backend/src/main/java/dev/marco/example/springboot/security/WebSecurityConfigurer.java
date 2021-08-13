@@ -24,6 +24,8 @@ import java.util.Arrays;
 @Configuration
 public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
+    private final String USER = "USER";
+    private final String ADMIN = "ADMIN";
     private final String GET_USERNAME_QUERY = "SELECT email, passwd, isActive from USR where email = ?";
     private final String GET_AUTHORITY_QUERY = "SELECT U.email, R.usr_role FROM USR U, USR_ROLES R where U.email = ? AND U.USR_ROLE = R.ID_USR_ROLE";
 
@@ -66,14 +68,14 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
                     .antMatchers("/").permitAll()
                     .and()
                 .authorizeRequests()
-                    .antMatchers("/user/**").hasRole("USER")
-                    .antMatchers("/users").hasRole("USER")
-                    .antMatchers("/quiz/**").hasRole("USER")
-                    .antMatchers("/announcement/**").hasRole("USER")
-                    .antMatchers("/updatePassword").hasRole("USER")
-                    .antMatchers("/dashboard/**").hasRole("USER")
-                    .antMatchers("/toAdmin").hasRole("ADMIN")
-                    .antMatchers("/admin/**").hasRole("ADMIN")
+                    .antMatchers("/user/**").hasRole(USER)
+                    .antMatchers("/users").hasRole(USER)
+                    .antMatchers("/quiz/**").hasRole(USER)
+                    .antMatchers("/announcement/**").hasRole(USER)
+                    .antMatchers("/updatePassword").hasRole(USER)
+                    .antMatchers("/dashboard/**").hasRole(USER)
+                    .antMatchers("/toAdmin").hasRole(ADMIN)
+                    .antMatchers("/admin/**").hasRole(ADMIN)
                     .antMatchers("/confirm").permitAll()
                     .antMatchers("/auth/**").permitAll()
                     .and()
