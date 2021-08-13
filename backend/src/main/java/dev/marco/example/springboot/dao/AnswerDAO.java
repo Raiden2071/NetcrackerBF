@@ -10,35 +10,39 @@ import java.math.BigInteger;
 import java.util.List;
 
 public interface AnswerDAO {
-    String URL_PROPERTY = "${spring.datasource.url}";
-    String USER_PROPERTY = "${spring.datasource.username}";
-    String PASSWORD_PROPERTY = "${spring.datasource.password}";
 
-    String SQL_ANSWER_ID = "id_answer";
-    String SQL_MAX_ID_ANSWER = "MAX(ID_ANSWER)";
-    String SQL_ANSWER_TEXT = "text";
-    String SQL_ANSWER_IS_TRUE = "is_true";
-    String SQL_ANSWER_QUESTION = "question";
+  String URL_PROPERTY = "${spring.datasource.url}";
+  String USER_PROPERTY = "${spring.datasource.username}";
+  String PASSWORD_PROPERTY = "${spring.datasource.password}";
 
-    String GET_ANSWER_BY_ID = "GET_ANSWER_BY_ID";
-    String GET_LAST_ANSWER_ID_BY_TITLE = "GET_LAST_ANSWER_ID_BY_TITLE";
-    String CREATE_ANSWER = "CREATE_ANSWER";
-    String DELETE_ANSWER = "DELETE_ANSWER";
-    String UPDATE_ANSWER = "UPDATE_ANSWER";
-    String GET_ANSWERS_BY_QUESTION_ID = "GET_ANSWERS_BY_QUESTION_ID";
+  String SQL_ANSWER_ID = "id_answer";
+  String SQL_MAX_ID_ANSWER = "MAX(ID_ANSWER)";
+  String SQL_ANSWER_TEXT = "text";
+  String SQL_ANSWER_IS_TRUE = "is_true";
+  String SQL_ANSWER_QUESTION = "question";
 
-    void setTestConnection() throws DAOConfigException;
+  String GET_ANSWER_BY_ID = "GET_ANSWER_BY_ID";
+  String GET_LAST_ANSWER_ID_BY_TITLE = "GET_LAST_ANSWER_ID_BY_TITLE";
+  String CREATE_ANSWER = "CREATE_ANSWER";
+  String DELETE_ANSWER = "DELETE_ANSWER";
+  String UPDATE_ANSWER = "UPDATE_ANSWER";
+  String GET_ANSWERS_BY_QUESTION_ID = "GET_ANSWERS_BY_QUESTION_ID";
+  String TEST = "_TEST";
 
-    Answer getAnswerById(BigInteger id) throws DAOLogicException, AnswerDoesNotExistException;
+  void setTestConnection() throws DAOConfigException;
 
-    BigInteger getLastAnswerIdByTitle(String title) throws DAOLogicException, AnswerDoesNotExistException;
+  Answer getAnswerById(BigInteger id) throws DAOLogicException, AnswerDoesNotExistException;
 
-    BigInteger createAnswer(Answer answer) throws DAOLogicException, AnswerDoesNotExistException;
+  BigInteger getLastAnswerIdByTitle(String title)
+      throws DAOLogicException, AnswerDoesNotExistException;
 
-    void deleteAnswer(BigInteger id) throws DAOLogicException;
+  BigInteger createAnswer(Answer answer) throws DAOLogicException, AnswerDoesNotExistException;
 
-    BigInteger updateAnswer(Answer answer) throws DAOLogicException;
+  void deleteAnswer(BigInteger id) throws DAOLogicException;
 
-    List<AnswerImpl> getAnswersByQuestionId(BigInteger questionId) throws DAOLogicException, AnswerDoesNotExistException;
+  BigInteger updateAnswer(Answer answer) throws DAOLogicException;
+
+  List<AnswerImpl> getAnswersByQuestionId(BigInteger questionId)
+      throws DAOLogicException, AnswerDoesNotExistException;
 
 }
