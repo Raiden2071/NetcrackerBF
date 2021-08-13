@@ -34,7 +34,7 @@ public interface QuizDAO {
     String SELECT_QUIZZES_LIKE_TITLE = "SELECT_QUIZZES_LIKE_TITLE";
     String TEST = "_TEST";
 
-    int COUNT_OF_QUIZZES_ON_PAGE = 6;
+    int COUNT_OF_QUIZZES_ON_PAGE = 8;
 
     Quiz createQuiz(Quiz quiz) throws DAOLogicException, UserDoesNotExistException;
 
