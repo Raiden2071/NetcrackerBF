@@ -121,6 +121,8 @@ export class QuizQuestionsComponent implements OnInit {
   onSubmit(): void {        
     // if(this.answerArray.valid) {
       const data = Object.assign(this.data, this.questionsForm.value);
+      console.log(data);
+      
       this.http.post('quiz/', data).subscribe((v)=> console.log(v));
     // }
   }

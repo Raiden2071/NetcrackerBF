@@ -17,7 +17,7 @@ export class CreateQuizTitleComponent implements OnInit {
     title:       ['', [Validators.required]],
     quizType:    [this.quizTypes.GEOGRAPHICAL, [Validators.required]],
     description: ['', [Validators.required]],
-    authorId:    [401]
+    authorId:    [21]
   });
 
   constructor(

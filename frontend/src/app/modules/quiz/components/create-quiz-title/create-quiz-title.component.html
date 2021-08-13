@@ -19,7 +19,7 @@
         <!-- <input type="text" class="form-control" formControlName="quizType"> -->
         <select class="w-50" formControlName="quizType">
           <option *ngFor="let exampleQuiz of quizTypes | keyvalue">
-            {{ exampleQuiz.value }}
+            {{ exampleQuiz.key }}
           </option>
         </select>
       </div>
