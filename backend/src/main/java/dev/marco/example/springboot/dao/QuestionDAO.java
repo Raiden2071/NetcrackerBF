@@ -1,7 +1,5 @@
 package dev.marco.example.springboot.dao;
 
-
-
 import dev.marco.example.springboot.exception.DAOConfigException;
 import dev.marco.example.springboot.exception.DAOLogicException;
 import dev.marco.example.springboot.exception.QuestionDoesNotExistException;
@@ -14,31 +12,39 @@ import java.util.List;
 
 public interface QuestionDAO {
 
-    final String questionIdColumn = "id_question";
-    final String questionNameColumn = "question_name";
-    final String questionTypeColumn = "question_type";
-    final String questionQuizIdColumn = "quiz";
+  String URL_PROPERTY = "${spring.datasource.url}";
+  String USERNAME_PROPERTY = "${spring.datasource.username}";
+  String PASSWORD_PROPERTY = "${spring.datasource.password}";
 
-    final String PROPERTY_GET_QUESTION_BY_ID = "GET_QUESTION_BY_ID";
-    final String PROPERTY_GET_QUESTION_BY_DATA = "GET_QUESTION_BY_DATA";
-    final String PROPERTY_CREATE_QUESTION = "CREATE_QUESTION";
-    final String PROPERTY_GET_QUESTION_ID_BY_DATA = "GET_QUESTION_ID_BY_DATA";
-    final String PROPERTY_DELETE_QUESTION = "DELETE_QUESTION";
-    final String PROPERTY_GET_ALL_QUESTIONS = "GET_ALL_QUESTIONS";
-    final String PROPERTY_UPDATE_QUESTION = "UPDATE_QUESTION";
+  String QUESTION_ID_COLUMN = "id_question";
+  String QUESTION_NAME_COLUMN = "question_name";
+  String QUESTION_TYPE_COLUMN = "question_type";
 
-    void setTestConnection() throws DAOConfigException;
+  String PROPERTY_GET_QUESTION_BY_ID = "GET_QUESTION_BY_ID";
+  String PROPERTY_GET_QUESTION_BY_DATA = "GET_QUESTION_BY_DATA";
+  String PROPERTY_CREATE_QUESTION = "CREATE_QUESTION";
+  String PROPERTY_GET_QUESTION_ID_BY_DATA = "GET_QUESTION_ID_BY_DATA";
+  String PROPERTY_DELETE_QUESTION = "DELETE_QUESTION";
+  String PROPERTY_GET_ALL_QUESTIONS = "GET_ALL_QUESTIONS";
+  String PROPERTY_UPDATE_QUESTION = "UPDATE_QUESTION";
+  String TEST = "_TEST";
 
-    Question getQuestionById(BigInteger id, List<AnswerImpl> answers) throws QuestionDoesNotExistException, DAOLogicException;
+  void setTestConnection() throws DAOConfigException;
 
-    Question getQuestionByData(String questionText, BigInteger quizId) throws QuestionDoesNotExistException, DAOLogicException;
+  Question getQuestionById(BigInteger id, List<AnswerImpl> answers)
+      throws QuestionDoesNotExistException, DAOLogicException;
 
-    Question createQuestion(Question question, BigInteger id) throws QuestionDoesNotExistException, DAOLogicException;
+  Question getQuestionByData(String questionText, BigInteger quizId)
+      throws QuestionDoesNotExistException, DAOLogicException;
 
-    void deleteQuestion(Question question) throws QuestionDoesNotExistException, DAOLogicException;
+  Question createQuestion(Question question, BigInteger id)
+      throws QuestionDoesNotExistException, DAOLogicException;
 
-    List<QuestionImpl> getAllQuestions(BigInteger id) throws QuestionDoesNotExistException, DAOLogicException;
+  void deleteQuestion(Question question) throws QuestionDoesNotExistException, DAOLogicException;
 
-    void updateQuestion(Question question) throws DAOLogicException;
+  List<QuestionImpl> getAllQuestions(BigInteger id)
+      throws QuestionDoesNotExistException, DAOLogicException;
+
+  void updateQuestion(Question question) throws DAOLogicException;
 
 }
