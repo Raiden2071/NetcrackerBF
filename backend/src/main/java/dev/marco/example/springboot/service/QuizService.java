@@ -4,6 +4,8 @@ import dev.marco.example.springboot.exception.*;
 import dev.marco.example.springboot.model.Quiz;
 import dev.marco.example.springboot.model.QuizType;
 import dev.marco.example.springboot.model.impl.QuizImpl;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -35,8 +37,8 @@ public interface QuizService {
 
     void setTestConnection() throws DAOConfigException;
 
-    List<Quiz> getQuizzesByPage(int page) throws QuizException;
+    Page<Quiz> getQuizzesLikeTitle(Pageable pageable, String title) throws QuizException;
 
-    List<Quiz> getQuizzesLikeTitle(String title) throws QuizException;
+    Page<Quiz> getQuizzesByPage(Pageable pageable) throws QuizException;
 
 }

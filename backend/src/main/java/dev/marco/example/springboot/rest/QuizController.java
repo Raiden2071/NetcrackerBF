@@ -7,6 +7,9 @@ import dev.marco.example.springboot.service.GameService;
 import dev.marco.example.springboot.util.ApiAddresses;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import dev.marco.example.springboot.exception.*;
@@ -61,24 +64,22 @@ public class QuizController implements ApiAddresses {
         }
     }
 
+
     @GetMapping
-    public List<Quiz> showQuizzesByPage(@RequestParam int page) {
+    public Page<Quiz> showQuizzesByPage(@PageableDefault(size = 8, page = 1) Pageable pageable) {
         try {
-            List<Quiz> quizzes = quizService.getQuizzesByPage(page);
-            if (quizzes.isEmpty()) {
-                log.error(QUIZ_NOT_FOUND_EXCEPTION);
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-            }
-            return quizzes;
+            return quizService.getQuizzesByPage(pageable);
         } catch (QuizException e) {
+            log.error(QUIZ_NOT_FOUND_EXCEPTION);
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
         }
     }
 
     @GetMapping(API_GET_QUIZ_BY_TITLE)
-    public List<Quiz> getQuizzesLikeTitle(@RequestParam String title) {
+    public Page<Quiz> getQuizzesLikeTitle(@PageableDefault(size = 8, page = 1) Pageable pageable,
+                                          @RequestParam String title) {
         try {
-            return quizService.getQuizzesLikeTitle(title);
+            return quizService.getQuizzesLikeTitle(pageable, title);
         } catch (QuizException e) {
             log.error(QUIZ_NOT_FOUND_EXCEPTION);
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());

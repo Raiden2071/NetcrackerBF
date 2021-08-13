@@ -7,6 +7,8 @@ import dev.marco.example.springboot.model.impl.QuestionImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import dev.marco.example.springboot.dao.QuizDAO;
 import dev.marco.example.springboot.exception.*;
@@ -187,13 +189,13 @@ public class QuizServiceImpl implements QuizService {
     }
 
     @Override
-    public List<Quiz> getQuizzesByPage(int page) throws QuizException {
-        return quizDAO.getQuizzesByPage(page);
+    public Page<Quiz> getQuizzesLikeTitle(Pageable pageable, String title) throws QuizException {
+        return quizDAO.getQuizzesLikeTitle(pageable, title);
     }
+
 
     @Override
-    public List<Quiz> getQuizzesLikeTitle(String title) throws QuizException {
-        return quizDAO.getQuizzesLikeTitle(title);
+    public Page<Quiz> getQuizzesByPage(Pageable pageable) throws QuizException {
+        return quizDAO.getQuizzesByPage(pageable);
     }
-
 }

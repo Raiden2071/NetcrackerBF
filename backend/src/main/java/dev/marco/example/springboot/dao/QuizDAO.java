@@ -4,6 +4,8 @@ import dev.marco.example.springboot.exception.*;
 import dev.marco.example.springboot.model.Quiz;
 import dev.marco.example.springboot.model.QuizType;
 import dev.marco.example.springboot.model.impl.QuizImpl;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -30,11 +32,13 @@ public interface QuizDAO {
     String SELECT_QUIZ_BY_TITLE = "SELECT_QUIZ_BY_TITLE";
     String SELECT_QUIZZES_BY_TYPE = "SELECT_QUIZZES_BY_TYPE";
     String SELECT_LAST_CREATED_QUIZZES = "SELECT_LAST_CREATED_QUIZZES";
+
+    String SELECT_COUNT_OF_QUIZZES = "SELECT_COUNT_OF_QUIZZES";
+    String SELECT_COUNT_OF_QUIZZES_BY_TITLE = "SELECT_COUNT_OF_QUIZZES_BY_TITLE";
+
     String SELECT_QUIZZES_BY_ROWS = "SELECT_QUIZZES_BY_ROWS";
     String SELECT_QUIZZES_LIKE_TITLE = "SELECT_QUIZZES_LIKE_TITLE";
     String TEST = "_TEST";
-
-    int COUNT_OF_QUIZZES_ON_PAGE = 8;
 
     Quiz createQuiz(Quiz quiz) throws DAOLogicException, UserDoesNotExistException;
 
@@ -56,8 +60,12 @@ public interface QuizDAO {
 
     void setTestConnection() throws DAOConfigException;
 
-    List<Quiz> getQuizzesByPage(int page) throws QuizException;
+    int countOfQuizzesLikeTitle(String title) throws QuizException;
 
-    List<Quiz> getQuizzesLikeTitle(String title) throws QuizException;
+    Page<Quiz> getQuizzesLikeTitle(Pageable pageable, String title) throws QuizException;
+
+    int countOfQuizzes() throws QuizException;
+
+    Page<Quiz> getQuizzesByPage(Pageable pageable) throws QuizException;
 
 }
