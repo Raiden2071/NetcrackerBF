@@ -16,6 +16,9 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -90,76 +93,36 @@ public class QuizControllerTest {
         verify(quizService).getAllQuizzes();
     }
 
-    @Test
-    @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
-    void showQuizzesByFirstPageTest() throws Exception {
-
-        when(quizService.getQuizzesByPage(1))
-                .thenReturn(
-                        Arrays.asList(
-                                QuizImpl.QuizBuilder()
-                                        .setId(BigInteger.valueOf(1))
-                                        .setTitle("Quiz1 on page 1")
-                                        .setDescription("Quiz1")
-                                        .setQuizType(QuizType.MATHEMATICS)
-                                        .setCreatorId(BigInteger.valueOf(1))
-                                        .build(),
-                                QuizImpl.QuizBuilder()
-                                        .setId(BigInteger.valueOf(2))
-                                        .setTitle("Quiz2 on page 1")
-                                        .setDescription("Quiz2")
-                                        .setQuizType(QuizType.HISTORIC)
-                                        .setCreatorId(BigInteger.valueOf(4))
-                                        .build()
-                        )
-                );
-
-        this.mockMvc.perform(MockMvcRequestBuilders
-                        .get("/quiz?page=1"))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(jsonPath("$[0].id").value(BigInteger.valueOf(1)))
-                .andExpect(jsonPath("$[0].title").value("Quiz1 on page 1"))
-
-                .andExpect(jsonPath("$[1].id").value(BigInteger.valueOf(2)))
-                .andExpect(jsonPath("$[1].title").value("Quiz2 on page 1"));
-
-        verify(quizService).getQuizzesByPage(1);
-    }
 
     @Test
     @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
     void searchQuizzesLikeTitleTest() throws Exception {
-        String title = "quiz";
-        when(quizService.getQuizzesLikeTitle(title))
+        String title = "qu";
+        Pageable pageable = PageRequest.of(0, 8);
+        when(quizService.getQuizzesLikeTitle(pageable, title))
                 .thenReturn(
-                        Arrays.asList(
+                        new PageImpl<>(Arrays.asList(
                                 QuizImpl.QuizBuilder()
                                         .setId(BigInteger.valueOf(1))
-                                        .setTitle("Test Quiz1")
+                                        .setTitle("Quiz1")
                                         .setDescription("Quiz1")
-                                        .setQuizType(QuizType.MATHEMATICS)
+                                        .setQuizType(QuizType.HISTORIC)
                                         .setCreatorId(BigInteger.valueOf(1))
                                         .build(),
                                 QuizImpl.QuizBuilder()
                                         .setId(BigInteger.valueOf(2))
-                                        .setTitle("Test Quiz2")
+                                        .setTitle("Quiz2")
                                         .setDescription("Quiz2")
                                         .setQuizType(QuizType.HISTORIC)
-                                        .setCreatorId(BigInteger.valueOf(4))
+                                        .setCreatorId(BigInteger.valueOf(1))
                                         .build()
-                        )
-                );
+                        ), pageable, 2));
 
         this.mockMvc.perform(MockMvcRequestBuilders
-                        .get("/quiz/search?title={title}", title))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(jsonPath("$[0].id").value(BigInteger.valueOf(1)))
-                .andExpect(jsonPath("$[0].title").value("Test Quiz1"))
+                        .get("/quiz/search?page=1&title={title}", title))
+                .andExpect(MockMvcResultMatchers.status().isOk());
 
-                .andExpect(jsonPath("$[1].id").value(BigInteger.valueOf(2)))
-                .andExpect(jsonPath("$[1].title").value("Test Quiz2"));
-
-        verify(quizService).getQuizzesLikeTitle(title);
+        verify(quizService).getQuizzesLikeTitle(pageable, title);
     }
 
     @Test
