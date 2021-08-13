@@ -1,6 +1,5 @@
 package dev.marco.example.springboot.dao.impl;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -48,13 +47,12 @@ public class UserDAOImpl implements UserDAO {
   @Override
   public void setTestConnection() throws DAOConfigException {
     try {
-      connection = DAOUtil.getDataSource(URL, USERNAME + "_TEST", PASSWORD, properties);
+      connection = DAOUtil.getDataSource(URL, USERNAME + TEST_CONNECTION, PASSWORD, properties);
     } catch (DAOConfigException e) {
       log.error(MessagesForException.TEST_CONNECTION_ERR + e.getMessage());
       throw new DAOConfigException(MessagesForException.TEST_CONNECTION_ERR, e);
     }
   }
-
 
   @Override
   public User getUserById(BigInteger id) throws UserDoesNotExistException, DAOLogicException {
@@ -69,31 +67,26 @@ public class UserDAOImpl implements UserDAO {
         throw new UserDoesNotExistException(MessagesForException.INVALID_USERS_ID + id);
       }
 
+//      Return's user without password and email code
       return new UserImpl.UserBuilder()
           .setId(id)
           .setFirstName(resultSet.getString(properties.getProperty(USER_FIRST_NAME)))
           .setLastName(resultSet.getString(properties.getProperty(USER_LAST_NAME)))
           .setEmail(resultSet.getString(properties.getProperty(USER_EMAIL)))
-//          .setPassword(resultSet.getString(properties.getProperty(USER_PASSWORD)))
           .setRole(
               UserRoles.convertFromIntToRole(resultSet.getInt(properties.getProperty(USER_ROLE))))
           .setActive(
               resultSet.getInt(properties.getProperty(USER_ACTIVE)) == UserActive.ACTIVE.ordinal())
-//          .setEmailCode(resultSet.getString(properties.getProperty(USER_EMAIL_CODE)))
           .setDescription(resultSet.getString(properties.getProperty(USER_DESCRIPTION)))
           .build();
-
     } catch (SQLException | UserException e) {
-      log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
+      log.error(MessagesForException.DAO_LOGIC_EXCEPTION + e.getMessage());
       throw new DAOLogicException(MessagesForException.DAO_LOGIC_EXCEPTION + id, e);
     }
   }
 
   @Override
   public User getUserByEmail(String email) throws UserDoesNotExistException, DAOLogicException {
-//    if (StringUtils.isEmpty(email)) {
-//      throw new UserDoesNotExistException(MessagesForException.USERS_DOESNT_EXIT);
-//    }
     try (PreparedStatement statement = connection
         .prepareStatement(properties.getProperty(SEARCH_USER_BY_EMAIL))) {
 
@@ -105,23 +98,21 @@ public class UserDAOImpl implements UserDAO {
         throw new UserDoesNotExistException(MessagesForException.INVALID_USERS_EMAIL + email);
       }
 
+//      Return's user without password and email code
       return new UserImpl.UserBuilder()
           .setId(BigInteger.valueOf(resultSet.getLong(properties.getProperty(USER_ID))))
           .setFirstName(resultSet.getString(properties.getProperty(USER_FIRST_NAME)))
           .setLastName(resultSet.getString(properties.getProperty(USER_LAST_NAME)))
           .setEmail(email)
-//          .setPassword(resultSet.getString(properties.getProperty(USER_PASSWORD)))
           .setRole(
               UserRoles.convertFromIntToRole(resultSet.getInt(properties.getProperty(USER_ROLE))))
           .setActive(
               resultSet.getInt(properties.getProperty(USER_ACTIVE)) == UserActive.ACTIVE.ordinal())
-//          .setEmailCode(resultSet.getString(properties.getProperty(USER_EMAIL_CODE)))
           .setDescription(resultSet.getString(properties.getProperty(USER_DESCRIPTION)))
           .build();
-
     } catch (SQLException | UserException e) {
-      log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
-      throw new DAOLogicException(DAO_LOGIC_EXCEPTION + email, e);
+      log.error(MessagesForException.DAO_LOGIC_EXCEPTION + e.getMessage());
+      throw new DAOLogicException(MessagesForException.DAO_LOGIC_EXCEPTION + email, e);
     }
   }
 
@@ -132,8 +123,8 @@ public class UserDAOImpl implements UserDAO {
       statement.setLong(1, id.longValue());
       statement.executeUpdate();
     } catch (SQLException e) {
-      log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
-      throw new DAOLogicException(DAO_LOGIC_EXCEPTION + id, e);
+      log.error(MessagesForException.DAO_LOGIC_EXCEPTION + e.getMessage());
+      throw new DAOLogicException(MessagesForException.DAO_LOGIC_EXCEPTION + id, e);
     }
   }
 
@@ -155,9 +146,8 @@ public class UserDAOImpl implements UserDAO {
       }
 
       return getUserByEmail(user.getEmail()).getId();
-
     } catch (SQLException | UserDoesNotExistException e) {
-      log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
+      log.error(MessagesForException.DAO_LOGIC_EXCEPTION + e.getMessage());
       throw new DAOLogicException(MessagesForException.ERROR_WHILE_CREATING_USER + user, e);
     }
   }
@@ -175,10 +165,9 @@ public class UserDAOImpl implements UserDAO {
         throw new UserDoesNotExistException(MessagesForException.USERS_DOESNT_EXIT + id);
       }
     } catch (SQLException e) {
-      log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
+      log.error(MessagesForException.DAO_LOGIC_EXCEPTION + e.getMessage());
       throw new DAOLogicException(MessagesForException.DAO_LOGIC_EXCEPTION + id, e);
     }
-
   }
 
   @Override
@@ -193,7 +182,7 @@ public class UserDAOImpl implements UserDAO {
         throw new UserDoesNotExistException(MessagesForException.USERS_DOESNT_EXIT + id);
       }
     } catch (SQLException e) {
-      log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
+      log.error(MessagesForException.DAO_LOGIC_EXCEPTION + e.getMessage());
       throw new DAOLogicException(MessagesForException.USERS_DOESNT_EXIT + id, e);
     }
 
@@ -201,51 +190,43 @@ public class UserDAOImpl implements UserDAO {
 
   @Override
   public User getAuthorizeUser(String email, String password)
-          throws UserDoesNotExistException, UserDoesNotConfirmedEmailException, DAOLogicException, UserException {
+      throws UserDoesNotExistException, UserDoesNotConfirmedEmailException, DAOLogicException, UserException {
     try (PreparedStatement statement = connection
         .prepareStatement(properties.getProperty(SEARCH_USER_AUTHORIZE))) {
 
       BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
       String dbPassword = getUserPasswordByEmail(email);
-      if(!encoder.matches(password, dbPassword)){
+      if (!encoder.matches(password, dbPassword)) {
         throw new UserException(MessagesForException.WRONG_PASSWORD);
       }
 
       statement.setString(1, email);
       ResultSet resultSet = statement.executeQuery();
       if (!resultSet.next()) {
-        log.error("resultSet user not found");
+        log.error(MessagesForException.USER_NOT_FOUND_EXCEPTION);
         throw new UserDoesNotExistException(
             MessagesForException.USERS_DOESNT_EXIT + email + password);
       }
-//      CHECK SQL SQRIPT, REMOVE isactive='1'
-//
-//      if (resultSet.getInt(properties.getProperty(USER_ACTIVE)) == UserActive.NOT_ACTIVE
-//          .ordinal()) {
-//        throw new UserDoesNotConfirmedEmailException(
-//            MessagesForException.USERS_DOESNT_EXIT + email + password);
-//      }
+
+//      Return's user without password and email code
       return new UserImpl.UserBuilder()
           .setId(BigInteger.valueOf(resultSet.getLong(properties.getProperty(USER_ID))))
           .setFirstName(resultSet.getString(properties.getProperty(USER_FIRST_NAME)))
           .setLastName(resultSet.getString(properties.getProperty(USER_LAST_NAME)))
           .setEmail(email)
-//          .setPassword(password)
           .setRole(
               UserRoles.convertFromIntToRole(resultSet.getInt(properties.getProperty(USER_ROLE))))
           .setActive(
               resultSet.getInt(properties.getProperty(USER_ACTIVE)) == UserActive.ACTIVE.ordinal())
-//          .setEmailCode(resultSet.getString(properties.getProperty(USER_EMAIL_CODE)))
           .setDescription(resultSet.getString(properties.getProperty(USER_DESCRIPTION)))
           .build();
 
     } catch (SQLException e) {
-      log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
+      log.error(MessagesForException.DAO_LOGIC_EXCEPTION + e.getMessage());
       throw new DAOLogicException(
           MessagesForException.DAO_LOGIC_EXCEPTION + email + password, e);
     }
-
   }
 
   @Override
@@ -260,7 +241,7 @@ public class UserDAOImpl implements UserDAO {
         throw new UserDoesNotExistException(MessagesForException.USERS_DOESNT_EXIT + id);
       }
     } catch (SQLException e) {
-      log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
+      log.error(MessagesForException.DAO_LOGIC_EXCEPTION + e.getMessage());
       throw new DAOLogicException(MessagesForException.DAO_LOGIC_EXCEPTION + id + newDescription,
           e);
     }
@@ -278,7 +259,7 @@ public class UserDAOImpl implements UserDAO {
         throw new UserDoesNotExistException(MessagesForException.USERS_DOESNT_EXIT + id);
       }
     } catch (SQLException e) {
-      log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
+      log.error(MessagesForException.DAO_LOGIC_EXCEPTION + e.getMessage());
       throw new DAOLogicException(
           MessagesForException.DAO_LOGIC_EXCEPTION + id + newCode, e);
     }
@@ -296,25 +277,23 @@ public class UserDAOImpl implements UserDAO {
         throw new UserDoesNotExistException(MessagesForException.USERS_DOESNT_EXIT + code);
       }
 
+//      Return's user without password and email
       return new UserImpl.UserBuilder()
           .setId(BigInteger.valueOf(resultSet.getLong(properties.getProperty(USER_ID))))
           .setFirstName(resultSet.getString(properties.getProperty(USER_FIRST_NAME)))
           .setLastName(resultSet.getString(properties.getProperty(USER_LAST_NAME)))
           .setEmail(resultSet.getString(properties.getProperty(USER_EMAIL)))
-//          .setPassword(resultSet.getString(properties.getProperty(USER_PASSWORD)))
           .setRole(
               UserRoles.convertFromIntToRole(resultSet.getInt(properties.getProperty(USER_ROLE))))
           .setActive(
               resultSet.getInt(properties.getProperty(USER_ACTIVE)) == UserActive.ACTIVE.ordinal())
-//          .setEmailCode(code)
           .setDescription(resultSet.getString(properties.getProperty(USER_DESCRIPTION)))
           .build();
 
     } catch (SQLException | UserException e) {
-      log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
+      log.error(MessagesForException.DAO_LOGIC_EXCEPTION + e.getMessage());
       throw new DAOLogicException(MessagesForException.DAO_LOGIC_EXCEPTION + code, e);
     }
-
   }
 
   @Override
@@ -329,10 +308,10 @@ public class UserDAOImpl implements UserDAO {
         throw new UserDoesNotExistException(MessagesForException.USERS_DOESNT_EXIT + email);
       }
 
-      return resultSet.getString("PASSWD");
+      return resultSet.getString(USERS_PASSWORD);
 
     } catch (SQLException e) {
-      log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
+      log.error(MessagesForException.DAO_LOGIC_EXCEPTION + e.getMessage());
       throw new DAOLogicException(MessagesForException.DAO_LOGIC_EXCEPTION + email, e);
     }
   }
@@ -350,13 +329,11 @@ public class UserDAOImpl implements UserDAO {
 
       return resultSet.next();
     } catch (SQLException e) {
-      log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
+      log.error(MessagesForException.DAO_LOGIC_EXCEPTION + e.getMessage());
       throw new DAOLogicException(
           MessagesForException.DAO_LOGIC_EXCEPTION + id + checkPassword, e);
-
     }
   }
-
 
   @Override
   public boolean activateUser(BigInteger id) throws DAOLogicException, UserDoesNotExistException {
@@ -367,10 +344,9 @@ public class UserDAOImpl implements UserDAO {
       return statement.executeUpdate() == 1;
 
     } catch (SQLException e) {
-      log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
+      log.error(MessagesForException.DAO_LOGIC_EXCEPTION + e.getMessage());
       throw new DAOLogicException(MessagesForException.DAO_LOGIC_EXCEPTION + id, e);
     }
-
   }
 
   @Override
@@ -382,7 +358,7 @@ public class UserDAOImpl implements UserDAO {
       return statement.executeUpdate() == 1;
 
     } catch (SQLException e) {
-      log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
+      log.error(MessagesForException.DAO_LOGIC_EXCEPTION + e.getMessage());
       throw new DAOLogicException(MessagesForException.DAO_LOGIC_EXCEPTION + id, e);
     }
   }
@@ -399,7 +375,7 @@ public class UserDAOImpl implements UserDAO {
         throw new UserDoesNotExistException(MessagesForException.USERS_DOESNT_EXIT + id);
       }
     } catch (SQLException e) {
-      log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
+      log.error(MessagesForException.DAO_LOGIC_EXCEPTION + e.getMessage());
       throw new DAOLogicException(MessagesForException.DAO_LOGIC_EXCEPTION + id + role.name(), e);
     }
   }

@@ -8,7 +8,7 @@ import java.math.BigInteger;
 
 public interface UserDAO {
 
-  public void setTestConnection() throws DAOConfigException;
+  void setTestConnection() throws DAOConfigException;
 
   User getUserById(BigInteger id) throws UserDoesNotExistException, DAOLogicException;
 
@@ -76,10 +76,8 @@ public interface UserDAO {
   String UPDATE_USER_ROLE = "UPDATE_USER_ROLE";
   String SEARCH_USER_BY_EMAIL = "SEARCH_USER_BY_EMAIL";
   String CHECK_USER_PASSWORD = "CHECK_USER_PASSWORD";
+  String USERS_PASSWORD = "PASSWD";
 
-
-  String DAO_LOGIC_EXCEPTION = "Dao logic exception ";
-
-  int TRUE_SQL = 1;
+  String TEST_CONNECTION = "_TEST";
 
 }
