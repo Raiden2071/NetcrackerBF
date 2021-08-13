@@ -4,9 +4,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import dev.marco.example.springboot.exception.*;
 import dev.marco.example.springboot.model.Announcement;
 import dev.marco.example.springboot.model.AnnouncementComment;
-import dev.marco.example.springboot.model.impl.AnnouncementCommentImpl;
 import dev.marco.example.springboot.model.impl.AnnouncementImpl;
 import dev.marco.example.springboot.service.AnnouncementService;
+import dev.marco.example.springboot.util.ApiAddresses;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,8 +17,8 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/announcement")
-public class AnnouncementController {
+@RequestMapping(ApiAddresses.API_ANNOUNCEMENT)
+public class AnnouncementController implements ApiAddresses {
 
   private static final String ID_USER = "idUser";
   private static final String ID_ANNOUNCEMENT = "idAnnouncement";
@@ -33,12 +33,11 @@ public class AnnouncementController {
     this.announcementService = announcementService;
   }
 
-  //@Autowired
   public void setTestConnection() throws DAOConfigException {
     announcementService.setTestConnection();
   }
 
-  @PostMapping("/create")
+  @PostMapping(API_CREATE_ANNOUNCEMENT)
   public BigInteger createAnnouncement(@RequestBody AnnouncementImpl announcement) {
     try {
       return announcementService.buildNewAnnouncement(new AnnouncementImpl.AnnouncementBuilder()
@@ -59,7 +58,7 @@ public class AnnouncementController {
     }
   }
 
-  @GetMapping("/all/{idUser}")
+  @GetMapping(API_GET_ALL_ANNOUNCEMENT)
   public List<Announcement> getAllAnnouncement(@PathVariable BigInteger idUser) {
     try {
       return announcementService.getAllAnnouncements(idUser);
@@ -75,7 +74,7 @@ public class AnnouncementController {
     }
   }
 
-  @DeleteMapping("/delete")
+  @DeleteMapping(API_DELETE_ANNOUNCEMENT)
   public void deleteAnnouncement(@RequestBody JsonNode requestBody) {
     BigInteger idUser = BigInteger.valueOf(requestBody.get(ID_USER).asLong());
     BigInteger idAnnouncement = BigInteger.valueOf(requestBody.get(ID_ANNOUNCEMENT).asLong());
@@ -93,7 +92,7 @@ public class AnnouncementController {
     }
   }
 
-  @PutMapping("/update")
+  @PutMapping(API_UPDATE_ANNOUNCEMENT)
   public void editAnnouncement(@RequestBody AnnouncementImpl announcement) {
     try {
       announcementService.editAnnouncement(new AnnouncementImpl.AnnouncementBuilder()
@@ -118,7 +117,7 @@ public class AnnouncementController {
     }
   }
 
-  @PostMapping("/like")
+  @PostMapping(API_LIKE_ANNOUNCEMENT)
   public void setLikeAnnouncement(@RequestBody JsonNode requestBody) {
     BigInteger idUser = BigInteger.valueOf(requestBody.get(ID_USER).asLong());
     BigInteger idAnnouncement = BigInteger.valueOf(requestBody.get(ID_ANNOUNCEMENT).asLong());
@@ -136,7 +135,7 @@ public class AnnouncementController {
     }
   }
 
-  @GetMapping("/commentaries")
+  @GetMapping(API_GET_COMMENTARIES)
   public List<AnnouncementComment> getCommentaries(@RequestBody JsonNode requestBody) {
     try {
       BigInteger idAnnouncement = BigInteger.valueOf(requestBody.get(ID_ANNOUNCEMENT).asLong());
@@ -153,7 +152,7 @@ public class AnnouncementController {
     }
   }
 
-  @PostMapping("/commentaries")
+  @PostMapping(API_CREATE_COMMENTARY)
   public void createCommentary(@RequestBody JsonNode requestBody) {
     try {
       BigInteger idAnnouncement = BigInteger.valueOf(requestBody.get(ID_ANNOUNCEMENT).asLong());
@@ -169,10 +168,11 @@ public class AnnouncementController {
     }
   }
 
-  @PostMapping("/search")
+  @PostMapping(API_SEARCH_ANNOUNCEMENT)
   public Set<Announcement> searchAnnouncement(@RequestBody JsonNode requestBody) {
-    String titleForSearch = requestBody.get("searchProject").asText();
-    BigInteger idUser = BigInteger.valueOf(requestBody.get("idUser").asLong());
+    String search = "searchProject";
+    String titleForSearch = requestBody.get(search).asText();
+    BigInteger idUser = BigInteger.valueOf(requestBody.get(ID_USER).asLong());
     try {
       return announcementService.getSetByTitle(titleForSearch, idUser);
     } catch (DAOLogicException e) {

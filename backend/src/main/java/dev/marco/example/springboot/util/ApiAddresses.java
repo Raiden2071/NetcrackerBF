@@ -27,4 +27,14 @@ public interface ApiAddresses {
 
   String API_GENERATE_DASHBOARD = "/dashboard/{id}";
 
+  String API_ANNOUNCEMENT = "/announcement";
+  String API_CREATE_ANNOUNCEMENT = "/create";
+  String API_GET_ALL_ANNOUNCEMENT = "/all/{idUser}";
+  String API_DELETE_ANNOUNCEMENT = "/delete";
+  String API_UPDATE_ANNOUNCEMENT = "/update";
+  String API_LIKE_ANNOUNCEMENT = "/like";
+  String API_GET_COMMENTARIES = "/commentaries";
+  String API_CREATE_COMMENTARY = "/commentaries";
+  String API_SEARCH_ANNOUNCEMENT = "/search";
+
 }
