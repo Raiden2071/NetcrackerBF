@@ -10,6 +10,7 @@ import java.util.Set;
 
 public interface AnnouncementService {
 
+    String MESSAGE_FROM_TEST_CONNECTION = "in testConnection";
     String MESSAGE_FOR_BUILD_NEW_ANNOUNCEMENT = " in buildNewAnnouncement()";
     String MESSAGE_FOR_EDIT_ANNOUNCEMENT = " in editAnnouncement()";
     String MESSAGE_FOR_DELETE_ANNOUNCEMENT = " in deleteAnnouncement()";
