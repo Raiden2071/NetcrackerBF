@@ -56,7 +56,7 @@ class UserDAOImplTest {
     try {
       assertNotNull(userDAO.getUserById(BigInteger.ONE));
     } catch (UserDoesNotExistException | DAOLogicException e) {
-      log.error(MessagesForException.TEST_USER_ERROR + e.getMessage());
+      log.error(MessagesForException.TEST_ERROR + e.getMessage());
       fail();
     }
   }
@@ -80,7 +80,7 @@ class UserDAOImplTest {
           userDAO.getUserById(BigInteger.ONE).getEmail()
       ));
     } catch (UserDoesNotExistException | DAOLogicException e) {
-      log.error(MessagesForException.TEST_USER_ERROR + e.getMessage());
+      log.error(MessagesForException.TEST_ERROR + e.getMessage());
       fail();
     }
   }
@@ -114,7 +114,7 @@ class UserDAOImplTest {
       }
 
     } catch (UserDoesNotExistException | DAOLogicException | UserException e) {
-      log.error(MessagesForException.TEST_USER_ERROR + e.getMessage());
+      log.error(MessagesForException.TEST_ERROR + e.getMessage());
       fail();
     }
   }
@@ -148,7 +148,7 @@ class UserDAOImplTest {
       }
 
     } catch (UserDoesNotExistException | DAOLogicException | UserException e) {
-      log.error(MessagesForException.TEST_USER_ERROR + e.getMessage());
+      log.error(MessagesForException.TEST_ERROR + e.getMessage());
       fail();
     }
   }
@@ -176,7 +176,7 @@ class UserDAOImplTest {
           userDAO.getUserById(BigInteger.ONE).getFullName().trim());
 
     } catch (UserDoesNotExistException | DAOLogicException e) {
-      log.error(MessagesForException.TEST_USER_ERROR + e.getMessage());
+      log.error(MessagesForException.TEST_ERROR + e.getMessage());
       fail();
     }
   }
@@ -190,7 +190,7 @@ class UserDAOImplTest {
 
       userDAO.getUserById(BigInteger.ZERO).getFullName();
     } catch (DAOLogicException e) {
-      log.error(MessagesForException.TEST_USER_ERROR + e.getMessage());
+      log.error(MessagesForException.TEST_ERROR + e.getMessage());
       fail();
     } catch (UserDoesNotExistException e) {
       assertTrue(true);
@@ -206,7 +206,7 @@ class UserDAOImplTest {
       assertTrue(userDAO.comparisonOfPasswords(BigInteger.ONE, TEST_PASSWORD));
 
     } catch (DAOLogicException | UserDoesNotExistException e) {
-      log.error(MessagesForException.TEST_USER_ERROR + e.getMessage());
+      log.error(MessagesForException.TEST_ERROR + e.getMessage());
       fail();
     }
   }
@@ -220,7 +220,7 @@ class UserDAOImplTest {
     } catch (UserDoesNotExistException e) {
       assertTrue(true);
     } catch (DAOLogicException e) {
-      log.error(MessagesForException.TEST_USER_ERROR + e.getMessage());
+      log.error(MessagesForException.TEST_ERROR + e.getMessage());
       fail();
     }
   }
@@ -233,7 +233,7 @@ class UserDAOImplTest {
       userDAO.updateUsersPassword(BigInteger.ONE, "$2a$04$UegxIC3EpNJVeL9WUGuvK.K6GTeCfSgbfVUoC9ZUt9J.6OZF1r8Mq");
       userDAO.getAuthorizeUser(userDAO.getUserById(BigInteger.ONE).getEmail(), TEST_PASSWORD);
     } catch (DAOLogicException | UserDoesNotExistException | UserDoesNotConfirmedEmailException | UserException e) {
-      log.error(MessagesForException.TEST_USER_ERROR + e.getMessage());
+      log.error(MessagesForException.TEST_ERROR + e.getMessage());
       fail();
     }
   }
@@ -245,7 +245,7 @@ class UserDAOImplTest {
       userDAO.updateUsersPassword(BigInteger.ONE, "$2a$04$UegxIC3EpNJVeL9WUGuvK.K6GTeCfSgbfVUoC9ZUt9J.6OZF1r8Mq");
       assertTrue(userDAO.comparisonOfPasswords(BigInteger.ONE, "$2a$04$UegxIC3EpNJVeL9WUGuvK.K6GTeCfSgbfVUoC9ZUt9J.6OZF1r8Mq"));
     } catch (DAOLogicException | UserDoesNotExistException e) {
-      log.error(MessagesForException.TEST_USER_ERROR + e.getMessage());
+      log.error(MessagesForException.TEST_ERROR + e.getMessage());
       fail();
     }
 
@@ -259,7 +259,7 @@ class UserDAOImplTest {
       assertEquals(TEST_DESCRIPTION,
           userDAO.getUserById(BigInteger.ONE).getDescription());
     } catch (DAOLogicException | UserDoesNotExistException e) {
-      log.error(MessagesForException.TEST_USER_ERROR + e.getMessage());
+      log.error(MessagesForException.TEST_ERROR + e.getMessage());
       fail();
     }
   }
@@ -273,7 +273,7 @@ class UserDAOImplTest {
     } catch (UserDoesNotExistException e) {
       assertTrue(true);
     } catch (DAOLogicException e) {
-      log.error(MessagesForException.TEST_USER_ERROR + e.getMessage());
+      log.error(MessagesForException.TEST_ERROR + e.getMessage());
       fail();
     }
   }
@@ -290,7 +290,7 @@ class UserDAOImplTest {
       userDAO.updateUsersEmailCode(BigInteger.ONE, newEmailCode);
       assertEquals(BigInteger.ONE, userDAO.getUserByEmailCode(newEmailCode).getId());
     } catch (DAOLogicException | UserDoesNotExistException e) {
-      log.error(MessagesForException.TEST_USER_ERROR + e.getMessage());
+      log.error(MessagesForException.TEST_ERROR + e.getMessage());
       fail();
     }
   }
@@ -308,7 +308,7 @@ class UserDAOImplTest {
       userDAO.updateUsersEmailCode(BigInteger.ONE, newEmailCode);
       assertEquals(BigInteger.ONE, userDAO.getUserByEmailCode(newEmailCode).getId());
     } catch (DAOLogicException | UserDoesNotExistException e) {
-      log.error(MessagesForException.TEST_USER_ERROR + e.getMessage());
+      log.error(MessagesForException.TEST_ERROR + e.getMessage());
       fail();
     }
 
@@ -324,7 +324,7 @@ class UserDAOImplTest {
     } catch (UserDoesNotExistException e) {
       assertTrue(true);
     } catch (DAOLogicException e) {
-      log.error(MessagesForException.TEST_USER_ERROR + e.getMessage());
+      log.error(MessagesForException.TEST_ERROR + e.getMessage());
       fail();
     }
   }
@@ -349,7 +349,7 @@ class UserDAOImplTest {
       userDAO.deleteUser(userDAO.getUserByEmail(TEST_EMAIL).getId());
 
     } catch (DAOLogicException | UserDoesNotExistException | UserException e) {
-      log.error(MessagesForException.TEST_USER_ERROR + e.getMessage());
+      log.error(MessagesForException.TEST_ERROR + e.getMessage());
       fail();
     }
 
@@ -362,7 +362,7 @@ class UserDAOImplTest {
       userDAO.activateUser(BigInteger.ONE);
       assertTrue(userDAO.getUserById(BigInteger.ONE).isActive());
     } catch (DAOLogicException | UserDoesNotExistException e) {
-      log.error(MessagesForException.TEST_USER_ERROR + e.getMessage());
+      log.error(MessagesForException.TEST_ERROR + e.getMessage());
       fail();
     }
 
@@ -375,7 +375,7 @@ class UserDAOImplTest {
       userDAO.disactivateUser(BigInteger.ONE);
       assertFalse(userDAO.getUserById(BigInteger.ONE).isActive());
     } catch (DAOLogicException | UserDoesNotExistException e) {
-      log.error(MessagesForException.TEST_USER_ERROR + e.getMessage());
+      log.error(MessagesForException.TEST_ERROR + e.getMessage());
       fail();
     }
 
@@ -401,7 +401,7 @@ class UserDAOImplTest {
       userDAO.deleteUser(userDAO.getUserByEmail(TEST_EMAIL).getId());
 
     } catch (DAOLogicException | UserDoesNotExistException | UserException e) {
-      log.error(MessagesForException.TEST_USER_ERROR + e.getMessage());
+      log.error(MessagesForException.TEST_ERROR + e.getMessage());
       fail();
     }
   }
@@ -413,7 +413,7 @@ class UserDAOImplTest {
       assertEquals(UserRoles.USER, userDAO.getUserById(BigInteger.ONE).getUserRole());
 
     } catch (DAOLogicException | UserDoesNotExistException e) {
-      log.error(MessagesForException.TEST_USER_ERROR + e.getMessage());
+      log.error(MessagesForException.TEST_ERROR + e.getMessage());
       fail();
     }
   }
@@ -423,7 +423,7 @@ class UserDAOImplTest {
     try {
       assertNotNull(userDAO.getUserPasswordByEmail(userDAO.getUserById(BigInteger.ONE).getEmail()));
     } catch (UserDoesNotExistException | DAOLogicException e) {
-      log.error(MessagesForException.TEST_USER_ERROR + e.getMessage());
+      log.error(MessagesForException.TEST_ERROR + e.getMessage());
       fail();
     }
   }

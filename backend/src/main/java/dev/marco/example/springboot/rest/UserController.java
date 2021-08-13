@@ -116,7 +116,6 @@ public class UserController implements RegexPatterns, ApiAddresses {
     } catch (AuthenticationException e) {
       log.error("AuthenticationException " + e.getMessage());
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
-      //throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
   }
 
