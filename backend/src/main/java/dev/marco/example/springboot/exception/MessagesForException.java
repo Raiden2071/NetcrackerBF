@@ -95,4 +95,6 @@ public interface MessagesForException {
 
   String JWT_AUTH_EXC = "JwtTokenFilter doFilter JwtAuthenticationException ";
   String JWT_TOKEN_INVALID = "JwtTokenFilter doFilter Invalid JWT Token ";
+
+  String TEST_ERROR = "Error while testing ";
 }

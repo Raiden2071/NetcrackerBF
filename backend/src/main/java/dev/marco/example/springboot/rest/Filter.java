@@ -22,7 +22,7 @@ public enum Filter {
   COMPLETED,
   FAVORITES;
 
-  public static List<Quiz> getQuziesByFilter(Filter filter, BigInteger id, QuizService quizService,
+  public static List<Quiz> getQuzziesByFilter(Filter filter, BigInteger id, QuizService quizService,
       UserService userService)
       throws DAOLogicException, QuizDoesNotExistException, UserDoesNotExistException {
     List<Quiz> filterQuizzes = Collections.emptyList();
@@ -56,6 +56,7 @@ public enum Filter {
         }
         break;
       default:
+        throw new DAOLogicException("Wrong filter");
     }
     return filterQuizzes;
   }

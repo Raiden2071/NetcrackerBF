@@ -46,7 +46,7 @@ public class AnnouncementDAOImpl implements AnnouncementDAO {
 
     public void setTestConnection() throws DAOConfigException {
         try {
-            connection = DAOUtil.getDataSource(URL, USERNAME + "_TEST", PASSWORD, properties);
+            connection = DAOUtil.getDataSource(URL, USERNAME + TEST, PASSWORD, properties);
         } catch (DAOConfigException e) {
             log.error(ERROR_TEST_CONNECTION + e.getMessage());
             throw new DAOConfigException(ERROR_TEST_CONNECTION, e);
@@ -74,9 +74,9 @@ public class AnnouncementDAOImpl implements AnnouncementDAO {
                     .setParticipantsCap(resultSet.getInt(LIKES))
                     .build();
 
-        } catch (SQLException | AnnouncementException throwables) {
-            log.error(DAO_LOGIC_EXCEPTION + throwables.getMessage());
-            throw new DAOLogicException(DAO_LOGIC_EXCEPTION, throwables);
+        } catch (SQLException | AnnouncementException e) {
+            log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
+            throw new DAOLogicException(DAO_LOGIC_EXCEPTION, e);
         }
     }
 
@@ -86,9 +86,9 @@ public class AnnouncementDAOImpl implements AnnouncementDAO {
             preparedStatement.setString(1, title);
             ResultSet resultSet = preparedStatement.executeQuery();
             return resultSet.isBeforeFirst();
-        } catch (SQLException throwables) {
-            log.error(DAO_LOGIC_EXCEPTION + throwables.getMessage());
-            throw new DAOLogicException(DAO_LOGIC_EXCEPTION, throwables);
+        } catch (SQLException e) {
+            log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
+            throw new DAOLogicException(DAO_LOGIC_EXCEPTION, e);
         }
     }
 
@@ -120,9 +120,9 @@ public class AnnouncementDAOImpl implements AnnouncementDAO {
                 announcements.add(announcement);
             }
             return announcements;
-        } catch (SQLException | AnnouncementException | UserException throwables) {
-            log.error(DAO_LOGIC_EXCEPTION + throwables.getMessage());
-            throw new DAOLogicException(DAO_LOGIC_EXCEPTION, throwables);
+        } catch (SQLException | AnnouncementException | UserException e) {
+            log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
+            throw new DAOLogicException(DAO_LOGIC_EXCEPTION, e);
         }
     }
 
@@ -144,9 +144,9 @@ public class AnnouncementDAOImpl implements AnnouncementDAO {
                 return BigInteger.valueOf(resultSets.getLong(1));
             }
             throw new DAOLogicException(DAO_LOGIC_EXCEPTION + MESSAGE_FOR_CREATE_ANNOUNCEMENT);
-        } catch (SQLException throwables) {
-            log.error(DAO_LOGIC_EXCEPTION + throwables.getMessage());
-            throw new DAOLogicException(DAO_LOGIC_EXCEPTION, throwables);
+        } catch (SQLException e) {
+            log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
+            throw new DAOLogicException(DAO_LOGIC_EXCEPTION, e);
         }
     }
 
@@ -160,9 +160,9 @@ public class AnnouncementDAOImpl implements AnnouncementDAO {
             preparedStatement.setLong(4, newAnnouncement.getId().longValue());
             preparedStatement.executeUpdate();
 
-        } catch (SQLException throwables) {
-            log.error(DAO_LOGIC_EXCEPTION + throwables.getMessage());
-            throw new DAOLogicException(DAO_LOGIC_EXCEPTION, throwables);
+        } catch (SQLException e) {
+            log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
+            throw new DAOLogicException(DAO_LOGIC_EXCEPTION, e);
         }
     }
 
@@ -171,9 +171,9 @@ public class AnnouncementDAOImpl implements AnnouncementDAO {
         try (PreparedStatement preparedStatement = connection.prepareStatement(properties.getProperty(DELETE_ANNOUNCEMENT_BY_ID))){
             preparedStatement.setLong(1, idAnnouncement.longValue());
             preparedStatement.executeUpdate();
-        } catch (SQLException throwables) {
-            log.error(DAO_LOGIC_EXCEPTION + throwables.getMessage());
-            throw new DAOLogicException(DAO_LOGIC_EXCEPTION, throwables);
+        } catch (SQLException e) {
+            log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
+            throw new DAOLogicException(DAO_LOGIC_EXCEPTION, e);
         }
     }
 
@@ -206,9 +206,9 @@ public class AnnouncementDAOImpl implements AnnouncementDAO {
                 announcements.add(announcement);
             }
             return announcements;
-        } catch (SQLException | AnnouncementException | UserException throwables) {
-            log.error(throwables.getMessage(), throwables);
-            throw new DAOLogicException(DAO_LOGIC_EXCEPTION, throwables);
+        } catch (SQLException | AnnouncementException | UserException e) {
+            log.error(e.getMessage(), e);
+            throw new DAOLogicException(DAO_LOGIC_EXCEPTION, e);
         }
     }
 
@@ -241,9 +241,9 @@ public class AnnouncementDAOImpl implements AnnouncementDAO {
                 popularAnnouncement.add(announcement);
             }
             return popularAnnouncement;
-        } catch (SQLException | AnnouncementException | UserException throwables) {
-            log.error(DAO_LOGIC_EXCEPTION + throwables.getMessage());
-            throw new DAOLogicException(DAO_LOGIC_EXCEPTION, throwables);
+        } catch (SQLException | AnnouncementException | UserException e) {
+            log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
+            throw new DAOLogicException(DAO_LOGIC_EXCEPTION, e);
         }
     }
 
@@ -266,9 +266,9 @@ public class AnnouncementDAOImpl implements AnnouncementDAO {
                     .setAddress(resultSet.getString(ADDRESS))
                     .setParticipantsCap(resultSet.getInt(LIKES))
                     .build();
-        } catch (SQLException | AnnouncementException throwables) {
-            log.error(DAO_LOGIC_EXCEPTION + throwables.getMessage());
-            throw new DAOLogicException(DAO_LOGIC_EXCEPTION, throwables);
+        } catch (SQLException | AnnouncementException e) {
+            log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
+            throw new DAOLogicException(DAO_LOGIC_EXCEPTION, e);
         }
     }
 
@@ -278,9 +278,9 @@ public class AnnouncementDAOImpl implements AnnouncementDAO {
             preparedStatement.setLong(1, idAnnouncement.longValue());
             ResultSet resultSet = preparedStatement.executeQuery();
             return resultSet.isBeforeFirst();
-        } catch (SQLException throwables) {
-            log.error(DAO_LOGIC_EXCEPTION + throwables.getMessage());
-            throw new DAOLogicException(DAO_LOGIC_EXCEPTION, throwables);
+        } catch (SQLException e) {
+            log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
+            throw new DAOLogicException(DAO_LOGIC_EXCEPTION, e);
         }
     }
 
@@ -289,9 +289,9 @@ public class AnnouncementDAOImpl implements AnnouncementDAO {
         try (PreparedStatement preparedStatement = connection.prepareStatement(properties.getProperty(SET_LIKE))){
             preparedStatement.setLong(1, idAnnouncement.longValue());
             preparedStatement.executeUpdate();
-        } catch (SQLException throwables) {
-            log.error(DAO_LOGIC_EXCEPTION + throwables.getMessage());
-            throw new DAOLogicException(DAO_LOGIC_EXCEPTION, throwables);
+        } catch (SQLException e) {
+            log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
+            throw new DAOLogicException(DAO_LOGIC_EXCEPTION, e);
         }
     }
 
@@ -300,9 +300,9 @@ public class AnnouncementDAOImpl implements AnnouncementDAO {
         try (PreparedStatement preparedStatement = connection.prepareStatement(properties.getProperty(UNSET_LIKE))){
             preparedStatement.setLong(1, idAnnouncement.longValue());
             preparedStatement.executeUpdate();
-        } catch (SQLException throwables) {
-            log.error(DAO_LOGIC_EXCEPTION + throwables.getMessage());
-            throw new DAOLogicException(DAO_LOGIC_EXCEPTION, throwables);
+        } catch (SQLException e) {
+            log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
+            throw new DAOLogicException(DAO_LOGIC_EXCEPTION, e);
         }
     }
 
@@ -331,9 +331,9 @@ public class AnnouncementDAOImpl implements AnnouncementDAO {
                 comments.add(comment);
             }
             return comments;
-        } catch (SQLException throwables) {
-            log.error(DAO_LOGIC_EXCEPTION + throwables.getMessage());
-            throw new DAOLogicException(DAO_LOGIC_EXCEPTION, throwables);
+        } catch (SQLException e) {
+            log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
+            throw new DAOLogicException(DAO_LOGIC_EXCEPTION, e);
         }
     }
 
@@ -346,9 +346,9 @@ public class AnnouncementDAOImpl implements AnnouncementDAO {
             preparedStatement.setString(3, commentContent);
             preparedStatement.setTimestamp(4, new Timestamp(System.currentTimeMillis()));
             preparedStatement.executeUpdate();
-        } catch (SQLException throwables) {
-            log.error(DAO_LOGIC_EXCEPTION + throwables.getMessage());
-            throw new DAOLogicException(DAO_LOGIC_EXCEPTION, throwables);
+        } catch (SQLException e) {
+            log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
+            throw new DAOLogicException(DAO_LOGIC_EXCEPTION, e);
         }
     }
 }

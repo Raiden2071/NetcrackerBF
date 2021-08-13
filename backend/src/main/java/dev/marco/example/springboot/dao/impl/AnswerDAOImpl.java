@@ -48,7 +48,7 @@ public class AnswerDAOImpl implements AnswerDAO, MessagesForException {
     @Override
     public void setTestConnection() throws DAOConfigException {
         try {
-            connection = DAOUtil.getDataSource(URL, USERNAME + "_TEST", PASSWORD, properties);
+            connection = DAOUtil.getDataSource(URL, USERNAME + TEST, PASSWORD, properties);
         } catch (DAOConfigException e) {
             log.error(String.format(TEST_CONNECTION_ERR, e.getMessage()));
             throw new DAOConfigException(TEST_CONNECTION_EXC, e);
@@ -161,6 +161,5 @@ public class AnswerDAOImpl implements AnswerDAO, MessagesForException {
             throw new DAOLogicException(String.format(getAnswersByQuestionIdLogicExc, questionId), throwable);
         }
     }
-
 
 }

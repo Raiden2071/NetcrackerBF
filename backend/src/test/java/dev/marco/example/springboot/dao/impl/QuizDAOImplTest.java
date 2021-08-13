@@ -23,186 +23,163 @@ import static dev.marco.example.springboot.exception.MessagesForException.ERROR_
 @SpringBootTest
 class QuizDAOImplTest {
 
-    private QuizDAOImpl quizDAO;
-    private static final Logger log = Logger.getLogger(QuizDAOImplTest.class);
+  private QuizDAOImpl quizDAO;
+  private static final Logger log = Logger.getLogger(QuizDAOImplTest.class);
 
-    @Autowired
-    private void setQuizDAO(QuizDAOImpl quizDAO) {
-        this.quizDAO = quizDAO;
-        try {
-            quizDAO.setTestConnection();
-        } catch (DAOConfigException e) {
-            log.error(ERROR_WHILE_SETTING_TEST_CONNECTION + e.getMessage());
-            fail();
-        }
+  @Autowired
+  private void setQuizDAO(QuizDAOImpl quizDAO) {
+    this.quizDAO = quizDAO;
+    try {
+      quizDAO.setTestConnection();
+    } catch (DAOConfigException e) {
+      log.error(ERROR_WHILE_SETTING_TEST_CONNECTION + e.getMessage());
+      fail();
+    }
+  }
+
+
+  @Test
+  @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
+  void createQuizTest() {
+    try {
+      String title = "History Quiz";
+      String description = "Historical quiz";
+      QuizType quizType = QuizType.HISTORIC;
+      Quiz quiz = QuizImpl.QuizBuilder()
+          .setTitle(title)
+          .setDescription(description)
+          .setQuizType(quizType)
+          .setCreationDate(new Date(System.currentTimeMillis()))
+          .setCreatorId(BigInteger.valueOf(3))
+          .build();
+
+      Quiz newQuiz = quizDAO.createQuiz(quiz);
+
+      assertNotNull(newQuiz);
+      assertEquals(title, newQuiz.getTitle());
+
+      quizDAO.deleteQuiz(newQuiz);
+    } catch (QuizDoesNotExistException | DAOLogicException | QuizException e) {
+      log.error(MessagesForException.TEST_ERROR, e);
+      fail();
     }
 
+  }
 
-    @Test
-    @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
-    void createQuizTest() {
-        try {
-            String title = "History Quiz";
-            String description = "Historical quiz";
-            QuizType quizType = QuizType.HISTORIC;
-            Quiz quiz = QuizImpl.QuizBuilder()
-                    .setTitle(title)
-                    .setDescription(description)
-                    .setQuizType(quizType)
-                    .setCreationDate(new Date(System.currentTimeMillis()))
-                    .setCreatorId(BigInteger.valueOf(3))
-                    .build();
+  @Test
+  @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
+  void getQuizByIdTest() {
+    try {
+      Quiz quiz = quizDAO.getQuizById(BigInteger.valueOf(1));
 
-            Quiz newQuiz = quizDAO.createQuiz(quiz);
-            log.info("Quiz with id " + newQuiz.getId() + " was created");
+      assertNotNull(quiz);
+      assertEquals(1, quiz.getId().intValue());
+    } catch (QuizDoesNotExistException | DAOLogicException e) {
+      log.error(MessagesForException.TEST_ERROR, e);
+      fail();
+    }
+  }
 
-            assertNotNull(newQuiz);
-            assertEquals(title, newQuiz.getTitle());
+  @Test
+  @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
+  void deleteQuizTest() {
+    try {
+      String title = "newOlo";
+      String description = "Horror quiz";
+      QuizType quizType = QuizType.SCIENCE;
+      Quiz quiz = QuizImpl.QuizBuilder()
+          .setTitle(title)
+          .setDescription(description)
+          .setQuizType(quizType)
+          .setCreationDate(new Date(System.currentTimeMillis()))
+          .setCreatorId(BigInteger.valueOf(5))
+          .build();
 
-            quizDAO.deleteQuiz(newQuiz);
-            log.info("Test Quiz with id: " + newQuiz.getId() + " was deleted");
-        } catch (QuizDoesNotExistException | DAOLogicException | QuizException e) {
-            log.error("Error while testing createQuiz ", e);
-            fail();
-        }
-
+      Quiz newQuiz = quizDAO.createQuiz(quiz);
+      assertEquals(title, newQuiz.getTitle());
+      quizDAO.deleteQuiz(newQuiz);
+    } catch (QuizDoesNotExistException | DAOLogicException | QuizException e) {
+      log.error(MessagesForException.TEST_ERROR, e);
+      fail();
     }
 
-    @Test
-    @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
-    void getQuizByIdTest() {
-        try {
+  }
 
-            Quiz quiz = quizDAO.getQuizById(BigInteger.valueOf(1));
+  @Test
+  @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
+  void updateQuizTest() {
+    try {
+      Quiz quiz = quizDAO.getQuizById(BigInteger.valueOf(1));
+      Quiz updatedQuiz = quizDAO.getQuizById(quiz.getId());
 
-            assertNotNull(quiz);
-            assertEquals(1, quiz.getId().intValue());
+      updatedQuiz.setCreationDate(new Date(System.currentTimeMillis()));
 
-            log.info("Quiz was found by id: " + quiz.getId());
+      quizDAO.updateQuiz(quiz.getId(), updatedQuiz);
 
-        } catch (QuizDoesNotExistException | DAOLogicException e) {
-            log.error("Error while testing getQuizById ", e);
-            fail();
-        }
+      assertNotEquals(quiz.getCreationDate(), updatedQuiz.getCreationDate());
+    } catch (QuizDoesNotExistException | DAOLogicException e) {
+      log.error(MessagesForException.TEST_ERROR, e);
+      fail();
     }
+  }
 
-    @Test
-    @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
-    void deleteQuizTest() {
-
-        try {
-            String title = "newOlo";
-            String description = "Horror quiz";
-            QuizType quizType = QuizType.SCIENCE;
-            Quiz quiz = QuizImpl.QuizBuilder()
-                    .setTitle(title)
-                    .setDescription(description)
-                    .setQuizType(quizType)
-                    .setCreationDate(new Date(System.currentTimeMillis()))
-                    .setCreatorId(BigInteger.valueOf(5))
-                    .build();
-
-            Quiz newQuiz = quizDAO.createQuiz(quiz);
-            log.info("Quiz with id " + newQuiz.getId() + " was created");
-
-            assertEquals(title, newQuiz.getTitle());
-
-            quizDAO.deleteQuiz(newQuiz);
-            log.info("Quiz with id " + newQuiz.getId() + " was deleted");
-
-
-        } catch (QuizDoesNotExistException | DAOLogicException | QuizException e) {
-            log.error("Error while testing deleteQuiz ", e);
-            fail();
-        }
-
+  @Test
+  @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
+  void getAllQuizzesTest() {
+    try {
+      List<Quiz> quizList = quizDAO.getAllQuizzes();
+      if (!quizList.isEmpty()) {
+        assertNotNull(quizList);
+      }
+    } catch (QuizDoesNotExistException | DAOLogicException e) {
+      log.error(MessagesForException.TEST_ERROR, e);
+      fail();
     }
+  }
 
-    @Test
-    @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
-    void updateQuizTest() {
-        try {
-            Quiz quiz = quizDAO.getQuizById(BigInteger.valueOf(1));
-            Quiz updatedQuiz = quizDAO.getQuizById(quiz.getId());
-
-            updatedQuiz.setCreationDate(new Date(System.currentTimeMillis()));
-
-            quizDAO.updateQuiz(quiz.getId(), updatedQuiz);
-            log.info("Quiz with id " + updatedQuiz.getId() + " was updated");
-
-            assertNotEquals(quiz.getCreationDate(), updatedQuiz.getCreationDate());
-
-        } catch (QuizDoesNotExistException | DAOLogicException e) {
-            log.error("Error while testing updateQuiz ", e);
-            fail();
-        }
+  @Test
+  @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
+  void getQuizByTitleTest() {
+    try {
+      String title = "ZNO";
+      Quiz quiz = quizDAO.getQuizByTitle(title);
+      if (quiz != null) {
+        assertEquals(title, quiz.getTitle());
+      }
+    } catch (QuizDoesNotExistException | DAOLogicException e) {
+      log.error(MessagesForException.TEST_ERROR, e);
+      fail();
     }
+  }
 
-    @Test
-    @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
-    void getAllQuizzesTest() {
-        try {
-            List<Quiz> quizList = quizDAO.getAllQuizzes();
+  @Test
+  @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
+  void getQuizzesByTypeTest() {
+    try {
+      QuizType quizType = QuizType.MATHEMATICS;
+      List<Quiz> quizzes = quizDAO.getQuizzesByType(quizType);
 
-            if (!quizList.isEmpty()) {
-                assertNotNull(quizList);
-            }
-
-            log.info("Get all quizzes in test");
-        } catch (QuizDoesNotExistException | DAOLogicException e) {
-            log.error("Error while testing getAllQuizzes ", e);
-            fail();
-        }
+      if (!quizzes.isEmpty()) {
+        assertEquals(quizType, quizzes.get(0).getQuizType());
+      }
+    } catch (QuizDoesNotExistException | DAOLogicException e) {
+      log.error(MessagesForException.TEST_ERROR, e);
+      fail();
     }
+  }
 
-    @Test
-    @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
-    void getQuizByTitleTest() {
-        try {
-            String title = "ZNO";
-            Quiz quiz = quizDAO.getQuizByTitle(title);
-            log.info("Get quiz by title in test");
-            if (quiz != null) {
-                assertEquals(title, quiz.getTitle());
-            }
-        } catch (QuizDoesNotExistException | DAOLogicException e) {
-            log.error("Error while testing getQuizByTitle ", e);
-            fail();
-        }
+  @Test
+  @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
+  void getLastCreatedQuizzesTest() {
+    try {
+      List<Quiz> quizList = quizDAO.getLastCreatedQuizzes(3);
 
-
+      if (!quizList.isEmpty()) {
+        assertNotNull(quizList);
+      }
+    } catch (DAOLogicException e) {
+      log.error(MessagesForException.TEST_ERROR, e);
+      fail();
     }
-
-    @Test
-    @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
-    void getQuizzesByTypeTest() {
-        try {
-            QuizType quizType = QuizType.MATHEMATICS;
-            List<Quiz> quizzes = quizDAO.getQuizzesByType(quizType);
-
-            if (!quizzes.isEmpty()) {
-                assertEquals(quizType, quizzes.get(0).getQuizType());
-            }
-        } catch (QuizDoesNotExistException | DAOLogicException e) {
-            log.error("Error while testing getQuizzesByType ", e);
-            fail();
-        }
-    }
-
-    @Test
-    @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
-    void getLastCreatedQuizzesTest() {
-        try {
-            List<Quiz> quizList = quizDAO.getLastCreatedQuizzes(3);
-
-            if (!quizList.isEmpty()) {
-                assertNotNull(quizList);
-            }
-
-            log.info("Get getLastCreatedQuizzes in test");
-        } catch (DAOLogicException e) {
-            log.error("Error while testing getAllQuizzes ", e);
-            fail();
-        }
-    }
+  }
 }

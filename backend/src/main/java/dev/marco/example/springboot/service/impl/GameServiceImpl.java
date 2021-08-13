@@ -1,5 +1,6 @@
 package dev.marco.example.springboot.service.impl;
 
+import com.esotericsoftware.kryo.Kryo;
 import dev.marco.example.springboot.model.impl.AnswerImpl;
 import dev.marco.example.springboot.model.impl.QuestionImpl;
 import dev.marco.example.springboot.model.impl.QuizImpl;
@@ -50,8 +51,20 @@ public class GameServiceImpl implements GameService {
         Quiz quiz = quizService.getQuizByTitle(title);
         BigInteger quizId = quiz.getId();
         List<QuestionImpl> questionList = questionService.getQuestionsByQuiz(quizId);
-        quiz.setQuestions(questionList);
-        return quiz;
+        for (Question question : questionList) {
+            List<AnswerImpl> answers = question.getAnswers();
+            for (AnswerImpl answer : answers) {
+                answer.setAnswer(false);
+            }
+        }
+        Kryo kryo = new Kryo();
+        kryo.register(java.math.BigInteger.class);
+        kryo.register(java.sql.Date.class);
+        kryo.register(dev.marco.example.springboot.model.QuizType.class);
+        kryo.register(dev.marco.example.springboot.model.impl.QuizImpl.class);
+        Quiz returnedQuiz = kryo.copy(quiz);
+        returnedQuiz.setQuestions(questionList);
+        return returnedQuiz;
     }
 
     @Override
@@ -59,7 +72,7 @@ public class GameServiceImpl implements GameService {
             throws QuestionDoesNotExistException, DAOLogicException, AnswerDoesNotExistException, QuizDoesNotExistException, QuizException {
         BigInteger quizId = quiz.getId();
         BigInteger userId = user.getId();
-        List<QuestionImpl> questions = questionDAO.getAllQuestions(quizId);
+        List<QuestionImpl> questions = questionService.getQuestionsByQuiz(quizId);
         int counterOfCorrectAnswers = 0;
         for (int i = 0; i < NUMBER_OF_QUESTIONS; i++) {
             Question question = questions.get(i);

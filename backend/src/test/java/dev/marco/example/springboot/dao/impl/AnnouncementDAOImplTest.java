@@ -1,5 +1,6 @@
 package dev.marco.example.springboot.dao.impl;
 
+import dev.marco.example.springboot.exception.MessagesForException;
 import dev.marco.example.springboot.model.AnnouncementComment;
 import org.apache.log4j.Logger;
 import org.junit.jupiter.api.Test;
@@ -59,11 +60,10 @@ class AnnouncementDAOImplTest {
                 assertNotNull(announcement);
             assertEquals(4, popularAnnouncement.size());
         } catch (DAOLogicException e) {
-            log.error("Error while testing getPopular" + e.getMessage());
+            log.error(MessagesForException.TEST_ERROR + e.getMessage());
             fail();
         }
     }
-
 
     @Test
     @Timeout(value = 10000, unit= TimeUnit.MILLISECONDS)
@@ -80,7 +80,7 @@ class AnnouncementDAOImplTest {
             assertEquals(TEST_TITLE, announcement.getTitle());
             announcementDAO.deleteAnnouncement(announcement.getId());
         } catch (AnnouncementDoesNotExistException | DAOLogicException | AnnouncementException e) {
-            log.error("Error while testing getByTitle " + e.getMessage());
+            log.error(MessagesForException.TEST_ERROR + e.getMessage());
             fail();
         }
     }
@@ -100,11 +100,10 @@ class AnnouncementDAOImplTest {
             assertTrue(idAnnouncement.intValue() > 0);
             announcementDAO.deleteAnnouncement(idAnnouncement);
         } catch (DAOLogicException | AnnouncementException e) {
-            log.error("Error while testing createAnnouncement " + e.getMessage());
+            log.error(MessagesForException.TEST_ERROR + e.getMessage());
             fail();
         }
     }
-
 
     @Test
     @Timeout(value = 10000, unit= TimeUnit.MILLISECONDS)
@@ -130,7 +129,7 @@ class AnnouncementDAOImplTest {
             assertEquals(announcement.getAddress(), testAnnouncement.getAddress());
             announcementDAO.deleteAnnouncement(idAnnouncement);
         } catch (DAOLogicException | AnnouncementDoesNotExistException | AnnouncementException e) {
-            log.error("Error while testing editAnnouncement " + e.getMessage());
+            log.error(MessagesForException.TEST_ERROR + e.getMessage());
             fail();
         }
     }
@@ -154,7 +153,7 @@ class AnnouncementDAOImplTest {
                 announcementDAO.getAnnouncementById(idAnnouncement));
             assertNotNull(thrown);
         } catch (DAOLogicException | AnnouncementDoesNotExistException | AnnouncementException e) {
-            log.error("Error while testing deleteAnnouncement " + e.getMessage());
+            log.error(MessagesForException.TEST_ERROR + e.getMessage());
             fail();
         }
     }
@@ -165,7 +164,7 @@ class AnnouncementDAOImplTest {
         try {
             assertNotNull(announcementDAO.getAnnouncementById(BigInteger.ONE));
         } catch (AnnouncementDoesNotExistException | DAOLogicException e) {
-            log.error("Error while testing getAnnouncementById " + e.getMessage());
+            log.error(MessagesForException.TEST_ERROR + e.getMessage());
             fail();
         }
     }
@@ -174,13 +173,14 @@ class AnnouncementDAOImplTest {
     @Timeout(value = 10000, unit= TimeUnit.MILLISECONDS)
     void getSetByTitle() {
         try {
-            Set<Announcement> announcements = announcementDAO.getSetByTitle("gath", BigInteger.ONE);
+            String title = "gath";
+            Set<Announcement> announcements = announcementDAO.getSetByTitle(title, BigInteger.ONE);
             assertNotNull(announcements);
             for(Announcement announcement : announcements){
                 assertNotNull(announcement);
             }
         } catch (DAOLogicException e) {
-            log.error("Error while testing getSetByTitle " + e.getMessage());
+            log.error(MessagesForException.TEST_ERROR + e.getMessage());
             fail();
         }
     }
@@ -193,7 +193,7 @@ class AnnouncementDAOImplTest {
             announcementDAO.toLike(BigInteger.ONE);
             assertEquals(likes + 1, announcementDAO.getAnnouncementById(BigInteger.ONE).getParticipantsCap());
         } catch (DAOLogicException | AnnouncementDoesNotExistException e) {
-            log.error("Error while testing toLike " + e.getMessage());
+            log.error(MessagesForException.TEST_ERROR + e.getMessage());
             fail();
         }
     }
@@ -206,7 +206,7 @@ class AnnouncementDAOImplTest {
             announcementDAO.toDisLike(BigInteger.ONE);
             assertEquals(likes - 1, announcementDAO.getAnnouncementById(BigInteger.ONE).getParticipantsCap());
         } catch (DAOLogicException | AnnouncementDoesNotExistException e) {
-            log.error("Error while testing toDisLike " + e.getMessage());
+            log.error(MessagesForException.TEST_ERROR + e.getMessage());
             fail();
         }
     }
@@ -217,7 +217,7 @@ class AnnouncementDAOImplTest {
         try {
             assertTrue(announcementDAO.isAnnouncementById(BigInteger.ONE));
         } catch (DAOLogicException e) {
-            log.error("Error while testing isAnnouncementById " + e.getMessage());
+            log.error(MessagesForException.TEST_ERROR + e.getMessage());
             fail();
         }
     }
@@ -232,7 +232,7 @@ class AnnouncementDAOImplTest {
                 assertNotNull(announcement);
             }
         } catch (DAOLogicException e) {
-            log.error("Error while testing addAndGetParticipantById" + e.getMessage());
+            log.error(MessagesForException.TEST_ERROR + e.getMessage());
             fail();
         }
     }
@@ -248,7 +248,7 @@ class AnnouncementDAOImplTest {
             assertNotNull(comments.get(0));
             assertTrue(StringUtils.isNotBlank(comments.get(0).getContent()));
         } catch (DAOLogicException | AnnouncementDoesNotExistException e) {
-            log.error("Error while testing getCommentaries " + e.getMessage());
+            log.error(MessagesForException.TEST_ERROR + e.getMessage());
             fail();
         }
     }
@@ -267,7 +267,7 @@ class AnnouncementDAOImplTest {
 
             assertEquals(comments.get(0).getContent(),  commentContent);
         } catch (DAOLogicException | AnnouncementDoesNotExistException e) {
-            log.error("Error while testing createComment " + e.getMessage());
+            log.error(MessagesForException.TEST_ERROR + e.getMessage());
             fail();
         }
     }

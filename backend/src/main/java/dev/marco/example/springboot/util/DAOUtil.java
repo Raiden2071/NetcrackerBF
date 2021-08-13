@@ -1,5 +1,6 @@
 package dev.marco.example.springboot.util;
 
+import dev.marco.example.springboot.exception.MessagesForException;
 import org.apache.log4j.Logger;
 import dev.marco.example.springboot.exception.DAOConfigException;
 
@@ -27,8 +28,8 @@ public class DAOUtil {
 
       return DriverManager.getConnection(URL, USERNAME, PASSWORD);
     } catch (Exception e){
-      log.error("DAO config error " + e.getMessage());
-      throw new DAOConfigException("Dao config exception ",e);
+      log.error(MessagesForException.DAO_CONFIG_EXCEPTION + e.getMessage());
+      throw new DAOConfigException(MessagesForException.DAO_CONFIG_EXCEPTION,e);
     }
   }
 
