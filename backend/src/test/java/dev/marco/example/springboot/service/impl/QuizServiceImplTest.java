@@ -43,7 +43,7 @@ class QuizServiceImplTest {
     private static final Logger log = Logger.getLogger(QuizServiceImplTest.class);
 
     @Test
-    @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
+    @Timeout(value = 30000, unit = TimeUnit.MILLISECONDS)
     void buildNewQuiz() {
         try {
             BigInteger quizId = BigInteger.valueOf(1);
