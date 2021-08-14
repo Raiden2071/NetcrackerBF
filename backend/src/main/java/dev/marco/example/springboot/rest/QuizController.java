@@ -18,6 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import static dev.marco.example.springboot.exception.MessagesForException.*;
@@ -224,10 +225,10 @@ public class QuizController implements ApiAddresses {
     }
 
     @PostMapping(API_FINISH_QUIZ)
-    public void finishQuiz(@RequestBody ParamsInFinishQuiz params) {
+    public List<Map<String, Boolean>> finishQuiz(@RequestBody ParamsInFinishQuiz params) {
         try {
             Quiz quiz = quizService.getQuizById(params.quizId);
-            gameService.validateAnswers(quiz, params.user, params.answers);
+            return gameService.validateAnswers(quiz, params.user, params.answers);
         } catch (QuizDoesNotExistException | QuizException e) {
             log.error(QUIZ_NOT_FOUND_EXCEPTION + e.getMessage());
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, properties.getProperty(QUIZ_EXCEPTION));

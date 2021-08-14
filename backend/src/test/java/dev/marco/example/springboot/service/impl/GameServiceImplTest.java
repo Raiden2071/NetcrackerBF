@@ -19,7 +19,9 @@ import dev.marco.example.springboot.service.GameService;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -99,7 +101,12 @@ public class GameServiceImplTest {
             userAnswers.add(answerDAO.getAnswerById(BigInteger.valueOf(113)));
             userAnswers.add(answerDAO.getAnswerById(BigInteger.valueOf(120)));
 
-            gameService.validateAnswers(quiz, user, userAnswers);
+            List<Map<String, Boolean>> resultList = gameService.validateAnswers(quiz, user, userAnswers);
+            assertNotNull(resultList);
+            Map<String, Boolean> map = new HashMap<>();
+            map.put("Europe", true);
+            assertEquals(resultList.get(0), map);
+
             QuizAccomplishedImpl newUserAccomplishedQuiz = userAccomplishedQuizDAO.getAccomplishedQuizById(userId, quiz.getId());
 
             assertNotNull(newUserAccomplishedQuiz);

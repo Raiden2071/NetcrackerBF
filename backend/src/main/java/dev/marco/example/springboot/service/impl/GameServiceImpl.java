@@ -17,7 +17,10 @@ import dev.marco.example.springboot.model.impl.QuizAccomplishedImpl;
 import dev.marco.example.springboot.service.GameService;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class GameServiceImpl implements GameService {
@@ -68,32 +71,31 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public void validateAnswers(Quiz quiz, User user, List<Answer> answers)
+    public List<Map<String, Boolean>> validateAnswers(Quiz quiz, User user, List<Answer> userAnswers)
             throws QuestionDoesNotExistException, DAOLogicException, AnswerDoesNotExistException, QuizDoesNotExistException, QuizException {
         BigInteger quizId = quiz.getId();
         BigInteger userId = user.getId();
         List<QuestionImpl> questions = questionService.getQuestionsByQuiz(quizId);
         int counterOfCorrectAnswers = 0;
+        List<Map<String, Boolean>> frontAnswers = new ArrayList<>(NUMBER_OF_USER_ANSWERS);
         for (int i = 0; i < NUMBER_OF_QUESTIONS; i++) {
+            Map<String, Boolean> answersMap = new HashMap<>(ONE_ANSWER);
             Question question = questions.get(i);
-            Answer answer = answers.get(i);
-            if (question.getQuestionType().equals(QuestionType.FOUR_ANSWERS)) {
-                List<AnswerImpl> fourDefaultAnswers = answerDAO.getAnswersByQuestionId(question.getId());
-                for (Answer defAnswer : fourDefaultAnswers) {
-                    if(defAnswer.getValue().equals(answer.getValue()) && defAnswer.getAnswer()) {
+            Answer userAnswer = userAnswers.get(i);
+            List<AnswerImpl> defaultAnswers = answerDAO.getAnswersByQuestionId(question.getId());
+            for (Answer defAnswer : defaultAnswers) {
+                String userAnswerValue = userAnswer.getValue();
+                if(defAnswer.getValue().equals(userAnswerValue)) {
+                    if(defAnswer.getAnswer()) {
+                        answersMap.put(userAnswerValue, true);
                         counterOfCorrectAnswers++;
-                        break;
+                    } else {
+                        answersMap.put(userAnswerValue, false);
                     }
-                }
-            } else {
-                List<AnswerImpl> twoDefaultAnswers = answerDAO.getAnswersByQuestionId(question.getId());
-                for (Answer defAnswer : twoDefaultAnswers) {
-                    if(defAnswer.getValue().equals(answer.getValue()) && defAnswer.getAnswer()) {
-                        counterOfCorrectAnswers++;
-                        break;
-                    }
+                    break;
                 }
             }
+            frontAnswers.add(answersMap);
         }
 
         boolean isAccomplishedQuiz = userAccomplishedQuizDAO.isAccomplishedQuiz(userId, quizId);
@@ -108,6 +110,7 @@ public class GameServiceImpl implements GameService {
             QuizAccomplishedImpl quizAccomplished = new QuizAccomplishedImpl(counterOfCorrectAnswers, newQuiz);
             userAccomplishedQuizDAO.addAccomplishedQuiz(userId, quizAccomplished);
         }
+        return frontAnswers;
     }
 
     @Override
