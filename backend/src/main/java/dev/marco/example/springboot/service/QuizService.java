@@ -16,6 +16,8 @@ public interface QuizService {
     int MAX_LENGTH_TITLE = 30;
     int MIN_LENGTH_DESCRIPTION = 5;
     int MAX_LENGTH_DESCRIPTION = 500;
+    int MIN_PAGE = 1;
+    int PAGE_SIZE = 8;
 
     Quiz buildNewQuiz(Quiz quiz) throws QuizException, DAOLogicException, UserException, QuestionException, AnswerDoesNotExistException;
 
@@ -33,12 +35,12 @@ public interface QuizService {
 
     Quiz getQuizByTitle(String title) throws QuizDoesNotExistException, DAOLogicException, QuizException;
 
-    void validateNewQuiz(Quiz quiz) throws QuizException, UserException, QuestionException;
+    void validateNewQuiz(Quiz quiz) throws QuizException, UserException, QuestionException, DAOLogicException, UserDoesNotExistException;
 
     void setTestConnection() throws DAOConfigException;
 
-    Page<Quiz> getQuizzesLikeTitle(Pageable pageable, String title) throws QuizException;
+    Page<Quiz> getQuizzesLikeTitle(int pageNumber, String title) throws QuizException, PageException;
 
-    Page<Quiz> getQuizzesByPage(Pageable pageable) throws QuizException;
+    Page<Quiz> getQuizzesByPage(int pageNumber) throws QuizException, PageException;
 
 }
