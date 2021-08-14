@@ -224,7 +224,7 @@ public class QuizController implements ApiAddresses {
         }
     }
 
-    @PostMapping(API_FINISH_QUIZ)
+    @GetMapping(API_FINISH_QUIZ)
     public List<Map<String, Boolean>> finishQuiz(@RequestBody ParamsInFinishQuiz params) {
         try {
             Quiz quiz = quizService.getQuizById(params.quizId);
