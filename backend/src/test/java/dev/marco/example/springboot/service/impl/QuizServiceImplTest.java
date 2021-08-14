@@ -43,39 +43,6 @@ class QuizServiceImplTest {
     private static final Logger log = Logger.getLogger(QuizServiceImplTest.class);
 
     @Test
-    @Timeout(value = 30000, unit = TimeUnit.MILLISECONDS)
-    void buildNewQuiz() {
-        try {
-            BigInteger quizId = BigInteger.valueOf(1);
-            List<QuestionImpl> questions = questionService.getQuestionsByQuiz(quizId);
-
-            String quizTitle = "Quiz №" + new Random().nextInt(500000);
-
-            Quiz quiz = QuizImpl.QuizBuilder()
-                    .setTitle(quizTitle)
-                    .setDescription("Math quiz")
-                    .setQuizType(QuizType.MATHEMATICS)
-                    .setCreatorId(BigInteger.valueOf(1))
-                    .setQuestions(questions)
-                    .build();
-
-            Quiz buildedQuiz = quizService.buildNewQuiz(quiz);
-
-            log.info("Quiz with id " + buildedQuiz.getId() + " was created");
-            assertNotNull(buildedQuiz);
-            log.info("Quiz with id " + buildedQuiz.getId() + " was deleted");
-            quizService.deleteQuiz(buildedQuiz);
-
-        } catch (QuizException | DAOLogicException | QuizDoesNotExistException |
-                QuestionDoesNotExistException | AnswerDoesNotExistException | UserException |
-                UserDoesNotExistException | QuestionException e) {
-            log.error("Error while testing buildNewQuiz in QuizService", e);
-            fail();
-        }
-    }
-
-
-    @Test
     @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
     void getQuizByIdTest() {
         try {
