@@ -87,7 +87,7 @@ public class QuizController implements ApiAddresses {
 
     @GetMapping(API_GET_QUIZ_BY_TITLE)
     public Page<Quiz> getQuizzesLikeTitle(@RequestParam("page") int pageNumber,
-                                          @RequestParam String title) {
+                                          @RequestParam("title") String title) {
         try {
             return quizService.getQuizzesLikeTitle(pageNumber, title);
         } catch (PageException e) {
