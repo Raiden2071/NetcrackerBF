@@ -92,17 +92,19 @@ public class QuizServiceImpl implements QuizService {
             return quizGame;
 
         } catch (UserDoesNotExistException e) {
-            log.error(USER_NOT_FOUND_EXCEPTION + " in buildNewQuiz()");
+            log.error(USER_NOT_FOUND_EXCEPTION + e);
             throw new UserException(USER_NOT_FOUND_EXCEPTION, e);
         } catch (UserException e) {
             log.error(USER_HAS_NOT_BEEN_RECEIVED);
             throw new UserException(USER_HAS_NOT_BEEN_RECEIVED, e);
         } catch (QuestionDoesNotExistException e) {
+            log.error(QUESTION_NOT_FOUND);
             throw new QuestionException(QUESTION_NOT_FOUND, e);
         } catch (AnswerDoesNotExistException e) {
+            log.error(getAnswerByIdNotFoundErr);
             throw new AnswerDoesNotExistException(getAnswerByIdNotFoundErr, e);
         } catch (DAOLogicException e) {
-            log.error(DAO_LOGIC_EXCEPTION + " in buildNewQuiz()");
+            log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
             throw new DAOLogicException(DAO_LOGIC_EXCEPTION, e);
         }
 
