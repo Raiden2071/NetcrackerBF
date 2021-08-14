@@ -98,8 +98,8 @@ public class QuizControllerTest {
     @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
     void searchQuizzesLikeTitleTest() throws Exception {
         String title = "qu";
-        Pageable pageable = PageRequest.of(0, 8);
-        when(quizService.getQuizzesLikeTitle(pageable, title))
+        Pageable pageable = PageRequest.of(1, 8);
+        when(quizService.getQuizzesLikeTitle(1, title))
                 .thenReturn(
                         new PageImpl<>(Arrays.asList(
                                 QuizImpl.QuizBuilder()
@@ -122,7 +122,7 @@ public class QuizControllerTest {
                         .get("/quiz/search?page=1&title={title}", title))
                 .andExpect(MockMvcResultMatchers.status().isOk());
 
-        verify(quizService).getQuizzesLikeTitle(pageable, title);
+        verify(quizService).getQuizzesLikeTitle(1, title);
     }
 
     @Test
