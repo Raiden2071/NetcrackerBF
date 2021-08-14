@@ -9,8 +9,6 @@ import dev.marco.example.springboot.util.ControllerUtil;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import dev.marco.example.springboot.exception.*;
@@ -75,9 +73,12 @@ public class QuizController implements ApiAddresses {
 
 
     @GetMapping
-    public Page<Quiz> showQuizzesByPage(@PageableDefault(size = 8, page = 1) Pageable pageable) {
+    public Page<Quiz> showQuizzesByPage(@RequestParam("page") int pageNumber) {
         try {
-            return quizService.getQuizzesByPage(pageable);
+            return quizService.getQuizzesByPage(pageNumber);
+        } catch (PageException e) {
+            log.error(PAGE_DOES_NOT_EXIST);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, properties.getProperty(PAGE_EXCEPTION));
         } catch (QuizException e) {
             log.error(QUIZ_NOT_FOUND_EXCEPTION);
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, properties.getProperty(QUIZ_EXCEPTION));
@@ -85,10 +86,13 @@ public class QuizController implements ApiAddresses {
     }
 
     @GetMapping(API_GET_QUIZ_BY_TITLE)
-    public Page<Quiz> getQuizzesLikeTitle(@PageableDefault(size = 8, page = 1) Pageable pageable,
+    public Page<Quiz> getQuizzesLikeTitle(@RequestParam("page") int pageNumber,
                                           @RequestParam String title) {
         try {
-            return quizService.getQuizzesLikeTitle(pageable, title);
+            return quizService.getQuizzesLikeTitle(pageNumber, title);
+        } catch (PageException e) {
+            log.error(PAGE_DOES_NOT_EXIST);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, properties.getProperty(PAGE_EXCEPTION));
         } catch (QuizException e) {
             log.error(QUIZ_NOT_FOUND_EXCEPTION);
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, properties.getProperty(QUIZ_EXCEPTION));
