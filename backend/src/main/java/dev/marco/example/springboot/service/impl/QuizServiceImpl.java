@@ -2,19 +2,21 @@ package dev.marco.example.springboot.service.impl;
 
 import dev.marco.example.springboot.dao.AnswerDAO;
 import dev.marco.example.springboot.dao.QuestionDAO;
+import dev.marco.example.springboot.model.*;
 import dev.marco.example.springboot.model.impl.AnswerImpl;
 import dev.marco.example.springboot.model.impl.QuestionImpl;
+import dev.marco.example.springboot.security.JwtUser;
+import dev.marco.example.springboot.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import dev.marco.example.springboot.dao.QuizDAO;
 import dev.marco.example.springboot.exception.*;
-import dev.marco.example.springboot.model.Question;
-import dev.marco.example.springboot.model.Quiz;
-import dev.marco.example.springboot.model.QuizType;
 import dev.marco.example.springboot.model.impl.QuizImpl;
 import dev.marco.example.springboot.service.QuizService;
 
@@ -32,12 +34,14 @@ public class QuizServiceImpl implements QuizService {
     private final QuizDAO quizDAO;
     private final QuestionDAO questionDAO;
     private final AnswerDAO answerDAO;
+    private final UserService userService;
 
     @Autowired
-    public QuizServiceImpl(QuizDAO quizDAO, QuestionDAO questionDAO, AnswerDAO answerDAO) {
+    public QuizServiceImpl(QuizDAO quizDAO, QuestionDAO questionDAO, AnswerDAO answerDAO, UserService userService) {
         this.quizDAO = quizDAO;
         this.questionDAO = questionDAO;
         this.answerDAO = answerDAO;
+        this.userService = userService;
     }
 
     @Override
@@ -45,6 +49,7 @@ public class QuizServiceImpl implements QuizService {
         quizDAO.setTestConnection();
         questionDAO.setTestConnection();
         answerDAO.setTestConnection();
+        userService.setTestConnection();
     }
 
     @Override
@@ -56,13 +61,16 @@ public class QuizServiceImpl implements QuizService {
                 log.error(QUIZ_ALREADY_EXISTS);
                 throw new QuizException(QUIZ_ALREADY_EXISTS);
             }
+            JwtUser user = (JwtUser) SecurityContextHolder.getContext().getAuthentication()
+                    .getPrincipal();
+            BigInteger userId = BigInteger.valueOf(user.getId());
 
             Quiz newQuiz = QuizImpl.QuizBuilder()
                     .setTitle(quiz.getTitle())
                     .setDescription(quiz.getDescription())
                     .setQuizType(quiz.getQuizType())
                     .setCreationDate(new Date(System.currentTimeMillis()))
-                    .setCreatorId(quiz.getCreatorId())
+                    .setCreatorId(userId)
                     .setQuestions(quiz.getQuestions())
                     .build();
 
@@ -83,22 +91,25 @@ public class QuizServiceImpl implements QuizService {
             }
             return quizGame;
 
-        } catch (DAOLogicException e) {
-            log.error(DAO_LOGIC_EXCEPTION + " in buildNewQuiz()");
-            throw new DAOLogicException(DAO_LOGIC_EXCEPTION, e);
-        } catch (UserDoesNotExistException | UserException e) {
+        } catch (UserDoesNotExistException e) {
             log.error(USER_NOT_FOUND_EXCEPTION + " in buildNewQuiz()");
             throw new UserException(USER_NOT_FOUND_EXCEPTION, e);
+        } catch (UserException e) {
+            log.error(USER_HAS_NOT_BEEN_RECEIVED);
+            throw new UserException(USER_HAS_NOT_BEEN_RECEIVED, e);
         } catch (QuestionDoesNotExistException e) {
             throw new QuestionException(QUESTION_NOT_FOUND, e);
         } catch (AnswerDoesNotExistException e) {
             throw new AnswerDoesNotExistException(getAnswerByIdNotFoundErr, e);
+        } catch (DAOLogicException e) {
+            log.error(DAO_LOGIC_EXCEPTION + " in buildNewQuiz()");
+            throw new DAOLogicException(DAO_LOGIC_EXCEPTION, e);
         }
 
     }
 
     @Override
-    public void validateNewQuiz(Quiz quiz) throws QuizException, UserException, QuestionException {
+    public void validateNewQuiz(Quiz quiz) throws QuizException, UserException, QuestionException, DAOLogicException, UserDoesNotExistException {
         if (StringUtils.isBlank(quiz.getTitle()) || StringUtils.length(quiz.getTitle()) < MIN_LENGTH_TITLE) {
             log.error(EMPTY_TITLE);
             throw new QuizException(EMPTY_TITLE);
@@ -123,6 +134,12 @@ public class QuizServiceImpl implements QuizService {
             log.error(USER_NOT_FOUND_EXCEPTION);
             throw new UserException(USER_NOT_FOUND_EXCEPTION);
         }
+//        User user = userService.getUserById(quiz.getCreatorId());
+//        if(!user.getUserRole().equals(UserRoles.ADMIN)) {
+//            log.error(DONT_ENOUGH_RIGHTS);
+//            throw new UserException(DONT_ENOUGH_RIGHTS);
+//        }
+
     }
 
     @Override
@@ -189,13 +206,33 @@ public class QuizServiceImpl implements QuizService {
     }
 
     @Override
-    public Page<Quiz> getQuizzesLikeTitle(Pageable pageable, String title) throws QuizException {
-        return quizDAO.getQuizzesLikeTitle(pageable, title);
+    public Page<Quiz> getQuizzesLikeTitle(int pageNumber, String title) throws QuizException, PageException {
+        if (pageNumber < MIN_PAGE) {
+            log.error(PAGE_DOES_NOT_EXIST);
+            throw new PageException(PAGE_DOES_NOT_EXIST);
+        }
+        Pageable pageable = PageRequest.of(--pageNumber, PAGE_SIZE);
+        Page<Quiz> page = quizDAO.getQuizzesLikeTitle(pageable, title);
+        if(page.getTotalPages() <= pageNumber) {
+            log.error(PAGE_DOES_NOT_EXIST);
+            throw new PageException(PAGE_DOES_NOT_EXIST);
+        }
+        return page;
     }
 
 
     @Override
-    public Page<Quiz> getQuizzesByPage(Pageable pageable) throws QuizException {
-        return quizDAO.getQuizzesByPage(pageable);
+    public Page<Quiz> getQuizzesByPage(int pageNumber) throws QuizException, PageException {
+        if (pageNumber < MIN_PAGE) {
+            log.error(PAGE_DOES_NOT_EXIST);
+            throw new PageException(PAGE_DOES_NOT_EXIST);
+        }
+        Pageable pageable = PageRequest.of(--pageNumber, PAGE_SIZE);
+        Page<Quiz> page = quizDAO.getQuizzesByPage(pageable);
+        if (!page.hasContent()) {
+            log.error(PAGE_DOES_NOT_EXIST);
+            throw new PageException(PAGE_DOES_NOT_EXIST);
+        }
+        return page;
     }
 }
