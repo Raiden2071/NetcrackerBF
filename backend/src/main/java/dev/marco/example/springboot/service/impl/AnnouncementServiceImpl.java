@@ -2,7 +2,6 @@ package dev.marco.example.springboot.service.impl;
 
 import dev.marco.example.springboot.dao.AnnouncementDAO;
 import dev.marco.example.springboot.dao.UserAnnouncementDAO;
-import dev.marco.example.springboot.dao.UserDAO;
 import dev.marco.example.springboot.exception.*;
 import dev.marco.example.springboot.model.Announcement;
 import dev.marco.example.springboot.model.AnnouncementComment;
@@ -12,6 +11,9 @@ import dev.marco.example.springboot.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import java.math.BigInteger;
 import java.util.List;
@@ -41,7 +43,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
             userAnnouncementDAO.setTestConnection();
             userService.setTestConnection();
         } catch (DAOConfigException e) {
-            log.error(DAO_CONFIG_EXCEPTION + MESSAGE_FROM_TEST_CONNECTION);
+            log.error(DAO_CONFIG_EXCEPTION);
             throw new DAOConfigException(DAO_CONFIG_EXCEPTION, e);
         }
     }
@@ -57,12 +59,12 @@ public class AnnouncementServiceImpl implements AnnouncementService {
             throws AnnouncementException, DAOLogicException {
         try {
             if(announcementDAO.isAnnouncementByTitle(announcement.getTitle())) {
-                log.error(ANNOUNCEMENT_ALREADY_EXISTS + MESSAGE_FOR_BUILD_NEW_ANNOUNCEMENT);
+                log.error(ANNOUNCEMENT_ALREADY_EXISTS);
                 throw new AnnouncementException(ANNOUNCEMENT_ALREADY_EXISTS);
             }
             return announcementDAO.createAnnouncement(announcement);
         } catch (DAOLogicException e) {
-            log.error(DAO_LOGIC_EXCEPTION + MESSAGE_FOR_BUILD_NEW_ANNOUNCEMENT);
+            log.error(DAO_LOGIC_EXCEPTION);
             throw new DAOLogicException(DAO_LOGIC_EXCEPTION, e);
         }
     }
@@ -81,7 +83,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
 
             announcementDAO.editAnnouncement(announcement);
         } catch (DAOLogicException e) {
-            log.error(DAO_LOGIC_EXCEPTION + MESSAGE_FOR_EDIT_ANNOUNCEMENT);
+            log.error(DAO_LOGIC_EXCEPTION);
             throw new DAOLogicException(DAO_LOGIC_EXCEPTION, e);
         }
     }
@@ -100,7 +102,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
 
             announcementDAO.deleteAnnouncement(idAnnouncement);
         } catch (DAOLogicException e) {
-            log.error(DAO_LOGIC_EXCEPTION + MESSAGE_FOR_DELETE_ANNOUNCEMENT);
+            log.error(DAO_LOGIC_EXCEPTION);
             throw new DAOLogicException(DAO_LOGIC_EXCEPTION, e);
         }
     }
@@ -121,7 +123,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
                 announcementDAO.toLike(idAnnouncement);
             }
         } catch (DAOLogicException e) {
-            log.error(DAO_LOGIC_EXCEPTION + MESSAGE_FOR_TO_LIKE_ANNOUNCEMENT);
+            log.error(DAO_LOGIC_EXCEPTION);
             throw new DAOLogicException(DAO_LOGIC_EXCEPTION, e);
         }
     }
@@ -166,5 +168,37 @@ public class AnnouncementServiceImpl implements AnnouncementService {
             throw new AnnouncementException(USER_IS_NULL);
         }
         announcementDAO.createComment(commentContent, announcementId, userId);
+    }
+
+    @Override
+    public Page<Announcement> getAnnouncementsByPage(BigInteger idUser, int pageNumber)
+            throws DAOLogicException, PageException {
+        if (pageNumber < MIN_PAGE) {
+            log.error(PAGE_DOES_NOT_EXIST);
+            throw new PageException(PAGE_DOES_NOT_EXIST);
+        }
+        Pageable pageable = PageRequest.of(--pageNumber, PAGE_SIZE);
+        Page<Announcement> page = announcementDAO.getAnnouncementsByPage(idUser, pageable);
+        if (!page.hasContent()) {
+            log.error(PAGE_DOES_NOT_EXIST);
+            throw new PageException(PAGE_DOES_NOT_EXIST);
+        }
+        return page;
+    }
+
+    @Override
+    public Page<Announcement> getAnnouncementsLikeTitle(BigInteger idUser, String title, int pageNumber)
+            throws DAOLogicException, PageException {
+        if (pageNumber < MIN_PAGE) {
+            log.error(PAGE_DOES_NOT_EXIST);
+            throw new PageException(PAGE_DOES_NOT_EXIST);
+        }
+        Pageable pageable = PageRequest.of(--pageNumber, PAGE_SIZE);
+        Page<Announcement> page = announcementDAO.getAnnouncementsByTitle(title, idUser, pageable);
+        if (!page.hasContent()) {
+            log.error(PAGE_DOES_NOT_EXIST);
+            throw new PageException(PAGE_DOES_NOT_EXIST);
+        }
+        return page;
     }
 }

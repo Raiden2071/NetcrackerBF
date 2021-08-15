@@ -11,6 +11,9 @@ import dev.marco.example.springboot.util.DAOUtil;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigInteger;
@@ -349,6 +352,109 @@ public class AnnouncementDAOImpl implements AnnouncementDAO {
         } catch (SQLException e) {
             log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
             throw new DAOLogicException(DAO_LOGIC_EXCEPTION, e);
+        }
+    }
+
+    @Override
+    public Page<Announcement> getAnnouncementsByPage(BigInteger idUser, Pageable pageable)
+            throws DAOLogicException {
+        try (PreparedStatement preparedStatement =
+                     connection.prepareStatement(properties.getProperty(SELECT_ANNOUNCEMENTS_BY_PAGE))) {
+            preparedStatement.setLong(1, idUser.longValue());
+            preparedStatement.setLong(2, pageable.getOffset());
+            preparedStatement.setInt(3, pageable.getPageSize());
+            ResultSet resultSet = preparedStatement.executeQuery();
+            List<Announcement> announcements = new ArrayList<>();
+            while (resultSet.next()) {
+                Announcement announcement = new AnnouncementImpl.AnnouncementBuilder()
+                        .setId(BigInteger.valueOf(resultSet.getLong(ID_ANNOUNCEMENT)))
+                        .setTitle(resultSet.getString(TITLE))
+                        .setDescription(resultSet.getString(DESCRIPTION))
+                        .setUser(new UserImpl.UserBuilder()
+                                .setId(BigInteger.valueOf(resultSet.getLong(OWNER)))
+                                .setFirstName(resultSet.getString(FIRST_NAME))
+                                .setLastName(resultSet.getString(LAST_NAME))
+                                .build())
+                        .setDate(resultSet.getDate(DATE_CREATE))
+                        .setAddress(resultSet.getString(ADDRESS))
+                        .setParticipantsCap(resultSet.getInt(LIKES))
+                        .setBlank(BigInteger.valueOf(resultSet.getLong(COLUMN_IS_LIKED)))
+                        .setIsLiked(!resultSet.wasNull())
+                        .build();
+                announcements.add(announcement);
+            }
+            return new PageImpl<>(announcements, pageable, countOfAnnouncements());
+        } catch (SQLException | AnnouncementException | UserException e) {
+            log.error(DAO_LOGIC_EXCEPTION);
+            throw new DAOLogicException(DAO_LOGIC_EXCEPTION + e.getMessage());
+        }
+    }
+
+    @Override
+    public long countOfAnnouncements() throws DAOLogicException {
+        try (PreparedStatement preparedStatement =
+                     connection.prepareStatement(properties.getProperty(SELECT_NUMBER_OF_ANNOUNCEMENT))) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getLong(1);
+            }
+            return 0;
+        } catch (SQLException e) {
+            log.error(DAO_LOGIC_EXCEPTION);
+            throw new DAOLogicException(DAO_LOGIC_EXCEPTION + e.getMessage());
+        }
+    }
+
+    @Override
+    public Page<Announcement> getAnnouncementsByTitle(String title, BigInteger idUser, Pageable pageable)
+            throws DAOLogicException {
+        try (PreparedStatement preparedStatement =
+                     connection.prepareStatement(properties.getProperty(SELECT_ANNOUNCEMENTS_BY_TITLE))){
+            preparedStatement.setLong(1, idUser.longValue());
+            preparedStatement.setString(2, "%" + title + "%");
+            preparedStatement.setLong(3, pageable.getOffset());
+            preparedStatement.setInt(4, pageable.getPageSize());
+            ResultSet resultSet = preparedStatement.executeQuery();
+            List<Announcement> announcements = new ArrayList<>();
+
+            while (resultSet.next()) {
+                Announcement announcement = new AnnouncementImpl.AnnouncementBuilder()
+                        .setId(BigInteger.valueOf(resultSet.getLong(ID_ANNOUNCEMENT)))
+                        .setTitle(resultSet.getString(TITLE))
+                        .setDescription(resultSet.getString(DESCRIPTION))
+                        .setUser(new UserImpl.UserBuilder()
+                                .setId(BigInteger.valueOf(resultSet.getLong(OWNER)))
+                                .setFirstName(resultSet.getString(FIRST_NAME))
+                                .setLastName(resultSet.getString(LAST_NAME))
+                                .build())
+                        .setDate(resultSet.getDate(DATE_CREATE))
+                        .setAddress(resultSet.getString(ADDRESS))
+                        .setParticipantsCap(resultSet.getInt(LIKES))
+                        .setBlank(BigInteger.valueOf(resultSet.getLong(COLUMN_IS_LIKED)))
+                        .setIsLiked(!resultSet.wasNull())
+                        .build();
+                announcements.add(announcement);
+            }
+            return new PageImpl<>(announcements, pageable, countOfAnnouncementsByTitle(title));
+        } catch (SQLException | AnnouncementException | UserException e) {
+            log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
+            throw new DAOLogicException(DAO_LOGIC_EXCEPTION, e);
+        }
+    }
+
+    @Override
+    public long countOfAnnouncementsByTitle(String title) throws DAOLogicException {
+        try (PreparedStatement preparedStatement =
+                     connection.prepareStatement(properties.getProperty(SELECT_NUMBER_OF_ANNOUNCEMENT_BY_TITLE))) {
+            preparedStatement.setString(1, "%" + title + "%");
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getLong(1);
+            }
+            return 0;
+        } catch (SQLException e) {
+            log.error(DAO_LOGIC_EXCEPTION);
+            throw new DAOLogicException(DAO_LOGIC_EXCEPTION + e.getMessage());
         }
     }
 }

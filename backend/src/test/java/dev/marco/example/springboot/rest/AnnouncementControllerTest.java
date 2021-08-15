@@ -132,38 +132,36 @@ class AnnouncementControllerTest {
 
     @Test
     void getSetByTitle() throws Exception {
-        when(announcementService.getSetByTitle("title", BigInteger.ONE)).thenReturn(
-                new HashSet<>(Arrays.asList(
-                        new AnnouncementImpl.AnnouncementBuilder()
-                                .setId(BigInteger.ONE)
-                                .setTitle("TEST_TITLE1")
-                                .setDescription("TEST_DESCRIPTION1")
-                                .setUser(new UserImpl.UserBuilder()
-                                        .setId(BigInteger.ONE)
-                                        .setFirstName("Aboba")
-                                        .setLastName("Abobus")
-                                        .build())
-                                .setAddress("TEST_ADDRESS1")
-                                .setParticipantsCap(5)
-                                .setIsLiked(true)
-                                .build())));
-
         this.mockMvc.perform(MockMvcRequestBuilders
                         .post("/announcement/search")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{ \"searchProject\":\"title\"," +
                                  "  \"idUser\":1}"))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(jsonPath("$[0].id").value(BigInteger.ONE))
-                .andExpect(jsonPath("$[0].title").value("TEST_TITLE1"))
-                .andExpect(jsonPath("$[0].description").value("TEST_DESCRIPTION1"))
-                .andExpect(jsonPath("$[0].user.id").value(BigInteger.ONE))
-                .andExpect(jsonPath("$[0].user.firstName").value("Aboba"))
-                .andExpect(jsonPath("$[0].user.lastName").value("Abobus"))
-                .andExpect(jsonPath("$[0].address").value("TEST_ADDRESS1"))
-                .andExpect(jsonPath("$[0].participantsCap").value(5))
-                .andExpect(jsonPath("$[0].isLiked").value(true));
+                .andExpect(MockMvcResultMatchers.status().isOk());
 
         verify(announcementService).getSetByTitle("title", BigInteger.ONE);
+    }
+
+    @Test
+    void getAnnouncementsByPage() throws Exception {
+
+        this.mockMvc.perform(MockMvcRequestBuilders
+                .get("/announcement/all/page/{pageNumber}", 1)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"idUser\":1}"))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+        verify(announcementService).getAnnouncementsByPage(BigInteger.ONE, 1);
+    }
+
+    @Test
+    void getAnnouncementsLikeTitle() throws Exception {
+        this.mockMvc.perform(MockMvcRequestBuilders
+                        .get("/announcement/search/page/{pageNumber}", 1)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"idUser\":1,"+
+                                 " \"searchProject\":\"chill\"}"))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+        verify(announcementService).getAnnouncementsLikeTitle(BigInteger.ONE, "chill", 1);
+
     }
 }

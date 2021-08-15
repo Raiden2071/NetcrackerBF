@@ -3,11 +3,14 @@ package dev.marco.example.springboot.dao.impl;
 import dev.marco.example.springboot.exception.MessagesForException;
 import dev.marco.example.springboot.model.AnnouncementComment;
 import org.apache.log4j.Logger;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 import org.junit.platform.commons.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import dev.marco.example.springboot.exception.AnnouncementDoesNotExistException;
 import dev.marco.example.springboot.exception.AnnouncementException;
@@ -267,6 +270,54 @@ class AnnouncementDAOImplTest {
 
             assertEquals(comments.get(0).getContent(),  commentContent);
         } catch (DAOLogicException | AnnouncementDoesNotExistException e) {
+            log.error(MessagesForException.TEST_ERROR + e.getMessage());
+            fail();
+        }
+    }
+
+    @Test
+    @Timeout(value = 10000, unit= TimeUnit.MILLISECONDS)
+    void countOfAnnouncements() {
+        try {
+            assertTrue(announcementDAO.countOfAnnouncements() >= 0);
+        } catch (DAOLogicException e) {
+            log.error(MessagesForException.TEST_ERROR + e.getMessage());
+            fail();
+        }
+    }
+
+    @Test
+    @Timeout(value = 10000, unit= TimeUnit.MILLISECONDS)
+    void getAnnouncementsByPage() {
+        try {
+            Page<Announcement> page = announcementDAO.getAnnouncementsByPage(BigInteger.ONE,
+                    PageRequest.of(0, 6));
+            page.get().forEach(Assertions::assertNotNull);
+        } catch (DAOLogicException e) {
+            log.error(MessagesForException.TEST_ERROR + e.getMessage());
+            fail();
+        }
+    }
+
+    @Test
+    @Timeout(value = 10000, unit= TimeUnit.MILLISECONDS)
+    void countOfAnnouncementsByTitle() {
+        try {
+            assertTrue(announcementDAO.countOfAnnouncementsByTitle("gath") >= 0);
+        } catch (DAOLogicException e) {
+            log.error(MessagesForException.TEST_ERROR + e.getMessage());
+            fail();
+        }
+    }
+
+    @Test
+    @Timeout(value = 10000, unit= TimeUnit.MILLISECONDS)
+    void getAnnouncementsByTitle() {
+        try {
+            Page<Announcement> page = announcementDAO.getAnnouncementsByTitle("gath", BigInteger.ONE,
+                    PageRequest.of(0, 6));
+            page.get().forEach(Assertions::assertNotNull);
+        } catch (DAOLogicException e) {
             log.error(MessagesForException.TEST_ERROR + e.getMessage());
             fail();
         }

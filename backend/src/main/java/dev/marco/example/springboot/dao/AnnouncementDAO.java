@@ -6,6 +6,8 @@ import dev.marco.example.springboot.exception.DAOConfigException;
 import dev.marco.example.springboot.exception.DAOLogicException;
 import dev.marco.example.springboot.model.Announcement;
 import dev.marco.example.springboot.model.AnnouncementComment;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -29,6 +31,10 @@ public interface AnnouncementDAO {
   String UNSET_LIKE = "UNSET_LIKE";
   String GET_ANNOUNCEMENT_COMMENTARIES_DESC = "GET_ANNOUNCEMENT_COMMENTARIES_DESC";
   String CREATE_COMMENTARY = "CREATE_COMMENTARY";
+  String SELECT_ANNOUNCEMENTS_BY_PAGE = "SELECT_ANNOUNCEMENTS_BY_PAGE";
+  String SELECT_NUMBER_OF_ANNOUNCEMENT = "SELECT_NUMBER_OF_ANNOUNCEMENT";
+  String SELECT_ANNOUNCEMENTS_BY_TITLE = "SELECT_ANNOUNCEMENTS_BY_TITLE";
+  String SELECT_NUMBER_OF_ANNOUNCEMENT_BY_TITLE = "SELECT_NUMBER_OF_ANNOUNCEMENT_BY_TITLE";
 
   String ID_ANNOUNCEMENT = "ID_ANNOUNCEMENT";
   String TITLE = "TITLE";
@@ -82,4 +88,14 @@ public interface AnnouncementDAO {
 
   void createComment(String commentContent, BigInteger announcementId, BigInteger userId)
       throws DAOLogicException;
+
+  Page<Announcement> getAnnouncementsByPage(BigInteger idUser, Pageable pageable)
+          throws DAOLogicException;
+
+  long countOfAnnouncements() throws DAOLogicException;
+
+  Page<Announcement> getAnnouncementsByTitle(String title, BigInteger idUser, Pageable pageable)
+          throws DAOLogicException;
+
+  long countOfAnnouncementsByTitle(String title) throws DAOLogicException;
 }
