@@ -126,8 +126,8 @@ public class QuizController implements ApiAddresses {
             log.error(QUESTION_NOT_FOUND + e.getMessage());
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, properties.getProperty(QUESTION_EXCEPTION));
         } catch (UserException e) {
-            log.error(USER_NOT_FOUND_EXCEPTION + e.getMessage());
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, properties.getProperty(USER_EXCEPTION));
+            log.error(DONT_ENOUGH_RIGHTS + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, properties.getProperty(DONT_ENOUGH_RIGHTS));
         } catch (QuizException e) {
             log.error(QUIZ_NOT_FOUND_EXCEPTION + e.getMessage());
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, properties.getProperty(QUIZ_EXCEPTION));
@@ -158,11 +158,16 @@ public class QuizController implements ApiAddresses {
         } catch (QuestionDoesNotExistException e) {
             log.error(QUESTION_NOT_FOUND + e.getMessage());
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, properties.getProperty(QUESTION_EXCEPTION));
+        } catch (UserDoesNotExistException e) {
+            log.error(USER_NOT_FOUND_EXCEPTION + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, properties.getProperty(USER_NOT_FOUND_EXCEPTION));
+        } catch (UserException e) {
+            log.error(DONT_ENOUGH_RIGHTS + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, properties.getProperty(DONT_ENOUGH_RIGHTS));
         } catch (DAOLogicException e) {
             log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, properties.getProperty(DAO_LOGIC_EXCEPTION));
         }
-
     }
 
     @DeleteMapping(API_DELETE_QUIZ)
@@ -177,9 +182,12 @@ public class QuizController implements ApiAddresses {
         } catch (QuizDoesNotExistException | QuizException e) {
             log.error(QUIZ_NOT_FOUND_EXCEPTION + e.getMessage());
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, properties.getProperty(QUIZ_EXCEPTION));
-        } catch (UserException | UserDoesNotExistException e) {
+        } catch (UserDoesNotExistException e) {
             log.error(USER_NOT_FOUND_EXCEPTION + e.getMessage());
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, properties.getProperty(USER_EXCEPTION));
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, properties.getProperty(USER_NOT_FOUND_EXCEPTION));
+        } catch (UserException e) {
+            log.error(DONT_ENOUGH_RIGHTS + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, properties.getProperty(DONT_ENOUGH_RIGHTS));
         } catch (QuestionDoesNotExistException e) {
             log.error(QUESTION_NOT_FOUND + e.getMessage());
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, properties.getProperty(QUESTION_EXCEPTION));
