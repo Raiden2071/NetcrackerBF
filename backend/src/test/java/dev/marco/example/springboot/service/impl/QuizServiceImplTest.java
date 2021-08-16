@@ -106,7 +106,7 @@ class QuizServiceImplTest {
             if (quiz != null) {
                 assertEquals(title, quiz.getTitle());
             }
-        } catch (QuizDoesNotExistException | DAOLogicException | QuizException e) {
+        } catch (QuizDoesNotExistException | DAOLogicException | QuizException | QuestionDoesNotExistException e) {
             log.error("Error while testing getQuizByTitle ", e);
             fail();
         }

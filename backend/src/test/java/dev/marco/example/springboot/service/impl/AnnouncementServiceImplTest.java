@@ -2,6 +2,7 @@ package dev.marco.example.springboot.service.impl;
 
 import dev.marco.example.springboot.model.AnnouncementComment;
 import org.apache.log4j.Logger;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import dev.marco.example.springboot.dao.impl.AnnouncementDAOImpl;
 import dev.marco.example.springboot.exception.*;
 import dev.marco.example.springboot.model.Announcement;
 import dev.marco.example.springboot.model.impl.AnnouncementImpl;
+import org.springframework.data.domain.Page;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -189,7 +191,7 @@ class AnnouncementServiceImplTest {
             for (Announcement announcement : announcementSet)
                 assertNotNull(announcement);
         } catch (DAOLogicException e) {
-            log.error(LOG_ERROR_CASE + "getAnnouncementsLikedByUser " + e.getMessage());
+            log.error(LOG_ERROR_CASE + "getSetByTitle " + e.getMessage());
             fail();
         }
     }
@@ -208,7 +210,7 @@ class AnnouncementServiceImplTest {
 
             assertEquals(comments.get(0).getContent(),  commentContent);
         } catch (AnnouncementDoesNotExistException | DAOLogicException | AnnouncementException e) {
-            log.error(LOG_ERROR_CASE +"getAnnouncementsLikedByUser "+ e.getMessage());
+            log.error(LOG_ERROR_CASE +"createComment "+ e.getMessage());
             fail();
         }
     }
@@ -220,5 +222,30 @@ class AnnouncementServiceImplTest {
         assertThrows(AnnouncementException.class,
                 () -> announcementService.createComment(commentContent, BigInteger.ZERO, null)
         );
+    }
+
+    @Test
+    @Timeout(value = 10000, unit= TimeUnit.MILLISECONDS)
+    void getAnnouncementsByPage() {
+        try {
+            Page<Announcement> page = announcementService.getAnnouncementsByPage(BigInteger.ONE, 1);
+            page.get().forEach(Assertions::assertNotNull);
+        } catch (DAOLogicException | PageException e) {
+            log.error(LOG_ERROR_CASE + "getAnnouncementsByPage " + e.getMessage());
+            fail();
+        }
+
+    }
+
+    @Test
+    @Timeout(value = 10000, unit= TimeUnit.MILLISECONDS)
+    void getAnnouncementsLikeTitle() {
+        try {
+            Page<Announcement> page = announcementService.getAnnouncementsLikeTitle(BigInteger.ONE, "gath", 1);
+            page.get().forEach(Assertions::assertNotNull);
+        } catch (DAOLogicException | PageException e) {
+            log.error(LOG_ERROR_CASE + "getAnnouncementsLikeTitle " + e.getMessage());
+            fail();
+        }
     }
 }

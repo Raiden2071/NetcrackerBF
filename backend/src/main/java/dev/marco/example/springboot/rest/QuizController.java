@@ -48,11 +48,11 @@ public class QuizController implements ApiAddresses {
         }
     }
 
-    public void setTestConnection() throws DAOConfigException {
-        quizService.setTestConnection();
-        userService.setTestConnection();
-        gameService.setTestConnection();
-    }
+//    public void setTestConnection() throws DAOConfigException {
+//        quizService.setTestConnection();
+//        userService.setTestConnection();
+//        gameService.setTestConnection();
+//    }
 
     @GetMapping(API_ALL_QUIZZES)
     public List<Quiz> showAllQuizzes() {
@@ -232,8 +232,8 @@ public class QuizController implements ApiAddresses {
         }
     }
 
-    @GetMapping(API_FINISH_QUIZ)
-    public List<Map<String, Boolean>> finishQuiz(@RequestBody ParamsInFinishQuiz params) {
+    @PostMapping(API_FINISH_QUIZ)
+    public List<Answer> finishQuiz(@RequestBody ParamsInFinishQuiz params) {
         try {
             Quiz quiz = quizService.getQuizById(params.quizId);
             return gameService.validateAnswers(quiz, params.user, params.answers);

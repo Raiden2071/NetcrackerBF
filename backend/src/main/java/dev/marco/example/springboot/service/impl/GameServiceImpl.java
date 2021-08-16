@@ -61,25 +61,28 @@ public class GameServiceImpl implements GameService {
             }
         }
         Kryo kryo = new Kryo();
+        kryo.register(java.util.ArrayList.class);
         kryo.register(java.math.BigInteger.class);
         kryo.register(java.sql.Date.class);
         kryo.register(dev.marco.example.springboot.model.QuizType.class);
         kryo.register(dev.marco.example.springboot.model.impl.QuizImpl.class);
+        kryo.register(dev.marco.example.springboot.model.impl.QuestionImpl.class);
+        kryo.register(dev.marco.example.springboot.model.QuestionType.class);
+        kryo.register(dev.marco.example.springboot.model.Answer.class);
         Quiz returnedQuiz = kryo.copy(quiz);
         returnedQuiz.setQuestions(questionList);
         return returnedQuiz;
     }
 
     @Override
-    public List<Map<String, Boolean>> validateAnswers(Quiz quiz, User user, List<Answer> userAnswers)
+    public List<Answer> validateAnswers(Quiz quiz, User user, List<Answer> userAnswers)
             throws QuestionDoesNotExistException, DAOLogicException, AnswerDoesNotExistException, QuizDoesNotExistException, QuizException {
         BigInteger quizId = quiz.getId();
         BigInteger userId = user.getId();
         List<QuestionImpl> questions = questionService.getQuestionsByQuiz(quizId);
         int counterOfCorrectAnswers = 0;
-        List<Map<String, Boolean>> frontAnswers = new ArrayList<>(NUMBER_OF_USER_ANSWERS);
+        List<Answer> frontAnswers = new ArrayList<>(NUMBER_OF_USER_ANSWERS);
         for (int i = 0; i < NUMBER_OF_QUESTIONS; i++) {
-            Map<String, Boolean> answersMap = new HashMap<>(ONE_ANSWER);
             Question question = questions.get(i);
             Answer userAnswer = userAnswers.get(i);
             List<AnswerImpl> defaultAnswers = answerDAO.getAnswersByQuestionId(question.getId());
@@ -87,15 +90,14 @@ public class GameServiceImpl implements GameService {
                 String userAnswerValue = userAnswer.getValue();
                 if(defAnswer.getValue().equals(userAnswerValue)) {
                     if(defAnswer.getAnswer()) {
-                        answersMap.put(userAnswerValue, true);
+                        frontAnswers.add(userAnswer);
                         counterOfCorrectAnswers++;
                     } else {
-                        answersMap.put(userAnswerValue, false);
+                        frontAnswers.add(userAnswer);
                     }
                     break;
                 }
             }
-            frontAnswers.add(answersMap);
         }
 
         boolean isAccomplishedQuiz = userAccomplishedQuizDAO.isAccomplishedQuiz(userId, quizId);

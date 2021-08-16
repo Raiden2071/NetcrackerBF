@@ -3,6 +3,7 @@ package dev.marco.example.springboot.service;
 import dev.marco.example.springboot.exception.*;
 import dev.marco.example.springboot.model.Announcement;
 import dev.marco.example.springboot.model.AnnouncementComment;
+import org.springframework.data.domain.Page;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -10,11 +11,8 @@ import java.util.Set;
 
 public interface AnnouncementService {
 
-    String MESSAGE_FROM_TEST_CONNECTION = "in testConnection";
-    String MESSAGE_FOR_BUILD_NEW_ANNOUNCEMENT = " in buildNewAnnouncement()";
-    String MESSAGE_FOR_EDIT_ANNOUNCEMENT = " in editAnnouncement()";
-    String MESSAGE_FOR_DELETE_ANNOUNCEMENT = " in deleteAnnouncement()";
-    String MESSAGE_FOR_TO_LIKE_ANNOUNCEMENT = " in toLikeAnnouncement()";
+    int MIN_PAGE = 1;
+    int PAGE_SIZE = 6;
 
     List<Announcement> getAllAnnouncements(BigInteger idUser)
             throws AnnouncementDoesNotExistException, DAOLogicException, AnnouncementException;
@@ -44,4 +42,10 @@ public interface AnnouncementService {
     void createComment(String commentContent, BigInteger  announcementId, BigInteger userId) throws DAOLogicException, AnnouncementException;
 
     Set<Announcement> getSetByTitle(String title, BigInteger idUser) throws DAOLogicException;
+
+    Page<Announcement> getAnnouncementsByPage(BigInteger idUser, int pageNumber)
+            throws DAOLogicException, PageException;
+
+    Page<Announcement> getAnnouncementsLikeTitle(BigInteger idUser, String title, int pageNumber)
+            throws DAOLogicException, PageException;
 }

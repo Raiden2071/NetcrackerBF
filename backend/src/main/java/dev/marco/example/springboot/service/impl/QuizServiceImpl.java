@@ -199,12 +199,20 @@ public class QuizServiceImpl implements QuizService {
 
     @Override
     public Quiz getQuizByTitle(String title)
-            throws QuizDoesNotExistException, DAOLogicException, QuizException {
+            throws QuizDoesNotExistException, DAOLogicException, QuizException, QuestionDoesNotExistException {
         if (StringUtils.isBlank(title)) {
             log.error(EMPTY_TITLE);
             throw new QuizException(EMPTY_TITLE);
         }
-        return quizDAO.getQuizByTitle(title);
+        Quiz quiz = quizDAO.getQuizByTitle(title);
+        if (quiz != null) {
+            List<QuestionImpl> questions = questionDAO.getAllQuestions(quiz.getId());
+            quiz.setQuestions(questions);
+        } else {
+            log.error(QUIZ_NOT_FOUND_EXCEPTION + " in getQuizByTitle");
+            throw new QuizDoesNotExistException(QUIZ_NOT_FOUND_EXCEPTION);
+        }
+        return quiz;
     }
 
     @Override

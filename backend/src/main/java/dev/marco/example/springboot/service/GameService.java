@@ -17,6 +17,6 @@ public interface GameService {
 
     void setTestConnection() throws DAOConfigException;
     Quiz sendGameQuiz(String title) throws DAOLogicException, QuizDoesNotExistException, QuizException, QuestionDoesNotExistException, AnswerDoesNotExistException;
-    List<Map<String, Boolean>> validateAnswers(Quiz quiz, User user, List<Answer> answers) throws QuestionDoesNotExistException, DAOLogicException, AnswerDoesNotExistException, QuizDoesNotExistException, QuizException;
+    List<Answer> validateAnswers(Quiz quiz, User user, List<Answer> answers) throws QuestionDoesNotExistException, DAOLogicException, AnswerDoesNotExistException, QuizDoesNotExistException, QuizException;
     void setIsFavorite(User user, QuizAccomplishedImpl quizAccomplished) throws DAOLogicException;
 }
