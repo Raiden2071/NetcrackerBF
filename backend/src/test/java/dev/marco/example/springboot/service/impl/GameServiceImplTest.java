@@ -101,12 +101,9 @@ public class GameServiceImplTest {
             userAnswers.add(answerDAO.getAnswerById(BigInteger.valueOf(113)));
             userAnswers.add(answerDAO.getAnswerById(BigInteger.valueOf(120)));
 
-            List<Map<String, Boolean>> resultList = gameService.validateAnswers(quiz, user, userAnswers);
-            //System.out.println(resultList);
+            List<Answer> resultList = gameService.validateAnswers(quiz, user, userAnswers);
+            System.out.println(resultList);
             assertNotNull(resultList);
-            Map<String, Boolean> map = new HashMap<>();
-            map.put("Europe", true);
-            assertEquals(resultList.get(0), map);
 
             QuizAccomplishedImpl newUserAccomplishedQuiz = userAccomplishedQuizDAO.getAccomplishedQuizById(userId, quiz.getId());
 

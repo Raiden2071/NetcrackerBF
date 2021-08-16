@@ -285,7 +285,7 @@ public class QuizControllerTest {
     mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 
     this.mockMvc.perform(MockMvcRequestBuilders
-            .get("/quiz/game/end")
+            .post("/quiz/game/end")
             .contentType(MediaType.APPLICATION_JSON)
             .content(mapper.writeValueAsString(new QuizController.ParamsInFinishQuiz(BigInteger.valueOf(1), user, userAnswers)))
             .accept(MediaType.APPLICATION_JSON))

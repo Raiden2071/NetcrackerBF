@@ -33,7 +33,7 @@ public interface QuizService {
 
     List<Quiz> getLastCreatedQuizzes(int count) throws QuizDoesNotExistException, DAOLogicException;
 
-    Quiz getQuizByTitle(String title) throws QuizDoesNotExistException, DAOLogicException, QuizException;
+    Quiz getQuizByTitle(String title) throws QuizDoesNotExistException, DAOLogicException, QuizException, QuestionDoesNotExistException;
 
     void validateNewQuiz(Quiz quiz) throws QuizException, UserException, QuestionException, DAOLogicException, UserDoesNotExistException;
 
