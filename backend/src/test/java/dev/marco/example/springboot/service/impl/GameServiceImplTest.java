@@ -102,6 +102,7 @@ public class GameServiceImplTest {
             userAnswers.add(answerDAO.getAnswerById(BigInteger.valueOf(120)));
 
             List<Map<String, Boolean>> resultList = gameService.validateAnswers(quiz, user, userAnswers);
+            System.out.println(resultList);
             assertNotNull(resultList);
             Map<String, Boolean> map = new HashMap<>();
             map.put("Europe", true);

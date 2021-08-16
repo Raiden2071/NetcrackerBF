@@ -48,11 +48,11 @@ public class QuizController implements ApiAddresses {
         }
     }
 
-    public void setTestConnection() throws DAOConfigException {
-        quizService.setTestConnection();
-        userService.setTestConnection();
-        gameService.setTestConnection();
-    }
+//    public void setTestConnection() throws DAOConfigException {
+//        quizService.setTestConnection();
+//        userService.setTestConnection();
+//        gameService.setTestConnection();
+//    }
 
     @GetMapping(API_ALL_QUIZZES)
     public List<Quiz> showAllQuizzes() {
