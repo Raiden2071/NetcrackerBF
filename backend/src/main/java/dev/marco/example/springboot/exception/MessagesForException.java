@@ -44,6 +44,13 @@ public interface MessagesForException {
   String GET_QUIZZES_BY_TYPE_EXCEPTION = "SQL Exception while getQuizzesByType in QuizDAOImpl";
   String ACCOMPLISHED_QUIZ_HAS_NOT_BEEN_FOUNDED = "Accomplished quiz has not been founded";
   String PAGE_DOES_NOT_EXIST = "Page does not exist";
+  String QUESTION_NOT_FULL = "Should be 10 questions";
+  String ANSWERS_NOT_FULL_FOR_FOURANSWER = "Should be 4 answers in ";
+  String ANSWERS_NOT_FULL_FOR_TRUEFALSSE = "Should be 2 answers in ";
+  String SAME_ANSWERS_EXCEPTION = "Same answers ";
+  String SAME_QUESTIONS_EXCEPTION = "Same questions with name ";
+  String EMPTY_ANSWER_EXCEPTION = "Empty answer in ";
+  String EMPTY_QUESTION_EXCEPTION = "Empty question";
 
   String TEST_CONNECTION_ERR = "Error while setting test connection %s";
   String TEST_CONNECTION_EXC = "Error while setting test connection";
