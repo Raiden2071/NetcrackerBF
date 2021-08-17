@@ -56,7 +56,7 @@ public class AnswerDAOImpl implements AnswerDAO, MessagesForException {
     }
 
     @Override
-    public Answer getAnswerById(BigInteger answerId) throws DAOLogicException, AnswerDoesNotExistException {
+    public AnswerImpl getAnswerById(BigInteger answerId) throws DAOLogicException, AnswerDoesNotExistException {
         try  {
             PreparedStatement preparedStatement =
                     connection.prepareStatement(properties.getProperty(GET_ANSWER_BY_ID));

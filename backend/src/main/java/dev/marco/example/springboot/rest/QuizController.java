@@ -1,7 +1,9 @@
 package dev.marco.example.springboot.rest;
 
+import dev.marco.example.springboot.model.impl.AnswerImpl;
 import dev.marco.example.springboot.model.impl.QuizAccomplishedImpl;
 import dev.marco.example.springboot.model.impl.QuizImpl;
+import dev.marco.example.springboot.model.impl.UserImpl;
 import dev.marco.example.springboot.service.UserService;
 import dev.marco.example.springboot.service.GameService;
 import dev.marco.example.springboot.util.ApiAddresses;
@@ -233,9 +235,9 @@ public class QuizController implements ApiAddresses {
     }
 
     @PostMapping(API_FINISH_QUIZ)
-    public List<Answer> finishQuiz(@RequestBody ParamsInFinishQuiz params) {
+    public List<AnswerImpl> finishQuiz(@RequestBody ParamsInFinishQuiz params) {
         try {
-            Quiz quiz = quizService.getQuizById(params.quizId);
+            Quiz quiz = quizService.getQuizByTitle(params.quizTitle);
             return gameService.validateAnswers(quiz, params.user, params.answers);
         } catch (QuizDoesNotExistException | QuizException e) {
             log.error(QUIZ_NOT_FOUND_EXCEPTION + e.getMessage());
@@ -267,14 +269,14 @@ public class QuizController implements ApiAddresses {
     }
 
     static class ParamsInFinishQuiz {
-        BigInteger quizId;
-        User user;
-        List<Answer> answers;
+        List<AnswerImpl> answers;
+        String quizTitle;
+        UserImpl user;
 
-        public ParamsInFinishQuiz(BigInteger quizId, User user, List<Answer> answers) {
-            this.quizId = quizId;
-            this.user = user;
+        public ParamsInFinishQuiz(List<AnswerImpl> answers, String quizTitle, UserImpl user) {
             this.answers = answers;
+            this.quizTitle = quizTitle;
+            this.user = user;
         }
     }
 }

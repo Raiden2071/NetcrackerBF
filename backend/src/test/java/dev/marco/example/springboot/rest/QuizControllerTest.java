@@ -272,14 +272,14 @@ public class QuizControllerTest {
   @Test
   @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
   void finishQuizTest() throws Exception {
-    User user = new UserImpl.UserBuilder()
+    UserImpl user = (UserImpl) new UserImpl.UserBuilder()
             .setId(BigInteger.valueOf(2036))
             .setEmail("JohnTitor@gmail.com")
             .setFirstName("John")
             .setLastName("Titor")
             .setDescription("Future")
             .build();
-    List<Answer> userAnswers = new ArrayList<>();
+    List<AnswerImpl> userAnswers = new ArrayList<>();
 
     ObjectMapper mapper = new ObjectMapper();
     mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
@@ -287,7 +287,7 @@ public class QuizControllerTest {
     this.mockMvc.perform(MockMvcRequestBuilders
             .post("/quiz/game/end")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(mapper.writeValueAsString(new QuizController.ParamsInFinishQuiz(BigInteger.valueOf(1), user, userAnswers)))
+            .content(mapper.writeValueAsString(new QuizController.ParamsInFinishQuiz(userAnswers, "ZNO", user)))
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(MockMvcResultMatchers.status().isOk());
   }

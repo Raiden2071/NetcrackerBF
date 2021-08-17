@@ -75,25 +75,25 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public List<Answer> validateAnswers(Quiz quiz, User user, List<Answer> userAnswers)
+    public List<AnswerImpl> validateAnswers(Quiz quiz, User user, List<AnswerImpl> userAnswers)
             throws QuestionDoesNotExistException, DAOLogicException, AnswerDoesNotExistException, QuizDoesNotExistException, QuizException {
         BigInteger quizId = quiz.getId();
         BigInteger userId = user.getId();
         List<QuestionImpl> questions = questionService.getQuestionsByQuiz(quizId);
         int counterOfCorrectAnswers = 0;
-        List<Answer> frontAnswers = new ArrayList<>(NUMBER_OF_USER_ANSWERS);
+        List<AnswerImpl> frontAnswers = new ArrayList<>(NUMBER_OF_USER_ANSWERS);
         for (int i = 0; i < NUMBER_OF_QUESTIONS; i++) {
             Question question = questions.get(i);
-            Answer userAnswer = userAnswers.get(i);
+            AnswerImpl userAnswer = userAnswers.get(i);
             List<AnswerImpl> defaultAnswers = answerDAO.getAnswersByQuestionId(question.getId());
-            for (Answer defAnswer : defaultAnswers) {
+            for (AnswerImpl defAnswer : defaultAnswers) {
                 String userAnswerValue = userAnswer.getValue();
                 if(defAnswer.getValue().equals(userAnswerValue)) {
                     if(defAnswer.getAnswer()) {
-                        frontAnswers.add(userAnswer);
+                        frontAnswers.add(defAnswer);
                         counterOfCorrectAnswers++;
                     } else {
-                        frontAnswers.add(userAnswer);
+                        frontAnswers.add(defAnswer);
                     }
                     break;
                 }
