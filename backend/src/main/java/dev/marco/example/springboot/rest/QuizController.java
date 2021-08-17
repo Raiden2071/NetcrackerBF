@@ -2,6 +2,7 @@ package dev.marco.example.springboot.rest;
 
 import dev.marco.example.springboot.model.impl.QuizAccomplishedImpl;
 import dev.marco.example.springboot.model.impl.QuizImpl;
+import dev.marco.example.springboot.model.impl.UserImpl;
 import dev.marco.example.springboot.service.UserService;
 import dev.marco.example.springboot.service.GameService;
 import dev.marco.example.springboot.util.ApiAddresses;
@@ -261,9 +262,9 @@ public class QuizController implements ApiAddresses {
     static class ParamsInFinishQuiz {
         List<Answer> answers;
         String quizTitle;
-        User user;
+        UserImpl user;
 
-        public ParamsInFinishQuiz(List<Answer> answers, String quizTitle, User user) {
+        public ParamsInFinishQuiz(List<Answer> answers, String quizTitle, UserImpl user) {
             this.answers = answers;
             this.quizTitle = quizTitle;
             this.user = user;

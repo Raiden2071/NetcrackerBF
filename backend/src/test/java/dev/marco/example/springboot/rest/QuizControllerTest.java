@@ -272,7 +272,7 @@ public class QuizControllerTest {
   @Test
   @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
   void finishQuizTest() throws Exception {
-    User user = new UserImpl.UserBuilder()
+    UserImpl user = (UserImpl) new UserImpl.UserBuilder()
             .setId(BigInteger.valueOf(2036))
             .setEmail("JohnTitor@gmail.com")
             .setFirstName("John")
