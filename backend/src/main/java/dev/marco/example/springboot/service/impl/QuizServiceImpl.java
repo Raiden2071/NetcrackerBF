@@ -53,65 +53,51 @@ public class QuizServiceImpl implements QuizService {
     }
 
     @Override
-    public Quiz buildNewQuiz(Quiz quiz) throws QuizException, DAOLogicException, QuestionException, UserException, AnswerDoesNotExistException {
-        try {
-            boolean isExist = quizDAO.existQuizByTitle(quiz.getTitle());
+    public Quiz buildNewQuiz(Quiz quiz) throws QuizException, DAOLogicException, QuestionException,
+            UserException, AnswerDoesNotExistException, AnswerException, UserDoesNotExistException,
+            QuestionDoesNotExistException {
 
-            if (isExist) {
-                log.error(QUIZ_ALREADY_EXISTS);
-                throw new QuizException(QUIZ_ALREADY_EXISTS);
-            }
-            JwtUser user = (JwtUser) SecurityContextHolder.getContext().getAuthentication()
-                    .getPrincipal();
-            BigInteger userId = BigInteger.valueOf(user.getId());
+        boolean isExist = quizDAO.existQuizByTitle(quiz.getTitle());
 
-            Quiz newQuiz = QuizImpl.QuizBuilder()
-                    .setTitle(quiz.getTitle())
-                    .setDescription(quiz.getDescription())
-                    .setQuizType(quiz.getQuizType())
-                    .setCreationDate(new Date(System.currentTimeMillis()))
-                    .setCreatorId(userId)
-                    .setQuestions(quiz.getQuestions())
-                    .build();
-
-            validateNewQuiz(newQuiz);
-
-            Quiz quizGame = quizDAO.createQuiz(newQuiz);
-
-            List<QuestionImpl> questions = newQuiz.getQuestions();
-            for (Question question : questions) {
-                Question questionWithId = questionDAO.createQuestion(question, quizGame.getId());
-
-                List<AnswerImpl> answers = questionWithId.getAnswers();
-                for (AnswerImpl answer : answers) {
-                    answer.setQuestionId(questionWithId.getId());
-                    BigInteger id = answerDAO.createAnswer(answer);
-                    answer.setId(id);
-                }
-            }
-            return quizGame;
-
-        } catch (UserDoesNotExistException e) {
-            log.error(USER_NOT_FOUND_EXCEPTION + e);
-            throw new UserException(USER_NOT_FOUND_EXCEPTION, e);
-        } catch (UserException e) {
-            log.error(USER_HAS_NOT_BEEN_RECEIVED);
-            throw new UserException(USER_HAS_NOT_BEEN_RECEIVED, e);
-        } catch (QuestionDoesNotExistException e) {
-            log.error(QUESTION_NOT_FOUND);
-            throw new QuestionException(QUESTION_NOT_FOUND, e);
-        } catch (AnswerDoesNotExistException e) {
-            log.error(getAnswerByIdNotFoundErr);
-            throw new AnswerDoesNotExistException(getAnswerByIdNotFoundErr, e);
-        } catch (DAOLogicException e) {
-            log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
-            throw new DAOLogicException(DAO_LOGIC_EXCEPTION, e);
+        if (isExist) {
+            log.error(QUIZ_ALREADY_EXISTS);
+            throw new QuizException(QUIZ_ALREADY_EXISTS);
         }
+        JwtUser user = (JwtUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        BigInteger userId = BigInteger.valueOf(user.getId());
+
+        Quiz newQuiz = QuizImpl.QuizBuilder()
+                .setTitle(quiz.getTitle())
+                .setDescription(quiz.getDescription())
+                .setQuizType(quiz.getQuizType())
+                .setCreationDate(new Date(System.currentTimeMillis()))
+                .setCreatorId(userId)
+                .setQuestions(quiz.getQuestions())
+                .build();
+
+        validateNewQuiz(newQuiz);
+
+        Quiz quizGame = quizDAO.createQuiz(newQuiz);
+
+        List<QuestionImpl> questions = newQuiz.getQuestions();
+
+        for (Question question : questions) {
+            Question questionWithId = questionDAO.createQuestion(question, quizGame.getId());
+
+            List<AnswerImpl> answers = questionWithId.getAnswers();
+
+            for (AnswerImpl answer : answers) {
+                answer.setQuestionId(questionWithId.getId());
+                BigInteger id = answerDAO.createAnswer(answer);
+                answer.setId(id);
+            }
+        }
+        return quizGame;
 
     }
 
     @Override
-    public void validateNewQuiz(Quiz quiz) throws QuizException, UserException, QuestionException, DAOLogicException, UserDoesNotExistException {
+    public void validateNewQuiz(Quiz quiz) throws QuizException, UserException, QuestionException, AnswerException {
         if (StringUtils.isBlank(quiz.getTitle()) || StringUtils.length(quiz.getTitle()) < MIN_LENGTH_TITLE) {
             log.error(EMPTY_TITLE);
             throw new QuizException(EMPTY_TITLE);
@@ -136,8 +122,62 @@ public class QuizServiceImpl implements QuizService {
             log.error(USER_NOT_FOUND_EXCEPTION);
             throw new UserException(USER_NOT_FOUND_EXCEPTION);
         }
+        if (quiz.getQuestions().size() != QUESTIONS_LENGTH) {
+            log.error(QUESTION_NOT_FULL);
+            throw new QuestionException(QUESTION_NOT_FULL);
+        }
+
+        List<QuestionImpl> questions = quiz.getQuestions();
+
+
+        for (int index = 0; index < questions.size(); index++) {
+            if(questions.get(index).getQuestion().isEmpty()) {
+                log.error(EMPTY_QUESTION_EXCEPTION);
+                throw new QuestionException(EMPTY_QUESTION_EXCEPTION);
+            }
+
+            for (int j = index + 1; j < questions.size(); j++) {
+                if (questions.get(index).getQuestion().equals(questions.get(j).getQuestion())) {
+                    log.error(SAME_QUESTIONS_EXCEPTION);
+                    throw new QuestionException(SAME_QUESTIONS_EXCEPTION + questions.get(index).getQuestion());
+                }
+            }
+
+
+            List<AnswerImpl> answers = questions.get(index).getAnswers();
+
+            switch (questions.get(index).getQuestionType()) {
+                case FOUR_ANSWERS:
+                    if (answers.size() != ANSWERS_LENGTH) {
+                        log.error(ANSWERS_NOT_FULL_FOR_FOURANSWER + questions.get(index).getQuestion());
+                        throw new AnswerException(ANSWERS_NOT_FULL_FOR_FOURANSWER + questions.get(index).getQuestion());
+                    }
+                    break;
+                case TRUE_FALSE:
+                    if (answers.size() != SHORT_ANSWERS_LENGTH) {
+                        log.error(ANSWERS_NOT_FULL_FOR_TRUEFALSSE + questions.get(index).getQuestion());
+                        throw new AnswerException(ANSWERS_NOT_FULL_FOR_TRUEFALSSE + questions.get(index).getQuestion());
+                    }
+                    break;
+            }
+
+            for (int i = 0; i < answers.size(); i++) {
+                if(answers.get(i).getValue().isEmpty()) {
+                    log.error(EMPTY_ANSWER_EXCEPTION + questions.get(index).getQuestion());
+                    throw new AnswerException(EMPTY_ANSWER_EXCEPTION + questions.get(index).getQuestion());
+                }
+                for (int j = i + 1; j < answers.size(); j++) {
+                    if (answers.get(i).getValue().equals(answers.get(j).getValue())) {
+                        log.error(SAME_ANSWERS_EXCEPTION + questions.get(index).getQuestion());
+                        throw new AnswerException(SAME_ANSWERS_EXCEPTION + answers.get(i).getValue() + " in "
+                                + questions.get(index).getQuestion());
+                    }
+                }
+            }
+        }
+
 //        User user = userService.getUserById(quiz.getCreatorId());
-//        if(!user.getUserRole().equals(UserRoles.ADMIN)) {
+//        if (!user.getUserRole().equals(UserRoles.ADMIN)) {
 //            log.error(DONT_ENOUGH_RIGHTS);
 //            throw new UserException(DONT_ENOUGH_RIGHTS);
 //        }
@@ -145,31 +185,44 @@ public class QuizServiceImpl implements QuizService {
     }
 
     @Override
-    public void updateQuiz(BigInteger id, Quiz quiz) throws QuizDoesNotExistException, DAOLogicException, QuestionDoesNotExistException {
+    public void updateQuiz(BigInteger id, Quiz quiz) throws QuizDoesNotExistException, DAOLogicException, QuestionDoesNotExistException, UserDoesNotExistException, UserException {
+
+//        JwtUser userJwt = (JwtUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        BigInteger userId = BigInteger.valueOf(userJwt.getId());
+//        User user = userService.getUserById(userId);
+//        if (!user.getUserRole().equals(UserRoles.ADMIN)) {
+//            log.error(DONT_ENOUGH_RIGHTS);
+//            throw new UserException(DONT_ENOUGH_RIGHTS);
+//        }
 
         Quiz quizFromDAO = quizDAO.getQuizById(id);
-
-        if (quizFromDAO != null) {
-            List<QuestionImpl> questions = questionDAO.getAllQuestions(quiz.getId());
-            quiz.setQuestions(questions);
-            quizDAO.updateQuiz(id, quiz);
-        } else {
-            log.error(QUIZ_NOT_FOUND_EXCEPTION + " in updateQuiz");
+        if (quizFromDAO == null) {
+            log.error(QUIZ_NOT_FOUND_EXCEPTION);
             throw new QuizDoesNotExistException(QUIZ_NOT_FOUND_EXCEPTION);
         }
+        List<QuestionImpl> questions = questionDAO.getAllQuestions(quiz.getId());
+        quiz.setQuestions(questions);
+        quizDAO.updateQuiz(id, quiz);
     }
 
     @Override
     public void deleteQuiz(Quiz quiz)
-            throws QuizDoesNotExistException, DAOLogicException {
+            throws QuizDoesNotExistException, DAOLogicException, UserDoesNotExistException, UserException {
+
+//        JwtUser userJwt = (JwtUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        BigInteger userId = BigInteger.valueOf(userJwt.getId());
+//        User user = userService.getUserById(userId);
+//        if (!user.getUserRole().equals(UserRoles.ADMIN)) {
+//            log.error(DONT_ENOUGH_RIGHTS);
+//            throw new UserException(DONT_ENOUGH_RIGHTS);
+//        }
 
         Quiz quizFromDAO = quizDAO.getQuizById(quiz.getId());
-        if (quizFromDAO != null) {
-            quizDAO.deleteQuiz(quiz);
-        } else {
-            log.error(QUIZ_NOT_FOUND_EXCEPTION + " in deleteQuiz");
+        if (quizFromDAO == null) {
+            log.error(QUIZ_NOT_FOUND_EXCEPTION);
             throw new QuizDoesNotExistException(QUIZ_NOT_FOUND_EXCEPTION);
         }
+        quizDAO.deleteQuiz(quiz);
     }
 
     @Override
@@ -205,13 +258,12 @@ public class QuizServiceImpl implements QuizService {
             throw new QuizException(EMPTY_TITLE);
         }
         Quiz quiz = quizDAO.getQuizByTitle(title);
-        if (quiz != null) {
-            List<QuestionImpl> questions = questionDAO.getAllQuestions(quiz.getId());
-            quiz.setQuestions(questions);
-        } else {
-            log.error(QUIZ_NOT_FOUND_EXCEPTION + " in getQuizByTitle");
+        if (quiz == null) {
+            log.error(QUIZ_NOT_FOUND_EXCEPTION);
             throw new QuizDoesNotExistException(QUIZ_NOT_FOUND_EXCEPTION);
         }
+        List<QuestionImpl> questions = questionDAO.getAllQuestions(quiz.getId());
+        quiz.setQuestions(questions);
         return quiz;
     }
 
@@ -223,7 +275,7 @@ public class QuizServiceImpl implements QuizService {
         }
         Pageable pageable = PageRequest.of(--pageNumber, PAGE_SIZE);
         Page<Quiz> page = quizDAO.getQuizzesLikeTitle(pageable, title);
-        if(page.getTotalPages() <= pageNumber) {
+        if (page.getTotalPages() <= pageNumber) {
             log.error(PAGE_DOES_NOT_EXIST);
             throw new PageException(PAGE_DOES_NOT_EXIST);
         }
