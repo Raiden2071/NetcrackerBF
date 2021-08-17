@@ -1,5 +1,6 @@
 package dev.marco.example.springboot.rest;
 
+import dev.marco.example.springboot.model.impl.AnswerImpl;
 import dev.marco.example.springboot.model.impl.QuizAccomplishedImpl;
 import dev.marco.example.springboot.model.impl.QuizImpl;
 import dev.marco.example.springboot.model.impl.UserImpl;
@@ -226,7 +227,7 @@ public class QuizController implements ApiAddresses {
     }
 
     @PostMapping(API_FINISH_QUIZ)
-    public List<Answer> finishQuiz(@RequestBody ParamsInFinishQuiz params) {
+    public List<AnswerImpl> finishQuiz(@RequestBody ParamsInFinishQuiz params) {
         try {
             Quiz quiz = quizService.getQuizByTitle(params.quizTitle);
             return gameService.validateAnswers(quiz, params.user, params.answers);
@@ -260,11 +261,11 @@ public class QuizController implements ApiAddresses {
     }
 
     static class ParamsInFinishQuiz {
-        List<Answer> answers;
+        List<AnswerImpl> answers;
         String quizTitle;
         UserImpl user;
 
-        public ParamsInFinishQuiz(List<Answer> answers, String quizTitle, UserImpl user) {
+        public ParamsInFinishQuiz(List<AnswerImpl> answers, String quizTitle, UserImpl user) {
             this.answers = answers;
             this.quizTitle = quizTitle;
             this.user = user;

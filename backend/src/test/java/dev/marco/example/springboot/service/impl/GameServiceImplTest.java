@@ -7,6 +7,7 @@ import dev.marco.example.springboot.exception.*;
 import dev.marco.example.springboot.model.Answer;
 import dev.marco.example.springboot.model.Quiz;
 import dev.marco.example.springboot.model.User;
+import dev.marco.example.springboot.model.impl.AnswerImpl;
 import dev.marco.example.springboot.model.impl.QuestionImpl;
 import dev.marco.example.springboot.model.impl.QuizAccomplishedImpl;
 import dev.marco.example.springboot.service.UserService;
@@ -89,7 +90,7 @@ public class GameServiceImplTest {
             assertNotNull(userAccomplishedQuiz);
             assertEquals(1, userAccomplishedQuiz.getCorrectAnswers());
 
-            List<Answer> userAnswers = new ArrayList<>();
+            List<AnswerImpl> userAnswers = new ArrayList<>();
             userAnswers.add(answerDAO.getAnswerById(BigInteger.valueOf(84)));
             userAnswers.add(answerDAO.getAnswerById(BigInteger.valueOf(88)));
             userAnswers.add(answerDAO.getAnswerById(BigInteger.valueOf(90)));
@@ -101,7 +102,7 @@ public class GameServiceImplTest {
             userAnswers.add(answerDAO.getAnswerById(BigInteger.valueOf(113)));
             userAnswers.add(answerDAO.getAnswerById(BigInteger.valueOf(120)));
 
-            List<Answer> resultList = gameService.validateAnswers(quiz, user, userAnswers);
+            List<AnswerImpl> resultList = gameService.validateAnswers(quiz, user, userAnswers);
             System.out.println(resultList);
             assertNotNull(resultList);
 

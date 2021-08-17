@@ -279,7 +279,7 @@ public class QuizControllerTest {
             .setLastName("Titor")
             .setDescription("Future")
             .build();
-    List<Answer> userAnswers = new ArrayList<>();
+    List<AnswerImpl> userAnswers = new ArrayList<>();
 
     ObjectMapper mapper = new ObjectMapper();
     mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);

@@ -31,7 +31,7 @@ public interface AnswerDAO {
 
   void setTestConnection() throws DAOConfigException;
 
-  Answer getAnswerById(BigInteger id) throws DAOLogicException, AnswerDoesNotExistException;
+  AnswerImpl getAnswerById(BigInteger id) throws DAOLogicException, AnswerDoesNotExistException;
 
   BigInteger getLastAnswerIdByTitle(String title)
       throws DAOLogicException, AnswerDoesNotExistException;
