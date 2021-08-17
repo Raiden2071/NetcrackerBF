@@ -90,10 +90,10 @@ public class GameServiceImpl implements GameService {
                 String userAnswerValue = userAnswer.getValue();
                 if(defAnswer.getValue().equals(userAnswerValue)) {
                     if(defAnswer.getAnswer()) {
-                        frontAnswers.add(userAnswer);
+                        frontAnswers.add(defAnswer);
                         counterOfCorrectAnswers++;
                     } else {
-                        frontAnswers.add(userAnswer);
+                        frontAnswers.add(defAnswer);
                     }
                     break;
                 }
