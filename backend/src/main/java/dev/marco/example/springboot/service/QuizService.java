@@ -5,7 +5,6 @@ import dev.marco.example.springboot.model.Quiz;
 import dev.marco.example.springboot.model.QuizType;
 import dev.marco.example.springboot.model.impl.QuizImpl;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -18,10 +17,13 @@ public interface QuizService {
     int MAX_LENGTH_DESCRIPTION = 500;
     int MIN_PAGE = 1;
     int PAGE_SIZE = 8;
+    int QUESTIONS_LENGTH = 10;
+    int ANSWERS_LENGTH = 4;
+    int SHORT_ANSWERS_LENGTH = 2;
 
-    Quiz buildNewQuiz(Quiz quiz) throws QuizException, DAOLogicException, UserException, QuestionException, AnswerDoesNotExistException;
+    Quiz buildNewQuiz(Quiz quiz) throws QuizException, DAOLogicException, UserException, QuestionException, AnswerDoesNotExistException, AnswerException, UserDoesNotExistException, QuestionDoesNotExistException;
 
-    void updateQuiz(BigInteger id, Quiz updatedQuiz) throws QuizDoesNotExistException, DAOLogicException, QuestionDoesNotExistException;
+    void updateQuiz(BigInteger id, Quiz updatedQuiz) throws QuizDoesNotExistException, DAOLogicException, QuestionDoesNotExistException, UserDoesNotExistException, UserException;
 
     void deleteQuiz(Quiz quiz) throws QuizDoesNotExistException, DAOLogicException, UserDoesNotExistException, UserException;
 
@@ -35,7 +37,7 @@ public interface QuizService {
 
     Quiz getQuizByTitle(String title) throws QuizDoesNotExistException, DAOLogicException, QuizException, QuestionDoesNotExistException;
 
-    void validateNewQuiz(Quiz quiz) throws QuizException, UserException, QuestionException, DAOLogicException, UserDoesNotExistException;
+    void validateNewQuiz(Quiz quiz) throws QuizException, UserException, QuestionException, DAOLogicException, UserDoesNotExistException, AnswerException;
 
     void setTestConnection() throws DAOConfigException;
 
