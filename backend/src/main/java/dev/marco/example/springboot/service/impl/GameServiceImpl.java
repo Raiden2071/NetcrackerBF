@@ -81,21 +81,19 @@ public class GameServiceImpl implements GameService {
         BigInteger quizId = quiz.getId();
         BigInteger userId = user.getId();
         List<QuestionImpl> questions = questionService.getQuestionsByQuiz(quizId);
+        List<QuestionImpl> frontQuestions = new ArrayList<>(questions);
         int counterOfCorrectAnswers = 0;
-       // List<AnswerImpl> frontAnswers = new ArrayList<>(NUMBER_OF_USER_ANSWERS);
         for (int i = 0; i < NUMBER_OF_QUESTIONS; i++) {
-            Question question = questions.get(i);
+            Question question = frontQuestions.get(i);
             AnswerImpl userAnswer = userAnswers.get(i);
+            String userAnswerValue = userAnswer.getValue();
             List<AnswerImpl> defaultAnswers = answerDAO.getAnswersByQuestionId(question.getId());
             for (AnswerImpl defAnswer : defaultAnswers) {
-                String userAnswerValue = userAnswer.getValue();
                 if(defAnswer.getValue().equals(userAnswerValue)) {
-                    if(defAnswer.getAnswer().equals(AnswerResult.TRUE)) {
-                        defAnswer.setAnswer(AnswerResult.SELECTED);
+                    if(defAnswer.getAnswer().equals(AnswerResult.TRUE))
                         counterOfCorrectAnswers++;
-                    } else {
-                        defAnswer.setAnswer(AnswerResult.SELECTED);
-                    }
+                    defAnswer.setAnswer(AnswerResult.SELECTED);
+                    question.setAnswers(defaultAnswers);
                     break;
                 }
             }
@@ -113,7 +111,7 @@ public class GameServiceImpl implements GameService {
             QuizAccomplishedImpl quizAccomplished = new QuizAccomplishedImpl(counterOfCorrectAnswers, newQuiz);
             userAccomplishedQuizDAO.addAccomplishedQuiz(userId, quizAccomplished);
         }
-        return questions;
+        return frontQuestions;
     }
 
     @Override
