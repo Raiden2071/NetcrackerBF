@@ -75,13 +75,13 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public List<AnswerImpl> validateAnswers(Quiz quiz, User user, List<AnswerImpl> userAnswers)
+    public List<QuestionImpl> validateAnswers(Quiz quiz, User user, List<AnswerImpl> userAnswers)
             throws QuestionDoesNotExistException, DAOLogicException, AnswerDoesNotExistException, QuizDoesNotExistException, QuizException {
         BigInteger quizId = quiz.getId();
         BigInteger userId = user.getId();
         List<QuestionImpl> questions = questionService.getQuestionsByQuiz(quizId);
         int counterOfCorrectAnswers = 0;
-        List<AnswerImpl> frontAnswers = new ArrayList<>(NUMBER_OF_USER_ANSWERS);
+       // List<AnswerImpl> frontAnswers = new ArrayList<>(NUMBER_OF_USER_ANSWERS);
         for (int i = 0; i < NUMBER_OF_QUESTIONS; i++) {
             Question question = questions.get(i);
             AnswerImpl userAnswer = userAnswers.get(i);
@@ -90,11 +90,12 @@ public class GameServiceImpl implements GameService {
                 String userAnswerValue = userAnswer.getValue();
                 if(defAnswer.getValue().equals(userAnswerValue)) {
                     if(defAnswer.getAnswer()) {
-                        frontAnswers.add(defAnswer);
+                        //frontAnswers.add(defAnswer);
                         counterOfCorrectAnswers++;
-                    } else {
-                        frontAnswers.add(defAnswer);
                     }
+//                    else {
+//                       // frontAnswers.add(defAnswer);
+//                    }
                     break;
                 }
             }
@@ -112,7 +113,7 @@ public class GameServiceImpl implements GameService {
             QuizAccomplishedImpl quizAccomplished = new QuizAccomplishedImpl(counterOfCorrectAnswers, newQuiz);
             userAccomplishedQuizDAO.addAccomplishedQuiz(userId, quizAccomplished);
         }
-        return frontAnswers;
+        return questions;
     }
 
     @Override
