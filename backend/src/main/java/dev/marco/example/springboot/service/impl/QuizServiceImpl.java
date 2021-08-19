@@ -97,7 +97,14 @@ public class QuizServiceImpl implements QuizService {
     }
 
     @Override
-    public void validateNewQuiz(Quiz quiz) throws QuizException, UserException, QuestionException, AnswerException {
+    public void validateNewQuiz(Quiz quiz) throws QuizException, UserException, QuestionException, AnswerException, DAOLogicException, UserDoesNotExistException {
+
+//        User user = userService.getUserById(quiz.getCreatorId());
+//        if (!user.getUserRole().equals(UserRoles.ADMIN)) {
+//            log.error(DONT_ENOUGH_RIGHTS);
+//            throw new UserException(DONT_ENOUGH_RIGHTS);
+//        }
+
         if (StringUtils.isBlank(quiz.getTitle()) || StringUtils.length(quiz.getTitle()) < MIN_LENGTH_TITLE) {
             log.error(EMPTY_TITLE);
             throw new QuizException(EMPTY_TITLE);
@@ -176,12 +183,6 @@ public class QuizServiceImpl implements QuizService {
             }
         }
 
-//        User user = userService.getUserById(quiz.getCreatorId());
-//        if (!user.getUserRole().equals(UserRoles.ADMIN)) {
-//            log.error(DONT_ENOUGH_RIGHTS);
-//            throw new UserException(DONT_ENOUGH_RIGHTS);
-//        }
-
     }
 
     @Override
@@ -231,7 +232,12 @@ public class QuizServiceImpl implements QuizService {
             log.error(EMPTY_ID);
             throw new QuizException(EMPTY_ID);
         }
-        return quizDAO.getQuizById(id);
+        QuizImpl quiz = quizDAO.getQuizById(id);
+        if (quiz == null) {
+            log.error(QUIZ_NOT_FOUND_EXCEPTION);
+            throw new QuizDoesNotExistException(QUIZ_NOT_FOUND_EXCEPTION);
+        }
+        return quiz;
     }
 
     @Override
@@ -242,7 +248,12 @@ public class QuizServiceImpl implements QuizService {
 
     @Override
     public List<Quiz> getAllQuizzes() throws QuizDoesNotExistException, DAOLogicException {
-        return quizDAO.getAllQuizzes();
+        List<Quiz> quizzes = quizDAO.getAllQuizzes();
+        if (quizzes.isEmpty()) {
+            log.error(QUIZ_NOT_FOUND_EXCEPTION);
+            throw new QuizDoesNotExistException(QUIZ_NOT_FOUND_EXCEPTION);
+        }
+        return quizzes;
     }
 
     @Override
