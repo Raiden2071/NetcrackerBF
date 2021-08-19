@@ -20,7 +20,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigInteger;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 
 import static dev.marco.example.springboot.exception.MessagesForException.*;
@@ -59,18 +58,13 @@ public class QuizController implements ApiAddresses {
     @GetMapping(API_ALL_QUIZZES)
     public List<Quiz> showAllQuizzes() {
         try {
-            List<Quiz> quizzes = quizService.getAllQuizzes();
-            if (quizzes.isEmpty()) {
-                log.error(QUIZ_NOT_FOUND_EXCEPTION);
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, properties.getProperty(QUIZ_EXCEPTION));
-            }
-            return quizzes;
+            return quizService.getAllQuizzes();
         } catch (QuizDoesNotExistException e) {
             log.error(QUIZ_NOT_FOUND_EXCEPTION + e.getMessage());
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, properties.getProperty(QUIZ_EXCEPTION)+ ' ' + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (DAOLogicException e) {
             log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, properties.getProperty(DAO_LOGIC_EXCEPTION)+ ' ' + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
 
@@ -81,10 +75,10 @@ public class QuizController implements ApiAddresses {
             return quizService.getQuizzesByPage(pageNumber);
         } catch (PageException e) {
             log.error(PAGE_DOES_NOT_EXIST);
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, properties.getProperty(PAGE_EXCEPTION) + ' ' + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (QuizException e) {
             log.error(QUIZ_NOT_FOUND_EXCEPTION);
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, properties.getProperty(QUIZ_EXCEPTION)+ ' ' + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 
@@ -95,31 +89,26 @@ public class QuizController implements ApiAddresses {
             return quizService.getQuizzesLikeTitle(pageNumber, title);
         } catch (PageException e) {
             log.error(PAGE_DOES_NOT_EXIST);
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, properties.getProperty(PAGE_EXCEPTION)+ ' ' + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (QuizException e) {
             log.error(QUIZ_NOT_FOUND_EXCEPTION);
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, properties.getProperty(QUIZ_EXCEPTION)+ ' ' + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 
     @GetMapping(API_GET_QUIZ_BY_ID)
     public Quiz getQuizById(@PathVariable BigInteger id) {
         try {
-            Quiz quiz = quizService.getQuizById(id);
-            if (quiz == null) {
-                log.error(QUIZ_NOT_FOUND_EXCEPTION);
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, properties.getProperty(QUIZ_EXCEPTION));
-            }
-            return quiz;
+            return quizService.getQuizById(id);
         } catch (QuizDoesNotExistException | QuizException e) {
             log.error(QUIZ_NOT_FOUND_EXCEPTION + e.getMessage());
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, properties.getProperty(QUIZ_EXCEPTION)+ ' ' + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (DAOLogicException e) {
             log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, properties.getProperty(DAO_LOGIC_EXCEPTION)+ ' ' + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         } catch (QuestionDoesNotExistException e) {
             log.error(QUESTION_NOT_FOUND + e.getMessage());
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, properties.getProperty(QUESTION_EXCEPTION)+ ' ' + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 
@@ -129,28 +118,28 @@ public class QuizController implements ApiAddresses {
             return quizService.buildNewQuiz(quiz);
         } catch (QuestionException e) {
             log.error(QUESTION_NOT_FOUND + e.getMessage());
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, properties.getProperty(QUESTION_EXCEPTION) + ' ' + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UserException e) {
             log.error(DONT_ENOUGH_RIGHTS + e.getMessage());
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, properties.getProperty(DONT_ENOUGH_RIGHTS) + ' ' + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
         } catch (QuizException e) {
             log.error(QUIZ_NOT_FOUND_EXCEPTION + e.getMessage());
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, properties.getProperty(QUIZ_EXCEPTION) + ' '+e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (AnswerDoesNotExistException e) {
             log.error(getAnswerByIdNotFoundExc + e.getMessage());
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, properties.getProperty(ANSWER_EXCEPTION) + ' ' + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (DAOLogicException e) {
             log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, properties.getProperty(DAO_LOGIC_EXCEPTION) + ' ' + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         } catch (AnswerException e) {
             log.error(ANSWER_EXCEPTION);
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, properties.getProperty(ANSWER_EXCEPTION) + ' ' + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (QuestionDoesNotExistException e) {
             log.error(QUESTION_NOT_FOUND);
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, properties.getProperty(QUESTION_EXCEPTION) + ' ' + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UserDoesNotExistException e) {
             log.error(USER_NOT_FOUND_EXCEPTION);
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, properties.getProperty(USER_EXCEPTION) + ' ' + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 
@@ -158,29 +147,24 @@ public class QuizController implements ApiAddresses {
     public Quiz updateQuiz(@PathVariable BigInteger id,
                            @RequestBody QuizImpl updatedQuiz) {
         try {
-            Quiz quiz = quizService.getQuizById(id);
-            if (quiz == null) {
-                log.error(QUIZ_NOT_FOUND_EXCEPTION);
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, properties.getProperty(QUIZ_EXCEPTION));
-            }
             quizService.updateQuiz(id, updatedQuiz);
             return updatedQuiz;
 
-        } catch (QuizDoesNotExistException | QuizException e) {
+        } catch (QuizDoesNotExistException e) {
             log.error(QUIZ_NOT_FOUND_EXCEPTION + e.getMessage());
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, properties.getProperty(QUIZ_EXCEPTION) + ' ' + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (QuestionDoesNotExistException e) {
             log.error(QUESTION_NOT_FOUND + e.getMessage());
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, properties.getProperty(QUESTION_EXCEPTION)+ ' ' + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UserDoesNotExistException e) {
             log.error(USER_NOT_FOUND_EXCEPTION + e.getMessage());
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, properties.getProperty(USER_NOT_FOUND_EXCEPTION)+ ' ' + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
         } catch (UserException e) {
             log.error(DONT_ENOUGH_RIGHTS + e.getMessage());
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, properties.getProperty(DONT_ENOUGH_RIGHTS) + ' ' + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
         } catch (DAOLogicException e) {
             log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, properties.getProperty(DAO_LOGIC_EXCEPTION) + ' ' + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
 
@@ -188,26 +172,22 @@ public class QuizController implements ApiAddresses {
     public void deleteQuiz(@PathVariable BigInteger id) {
         try {
             Quiz quiz = quizService.getQuizById(id);
-            if (quiz == null) {
-                log.error(QUIZ_NOT_FOUND_EXCEPTION);
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, properties.getProperty(QUIZ_EXCEPTION));
-            }
             quizService.deleteQuiz(quiz);
         } catch (QuizDoesNotExistException | QuizException e) {
             log.error(QUIZ_NOT_FOUND_EXCEPTION + e.getMessage());
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, properties.getProperty(QUIZ_EXCEPTION) + ' ' + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UserDoesNotExistException e) {
             log.error(USER_NOT_FOUND_EXCEPTION + e.getMessage());
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, properties.getProperty(USER_NOT_FOUND_EXCEPTION) + ' ' + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
         } catch (UserException e) {
             log.error(DONT_ENOUGH_RIGHTS + e.getMessage());
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, properties.getProperty(DONT_ENOUGH_RIGHTS) + ' ' + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
         } catch (QuestionDoesNotExistException e) {
             log.error(QUESTION_NOT_FOUND + e.getMessage());
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, properties.getProperty(QUESTION_EXCEPTION) + ' ' + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (DAOLogicException e) {
             log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, properties.getProperty(DAO_LOGIC_EXCEPTION) + ' ' + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
 
