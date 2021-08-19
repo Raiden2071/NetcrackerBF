@@ -1,9 +1,12 @@
 package dev.marco.example.springboot.service.impl;
 
+import dev.marco.example.springboot.model.UserRoles;
+import dev.marco.example.springboot.security.JwtUser;
 import dev.marco.example.springboot.util.RegexPatterns;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import dev.marco.example.springboot.dao.UserAccomplishedQuizDAO;
@@ -309,6 +312,22 @@ public class UserServiceImpl implements UserService, RegexPatterns {
   @Override
   public boolean isAccomplishedQuiz(BigInteger idUser, BigInteger idQuiz) throws DAOLogicException {
     return userAccomplishedQuizDAO.isAccomplishedQuiz(idUser, idQuiz);
+  }
+
+  @Override
+  public void updateUserRole(BigInteger id, UserRoles role) throws UserDoesNotExistException, DAOLogicException, UserException {
+    User userFromDAO = userDAO.getUserById(id);
+    if (userFromDAO == null) {
+      throw new UserDoesNotExistException(USER_NOT_FOUND_EXCEPTION);
+    }
+    JwtUser userJwt = (JwtUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    BigInteger userId = BigInteger.valueOf(userJwt.getId());
+    User user = userDAO.getUserById(userId);
+    if (!user.getUserRole().equals(UserRoles.ADMIN)) {
+      log.error(DONT_ENOUGH_RIGHTS);
+      throw new UserException(DONT_ENOUGH_RIGHTS);
+    }
+    userDAO.updateUserRole(id, role);
   }
 }
 

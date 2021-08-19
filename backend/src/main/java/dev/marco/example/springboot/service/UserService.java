@@ -2,6 +2,7 @@ package dev.marco.example.springboot.service;
 
 import dev.marco.example.springboot.exception.*;
 import dev.marco.example.springboot.model.User;
+import dev.marco.example.springboot.model.UserRoles;
 import dev.marco.example.springboot.model.impl.QuizAccomplishedImpl;
 
 import java.math.BigInteger;
@@ -38,6 +39,8 @@ public interface UserService {
 
   void updateUsersDescription(BigInteger id, String newDescription)
           throws DAOLogicException, UserDoesNotExistException;
+
+  void updateUserRole(BigInteger id, UserRoles role) throws UserDoesNotExistException, DAOLogicException, UserException;
 
   User getUserByEmailCode(String code) throws UserDoesNotExistException, DAOLogicException;
 
