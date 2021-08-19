@@ -7,7 +7,7 @@ public interface Answer {
 
     BigInteger getId();
 
-    Boolean getAnswer();
+    AnswerResult getAnswer();
 
     BigInteger getQuestionId();
 
@@ -15,7 +15,7 @@ public interface Answer {
 
     void setValue(String value);
 
-    void setAnswer(Boolean answer);
+    void setAnswer(AnswerResult answer);
 
     void setQuestionId(BigInteger questionId);
 }

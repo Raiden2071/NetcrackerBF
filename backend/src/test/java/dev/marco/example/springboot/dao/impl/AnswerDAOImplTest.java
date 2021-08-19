@@ -1,6 +1,7 @@
 package dev.marco.example.springboot.dao.impl;
 
 import dev.marco.example.springboot.exception.MessagesForException;
+import dev.marco.example.springboot.model.AnswerResult;
 import org.apache.log4j.Logger;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
@@ -56,7 +57,7 @@ class AnswerDAOImplTest {
   void getLastAnswerIdByTitleTest() {
     try {
       String aboba = "Aboba";
-      Answer answerByTitle = new AnswerImpl(aboba, true, BigInteger.ONE);
+      Answer answerByTitle = new AnswerImpl(aboba, AnswerResult.TRUE, BigInteger.ONE);
       answerDAO.createAnswer(answerByTitle);
 
       BigInteger id = answerDAO.getLastAnswerIdByTitle(aboba);
@@ -79,7 +80,7 @@ class AnswerDAOImplTest {
   void createAnswerTest() {
     try {
       String antarctica = "Antarctica";
-      Answer answerImpl = new AnswerImpl(antarctica, false, BigInteger.ONE);
+      Answer answerImpl = new AnswerImpl(antarctica, AnswerResult.FALSE, BigInteger.ONE);
 
       answerDAO.createAnswer(answerImpl);
       BigInteger id = answerDAO.getLastAnswerIdByTitle(antarctica);
@@ -102,7 +103,7 @@ class AnswerDAOImplTest {
   void deleteAnswerTest() {
     try {
       String mars = "Mars";
-      Answer ans = new AnswerImpl(mars, false, BigInteger.ONE);
+      Answer ans = new AnswerImpl(mars, AnswerResult.FALSE, BigInteger.ONE);
       answerDAO.createAnswer(ans);
 
       BigInteger id = answerDAO.getLastAnswerIdByTitle(mars);
@@ -121,7 +122,7 @@ class AnswerDAOImplTest {
   void updateAnswerTest() {
     try {
       String moon = "Moon";
-      Answer newAnswer = new AnswerImpl(moon, false, BigInteger.TWO);
+      Answer newAnswer = new AnswerImpl(moon, AnswerResult.FALSE, BigInteger.TWO);
       answerDAO.createAnswer(newAnswer);
 
       BigInteger id = answerDAO.getLastAnswerIdByTitle(moon);
@@ -130,7 +131,7 @@ class AnswerDAOImplTest {
 
       String sun = "Sun";
       testNewAnswer.setValue(sun);
-      testNewAnswer.setAnswer(true);
+      testNewAnswer.setAnswer(AnswerResult.TRUE);
       testNewAnswer.setQuestionId(BigInteger.valueOf(3));
       answerDAO.updateAnswer(testNewAnswer);
 

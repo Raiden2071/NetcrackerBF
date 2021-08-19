@@ -1,5 +1,6 @@
 package dev.marco.example.springboot.dao.impl;
 
+import dev.marco.example.springboot.model.AnswerResult;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -69,7 +70,7 @@ public class AnswerDAOImpl implements AnswerDAO, MessagesForException {
             return new AnswerImpl(
                     answerId,
                     resultSet.getString(SQL_ANSWER_TEXT),
-                    resultSet.getInt(SQL_ANSWER_IS_TRUE) == SQL_TRUE,
+                    AnswerResult.convertBooleanToAnswer(resultSet.getInt(SQL_ANSWER_IS_TRUE) == SQL_TRUE),
                     BigInteger.valueOf(resultSet.getLong(SQL_ANSWER_QUESTION)));
         } catch (SQLException throwable) {
             log.error(getAnswerByIdLogicErr, throwable);
@@ -101,7 +102,10 @@ public class AnswerDAOImpl implements AnswerDAO, MessagesForException {
             String title = answer.getValue();
             PreparedStatement preparedStatement = connection.prepareStatement(properties.getProperty(CREATE_ANSWER));
             preparedStatement.setString(1, title);
-            preparedStatement.setInt(2, answer.getAnswer() ? SQL_TRUE : SQL_FALSE);
+            if (answer.getAnswer().equals(AnswerResult.TRUE))
+                preparedStatement.setInt(2, SQL_TRUE);
+            else if (answer.getAnswer().equals(AnswerResult.FALSE))
+                preparedStatement.setInt(2, SQL_FALSE);
             preparedStatement.setLong(3, answer.getQuestionId().longValue());
             preparedStatement.executeUpdate();
             return getLastAnswerIdByTitle(title);
@@ -129,7 +133,10 @@ public class AnswerDAOImpl implements AnswerDAO, MessagesForException {
             BigInteger id = answer.getId();
             PreparedStatement preparedStatement = connection.prepareStatement(properties.getProperty(UPDATE_ANSWER));
             preparedStatement.setString(1, answer.getValue());
-            preparedStatement.setInt(2, answer.getAnswer() ? SQL_TRUE : SQL_FALSE);
+            if (answer.getAnswer().equals(AnswerResult.TRUE))
+                preparedStatement.setInt(2, SQL_TRUE);
+            else if (answer.getAnswer().equals(AnswerResult.FALSE))
+                preparedStatement.setInt(2, SQL_FALSE);
             preparedStatement.setLong(3, answer.getQuestionId().longValue());
             preparedStatement.setLong(4, id.longValue());
             preparedStatement.executeUpdate();
@@ -152,7 +159,7 @@ public class AnswerDAOImpl implements AnswerDAO, MessagesForException {
                 answers.add(new AnswerImpl(
                         BigInteger.valueOf(resultSet.getLong(SQL_ANSWER_ID)),
                         resultSet.getString(SQL_ANSWER_TEXT),
-                        resultSet.getInt(SQL_ANSWER_IS_TRUE) == SQL_TRUE,
+                        AnswerResult.convertBooleanToAnswer(resultSet.getInt(SQL_ANSWER_IS_TRUE) == SQL_TRUE),
                         questionId));
             }
             return answers;

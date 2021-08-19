@@ -1,9 +1,6 @@
 package dev.marco.example.springboot.rest;
 
-import dev.marco.example.springboot.model.impl.AnswerImpl;
-import dev.marco.example.springboot.model.impl.QuizAccomplishedImpl;
-import dev.marco.example.springboot.model.impl.QuizImpl;
-import dev.marco.example.springboot.model.impl.UserImpl;
+import dev.marco.example.springboot.model.impl.*;
 import dev.marco.example.springboot.service.UserService;
 import dev.marco.example.springboot.service.GameService;
 import dev.marco.example.springboot.util.ApiAddresses;
@@ -227,7 +224,7 @@ public class QuizController implements ApiAddresses {
     }
 
     @PostMapping(API_FINISH_QUIZ)
-    public List<AnswerImpl> finishQuiz(@RequestBody ParamsInFinishQuiz params) {
+    public List<QuestionImpl> finishQuiz(@RequestBody ParamsInFinishQuiz params) {
         try {
             Quiz quiz = quizService.getQuizByTitle(params.quizTitle);
             return gameService.validateAnswers(quiz, params.user, params.answers);

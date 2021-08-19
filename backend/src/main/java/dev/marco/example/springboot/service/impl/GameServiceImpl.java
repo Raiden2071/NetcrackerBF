@@ -57,13 +57,14 @@ public class GameServiceImpl implements GameService {
         for (Question question : questionList) {
             List<AnswerImpl> answers = question.getAnswers();
             for (AnswerImpl answer : answers) {
-                answer.setAnswer(false);
+                answer.setAnswer(AnswerResult.FALSE);
             }
         }
         Kryo kryo = new Kryo();
         kryo.register(java.util.ArrayList.class);
         kryo.register(java.math.BigInteger.class);
         kryo.register(java.sql.Date.class);
+        kryo.register(dev.marco.example.springboot.model.AnswerResult.class);
         kryo.register(dev.marco.example.springboot.model.QuizType.class);
         kryo.register(dev.marco.example.springboot.model.impl.QuizImpl.class);
         kryo.register(dev.marco.example.springboot.model.impl.QuestionImpl.class);
@@ -75,13 +76,13 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public List<AnswerImpl> validateAnswers(Quiz quiz, User user, List<AnswerImpl> userAnswers)
+    public List<QuestionImpl> validateAnswers(Quiz quiz, User user, List<AnswerImpl> userAnswers)
             throws QuestionDoesNotExistException, DAOLogicException, AnswerDoesNotExistException, QuizDoesNotExistException, QuizException {
         BigInteger quizId = quiz.getId();
         BigInteger userId = user.getId();
         List<QuestionImpl> questions = questionService.getQuestionsByQuiz(quizId);
         int counterOfCorrectAnswers = 0;
-        List<AnswerImpl> frontAnswers = new ArrayList<>(NUMBER_OF_USER_ANSWERS);
+       // List<AnswerImpl> frontAnswers = new ArrayList<>(NUMBER_OF_USER_ANSWERS);
         for (int i = 0; i < NUMBER_OF_QUESTIONS; i++) {
             Question question = questions.get(i);
             AnswerImpl userAnswer = userAnswers.get(i);
@@ -89,11 +90,11 @@ public class GameServiceImpl implements GameService {
             for (AnswerImpl defAnswer : defaultAnswers) {
                 String userAnswerValue = userAnswer.getValue();
                 if(defAnswer.getValue().equals(userAnswerValue)) {
-                    if(defAnswer.getAnswer()) {
-                        frontAnswers.add(defAnswer);
+                    if(defAnswer.getAnswer().equals(AnswerResult.TRUE)) {
+                        defAnswer.setAnswer(AnswerResult.SELECTED);
                         counterOfCorrectAnswers++;
                     } else {
-                        frontAnswers.add(defAnswer);
+                        defAnswer.setAnswer(AnswerResult.SELECTED);
                     }
                     break;
                 }
@@ -112,7 +113,7 @@ public class GameServiceImpl implements GameService {
             QuizAccomplishedImpl quizAccomplished = new QuizAccomplishedImpl(counterOfCorrectAnswers, newQuiz);
             userAccomplishedQuizDAO.addAccomplishedQuiz(userId, quizAccomplished);
         }
-        return frontAnswers;
+        return questions;
     }
 
     @Override

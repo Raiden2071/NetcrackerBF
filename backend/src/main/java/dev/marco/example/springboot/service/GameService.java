@@ -5,6 +5,7 @@ import dev.marco.example.springboot.model.Answer;
 import dev.marco.example.springboot.model.Quiz;
 import dev.marco.example.springboot.model.User;
 import dev.marco.example.springboot.model.impl.AnswerImpl;
+import dev.marco.example.springboot.model.impl.QuestionImpl;
 import dev.marco.example.springboot.model.impl.QuizAccomplishedImpl;
 
 import java.math.BigInteger;
@@ -18,6 +19,6 @@ public interface GameService {
 
     void setTestConnection() throws DAOConfigException;
     Quiz sendGameQuiz(String title) throws DAOLogicException, QuizDoesNotExistException, QuizException, QuestionDoesNotExistException, AnswerDoesNotExistException;
-    List<AnswerImpl> validateAnswers(Quiz quiz, User user, List<AnswerImpl> answers) throws QuestionDoesNotExistException, DAOLogicException, AnswerDoesNotExistException, QuizDoesNotExistException, QuizException;
+    List<QuestionImpl> validateAnswers(Quiz quiz, User user, List<AnswerImpl> answers) throws QuestionDoesNotExistException, DAOLogicException, AnswerDoesNotExistException, QuizDoesNotExistException, QuizException;
     void setIsFavorite(User user, QuizAccomplishedImpl quizAccomplished) throws DAOLogicException;
 }

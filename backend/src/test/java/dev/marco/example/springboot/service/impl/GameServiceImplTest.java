@@ -102,7 +102,7 @@ public class GameServiceImplTest {
             userAnswers.add(answerDAO.getAnswerById(BigInteger.valueOf(113)));
             userAnswers.add(answerDAO.getAnswerById(BigInteger.valueOf(120)));
 
-            List<AnswerImpl> resultList = gameService.validateAnswers(quiz, user, userAnswers);
+            List<QuestionImpl> resultList = gameService.validateAnswers(quiz, user, userAnswers);
             System.out.println(resultList);
             assertNotNull(resultList);
 
