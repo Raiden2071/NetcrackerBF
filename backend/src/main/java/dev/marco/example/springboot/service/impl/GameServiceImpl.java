@@ -57,13 +57,14 @@ public class GameServiceImpl implements GameService {
         for (Question question : questionList) {
             List<AnswerImpl> answers = question.getAnswers();
             for (AnswerImpl answer : answers) {
-                answer.setAnswer(false);
+                answer.setAnswer(AnswerResult.FALSE);
             }
         }
         Kryo kryo = new Kryo();
         kryo.register(java.util.ArrayList.class);
         kryo.register(java.math.BigInteger.class);
         kryo.register(java.sql.Date.class);
+        kryo.register(dev.marco.example.springboot.model.AnswerResult.class);
         kryo.register(dev.marco.example.springboot.model.QuizType.class);
         kryo.register(dev.marco.example.springboot.model.impl.QuizImpl.class);
         kryo.register(dev.marco.example.springboot.model.impl.QuestionImpl.class);
@@ -89,13 +90,12 @@ public class GameServiceImpl implements GameService {
             for (AnswerImpl defAnswer : defaultAnswers) {
                 String userAnswerValue = userAnswer.getValue();
                 if(defAnswer.getValue().equals(userAnswerValue)) {
-                    if(defAnswer.getAnswer()) {
-                        //frontAnswers.add(defAnswer);
+                    if(defAnswer.getAnswer().equals(AnswerResult.TRUE)) {
+                        defAnswer.setAnswer(AnswerResult.SELECTED);
                         counterOfCorrectAnswers++;
+                    } else {
+                        defAnswer.setAnswer(AnswerResult.SELECTED);
                     }
-//                    else {
-//                       // frontAnswers.add(defAnswer);
-//                    }
                     break;
                 }
             }

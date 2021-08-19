@@ -1,6 +1,7 @@
 package dev.marco.example.springboot.model.impl;
 
 import dev.marco.example.springboot.model.Answer;
+import dev.marco.example.springboot.model.AnswerResult;
 
 import java.math.BigInteger;
 
@@ -8,19 +9,19 @@ public class AnswerImpl implements Answer {
 
     private BigInteger id;
     private String value;
-    private Boolean answer;
+    private AnswerResult answer;
     private BigInteger questionId;
 
     private AnswerImpl() {
     }
 
-    public AnswerImpl(String value, Boolean answer, BigInteger questionId) {
+    public AnswerImpl(String value, AnswerResult answer, BigInteger questionId) {
         this.value = value;
         this.answer = answer;
         this.questionId = questionId;
     }
 
-    public AnswerImpl(BigInteger id, String value, Boolean answer, BigInteger questionId) {
+    public AnswerImpl(BigInteger id, String value, AnswerResult answer, BigInteger questionId) {
         this.id = id;
         this.value = value;
         this.answer = answer;
@@ -38,7 +39,7 @@ public class AnswerImpl implements Answer {
     }
 
     @Override
-    public Boolean getAnswer() {
+    public AnswerResult getAnswer() {
         return answer;
     }
 
@@ -58,7 +59,7 @@ public class AnswerImpl implements Answer {
     }
 
     @Override
-    public void setAnswer(Boolean answer) {
+    public void setAnswer(AnswerResult answer) {
         this.answer = answer;
     }
 

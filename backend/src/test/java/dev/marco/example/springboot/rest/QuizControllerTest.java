@@ -201,8 +201,8 @@ public class QuizControllerTest {
         QuestionImpl question = new QuestionImpl(BigInteger.valueOf(1), "Ukraine location?", QuestionType.TRUE_FALSE);
 
         List<AnswerImpl> answers = new ArrayList<>();
-        answers.add(new AnswerImpl(BigInteger.valueOf(1), "America", false, question.getId()));
-        answers.add(new AnswerImpl(BigInteger.valueOf(2), "Europe", true, question.getId()));
+        answers.add(new AnswerImpl(BigInteger.valueOf(1), "America", AnswerResult.FALSE, question.getId()));
+        answers.add(new AnswerImpl(BigInteger.valueOf(2), "Europe", AnswerResult.TRUE, question.getId()));
 
         question.setAnswers(answers);
         questions.add(question);

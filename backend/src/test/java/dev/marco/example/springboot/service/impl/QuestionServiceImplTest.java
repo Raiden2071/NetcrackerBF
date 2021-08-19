@@ -1,5 +1,6 @@
 package dev.marco.example.springboot.service.impl;
 
+import dev.marco.example.springboot.model.AnswerResult;
 import org.apache.log4j.Logger;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
@@ -76,10 +77,10 @@ class QuestionServiceImplTest {
             );
 
             List<AnswerImpl> answers = new ArrayList<>();
-            answers.add(new AnswerImpl("America", false, BigInteger.valueOf(52)));
-            answers.add(new AnswerImpl("Asia", false, BigInteger.valueOf(52)));
-            answers.add(new AnswerImpl("Africa", false, BigInteger.valueOf(52)));
-            answers.add(new AnswerImpl("Europe", true, BigInteger.valueOf(52)));
+            answers.add(new AnswerImpl("America", AnswerResult.FALSE, BigInteger.valueOf(52)));
+            answers.add(new AnswerImpl("Asia", AnswerResult.FALSE, BigInteger.valueOf(52)));
+            answers.add(new AnswerImpl("Africa", AnswerResult.FALSE, BigInteger.valueOf(52)));
+            answers.add(new AnswerImpl("Europe", AnswerResult.TRUE, BigInteger.valueOf(52)));
             questionModel.setAnswers(answers);
 
             Question questionGot = questionService.createQuestion(questionModel, quizId);
@@ -138,10 +139,10 @@ class QuestionServiceImplTest {
                     QuestionType.FOUR_ANSWERS
             );
             List<AnswerImpl> answers = new ArrayList<>();
-            answers.add(new AnswerImpl("America", false, BigInteger.valueOf(52)));
-            answers.add(new AnswerImpl("Asia", false, BigInteger.valueOf(52)));
-            answers.add(new AnswerImpl("Africa", false, BigInteger.valueOf(52)));
-            answers.add(new AnswerImpl("Europe", true, BigInteger.valueOf(52)));
+            answers.add(new AnswerImpl("America", AnswerResult.FALSE, BigInteger.valueOf(52)));
+            answers.add(new AnswerImpl("Asia", AnswerResult.FALSE, BigInteger.valueOf(52)));
+            answers.add(new AnswerImpl("Africa", AnswerResult.FALSE, BigInteger.valueOf(52)));
+            answers.add(new AnswerImpl("Europe", AnswerResult.TRUE, BigInteger.valueOf(52)));
             questionModel.setAnswers(answers);
 
             Question createdQuestion = questionService.createQuestion(questionModel, BigInteger.valueOf(5));
