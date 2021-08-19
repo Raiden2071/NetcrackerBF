@@ -3,6 +3,7 @@ package dev.marco.example.springboot.rest;
 import com.fasterxml.jackson.databind.JsonNode;
 import dev.marco.example.springboot.exception.*;
 import dev.marco.example.springboot.model.User;
+import dev.marco.example.springboot.model.UserRoles;
 import dev.marco.example.springboot.model.impl.QuizAccomplishedImpl;
 import dev.marco.example.springboot.model.impl.UserImpl;
 import dev.marco.example.springboot.security.JwtTokenProvider;
@@ -305,6 +306,20 @@ public class UserController implements RegexPatterns, ApiAddresses {
         } catch (UserDoesNotExistException e) {
             log.error(USER_NOT_FOUND_EXCEPTION + e.getMessage());
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, properties.getProperty(USER_EXCEPTION));
+        }
+    }
+
+    @GetMapping("/changeRole/{id}")
+    public void updateUserRole(@PathVariable(name = "id") BigInteger id,
+                               @RequestParam(name = "role") UserRoles role) {
+        try {
+            userService.updateUserRole(id, role);
+        } catch (UserDoesNotExistException | UserException e) {
+            log.error(USER_NOT_FOUND_EXCEPTION + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (DAOLogicException e) {
+            log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
 
