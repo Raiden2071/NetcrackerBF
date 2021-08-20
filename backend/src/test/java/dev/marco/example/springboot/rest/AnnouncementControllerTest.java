@@ -146,22 +146,17 @@ class AnnouncementControllerTest {
     void getAnnouncementsByPage() throws Exception {
 
         this.mockMvc.perform(MockMvcRequestBuilders
-                .get("/announcement/all/page/{pageNumber}", 1)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"idUser\":1}"))
+                .get("/announcement/all?page=1"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
-        verify(announcementService).getAnnouncementsByPage(BigInteger.ONE, 1);
+        verify(announcementService).getAnnouncementsByPage(1);
     }
 
     @Test
     void getAnnouncementsLikeTitle() throws Exception {
         this.mockMvc.perform(MockMvcRequestBuilders
-                        .get("/announcement/search/page/{pageNumber}", 1)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"idUser\":1,"+
-                                 " \"searchProject\":\"chill\"}"))
+                        .get("/announcement/search?page=1&title=chill" ))
                 .andExpect(MockMvcResultMatchers.status().isOk());
-        verify(announcementService).getAnnouncementsLikeTitle(BigInteger.ONE, "chill", 1);
+        verify(announcementService).getAnnouncementsLikeTitle("chill", 1);
 
     }
 }

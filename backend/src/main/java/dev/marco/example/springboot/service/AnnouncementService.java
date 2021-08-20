@@ -43,9 +43,9 @@ public interface AnnouncementService {
 
     Set<Announcement> getSetByTitle(String title, BigInteger idUser) throws DAOLogicException;
 
-    Page<Announcement> getAnnouncementsByPage(BigInteger idUser, int pageNumber)
+    Page<Announcement> getAnnouncementsByPage(int pageNumber)
             throws DAOLogicException, PageException;
 
-    Page<Announcement> getAnnouncementsLikeTitle(BigInteger idUser, String title, int pageNumber)
+    Page<Announcement> getAnnouncementsLikeTitle(String title, int pageNumber)
             throws DAOLogicException, PageException;
 }

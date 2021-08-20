@@ -36,8 +36,8 @@ public interface ApiAddresses {
   String API_GET_COMMENTARIES = "/commentaries";
   String API_CREATE_COMMENTARY = "/commentaries";
   String API_SEARCH_ANNOUNCEMENT = "/search";
-  String API_GET_ANNOUNCEMENTS_BY_PAGE = "/all/page/{pageNumber}";
-  String API_GET_ANNOUNCEMENTS_BY_TITLE = "/search/page/{pageNumber}";
+  String API_GET_ANNOUNCEMENTS_BY_PAGE = "/all";
+  String API_GET_ANNOUNCEMENTS_BY_TITLE = "/search";
 
   String CONFIG_EXCEPTION = "CONFIG_EXCEPTION";
   String DAO_LOGIC_EXCEPTION = "DAO_LOGIC_EXCEPTION";

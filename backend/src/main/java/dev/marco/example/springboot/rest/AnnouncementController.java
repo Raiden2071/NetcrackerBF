@@ -201,10 +201,9 @@ public class AnnouncementController implements ApiAddresses {
     }
 
     @GetMapping(API_GET_ANNOUNCEMENTS_BY_PAGE)
-    public Page<Announcement> getAnnouncementsByPage(@PathVariable int pageNumber, @RequestBody JsonNode requestBody){
-        BigInteger idUser = BigInteger.valueOf(requestBody.get(ID_USER).asLong());
+    public Page<Announcement> getAnnouncementsByPage(@RequestParam int page){
         try {
-            return announcementService.getAnnouncementsByPage(idUser, pageNumber);
+            return announcementService.getAnnouncementsByPage(page);
         } catch (DAOLogicException e) {
             log.error(e.getMessage(), e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, properties.getProperty(DAO_LOGIC_EXCEPTION));
@@ -215,11 +214,9 @@ public class AnnouncementController implements ApiAddresses {
     }
 
     @GetMapping(API_GET_ANNOUNCEMENTS_BY_TITLE)
-    public Page<Announcement> getAnnouncementsLikeTitle(@PathVariable int pageNumber, @RequestBody JsonNode requestBody){
-        BigInteger idUser = BigInteger.valueOf(requestBody.get(ID_USER).asLong());
-        String titleForSearch = requestBody.get(SEARCH_PROJECT).asText();
+    public Page<Announcement> getAnnouncementsLikeTitle(@RequestParam int page, @RequestParam String title){
         try {
-            return announcementService.getAnnouncementsLikeTitle(idUser, titleForSearch, pageNumber);
+            return announcementService.getAnnouncementsLikeTitle(title, page);
         } catch (DAOLogicException e) {
             log.error(e.getMessage(), e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, properties.getProperty(DAO_LOGIC_EXCEPTION));

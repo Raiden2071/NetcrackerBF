@@ -212,29 +212,4 @@ class AnnouncementServiceImplTest {
                 () -> announcementService.createComment(commentContent, BigInteger.ZERO, null)
         );
     }
-
-    @Test
-    @Timeout(value = 10000, unit= TimeUnit.MILLISECONDS)
-    void getAnnouncementsByPage() {
-        try {
-            Page<Announcement> page = announcementService.getAnnouncementsByPage(BigInteger.ONE, 1);
-            page.get().forEach(Assertions::assertNotNull);
-        } catch (DAOLogicException | PageException e) {
-            log.error(LOG_ERROR_CASE + "getAnnouncementsByPage " + e.getMessage());
-            fail();
-        }
-
-    }
-
-    @Test
-    @Timeout(value = 10000, unit= TimeUnit.MILLISECONDS)
-    void getAnnouncementsLikeTitle() {
-        try {
-            Page<Announcement> page = announcementService.getAnnouncementsLikeTitle(BigInteger.ONE, "gath", 1);
-            page.get().forEach(Assertions::assertNotNull);
-        } catch (DAOLogicException | PageException e) {
-            log.error(LOG_ERROR_CASE + "getAnnouncementsLikeTitle " + e.getMessage());
-            fail();
-        }
-    }
 }

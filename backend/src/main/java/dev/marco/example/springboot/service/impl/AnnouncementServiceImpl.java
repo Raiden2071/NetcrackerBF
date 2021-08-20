@@ -176,8 +176,10 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     }
 
     @Override
-    public Page<Announcement> getAnnouncementsByPage(BigInteger idUser, int pageNumber)
+    public Page<Announcement> getAnnouncementsByPage(int pageNumber)
             throws DAOLogicException, PageException {
+        JwtUser user = (JwtUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        BigInteger idUser = BigInteger.valueOf(user.getId());
         if (pageNumber < MIN_PAGE) {
             log.error(PAGE_DOES_NOT_EXIST);
             throw new PageException(PAGE_DOES_NOT_EXIST);
@@ -192,8 +194,10 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     }
 
     @Override
-    public Page<Announcement> getAnnouncementsLikeTitle(BigInteger idUser, String title, int pageNumber)
+    public Page<Announcement> getAnnouncementsLikeTitle(String title, int pageNumber)
             throws DAOLogicException, PageException {
+        JwtUser user = (JwtUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        BigInteger idUser = BigInteger.valueOf(user.getId());
         if (pageNumber < MIN_PAGE) {
             log.error(PAGE_DOES_NOT_EXIST);
             throw new PageException(PAGE_DOES_NOT_EXIST);
