@@ -146,17 +146,6 @@ class AnnouncementServiceImplTest {
 
     @Test
     @Timeout(value = 10000, unit= TimeUnit.MILLISECONDS)
-    void toLikeAndDisLikeAnnouncement() {
-        try {
-            announcementService.setLikeAnnouncement(BigInteger.ONE);
-        } catch (DAOLogicException | AnnouncementDoesNotExistException | UserDoesNotExistException e) {
-            log.error(LOG_ERROR_CASE +"toLikeAndDisLikeAnnouncement "+ e.getMessage());
-            fail();
-        }
-    }
-
-    @Test
-    @Timeout(value = 10000, unit= TimeUnit.MILLISECONDS)
     void getPopularAnnouncements() {
         try {
             List<Announcement> announcements = announcementService.getPopularAnnouncements(4, BigInteger.ONE);
