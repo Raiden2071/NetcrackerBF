@@ -137,10 +137,9 @@ public class AnnouncementController implements ApiAddresses {
 
     @PostMapping(API_LIKE_ANNOUNCEMENT)
     public void setLikeAnnouncement(@RequestBody JsonNode requestBody) {
-        BigInteger idUser = BigInteger.valueOf(requestBody.get(ID_USER).asLong());
         BigInteger idAnnouncement = BigInteger.valueOf(requestBody.get(ID_ANNOUNCEMENT).asLong());
         try {
-            announcementService.setLikeAnnouncement(idAnnouncement, idUser);
+            announcementService.setLikeAnnouncement(idAnnouncement);
         } catch (AnnouncementException e) {
             log.error(e.getMessage(), e);
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, properties.getProperty(ANNOUNCEMENT_EXCEPTION));

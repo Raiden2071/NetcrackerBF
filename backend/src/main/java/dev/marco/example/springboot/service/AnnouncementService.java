@@ -26,7 +26,7 @@ public interface AnnouncementService {
     void deleteAnnouncement(BigInteger idAnnouncement, BigInteger idUser)
             throws DAOLogicException, UserException, AnnouncementDoesNotExistException, UserDoesNotExistException;
 
-    void setLikeAnnouncement(BigInteger idAnnouncement, BigInteger idUser)
+    void setLikeAnnouncement(BigInteger idAnnouncement)
             throws AnnouncementException, DAOLogicException, AnnouncementDoesNotExistException, UserDoesNotExistException;
 
     List<Announcement> getPopularAnnouncements(int numberAnnouncements, BigInteger idUser)

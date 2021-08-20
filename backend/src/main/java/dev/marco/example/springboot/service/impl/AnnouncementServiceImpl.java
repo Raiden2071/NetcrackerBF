@@ -6,6 +6,7 @@ import dev.marco.example.springboot.exception.*;
 import dev.marco.example.springboot.model.Announcement;
 import dev.marco.example.springboot.model.AnnouncementComment;
 import dev.marco.example.springboot.model.UserRoles;
+import dev.marco.example.springboot.security.JwtUser;
 import dev.marco.example.springboot.service.AnnouncementService;
 import dev.marco.example.springboot.service.UserService;
 import org.apache.commons.lang3.StringUtils;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import java.math.BigInteger;
 import java.util.List;
@@ -108,9 +110,12 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     }
 
     @Override
-    public void setLikeAnnouncement(BigInteger idAnnouncement, BigInteger idUser)
+    public void setLikeAnnouncement(BigInteger idAnnouncement)
             throws DAOLogicException, AnnouncementDoesNotExistException, UserDoesNotExistException {
         try {
+            JwtUser user = (JwtUser) SecurityContextHolder.getContext().getAuthentication()
+                    .getPrincipal();
+            BigInteger idUser = BigInteger.valueOf(user.getId());
             if(!announcementDAO.isAnnouncementById(idAnnouncement))
                 throw new AnnouncementDoesNotExistException(ANNOUNCEMENT_NOT_FOUND_EXCEPTION);
             userService.getUserById(idUser); // throw UserDoesNotExistException

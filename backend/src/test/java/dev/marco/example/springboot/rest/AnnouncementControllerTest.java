@@ -127,7 +127,7 @@ class AnnouncementControllerTest {
                 .content("{ \"idUser\" : 1, " +
                          "  \"idAnnouncement\": 1 }"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
-        verify(announcementService).setLikeAnnouncement(BigInteger.ONE, BigInteger.ONE);
+        verify(announcementService).setLikeAnnouncement(BigInteger.ONE);
     }
 
     @Test
