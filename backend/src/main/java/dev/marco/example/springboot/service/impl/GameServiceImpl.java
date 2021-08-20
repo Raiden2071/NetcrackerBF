@@ -90,9 +90,12 @@ public class GameServiceImpl implements GameService {
             List<AnswerImpl> defaultAnswers = answerDAO.getAnswersByQuestionId(question.getId());
             for (AnswerImpl defAnswer : defaultAnswers) {
                 if(defAnswer.getValue().equals(userAnswerValue)) {
-                    if(defAnswer.getAnswer().equals(AnswerResult.TRUE))
+                    if(defAnswer.getAnswer().equals(AnswerResult.TRUE)) {
                         counterOfCorrectAnswers++;
-                    defAnswer.setAnswer(AnswerResult.SELECTED);
+                        defAnswer.setAnswer(AnswerResult.TRUE);
+                    } else {
+                        defAnswer.setAnswer(AnswerResult.SELECTED);
+                    }
                     question.setAnswers(defaultAnswers);
                     break;
                 }
