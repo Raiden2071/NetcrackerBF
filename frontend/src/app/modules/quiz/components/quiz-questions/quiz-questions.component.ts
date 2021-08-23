@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { QuestionType, Quiz } from 'src/app/models/quiz';
 
 @Component({
@@ -11,10 +12,11 @@ import { QuestionType, Quiz } from 'src/app/models/quiz';
 })
 export class QuizQuestionsComponent implements OnInit {
 
-  data: Quiz; //title, description, type of quiz
+  data: Quiz; 
   questionTypes = QuestionType;
   currentQuiz: number = 0;
   quizId: number = 0;
+  showErrors = false;
 
   questionsForm: FormGroup = this.fb.group({
     questions: this.fb.array([
@@ -34,11 +36,12 @@ export class QuizQuestionsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private fb: FormBuilder,
-    private http: HttpClient
+    private http: HttpClient,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit(): void {
-    // поменяй any
+    this.questionsForm.valueChanges.subscribe(() => this.showErrors = false);
     this.route.paramMap.subscribe((data: any) => this.data = JSON.parse(data.getAll('data')));
   }
 
@@ -46,24 +49,23 @@ export class QuizQuestionsComponent implements OnInit {
     return this.questionsForm.get("questions") as FormArray;
   }
 
-  get answerArray(): FormArray {    
+  get answerArray(): FormArray {
     return this.questionsForm.get("questions")['controls'][1].get("answers");
   }
 
-  newQuestionForm(): FormGroup {    
-      this.quizId++;
+  newQuestionForm(): FormGroup {
+    this.quizId++;
     return this.fb.group({
-      // questionId:   [this.quizId, [Validators.required]],  // 0 до 9
-      question: ['', [Validators.required]],  // question title
-      questionType: [this.questionTypes.FOUR_ANSWERS, [Validators.required]],  // four answer
-      answers:      this.fb.array([this.newAnswerForm(),this.newAnswerForm(),this.newAnswerForm(),this.newAnswerForm()])
+      question:     ['', [Validators.required]],  // question title
+      questionType: ['FOUR_ANSWERS', [Validators.required]],  // four answer
+      answers:      this.fb.array([this.newAnswerForm(), this.newAnswerForm(), this.newAnswerForm(), this.newAnswerForm()])
     });
   }
 
   newAnswerForm(): FormGroup {
     return this.fb.group({
-			value:    ['', [Validators.required]],  // текст ответа
-			answer:   [false]
+      value:  ['', [Validators.required]],  // текст ответа
+      answer: ['FALSE', [Validators.required]]
     });
   }
 
@@ -71,58 +73,58 @@ export class QuizQuestionsComponent implements OnInit {
     return form.controls.questions.controls;
   }
 
-  getAnswers(form) {        
+  getAnswers(form) {
     return form.controls.answers.controls;
   }
 
-  previous():void {    
-    if(this.currentQuiz>=1) {this.currentQuiz--;}
+  addAnswers(j) {
+    const control = <FormArray>this.questionsForm.get('questions')['controls'][j].get("answers");
+    control.push(this.newAnswerForm());
+  }
+
+  removeAnswers(j) {
+    const control = <FormArray>this.questionsForm.get('questions')['controls'][j].get("answers");
+    control.removeAt(0);
+ }
+
+  previous(): void {
+    if (this.currentQuiz >= 1) { this.currentQuiz--; }
   }
 
   next(): void {
-    if(this.currentQuiz<=8) {this.currentQuiz++;}
+    if (this.currentQuiz <= 8) { this.currentQuiz++; }
   }
 
-  click(val) {
-    console.log(val);
-  }
-
-  logOut() {        
+  logOut() {
     localStorage.removeItem('access_token');
     sessionStorage.removeItem('access_token');
   }
 
-  onChangeType(quiz): void {
-    // переделай 
-    if(quiz.questionType==="true/false") {
-      quiz=='true' ?
-      quiz.answers=[{
-        value: true,
-        answer: true
-      },
-      {
-        value: false,
-        answer: false
-      }] : 
-      quiz.answers=[{
-        value: true,
-        answer: false
-      },
-      {
-        value: false,
-        answer: true
-      }];
-    } 
-    else {
-      this.newAnswerForm();
+  isChecked(allAnswers, currentAnswer): void {
+    allAnswers.map(v => v.answer = 'FALSE');
+    currentAnswer.answer = 'TRUE';
+  }
+
+  onChangeType(quiz, index): void {
+    if(quiz.questionType === "TRUE_FALSE") {
+      this.removeAnswers(index);
+      this.removeAnswers(index);          
+    }
+    else if(quiz.questionType === "FOUR_ANSWERS") {
+      this.addAnswers(index);
+      this.addAnswers(index);      
     }
   }
 
-  onSubmit(): void {        
-    // if(this.answerArray.valid) {
-      const data = Object.assign(this.data, this.questionsForm.value);
-      this.http.post('quiz/', data).subscribe((v)=> console.log(v));
-    // }
+  onSubmit(): void {
+    if(this.questionsForm.valid) {
+    let data = Object.assign(this.data, this.questionsForm.value);
+    console.log(data);
+    this.http.post('quiz/', data).subscribe(() => this.toastr.success('Поздравляю, вы успешно создали квиз',''));
+    }
+    else {
+    this.showErrors = true;      
+    }
   }
-
 }
+

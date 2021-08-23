@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
+import { debounceTime, switchMap, tap } from 'rxjs/operators';
 import { Quiz, QuizType } from 'src/app/models/quiz';
-import { quizService } from 'src/app/shared/services/quiz.service';
 
 @Component({
   selector: 'app-quiz',
@@ -12,29 +13,36 @@ import { quizService } from 'src/app/shared/services/quiz.service';
 export class QuizComponent implements OnInit {
 
   quizzes: Quiz[];
-  // searchProject: FormControl = new FormControl('');
-  term: any;
-  p: number = 1;
+  searchProject: FormControl = new FormControl('');
   quizType = QuizType;
+  page = 1;
+  totalElements = 6;
 
   constructor(
-    private quizService: quizService,
     private router: Router,
     private http: HttpClient
   ) { }
 
   ngOnInit(): void {    
     this.getQuizzes();
+    this.retrieveFilterChanges();
   }
 
   onSelect(type: string) {
-    console.log(type);
-    this.http.get(`quiz/filter?QUIZTYPE_MATH`).subscribe((v) => console.log(v))
-    // parseInt(id, 10) !== 0 ? this.getProjects(`?categories.id_eq=${id}`) : this.getProjects();
+    this.http.get(`quiz/filter?filter=SCIENCE`).subscribe((v) => console.log(v))
+  }
+
+  retrieveFilterChanges() {
+    this.searchProject.valueChanges.pipe(
+      debounceTime(300),
+      tap(() => this.page=1)).subscribe(() => this.getQuizzes());
   }
 
   getQuizzes() {
-    this.quizService.getList().subscribe(quiz => this.quizzes = quiz);
+    this.http.get(`quiz/search?page=${this.page}&title=${this.searchProject.value}`).subscribe((quiz: any) =>  {
+      this.quizzes = quiz.content;      
+      this.totalElements = quiz.totalElements;
+    });
   }
   
   createQuiz(): void {

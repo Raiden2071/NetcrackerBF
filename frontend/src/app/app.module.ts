@@ -10,15 +10,13 @@ import { TokenInterceptor } from './interceptor/token.interceptor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { SidebarComponent } from './shared/components/sidebar/sidebar.component';
-import { QuizSidebarComponent } from './shared/components/quiz-sidebar/quiz-sidebar.component';
 import { LayoutComponent } from './layout/layout.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LayoutComponent,
-    SidebarComponent,
-    QuizSidebarComponent
+    SidebarComponent
   ],
   imports: [
     BrowserModule,

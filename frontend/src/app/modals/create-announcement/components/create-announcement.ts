@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
 import { UserService } from 'src/app/shared/services/users.service';
-// import { User } from 'src/app/models/user';
-// import { announcementService } from 'src/app/shared/services/announcement.service';
-// import { UserService } from 'src/app/shared/services/users.service';
 
 @Component({
   selector: 'app-create-announcment',
@@ -19,7 +17,8 @@ export class CreateAnnouncementComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private activeModal: NgbActiveModal,
-    private userService: UserService
+    private userService: UserService,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit(): void {
@@ -42,6 +41,9 @@ export class CreateAnnouncementComponent implements OnInit {
       this.activeModal.close(this.annoucementForm.value);
     }
     else {
+      this.toastr.error("Пожалуйста, заполните все поля.", '', {
+        timeOut: 2000,
+      });    
       this.showErrors = true;
     }
   }

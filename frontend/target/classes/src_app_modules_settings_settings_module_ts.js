@@ -263,12 +263,12 @@ class EditProfileComponent {
         this.userService.userInfo$.subscribe(user => this.user = user);
     }
     onSubmit() {
-        if (this.editForm.valid) {
-            this.userService.editOne(this.user.id, this.editForm.value).subscribe(() => {
-                this.userService.userInfo$.subscribe(user => this.user = user);
-                this.userService.subject$.next(1);
-            });
-        }
+        // if(this.editForm.valid) {
+        this.userService.editOne(this.user.id, this.editForm.value).subscribe(() => {
+            this.userService.userInfo$.subscribe(user => this.user = user);
+            this.userService.subject$.next(1);
+        });
+        // }
     }
 }
 EditProfileComponent.ɵfac = function EditProfileComponent_Factory(t) { return new (t || EditProfileComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdirectiveInject"](_angular_forms__WEBPACK_IMPORTED_MODULE_3__.FormBuilder), _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdirectiveInject"](src_app_shared_services_users_service__WEBPACK_IMPORTED_MODULE_0__.UserService)); };
