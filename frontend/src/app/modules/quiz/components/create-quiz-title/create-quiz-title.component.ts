@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { QuizType } from 'src/app/models/quiz';
 import { QuizGuard } from '../../quiz.guard';
@@ -12,12 +12,12 @@ import { QuizGuard } from '../../quiz.guard';
 export class CreateQuizTitleComponent implements OnInit {
 
   quizTypes = QuizType;
+  showErrors = false;
 
   createQuizForm: FormGroup = this.fb.group({
     title:       ['', [Validators.required]],
-    quizType:    [this.quizTypes.GEOGRAPHICAL, [Validators.required]],
-    description: ['', [Validators.required]],
-    authorId:    [401]
+    quizType:    ['GEOGRAPHICAL', [Validators.required]],
+    description: ['', [Validators.required]]
   });
 
   constructor(
@@ -27,6 +27,7 @@ export class CreateQuizTitleComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {    
+    this.createQuizForm.valueChanges.subscribe(() => this.showErrors = false);
   }
 
   onSubmit(): void {
@@ -35,6 +36,7 @@ export class CreateQuizTitleComponent implements OnInit {
       this.router.navigate(['/quiz/quiz-questions', {data: JSON.stringify(this.createQuizForm.value)}])
     }
     else {
+      this.showErrors = true;
       console.log('not valid');
     }
   }

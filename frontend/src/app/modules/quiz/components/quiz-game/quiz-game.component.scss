@@ -33,10 +33,17 @@ select {
   flex: 0 0 100px;
 }
 
+.size__error {
+  background-color: #ff0000f8;
+}
+
+.size__green {
+  background-color: green;
+}
+
 .size__color {
   background-color: #1075e9;
 }
-
 
 // 
 // 
@@ -57,8 +64,3 @@ select {
   background-color: green;
 }
 
-// .position {
-//   position: fixed;
-//   background-color: #F8F8F8;
-//   width: 180px;
-// }

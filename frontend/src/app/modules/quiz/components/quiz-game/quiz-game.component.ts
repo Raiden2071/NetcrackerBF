@@ -2,7 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { Quiz, QuizType } from 'src/app/models/quiz';
+import { User } from 'src/app/models/user';
 import { UserService } from 'src/app/shared/services/users.service';
 
 @Component({
@@ -12,58 +14,86 @@ import { UserService } from 'src/app/shared/services/users.service';
 })
 export class QuizGameComponent implements OnInit {
 
-  quizId: number;
+  quizTitle: string;
   quizData: Quiz;
   questionTypes = QuizType
-  userId: number;
-  questionsForm: FormGroup = this.fb.group({
-    quizId: ['', Validators.required],
-    userId: ['', Validators.required],
-    answers: this.fb.array([])
-  });
+  user: User;
   currentQuiz = 0;
+  quizPassed = false;
+  correctAnswer: any = [];
+  showErrors = false;
 
   constructor(
     private route: ActivatedRoute,
-    private fb: FormBuilder,
     private http: HttpClient,
-    private userService: UserService
+    private userService: UserService,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit(): void {
     this.getUser();
-    this.route.paramMap.subscribe((quiz: any) => this.quizId = quiz.params.id);
-    this.http.get(`quiz/game/${this.quizId}`).subscribe((quiz: Quiz) => this.quizData = quiz);  
+    this.route.paramMap.subscribe((quiz: any) => this.quizTitle = quiz.params.id);
+    this.http.get(`quiz/game/${this.quizTitle}`).subscribe((quiz: Quiz) => this.quizData = quiz);
   }
 
-  previous():void {    
-    if(this.currentQuiz>=1) {this.currentQuiz--;}
+  previous(): void {
+    if (this.currentQuiz >= 1) { this.currentQuiz--; }
+    this.changeCurrentQuiz();
   }
 
   next(): void {
-    if(this.currentQuiz<=8) {this.currentQuiz++;}
+    if (this.currentQuiz <= 8) { this.currentQuiz++; }
+    this.changeCurrentQuiz();
   }
 
-  changeAnswer(index): void {    
-    this.quizData.questions[this.currentQuiz].answers[index].answer = !this.quizData.questions[this.currentQuiz].answers[index].answer;
+  changeAnswer(index, quiz): void {
+    let bool = quiz.every(v => v.answer == "FALSE"); // true если все false
+    if (bool || quiz[index].answer==="TRUE") {
+      if(quiz[index].answer == "TRUE") {
+        quiz[index].answer = "FALSE";
+      }
+      else if(quiz[index].answer == "FALSE") {
+        quiz[index].answer = "TRUE";
+      }
+    }
   }
 
   getUser(): void {
-    this.userService.userInfo$.subscribe(({id}) => this.userId = id);
+    this.userService.userInfo$.subscribe((user) => this.user = user);
   }
 
-  logOut() {        
+  logOut() {
     localStorage.removeItem('access_token');
     sessionStorage.removeItem('access_token');
   }
 
-  onSubmit(): void {    
-    console.log(this.questionsForm.value.userId);
-    
-    const data = Object.assign(this.quizData.questions, this.questionsForm.value.userId)
-    console.log(data);
-    
-    // console.log(this .quizData.questions);
+  // костыль поменяй 
+  changeCurrentQuiz(): void {
+    this.showErrors = false;    
   }
 
+  onSubmit(): void {    
+    this.correctAnswer = this.quizData.questions.map(quiz => {
+      let firstAnswer = quiz.answers.filter((quiz: any) => quiz.answer == "TRUE")
+      return firstAnswer[0];
+    });
+
+    let searchError = this.correctAnswer.every(data => data?.answer=="TRUE"); //проверка на пустоту    
+    console.log(searchError);
+
+    if (searchError) {
+      let data = Object.assign({ user: this.user }, { quizTitle: this.quizTitle }, { answers: this.correctAnswer });
+      
+      this.http.post('quiz/game/end', data).subscribe(v => {  
+        console.log(v);
+        (this.quizData.questions as any) = v;        
+        this.quizPassed = true;
+        this.toastr.success('Поздравляю, вы успешно создали квиз','')
+      });
+    }
+    else {      
+      console.log('not valid');
+      this.showErrors = true;
+    }
+  }
 }

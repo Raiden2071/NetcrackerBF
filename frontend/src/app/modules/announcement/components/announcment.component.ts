@@ -1,11 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { switchMap, tap } from 'rxjs/operators';
+import { debounceTime, switchMap, tap } from 'rxjs/operators';
 import { CreateAnnouncementComponent } from 'src/app/modals/create-announcement/components/create-announcement';
 import { Announcement } from 'src/app/models/announcements';
-import { announcementService } from 'src/app/shared/services/announcement.service';
-import { UserService } from 'src/app/shared/services/users.service';
 
 @Component({
   selector: 'app-announcment',
@@ -15,25 +14,35 @@ import { UserService } from 'src/app/shared/services/users.service';
 export class AnnouncmentComponent implements OnInit {
 
   announcements: Announcement;
-  // searchProject: FormControl = new FormControl('');
-  term: any;
-  p: number = 1;
-  userId: number;
+  searchProject: FormControl = new FormControl('');
+  page = 1;
+  totalElements = 8;
+  
   constructor(
     private modalService: NgbModal,
-    private announcementService: announcementService,
-    private userService: UserService,
     private http: HttpClient
   ) { }
 
   ngOnInit(): void {    
     this.getAnnouncement();
+    this.retrieveFilterChanges();    
   }
 
   getAnnouncement() {
-    this.userService.userInfo$.pipe(
-      switchMap(({id}) => this.announcementService.getOne(id)),
-    ).subscribe(announcement => this.announcements = announcement);
+    this.http.get<Announcement>(`announcement/search?page=${this.page}&title=${this.searchProject.value}`).subscribe((announcement: any) => {
+      this.announcements = announcement.content
+      this.totalElements = announcement.totalElements
+    });
+  }
+
+  retrieveFilterChanges() {
+    this.searchProject.valueChanges.pipe(
+      debounceTime(300),
+      tap(() => this.page=1)).subscribe(() => this.getAnnouncement());
+  }
+
+  onLike(annoucement) {
+    this.http.post('announcement/like', {idAnnouncement: annoucement.id}).subscribe(() => this.getAnnouncement());
   }
 
   createAnnouncement(): void {

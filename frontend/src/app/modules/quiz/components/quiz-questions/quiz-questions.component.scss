@@ -33,6 +33,11 @@ select {
   flex: 0 0 100px;
 }
 
-.size__color {
+.size__error {
+  background-color: #ff0000f8;
+}
+
+.size__current {
   background-color: #1075e9;
 }
+

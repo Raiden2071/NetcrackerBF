@@ -37,18 +37,17 @@ export class EditProfileComponent implements OnInit {
     }, 500);
   }
 
-
   getUser() {
     this.userService.userInfo$.subscribe(user => this.user = user);
   }
 
   onSubmit() {
-    if(this.editForm.valid) {
+    // if(this.editForm.valid) {
     this.userService.editOne(this.user.id, this.editForm.value).subscribe(() => {
       this.userService.userInfo$.subscribe(user => this.user = user);
       this.userService.subject$.next(1);
     });
-    }
+    // }
   }
 
 }
