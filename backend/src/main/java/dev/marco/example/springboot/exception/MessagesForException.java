@@ -22,7 +22,7 @@ public interface MessagesForException {
   String OWNER_IS_NULL = "Owner field cannot be empty";
   String LONG_TITLE = "Long title";
   String LONG_DESCRIPTION = "Long description";
-  String TITLE_IS_NOT_CORRECT = "Must be only letters, digits and whitespaces";
+  String TITLE_IS_NOT_CORRECT = "Title must contains only letters, digits and whitespaces";
 
   String ANNOUNCEMENT_NOT_FOUND_EXCEPTION = "Announcement does not exist!";
   String ANNOUNCEMENT_HAS_NOT_BEEN_RECEIVED = "Announcement has not been received";
