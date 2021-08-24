@@ -140,9 +140,9 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     }
 
     @Override
-    public Set<Announcement> getAnnouncementsLikedByUser(BigInteger idUser)
+    public Set<Announcement> getAnnouncementsLikedByUser(int numberAnnouncements, BigInteger idUser)
             throws AnnouncementDoesNotExistException, DAOLogicException, AnnouncementException {
-        return userAnnouncementDAO.getAnnouncementsLikedByUser(idUser);
+        return userAnnouncementDAO.getAnnouncementsLikedByUser(numberAnnouncements, idUser);
     }
 
     @Override

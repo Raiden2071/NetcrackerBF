@@ -32,7 +32,7 @@ public interface AnnouncementService {
     List<Announcement> getPopularAnnouncements(int numberAnnouncements, BigInteger idUser)
             throws AnnouncementDoesNotExistException, DAOLogicException;
 
-    Set<Announcement> getAnnouncementsLikedByUser(BigInteger idUser)
+    Set<Announcement> getAnnouncementsLikedByUser(int numberAnnouncements, BigInteger idUser)
             throws AnnouncementDoesNotExistException, DAOLogicException, AnnouncementException;
 
     void setTestConnection() throws DAOConfigException;
