@@ -162,7 +162,7 @@ class AnnouncementServiceImplTest {
     @Timeout(value = 10000, unit= TimeUnit.MILLISECONDS)
     void getAnnouncementsLikedByUser() {
         try {
-            Set<Announcement> announcementSet = announcementService.getAnnouncementsLikedByUser(BigInteger.ONE);
+            Set<Announcement> announcementSet = announcementService.getAnnouncementsLikedByUser(1, BigInteger.ONE);
             assertNotNull(announcementSet);
             for(Announcement announcement: announcementSet)
                 assertNotNull(announcement);
