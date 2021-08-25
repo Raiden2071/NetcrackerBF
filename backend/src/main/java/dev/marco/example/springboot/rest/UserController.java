@@ -309,7 +309,7 @@ public class UserController implements RegexPatterns, ApiAddresses {
         }
     }
 
-    @GetMapping("/changeRole/{id}")
+    @GetMapping(API_CHANGE_ROLE)
     public void updateUserRole(@PathVariable(name = "id") BigInteger id,
                                @RequestParam(name = "role") UserRoles role) {
         try {

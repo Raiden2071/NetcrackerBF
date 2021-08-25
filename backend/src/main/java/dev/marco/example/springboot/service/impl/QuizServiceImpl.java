@@ -25,6 +25,7 @@ import java.sql.Date;
 import java.util.List;
 
 import static dev.marco.example.springboot.exception.MessagesForException.*;
+import static dev.marco.example.springboot.util.RegexPatterns.quizTitlePattern;
 
 @Service
 public class QuizServiceImpl implements QuizService {
@@ -97,17 +98,15 @@ public class QuizServiceImpl implements QuizService {
     }
 
     @Override
-    public void validateNewQuiz(Quiz quiz) throws QuizException, UserException, QuestionException, AnswerException, DAOLogicException, UserDoesNotExistException {
-
-//        User user = userService.getUserById(quiz.getCreatorId());
-//        if (!user.getUserRole().equals(UserRoles.ADMIN)) {
-//            log.error(DONT_ENOUGH_RIGHTS);
-//            throw new UserException(DONT_ENOUGH_RIGHTS);
-//        }
+    public void validateNewQuiz(Quiz quiz) throws QuizException, UserException, QuestionException, AnswerException {
 
         if (StringUtils.isBlank(quiz.getTitle()) || StringUtils.length(quiz.getTitle()) < MIN_LENGTH_TITLE) {
             log.error(EMPTY_TITLE);
             throw new QuizException(EMPTY_TITLE);
+        }
+        if (!quiz.getTitle().matches(quizTitlePattern)) {
+            log.error(TITLE_IS_NOT_CORRECT);
+            throw new QuizException(TITLE_IS_NOT_CORRECT);
         }
         if (StringUtils.length(quiz.getTitle()) > MAX_LENGTH_TITLE) {
             log.error(LONG_TITLE);
@@ -135,7 +134,6 @@ public class QuizServiceImpl implements QuizService {
         }
 
         List<QuestionImpl> questions = quiz.getQuestions();
-
 
         for (int index = 0; index < questions.size(); index++) {
             if(questions.get(index).getQuestion().isEmpty()) {
@@ -186,15 +184,7 @@ public class QuizServiceImpl implements QuizService {
     }
 
     @Override
-    public void updateQuiz(BigInteger id, Quiz quiz) throws QuizDoesNotExistException, DAOLogicException, QuestionDoesNotExistException, UserDoesNotExistException, UserException {
-
-//        JwtUser userJwt = (JwtUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        BigInteger userId = BigInteger.valueOf(userJwt.getId());
-//        User user = userService.getUserById(userId);
-//        if (!user.getUserRole().equals(UserRoles.ADMIN)) {
-//            log.error(DONT_ENOUGH_RIGHTS);
-//            throw new UserException(DONT_ENOUGH_RIGHTS);
-//        }
+    public void updateQuiz(BigInteger id, Quiz quiz) throws QuizDoesNotExistException, DAOLogicException, QuestionDoesNotExistException {
 
         Quiz quizFromDAO = quizDAO.getQuizById(id);
         if (quizFromDAO == null) {
@@ -208,15 +198,7 @@ public class QuizServiceImpl implements QuizService {
 
     @Override
     public void deleteQuiz(Quiz quiz)
-            throws QuizDoesNotExistException, DAOLogicException, UserDoesNotExistException, UserException {
-
-//        JwtUser userJwt = (JwtUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        BigInteger userId = BigInteger.valueOf(userJwt.getId());
-//        User user = userService.getUserById(userId);
-//        if (!user.getUserRole().equals(UserRoles.ADMIN)) {
-//            log.error(DONT_ENOUGH_RIGHTS);
-//            throw new UserException(DONT_ENOUGH_RIGHTS);
-//        }
+            throws QuizDoesNotExistException, DAOLogicException {
 
         Quiz quizFromDAO = quizDAO.getQuizById(quiz.getId());
         if (quizFromDAO == null) {

@@ -28,7 +28,7 @@ public interface UserAnnouncementDAO {
 
   void setTestConnection() throws DAOConfigException;
 
-  Set<Announcement> getAnnouncementsLikedByUser(BigInteger idUser)
+  Set<Announcement> getAnnouncementsLikedByUser(int numberAnnouncements, BigInteger idUser)
       throws AnnouncementDoesNotExistException, DAOLogicException, AnnouncementException;
 
   Set<User> getUsersLikedAnnouncement(BigInteger idAnnouncement)

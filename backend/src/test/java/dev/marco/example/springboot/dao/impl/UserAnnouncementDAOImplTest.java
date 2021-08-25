@@ -67,7 +67,7 @@ class UserAnnouncementDAOImplTest {
   void getAnnouncementsLikedByUser() {
     try {
       Set<Announcement> announcementSet = userAnnouncementDAO.getAnnouncementsLikedByUser(
-          BigInteger.ONE);
+              1, BigInteger.ONE);
       assertNotNull(announcementSet);
       for (Announcement announcement : announcementSet) {
         assertNotNull(announcement);

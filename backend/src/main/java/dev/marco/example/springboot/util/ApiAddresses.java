@@ -13,6 +13,7 @@ public interface ApiAddresses {
   String API_EDIT_USER = "/user/{idUser}";
   String API_GET_ACCOMPLISHED_QUIZZES_BY_USER ="/user/acc_quiz/{userId}";
   String API_GET_FAVORITE_QUIZZES_BY_USER = "/user/favorite/{id}";
+  String API_CHANGE_ROLE = "/changeRole/{id}";
 
   String API_QUIZ = "/quiz";
   String API_ALL_QUIZZES = "/all";

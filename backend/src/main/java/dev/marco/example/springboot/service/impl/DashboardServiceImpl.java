@@ -29,7 +29,8 @@ public class DashboardServiceImpl implements DashboardService {
     private final UserService userService;
     private static final Logger log = Logger.getLogger(DashboardServiceImpl.class);
 
-    private static final int DASHBOARD_COUNT_POPULAR_ANNOUNCEMENT = 2;
+    private static final int DASHBOARD_COUNT_POPULAR_ANNOUNCEMENT = 3;
+    private static final int DASHBOARD_COUNT_LIKED_ANNOUNCEMENT = 3;
     private static final int DASHBOARD_COUNT_LAST_CREATED_QUIZZES = 3;
 
     @Autowired
@@ -67,7 +68,8 @@ public class DashboardServiceImpl implements DashboardService {
         List<Announcement> popularAnnouncement =
                 announcementService.getPopularAnnouncements(DASHBOARD_COUNT_POPULAR_ANNOUNCEMENT, id);
 
-        Set<Announcement> likedAnnouncement = announcementService.getAnnouncementsLikedByUser(id);
+        Set<Announcement> likedAnnouncement =
+                announcementService.getAnnouncementsLikedByUser(DASHBOARD_COUNT_LIKED_ANNOUNCEMENT, id);
 
         return new DashboardImpl(lastQuizzes, popularAnnouncement, likedAnnouncement);
     }

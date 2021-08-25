@@ -59,11 +59,12 @@ public class UserAnnouncementDAOImpl implements UserAnnouncementDAO {
   }
 
   @Override
-  public Set<Announcement> getAnnouncementsLikedByUser(BigInteger idUser)
+  public Set<Announcement> getAnnouncementsLikedByUser(int numberAnnouncements, BigInteger idUser)
       throws AnnouncementDoesNotExistException, DAOLogicException, AnnouncementException {
     try (PreparedStatement preparedStatement = connection.prepareStatement(
         properties.getProperty(SELECT_ANNOUNCEMENT_LIKED_BY_USER))) {
       preparedStatement.setLong(1, idUser.longValue());
+      preparedStatement.setInt(2, numberAnnouncements);
       ResultSet resultSet = preparedStatement.executeQuery();
       Set<Announcement> announcements = new HashSet<>();
       if (!resultSet.isBeforeFirst()) {
