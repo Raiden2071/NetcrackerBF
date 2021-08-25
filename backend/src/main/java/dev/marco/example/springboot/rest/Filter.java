@@ -25,7 +25,7 @@ public enum Filter {
   COMPLETED,
   FAVORITES;
 
-  public static Page<Quiz> getQuzziesByFilter(int pageNumber, Filter filter, BigInteger id, QuizService quizService,
+  public static Page<Quiz> getQuzziesByFilter(int pageNumber, Filter filter, QuizService quizService,
                                               UserService userService)
           throws DAOLogicException, QuizDoesNotExistException, UserDoesNotExistException, PageException {
     Page<Quiz> filterQuizzes;
