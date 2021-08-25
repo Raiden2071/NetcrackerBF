@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import static dev.marco.example.springboot.service.QuizService.PAGE_SIZE;
 
 public enum Filter {
   DATE,
@@ -25,7 +26,7 @@ public enum Filter {
   COMPLETED,
   FAVORITES;
 
-  public static Page<Quiz> getQuzziesByFilter(int pageNumber, Filter filter, QuizService quizService,
+  public static Page<Quiz> getQuzziesByFilter(int pageNumber, Filter filter, BigInteger id, QuizService quizService,
                                               UserService userService)
           throws DAOLogicException, QuizDoesNotExistException, UserDoesNotExistException, PageException {
     Page<Quiz> filterQuizzes;
