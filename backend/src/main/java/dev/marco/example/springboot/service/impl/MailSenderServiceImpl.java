@@ -67,7 +67,7 @@ public class MailSenderServiceImpl implements MailSenderService {
         }
       });
 
-      Message message = prepareMessage(session, from, to, EMAIL_SUBJECT, TEXT_HTML+
+      Message message = prepareMessage(session, from, to, EMAIL_SUBJECT, TEXT_HTML +
           String.format(TEXT_INPUT, code));
       Transport.send(message);
       return true;
@@ -153,7 +153,7 @@ public class MailSenderServiceImpl implements MailSenderService {
     StringBuilder hexString = new StringBuilder(2 * hash.length);
     for (int i = 0; i < hash.length; i++) {
       String hex = Integer.toHexString(0xff & hash[i]);
-      if(hex.length() == 1) {
+      if (hex.length() == 1) {
         hexString.append('0');
       }
       hexString.append(hex);
@@ -171,11 +171,11 @@ public class MailSenderServiceImpl implements MailSenderService {
 
       String newPassword = generateCode();
       byte[] encodedhash = digest.digest(
-              newPassword.getBytes(StandardCharsets.UTF_8));
+          newPassword.getBytes(StandardCharsets.UTF_8));
       String hashPassword = bytesToHex(encodedhash);
 
-
-      userDAO.updateUsersPassword(userDAO.getUserByEmail(email).getId(), encoder.encode(hashPassword));
+      userDAO.updateUsersPassword(userDAO.getUserByEmail(email).getId(),
+          encoder.encode(hashPassword));
 
       Properties properties = new Properties();
       setProperties(properties);
