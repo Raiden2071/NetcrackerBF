@@ -49,10 +49,9 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public Quiz sendGameQuiz(String title) throws DAOLogicException, QuizDoesNotExistException,
+    public Quiz sendGameQuiz(BigInteger quizId) throws DAOLogicException, QuizDoesNotExistException,
             QuizException, QuestionDoesNotExistException, AnswerDoesNotExistException {
-        Quiz quiz = quizService.getQuizByTitle(title);
-        BigInteger quizId = quiz.getId();
+        Quiz quiz = quizService.getQuizById(quizId);
         List<QuestionImpl> questionList = questionService.getQuestionsByQuiz(quizId);
         for (Question question : questionList) {
             List<AnswerImpl> answers = question.getAnswers();

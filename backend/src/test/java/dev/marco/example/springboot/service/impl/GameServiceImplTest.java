@@ -58,8 +58,8 @@ public class GameServiceImplTest {
     @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
     void sendGameQuizTest() {
         try {
-            String quizTitle = "ZNO";
-            Quiz quiz = gameService.sendGameQuiz(quizTitle);
+            BigInteger id = BigInteger.valueOf(3);
+            Quiz quiz = gameService.sendGameQuiz(id);
             assertNotNull(quiz);
             assertEquals("Try this!", quiz.getDescription());
             assertEquals(BigInteger.TWO, quiz.getCreatorId());

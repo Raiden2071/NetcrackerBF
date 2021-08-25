@@ -249,11 +249,12 @@ public class QuizControllerTest {
     @Test
     @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
     void quizGameTest() throws Exception {
+        BigInteger id = BigInteger.ONE;
         String quizName = "NewQuiz";
 
-        when(gameService.sendGameQuiz(quizName))
+        when(gameService.sendGameQuiz(id))
                 .thenReturn(QuizImpl.QuizBuilder()
-                        .setId(BigInteger.valueOf(1))
+                        .setId(id)
                         .setTitle(quizName)
                         .setDescription("Desc of new quiz")
                         .setCreatorId(BigInteger.valueOf(7))
@@ -262,10 +263,10 @@ public class QuizControllerTest {
 
         this.mockMvc
                 .perform(MockMvcRequestBuilders
-                        .get("/quiz/game/{title}", quizName)
+                        .get("/quiz/game/{id}", id)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(BigInteger.ONE))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(id))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.title").value(quizName));
     }
 
