@@ -256,14 +256,31 @@ public class QuizDAOImpl implements QuizDAO {
         }
     }
 
+
+    private int countOfQuizzesByType(QuizType quizType) throws QuizException {
+        try (PreparedStatement preparedStatement =
+                     connection.prepareStatement(properties.getProperty(SELECT_COUNT_OF_QUIZZES_BY_TYPE))) {
+            preparedStatement.setLong(1, quizType.ordinal());
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            }
+            return 0;
+
+        } catch (SQLException throwables) {
+            throw new QuizException(QUIZ_NOT_FOUND_EXCEPTION);
+        }
+    }
     @Override
-    public List<Quiz> getQuizzesByType(QuizType quizType)
+    public Page<Quiz> getQuizzesByType(Pageable pageable, QuizType quizType)
             throws QuizDoesNotExistException, DAOLogicException {
 
         try (PreparedStatement preparedStatement =
                      connection.prepareStatement(properties.getProperty(SELECT_QUIZZES_BY_TYPE))) {
 
             preparedStatement.setLong(1, quizType.ordinal());
+            preparedStatement.setLong(2, pageable.getOffset());
+            preparedStatement.setInt(3, pageable.getPageSize());
 
             ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -282,13 +299,15 @@ public class QuizDAOImpl implements QuizDAO {
                 quizzes.add(quiz);
             }
 
-            return quizzes;
+            return new PageImpl<>(quizzes, pageable, countOfQuizzesByType(quizType));
 
         } catch (SQLException | QuizException e) {
             log.error(GET_QUIZZES_BY_TYPE_EXCEPTION + e.getMessage());
             throw new DAOLogicException(GET_QUIZZES_BY_TYPE_EXCEPTION, e);
         }
     }
+
+
 
     @Override
     public int countOfQuizzesLikeTitle(String title) throws QuizException {

@@ -1,17 +1,21 @@
 package dev.marco.example.springboot.rest;
 
 import dev.marco.example.springboot.exception.DAOLogicException;
+import dev.marco.example.springboot.exception.PageException;
 import dev.marco.example.springboot.exception.QuizDoesNotExistException;
 import dev.marco.example.springboot.exception.UserDoesNotExistException;
 import dev.marco.example.springboot.model.Quiz;
 import dev.marco.example.springboot.model.QuizType;
-import dev.marco.example.springboot.model.impl.QuizAccomplishedImpl;
 import dev.marco.example.springboot.service.QuizService;
 import dev.marco.example.springboot.service.UserService;
+import org.springframework.data.domain.Page;
+
 import java.math.BigInteger;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+
+import static dev.marco.example.springboot.service.QuizService.PAGE_SIZE;
 
 public enum Filter {
   DATE,
@@ -22,39 +26,41 @@ public enum Filter {
   COMPLETED,
   FAVORITES;
 
-  public static List<Quiz> getQuzziesByFilter(Filter filter, BigInteger id, QuizService quizService,
-      UserService userService)
-      throws DAOLogicException, QuizDoesNotExistException, UserDoesNotExistException {
-    List<Quiz> filterQuizzes = Collections.emptyList();
+  public static Page<Quiz> getQuzziesByFilter(int pageNumber, Filter filter, BigInteger id, QuizService quizService,
+                                              UserService userService)
+          throws DAOLogicException, QuizDoesNotExistException, UserDoesNotExistException, PageException {
+    Page<Quiz> filterQuizzes;
     switch (filter) {
-      case DATE:
-        filterQuizzes = quizService.getLastCreatedQuizzes(10);
-        break;
+//      case DATE:
+//        List<Quiz> quizzes =  quizService.getLastCreatedQuizzes(10);
+//        Pageable pageable = PageRequest.of(--pageNumber, PAGE_SIZE);
+//        filterQuizzes = new PageImpl<>(quizzes, pageable, quizzes.size());
+//        break;
       case MATHEMATICS:
-        filterQuizzes = quizService.getQuizzesByType(QuizType.MATHEMATICS);
+        filterQuizzes = quizService.getQuizzesByType(pageNumber, QuizType.MATHEMATICS);
         break;
       case SCIENCE:
-        filterQuizzes = quizService.getQuizzesByType(QuizType.SCIENCE);
+        filterQuizzes = quizService.getQuizzesByType(pageNumber, QuizType.SCIENCE);
         break;
       case HISTORIC:
-        filterQuizzes = quizService.getQuizzesByType(QuizType.HISTORIC);
+        filterQuizzes = quizService.getQuizzesByType(pageNumber, QuizType.HISTORIC);
         break;
       case GEOGRAPHICAL:
-        filterQuizzes = quizService.getQuizzesByType(QuizType.GEOGRAPHICAL);
+        filterQuizzes = quizService.getQuizzesByType(pageNumber, QuizType.GEOGRAPHICAL);
         break;
-      case COMPLETED:
-        Set<QuizAccomplishedImpl> accomplisheds = userService
-            .getAccomplishedQuizesByUser(id);
-        for (QuizAccomplishedImpl quiz : accomplisheds) {
-          filterQuizzes.add(quiz.getQuiz());
-        }
-        break;
-      case FAVORITES:
-        Set<QuizAccomplishedImpl> favorites = userService.getFavoriteQuizesByUser(id);
-        for (QuizAccomplishedImpl quiz : favorites) {
-          filterQuizzes.add(quiz.getQuiz());
-        }
-        break;
+//      case COMPLETED:
+//        Set<QuizAccomplishedImpl> accomplisheds = userService
+//            .getAccomplishedQuizesByUser(id);
+//        for (QuizAccomplishedImpl quiz : accomplisheds) {
+//          filterQuizzes.add(quiz.getQuiz());
+//        }
+//        break;
+//      case FAVORITES:
+//        Set<QuizAccomplishedImpl> favorites = userService.getFavoriteQuizesByUser(id);
+//        for (QuizAccomplishedImpl quiz : favorites) {
+//          filterQuizzes.add(quiz.getQuiz());
+//        }
+//        break;
       default:
         throw new DAOLogicException("Wrong filter");
     }

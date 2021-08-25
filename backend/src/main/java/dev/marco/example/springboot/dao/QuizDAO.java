@@ -36,6 +36,7 @@ public interface QuizDAO {
     String SELECT_COUNT_OF_QUIZZES_BY_TITLE = "SELECT_COUNT_OF_QUIZZES_BY_TITLE";
     String SELECT_QUIZZES_BY_ROWS = "SELECT_QUIZZES_BY_ROWS";
     String SELECT_QUIZZES_LIKE_TITLE = "SELECT_QUIZZES_LIKE_TITLE";
+    String SELECT_COUNT_OF_QUIZZES_BY_TYPE = "SELECT_COUNT_OF_QUIZZES_BY_TYPE";
     String TEST = "_TEST";
 
     Quiz createQuiz(Quiz quiz) throws DAOLogicException, UserDoesNotExistException;
@@ -48,7 +49,7 @@ public interface QuizDAO {
 
     boolean existQuizByTitle(String title) throws DAOLogicException;
 
-    List<Quiz> getQuizzesByType(QuizType quizType) throws QuizDoesNotExistException, DAOLogicException;
+    Page<Quiz> getQuizzesByType(Pageable pageable, QuizType quizType) throws QuizDoesNotExistException, DAOLogicException;
 
     List<Quiz> getAllQuizzes() throws QuizDoesNotExistException, DAOLogicException;
 

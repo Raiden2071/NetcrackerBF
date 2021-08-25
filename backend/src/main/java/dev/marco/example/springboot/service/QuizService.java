@@ -29,7 +29,7 @@ public interface QuizService {
 
     QuizImpl getQuizById(BigInteger id) throws QuizDoesNotExistException, DAOLogicException, QuizException, QuestionDoesNotExistException;
 
-    List<Quiz> getQuizzesByType(QuizType quizType) throws QuizDoesNotExistException, DAOLogicException;
+    Page<Quiz> getQuizzesByType(int pageNumber, QuizType quizType) throws QuizDoesNotExistException, DAOLogicException, PageException;
 
     List<Quiz> getAllQuizzes() throws QuizDoesNotExistException, DAOLogicException;
 
