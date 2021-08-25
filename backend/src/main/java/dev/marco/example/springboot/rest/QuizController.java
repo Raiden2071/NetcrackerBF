@@ -189,9 +189,11 @@ public class QuizController implements ApiAddresses {
     }
 
     @GetMapping(API_SHOW_ALL_FILTER_QUIZZES)
-    public List<Quiz> showAllFilterQuizzes(@RequestParam BigInteger id, @RequestParam Filter filter) {
+    public Page<Quiz> showAllFilterQuizzes(@RequestParam("page") int pageNumber,
+                                           @RequestParam BigInteger id,
+                                           @RequestParam Filter filter) {
         try {
-            return Filter.getQuzziesByFilter(filter, id, quizService, userService);
+            return Filter.getQuzziesByFilter(pageNumber, filter, id, quizService, userService);
         } catch (UserDoesNotExistException e) {
             log.error(USERS_DOESNT_EXIT + e.getMessage());
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, properties.getProperty(USER_EXCEPTION));
@@ -201,6 +203,9 @@ public class QuizController implements ApiAddresses {
         } catch (QuizDoesNotExistException e) {
             log.error(QUIZ_NOT_FOUND_EXCEPTION + e.getMessage());
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, properties.getProperty(QUIZ_EXCEPTION));
+        } catch (PageException e) {
+            log.error(PAGE_DOES_NOT_EXIST);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 
