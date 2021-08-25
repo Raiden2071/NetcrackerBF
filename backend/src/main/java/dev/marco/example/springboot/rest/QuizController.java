@@ -52,20 +52,6 @@ public class QuizController implements ApiAddresses {
 //        gameService.setTestConnection();
 //    }
 
-    @GetMapping(API_ALL_QUIZZES)
-    public List<Quiz> showAllQuizzes() {
-        try {
-            return quizService.getAllQuizzes();
-        } catch (QuizDoesNotExistException e) {
-            log.error(QUIZ_NOT_FOUND_EXCEPTION + e.getMessage());
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        } catch (DAOLogicException e) {
-            log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
-        }
-    }
-
-
     @GetMapping
     public Page<Quiz> showQuizzesByPage(@RequestParam("page") int pageNumber) {
         try {

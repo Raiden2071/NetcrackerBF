@@ -51,7 +51,7 @@ public interface QuizDAO {
 
     Page<Quiz> getQuizzesByType(Pageable pageable, QuizType quizType) throws QuizDoesNotExistException, DAOLogicException;
 
-    List<Quiz> getAllQuizzes() throws QuizDoesNotExistException, DAOLogicException;
+    Page<Quiz> getSortedByDateQuizzes(Pageable pageable) throws QuizDoesNotExistException, DAOLogicException;
 
     List<Quiz> getLastCreatedQuizzes(int count) throws DAOLogicException, QuizDoesNotExistException;
 

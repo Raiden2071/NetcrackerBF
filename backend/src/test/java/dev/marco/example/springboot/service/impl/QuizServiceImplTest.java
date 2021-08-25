@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import dev.marco.example.springboot.exception.*;
 import dev.marco.example.springboot.model.Quiz;
 import dev.marco.example.springboot.service.QuizService;
+import org.springframework.data.domain.Page;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -54,14 +55,14 @@ class QuizServiceImplTest {
     @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
     void getAllQuizzesTest() {
         try {
-            List<Quiz> quizList = quizService.getAllQuizzes();
+            Page<Quiz> quizList = quizService.getSortedByDateQuizzes(1);
 
             if (!quizList.isEmpty()) {
                 assertNotNull(quizList);
             }
 
             log.info("Get all quizzes in test");
-        } catch (QuizDoesNotExistException | DAOLogicException e) {
+        } catch (QuizDoesNotExistException | DAOLogicException | PageException e) {
             log.error("Error while testing getAllQuizzes ", e);
             fail();
         }

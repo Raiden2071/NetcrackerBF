@@ -31,7 +31,7 @@ public interface QuizService {
 
     Page<Quiz> getQuizzesByType(int pageNumber, QuizType quizType) throws QuizDoesNotExistException, DAOLogicException, PageException;
 
-    List<Quiz> getAllQuizzes() throws QuizDoesNotExistException, DAOLogicException;
+    Page<Quiz> getSortedByDateQuizzes(int pageNumber) throws QuizDoesNotExistException, DAOLogicException, PageException;
 
     List<Quiz> getLastCreatedQuizzes(int count) throws QuizDoesNotExistException, DAOLogicException;
 

@@ -8,14 +8,13 @@ import dev.marco.example.springboot.model.Quiz;
 import dev.marco.example.springboot.model.QuizType;
 import dev.marco.example.springboot.service.QuizService;
 import dev.marco.example.springboot.service.UserService;
-import org.springframework.data.domain.Page;
+import org.springframework.data.domain.*;
 
 import java.math.BigInteger;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import static dev.marco.example.springboot.service.QuizService.PAGE_SIZE;
 
 public enum Filter {
   DATE,
@@ -31,11 +30,9 @@ public enum Filter {
           throws DAOLogicException, QuizDoesNotExistException, UserDoesNotExistException, PageException {
     Page<Quiz> filterQuizzes;
     switch (filter) {
-//      case DATE:
-//        List<Quiz> quizzes =  quizService.getLastCreatedQuizzes(10);
-//        Pageable pageable = PageRequest.of(--pageNumber, PAGE_SIZE);
-//        filterQuizzes = new PageImpl<>(quizzes, pageable, quizzes.size());
-//        break;
+      case DATE:
+        filterQuizzes =  quizService.getSortedByDateQuizzes(pageNumber);
+        break;
       case MATHEMATICS:
         filterQuizzes = quizService.getQuizzesByType(pageNumber, QuizType.MATHEMATICS);
         break;

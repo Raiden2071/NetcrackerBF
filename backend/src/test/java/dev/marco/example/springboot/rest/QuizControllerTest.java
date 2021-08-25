@@ -59,43 +59,6 @@ public class QuizControllerTest {
 
     @Test
     @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
-    void showAllQuizzesTest() throws Exception {
-
-        when(quizService.getAllQuizzes())
-                .thenReturn(
-                        Arrays.asList(
-                                QuizImpl.QuizBuilder()
-                                        .setId(BigInteger.valueOf(1))
-                                        .setTitle("Quiz1")
-                                        .setDescription("Quiz1")
-                                        .setQuizType(QuizType.MATHEMATICS)
-                                        .setCreatorId(BigInteger.valueOf(1))
-                                        .build(),
-                                QuizImpl.QuizBuilder()
-                                        .setId(BigInteger.valueOf(2))
-                                        .setTitle("Quiz2")
-                                        .setDescription("Quiz2")
-                                        .setQuizType(QuizType.HISTORIC)
-                                        .setCreatorId(BigInteger.valueOf(4))
-                                        .build()
-                        )
-                );
-
-        this.mockMvc.perform(MockMvcRequestBuilders
-                        .get("/quiz/all"))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(jsonPath("$[0].id").value(BigInteger.valueOf(1)))
-                .andExpect(jsonPath("$[0].title").value("Quiz1"))
-
-                .andExpect(jsonPath("$[1].id").value(BigInteger.valueOf(2)))
-                .andExpect(jsonPath("$[1].title").value("Quiz2"));
-
-        verify(quizService).getAllQuizzes();
-    }
-
-
-    @Test
-    @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
     void searchQuizzesLikeTitleTest() throws Exception {
         String title = "qu";
         Pageable pageable = PageRequest.of(1, 8);
@@ -240,7 +203,7 @@ public class QuizControllerTest {
 
         this.mockMvc
                 .perform(MockMvcRequestBuilders
-                        .get("/quiz/filter?id=1&filter=DATE")
+                        .get("/quiz/filter?page=1&id=1&filter=DATE")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }

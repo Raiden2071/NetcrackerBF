@@ -130,7 +130,8 @@ class QuizDAOImplTest {
     @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
     void getAllQuizzesTest() {
         try {
-            List<Quiz> quizList = quizDAO.getAllQuizzes();
+            Pageable pageable = PageRequest.of(1, 8);
+            Page<Quiz> quizList = quizDAO.getSortedByDateQuizzes(pageable);
             if (!quizList.isEmpty()) {
                 assertNotNull(quizList);
             }

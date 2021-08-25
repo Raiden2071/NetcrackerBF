@@ -239,13 +239,18 @@ public class QuizServiceImpl implements QuizService {
     }
 
     @Override
-    public List<Quiz> getAllQuizzes() throws QuizDoesNotExistException, DAOLogicException {
-        List<Quiz> quizzes = quizDAO.getAllQuizzes();
-        if (quizzes.isEmpty()) {
-            log.error(QUIZ_NOT_FOUND_EXCEPTION);
-            throw new QuizDoesNotExistException(QUIZ_NOT_FOUND_EXCEPTION);
+    public Page<Quiz> getSortedByDateQuizzes(int pageNumber) throws QuizDoesNotExistException, DAOLogicException, PageException {
+        if (pageNumber < MIN_PAGE) {
+            log.error(PAGE_DOES_NOT_EXIST);
+            throw new PageException(PAGE_DOES_NOT_EXIST);
         }
-        return quizzes;
+        Pageable pageable = PageRequest.of(--pageNumber, PAGE_SIZE);
+        Page<Quiz> page = quizDAO.getSortedByDateQuizzes(pageable);
+        if (!page.hasContent()) {
+            log.error(PAGE_DOES_NOT_EXIST);
+            throw new PageException(PAGE_DOES_NOT_EXIST);
+        }
+        return page;
     }
 
     @Override

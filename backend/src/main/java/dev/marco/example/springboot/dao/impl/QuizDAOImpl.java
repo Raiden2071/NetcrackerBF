@@ -169,11 +169,13 @@ public class QuizDAOImpl implements QuizDAO {
     }
 
     @Override
-    public List<Quiz> getAllQuizzes() throws QuizDoesNotExistException, DAOLogicException {
+    public Page<Quiz> getSortedByDateQuizzes(Pageable pageable) throws QuizDoesNotExistException, DAOLogicException {
 
         try (PreparedStatement preparedStatement =
                      connection.prepareStatement(properties.getProperty(SELECT_ALL_QUIZZES))) {
 
+            preparedStatement.setLong(1, pageable.getOffset());
+            preparedStatement.setInt(2, pageable.getPageSize());
             ResultSet resultSet = preparedStatement.executeQuery();
 
             List<Quiz> quizzes = new ArrayList<>();
@@ -192,7 +194,7 @@ public class QuizDAOImpl implements QuizDAO {
                 quizzes.add(quiz);
             }
 
-            return quizzes;
+            return new PageImpl<>(quizzes, pageable, countOfQuizzes());
         } catch (SQLException | QuizException e) {
             log.error(GET_ALL_QUIZZES_EXCEPTION + e.getMessage());
             throw new DAOLogicException(GET_ALL_QUIZZES_EXCEPTION, e);
