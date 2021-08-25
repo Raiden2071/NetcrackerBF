@@ -112,7 +112,7 @@ __webpack_require__.r(__webpack_exports__);
 
 function LoginComponent_div_9_Template(rf, ctx) { if (rf & 1) {
     _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementStart"](0, "div", 20);
-    _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵtext"](1, "\u041D\u0435\u043F\u0440\u0430\u0432\u0438\u043B\u044C\u043D\u043E \u0432\u0432\u0435\u0434\u0435\u043D\u044B \u0434\u0430\u043D\u043D\u044B\u0435");
+    _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵtext"](1, "Incorrectly entered data");
     _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementEnd"]();
 } }
 class LoginComponent {
@@ -145,7 +145,7 @@ class LoginComponent {
             };
             this.authService.login(data, data.remember).subscribe((userData) => {
                 this.userId = userData.user.id;
-                this.router.navigateByUrl('/profile');
+                this.router.navigateByUrl('/dashboard');
             }, err => {
                 this.showErrors = true;
             });
@@ -162,7 +162,7 @@ LoginComponent.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_3__[
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementStart"](1, "div", 1);
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementStart"](2, "div", 2);
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementStart"](3, "p", 3);
-        _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵtext"](4, "\u0412\u0445\u043E\u0434");
+        _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵtext"](4, "Login");
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementStart"](5, "div");
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementStart"](6, "div", 4);
@@ -182,24 +182,24 @@ LoginComponent.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_3__[
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementStart"](15, "div", 10);
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementStart"](16, "div", 11);
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelement"](17, "input", 12);
-        _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵtext"](18, " \u0417\u0430\u043F\u043E\u043C\u043D\u0438\u0442\u044C \u043C\u0435\u043D\u044F ");
+        _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵtext"](18, " Remember me ");
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementStart"](19, "div", 13);
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementStart"](20, "a", 14);
-        _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵtext"](21, "\u0417\u0430\u0431\u044B\u043B\u0438 \u043F\u0430\u0440\u043E\u043B\u044C?");
+        _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵtext"](21, "Forget password?");
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementStart"](22, "div", 15);
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementStart"](23, "button", 16);
-        _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵtext"](24, "\u0412\u043E\u0439\u0442\u0438");
+        _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵtext"](24, "Enter");
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementStart"](25, "div", 17);
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementStart"](26, "div", 18);
-        _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵtext"](27, "\u0415\u0449\u0435 \u043D\u0435 ");
+        _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵtext"](27, "not ");
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementStart"](28, "a", 19);
-        _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵtext"](29, "\u0437\u0430\u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0438\u0440\u043E\u0432\u0430\u043B\u0438\u0441\u044C?");
+        _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵtext"](29, "registered?");
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementEnd"]();
@@ -255,12 +255,12 @@ __webpack_require__.r(__webpack_exports__);
 
 function RegisterComponent_span_22_Template(rf, ctx) { if (rf & 1) {
     _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementStart"](0, "span", 23);
-    _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵtext"](1, " (\u043C\u0438\u043D\u0438\u043C\u0430\u043B\u044C\u043D\u043E 8 \u0441\u0438\u043C\u0432\u043E\u043B\u043E\u0432)");
+    _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵtext"](1, " (minimum length 8 characters)");
     _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementEnd"]();
 } }
 function RegisterComponent_span_30_Template(rf, ctx) { if (rf & 1) {
     _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementStart"](0, "span", 24);
-    _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵtext"](1, " \u041F\u0430\u0440\u043E\u043B\u0438 \u043D\u0435 \u0441\u043E\u0432\u043F\u0430\u0434\u0430\u044E\u0442 ");
+    _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵtext"](1, " Password mismatch ");
     _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementEnd"]();
 } }
 class RegisterComponent {
@@ -302,24 +302,24 @@ class RegisterComponent {
     }
 }
 RegisterComponent.ɵfac = function RegisterComponent_Factory(t) { return new (t || RegisterComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵdirectiveInject"](_angular_forms__WEBPACK_IMPORTED_MODULE_4__.FormBuilder), _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵdirectiveInject"](_services_auth_service__WEBPACK_IMPORTED_MODULE_2__.AuthService), _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_5__.Router)); };
-RegisterComponent.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵdefineComponent"]({ type: RegisterComponent, selectors: [["app-register"]], decls: 39, vars: 29, consts: [[1, "modal-dialog", "modal-dialog-centered", 3, "formGroup", "ngSubmit"], [1, "modal-content", "p-4"], [1, "modal-body", "custom_body"], [1, "h3", "text-center", "pb-4"], [1, "d-flex", "justify-content-between"], [1, "form-group", "mr-3", "mb-3"], [1, "mb-2"], ["type", "text", "placeholder", "\u0418\u043C\u044F", "formControlName", "firstName", 1, "form-control", "text-dark"], [1, "form-group", "mb-3"], ["type", "text", "placeholder", "\u0424\u0430\u043C\u0438\u043B\u0438\u044F", "formControlName", "lastName", 1, "form-control", "text-dark"], ["type", "email", "placeholder", "Email", "formControlName", "email", 1, "form-control", "text-dark"], [1, "form-group"], ["class", "text-sm text-danger", 4, "ngIf"], [1, "input-group", "input-group-merge", "pass", "rounded", "mb-3"], ["formControlName", "password", "placeholder", "\u041F\u0430\u0440\u043E\u043B\u044C", 1, "form-control", "pass", 3, "type"], [1, "mb-4"], [1, "input-group", "input-group-merge", "pass", "rounded"], ["formControlName", "confirmPassword", "placeholder", "\u041F\u043E\u0434\u0442\u0432\u0435\u0440\u0434\u0438\u0442\u044C \u043F\u0430\u0440\u043E\u043B\u044C", 1, "form-control", "pass", 3, "type"], ["class", " text-danger text-sm", 4, "ngIf"], ["type", "submit", 1, "mb-4", "mt-3", "btn", "btn-primary", "w-100"], [1, "border-top"], [1, "mt-3", "d-flex", "justify-content-center"], ["routerLink", "/auth/login", 1, "font-bold"], [1, "text-sm", "text-danger"], [1, "text-danger", "text-sm"]], template: function RegisterComponent_Template(rf, ctx) { if (rf & 1) {
+RegisterComponent.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵdefineComponent"]({ type: RegisterComponent, selectors: [["app-register"]], decls: 39, vars: 29, consts: [[1, "modal-dialog", "modal-dialog-centered", 3, "formGroup", "ngSubmit"], [1, "modal-content", "p-4"], [1, "modal-body", "custom_body"], [1, "h3", "text-center", "pb-4"], [1, "d-flex", "justify-content-between"], [1, "form-group", "mr-3", "mb-3"], [1, "mb-2"], ["type", "text", "placeholder", "Name", "formControlName", "firstName", 1, "form-control", "text-dark"], [1, "form-group", "mb-3"], ["type", "text", "placeholder", "Surname", "formControlName", "lastName", 1, "form-control", "text-dark"], ["type", "email", "placeholder", "Email", "formControlName", "email", 1, "form-control", "text-dark"], [1, "form-group"], ["class", "text-sm text-danger", 4, "ngIf"], [1, "input-group", "input-group-merge", "pass", "rounded", "mb-3"], ["formControlName", "password", "placeholder", "Password", 1, "form-control", "pass", 3, "type"], [1, "mb-4"], [1, "input-group", "input-group-merge", "pass", "rounded"], ["formControlName", "confirmPassword", "placeholder", "Confirm password", 1, "form-control", "pass", 3, "type"], ["class", " text-danger text-sm", 4, "ngIf"], ["type", "submit", 1, "mb-4", "mt-3", "btn", "btn-primary", "w-100"], [1, "border-top"], [1, "mt-3", "d-flex", "justify-content-center"], ["routerLink", "/auth/login", 1, "font-bold"], [1, "text-sm", "text-danger"], [1, "text-danger", "text-sm"]], template: function RegisterComponent_Template(rf, ctx) { if (rf & 1) {
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementStart"](0, "form", 0);
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵlistener"]("ngSubmit", function RegisterComponent_Template_form_ngSubmit_0_listener() { return ctx.onSubmit(); });
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementStart"](1, "div", 1);
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementStart"](2, "div", 2);
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementStart"](3, "p", 3);
-        _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵtext"](4, "\u0420\u0435\u0433\u0438\u0441\u0442\u0440\u0430\u0446\u0438\u044F");
+        _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵtext"](4, "Registration");
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementStart"](5, "div", 4);
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementStart"](6, "div", 5);
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementStart"](7, "label", 6);
-        _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵtext"](8, "\u0418\u043C\u044F");
+        _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵtext"](8, "Name");
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelement"](9, "input", 7);
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementStart"](10, "div", 8);
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementStart"](11, "label", 6);
-        _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵtext"](12, "\u0424\u0430\u043C\u0438\u043B\u0438\u044F");
+        _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵtext"](12, "Surname");
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelement"](13, "input", 9);
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementEnd"]();
@@ -333,7 +333,7 @@ RegisterComponent.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_3
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementStart"](18, "div", 11);
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementStart"](19, "div");
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementStart"](20, "label", 6);
-        _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵtext"](21, "\u041F\u0430\u0440\u043E\u043B\u044C");
+        _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵtext"](21, "Password");
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵtemplate"](22, RegisterComponent_span_22_Template, 2, 0, "span", 12);
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementEnd"]();
@@ -342,7 +342,7 @@ RegisterComponent.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_3
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementStart"](25, "div", 15);
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementStart"](26, "label", 6);
-        _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵtext"](27, "\u041F\u043E\u0434\u0442\u0432\u0435\u0440\u0434\u0438\u0442\u044C \u043F\u0430\u0440\u043E\u043B\u044C");
+        _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵtext"](27, "Confirm password");
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementStart"](28, "div", 16);
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelement"](29, "input", 17);
@@ -351,15 +351,15 @@ RegisterComponent.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_3
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementStart"](31, "button", 19);
-        _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵtext"](32, "\u0417\u0430\u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0438\u0440\u043E\u0432\u0430\u0442\u044C\u0441\u044F");
+        _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵtext"](32, "Sign up");
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementStart"](33, "div", 20);
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementStart"](34, "div", 21);
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementStart"](35, "p");
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementStart"](36, "a", 22);
-        _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵtext"](37, "\u0412\u043E\u0439\u0442\u0438 ");
+        _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵtext"](37, "Sign in ");
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵtext"](38, " \u0432 \u0441\u0443\u0449\u0435\u0441\u0442\u0432\u0443\u044E\u0449\u0438\u0439 \u0430\u043A\u043A\u0430\u0443\u043D\u0442");
+        _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵtext"](38, " to your existing account");
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementEnd"]();

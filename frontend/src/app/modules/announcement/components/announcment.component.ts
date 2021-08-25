@@ -16,7 +16,7 @@ export class AnnouncmentComponent implements OnInit {
   announcements: Announcement;
   searchProject: FormControl = new FormControl('');
   page = 1;
-  totalElements = 8;
+  totalElements = 6;
   
   constructor(
     private modalService: NgbModal,

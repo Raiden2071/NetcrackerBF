@@ -64,7 +64,7 @@ export class QuizQuestionsComponent implements OnInit {
 
   newAnswerForm(): FormGroup {
     return this.fb.group({
-      value:  ['', [Validators.required]],  // текст ответа
+      value:  ['',      [Validators.required]],  // текст ответа
       answer: ['FALSE', [Validators.required]]
     });
   }
@@ -117,13 +117,19 @@ export class QuizQuestionsComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if(this.questionsForm.valid) {
+    let checkRadioButton = this.questionsForm.value.questions.every(question => question.answers.every(v => v.answer == "FALSE"));    
+    if(this.questionsForm.valid, !checkRadioButton) {
     let data = Object.assign(this.data, this.questionsForm.value);
     console.log(data);
-    this.http.post('quiz/', data).subscribe(() => this.toastr.success('Поздравляю, вы успешно создали квиз',''));
+    this.http.post('quiz/', data).subscribe(() => {
+      this.toastr.success('Congratulations, you have successfully created a quiz.','')
+    },err => {
+      this.toastr.error(err.message,'')
+    });
     }
     else {
     this.showErrors = true;      
+    this.toastr.error('Fill in all the fields.','')
     }
   }
 }

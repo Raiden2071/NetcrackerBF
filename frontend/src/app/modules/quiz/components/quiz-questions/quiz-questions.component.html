@@ -1,6 +1,6 @@
 <!-- quiz sidebar -->
 <form [formGroup]="questionsForm" (ngSubmit)="onSubmit()" class="d-flex justify-content-between h-100">
-  <div class="d-flex h-100" style="width: 180px; background-color: '#F8F8F8';">
+  <div class="d-flex sidebar_color h-100">
     <div class="d-flex justify-content-between">
       <div class="d-flex flex-column justify-content-between mb-5 w-100">
         <div class="d-flex flex-column">
@@ -9,7 +9,7 @@
             Question {{currentQuiz+1}} of 10
           </div>
           <!-- <a routerLink="/profile" class="p-2 mb-5 text-center return">return to profile</a> -->
-          <div formArrayName="questions">
+          <div formArrayName="questions" class="sidebar_color">
             <!-- quiz number -->
             <div class="d-flex align-items-center flex-wrap w-100 mb-5">
               <div *ngFor="let quiz of questionArray.controls; let i=index" [formGroupName]="i"
@@ -43,14 +43,16 @@
             <button type="button" class="btn btn-primary ms-1" (click)="previous()">previous</button>
             <button type="button" class="btn btn-primary me-1" (click)="next()">next</button>
           </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+
           <!--  -->
         </div>
         <!-- settings, logout -->
-        <ul class="nav nav-pills flex-column">
+        <ul class="nav nav-pills flex-column sidebar_color">
           <li class="mb-2">
-            <a routerLink="/profile" routerLinkActive="active" class="nav-link link-dark">
-              <img src="\assets\images\icons\account_circle_black_24dp.svg" alt="image">
-              Profile
+            <a routerLink="/dashboard" routerLinkActive="active" class="nav-link link-dark">
+              <img src="\assets\images\icons\dashboard_black_24dp.svg" alt="image">
+              Dashboard
             </a>
           </li>
           <li class="mb-2">
@@ -125,10 +127,10 @@
             </div>
           </div>
         </div>
-        <div class="text__input">
+        <!-- <div class="text__input">
           <div></div>
           <button type="submit" class="btn btn-primary">Submit</button>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
