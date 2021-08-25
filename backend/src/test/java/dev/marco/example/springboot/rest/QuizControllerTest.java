@@ -203,7 +203,7 @@ public class QuizControllerTest {
 
         this.mockMvc
                 .perform(MockMvcRequestBuilders
-                        .get("/quiz/filter?page=1&id=1&filter=DATE")
+                        .get("/quiz/filter?page=1&filter=DATE")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
