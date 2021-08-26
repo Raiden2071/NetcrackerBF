@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { sha256 } from 'js-sha256';
+import { ToastrService } from 'ngx-toastr';
 import { User } from 'src/app/models/user';
 import { RecoveryComponent } from 'src/app/modules/auth/components/recovery/recovery.component';
 import { MustMatch } from 'src/app/modules/auth/validators/must-match.validator';
@@ -29,7 +30,8 @@ export class ChangePasswordComponent implements OnInit {
     private userService: UserService,
     private fb: FormBuilder,
     private modal: NgbModal,
-    private http: HttpClient
+    private http: HttpClient,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit(): void {
@@ -52,7 +54,11 @@ export class ChangePasswordComponent implements OnInit {
         newPass: sha256(this.changeForm.value.newPass),
         confirmPass: sha256(this.changeForm.value.confirmPass)
       }      
-      this.http.put(`updatePassword/${this.user.id}`, data).subscribe(() => console.log());
+      this.http.put(`updatePassword/${this.user.id}`, data).subscribe(() => 
+      this.toastr.success(`Congratulations, you have successfully changed your password.`, '', {
+        timeOut: 2000,
+      })   
+      );
     }
   }
 }

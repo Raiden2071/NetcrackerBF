@@ -52,7 +52,7 @@
           <li class="mb-2">
             <a routerLink="/dashboard" routerLinkActive="active" class="nav-link link-dark">
               <img src="\assets\images\icons\dashboard_black_24dp.svg" alt="image">
-              Dashboard
+              Quit the quiz
             </a>
           </li>
           <li class="mb-2">
@@ -61,8 +61,8 @@
               Settings
             </a>
           </li>
-          <li class="mb-2" (click)="logOut()">
-            <a routerLink="/auth/login" class="nav-link link-dark">
+          <li class="mb-2">
+            <a routerLink="/auth/login" (click)="logOut()" class="nav-link link-dark">
               <img src="\assets\images\icons\logout_black_24dp.svg" alt="image">
               Log out
             </a>
@@ -87,8 +87,11 @@
                     Question
                   </span>
                   <!-- определяем какой будет отображаться questionType -->
-                  <input type="text" formControlName="question" class="mb-4"
-                    [class.border-danger]="quiz.invalid && showErrors ? true : false">
+                  <!-- <input type="text" formControlName="question" class="mb-4"
+                    [class.border-danger]="quiz.invalid && showErrors ? true : false"> -->
+                    <textarea name="" id="" cols="30" rows="2" class="mb-4 w-100"
+                    [class.border-danger]="quiz.invalid && showErrors ? true : false"
+                    ></textarea>
                 </div>
                 <!-- answers value -->
                 <div class="d-flex flex-column" formArrayName="answers">
@@ -98,7 +101,7 @@
                         <div class="text__input me-4">
                           Answer {{j+1}}
                         </div>
-                        <input type="text" class="me-4" formControlName="value"
+                        <input type="text" class="me-4 w-100" formControlName="value"
                           [class.border-danger]="answer.invalid && showErrors ? true : false">
                         <div class="d-flex align-items-center">
                           <!-- <input type="checkbox" value="false" formControlName="answer">  -->

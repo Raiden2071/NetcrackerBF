@@ -28,7 +28,16 @@ export class AnnouncmentComponent implements OnInit {
     this.retrieveFilterChanges();    
   }
 
-  getAnnouncement() {
+  // announcement/all?page=1
+// announcement/search?page=${this.page}&title=${this.searchProject.value}
+  getAnnouncement(): void {
+    this.http.get<Announcement>(`announcement/all?page=1`).subscribe((announcement: any) => {
+      this.announcements = announcement.content
+      this.totalElements = announcement.totalElements
+    });
+  }
+  
+  getSearchAnnouncement():void {
     this.http.get<Announcement>(`announcement/search?page=${this.page}&title=${this.searchProject.value}`).subscribe((announcement: any) => {
       this.announcements = announcement.content
       this.totalElements = announcement.totalElements
@@ -38,7 +47,7 @@ export class AnnouncmentComponent implements OnInit {
   retrieveFilterChanges() {
     this.searchProject.valueChanges.pipe(
       debounceTime(300),
-      tap(() => this.page=1)).subscribe(() => this.getAnnouncement());
+      tap(() => this.page=1)).subscribe((searchValue) => searchValue == '' ? this.getAnnouncement() :this.getSearchAnnouncement());
   }
 
   onLike(annoucement) {

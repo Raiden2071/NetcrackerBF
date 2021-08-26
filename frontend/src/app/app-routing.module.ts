@@ -26,7 +26,7 @@ const routes: Routes = [
     path: 'quiz/quiz-questions', component: QuizQuestionsComponent, canActivate: [QuizGuard]
   },
   {
-    path: 'quiz/:id', component: QuizGameComponent 
+    path: 'quiz/:id', component: QuizGameComponent, canActivate: [QuizGuard]
   },
   {
     path: 'auth', loadChildren: () => import('./modules/auth/auth.module').then(m => m.AuthModule)

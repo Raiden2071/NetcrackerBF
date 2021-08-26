@@ -24,6 +24,16 @@ export interface Quiz {
 }
 
 
+export enum Filter {
+  DATE = 'Date',
+  MATHEMATICS = "Mathematics",
+  HISTORIC = "History",
+  SCIENCE = "Science",
+  GEOGRAPHICAL = "Geographical",
+  COMPLETED = 'Completed',
+  FAVORITES = 'Favorites'
+}
+
 export enum QuizType {
   HISTORIC = "history",
   SCIENCE = "science",
@@ -32,6 +42,6 @@ export enum QuizType {
 }
 
 export enum QuestionType {
-  FOUR_ANSWERS = "four answers",
-  TRUE_FALSE = "true/false"
+  FOUR_ANSWERS = "Four answers",
+  TRUE_FALSE = "Two answers"
 }
