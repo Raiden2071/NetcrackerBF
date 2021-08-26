@@ -216,7 +216,7 @@ public class QuizController implements ApiAddresses {
     @PostMapping(API_FINISH_QUIZ)
     public List<QuestionImpl> finishQuiz(@RequestBody ParamsInFinishQuiz params) {
         try {
-            Quiz quiz = quizService.getQuizById(params.quizId);
+            Quiz quiz = quizService.getQuizByTitle(params.quizTitle);
             return gameService.validateAnswers(quiz, params.user, params.answers);
         } catch (QuizDoesNotExistException | QuizException e) {
             log.error(QUIZ_NOT_FOUND_EXCEPTION + e.getMessage());
@@ -249,12 +249,12 @@ public class QuizController implements ApiAddresses {
 
     static class ParamsInFinishQuiz {
         List<AnswerImpl> answers;
-        BigInteger quizId;
+        String quizTitle;
         UserImpl user;
 
-        public ParamsInFinishQuiz(List<AnswerImpl> answers, BigInteger quizId, UserImpl user) {
+        public ParamsInFinishQuiz(List<AnswerImpl> answers, String quizTitle, UserImpl user) {
             this.answers = answers;
-            this.quizId = quizId;
+            this.quizTitle = quizTitle;
             this.user = user;
         }
     }
