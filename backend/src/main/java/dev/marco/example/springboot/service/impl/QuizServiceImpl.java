@@ -166,10 +166,14 @@ public class QuizServiceImpl implements QuizService {
                     break;
             }
 
+            boolean answerIsTrue = false;
             for (int i = 0; i < answers.size(); i++) {
                 if(answers.get(i).getValue().isEmpty()) {
                     log.error(EMPTY_ANSWER_EXCEPTION + questions.get(index).getQuestion());
                     throw new AnswerException(EMPTY_ANSWER_EXCEPTION + questions.get(index).getQuestion());
+                }
+                if(answers.get(i).getAnswer().equals(AnswerResult.TRUE)) {
+                    answerIsTrue = true;
                 }
                 for (int j = i + 1; j < answers.size(); j++) {
                     if (answers.get(i).getValue().equals(answers.get(j).getValue())) {
@@ -178,6 +182,10 @@ public class QuizServiceImpl implements QuizService {
                                 + questions.get(index).getQuestion());
                     }
                 }
+            }
+            if(!answerIsTrue) {
+                log.error(ANSWER_IS_NOT_SELECTED);
+                throw new AnswerException(ANSWER_IS_NOT_SELECTED + questions.get(index).getQuestion());
             }
         }
 
