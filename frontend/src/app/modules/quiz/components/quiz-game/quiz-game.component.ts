@@ -72,11 +72,9 @@ export class QuizGameComponent implements OnInit {
     });
 
     let searchError = this.correctAnswer.every(data => data?.answer=="TRUE"); //проверка на пустоту    
-    console.log(searchError);
 
     if (searchError) {
       let data = Object.assign({ user: this.user }, { quizTitle: this.quizTitle }, { answers: this.correctAnswer });
-      
       this.http.post('quiz/game/end', data).subscribe(v => {  
         console.log(v);
         (this.quizData.questions as any) = v;        

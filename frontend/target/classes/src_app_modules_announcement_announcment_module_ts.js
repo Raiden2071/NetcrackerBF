@@ -314,14 +314,22 @@ class AnnouncmentComponent {
         this.getAnnouncement();
         this.retrieveFilterChanges();
     }
+    // announcement/all?page=1
+    // announcement/search?page=${this.page}&title=${this.searchProject.value}
     getAnnouncement() {
+        this.http.get(`announcement/all?page=1`).subscribe((announcement) => {
+            this.announcements = announcement.content;
+            this.totalElements = announcement.totalElements;
+        });
+    }
+    getSearchAnnouncement() {
         this.http.get(`announcement/search?page=${this.page}&title=${this.searchProject.value}`).subscribe((announcement) => {
             this.announcements = announcement.content;
             this.totalElements = announcement.totalElements;
         });
     }
     retrieveFilterChanges() {
-        this.searchProject.valueChanges.pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_3__.debounceTime)(300), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_4__.tap)(() => this.page = 1)).subscribe(() => this.getAnnouncement());
+        this.searchProject.valueChanges.pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_3__.debounceTime)(300), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_4__.tap)(() => this.page = 1)).subscribe((searchValue) => searchValue == '' ? this.getAnnouncement() : this.getSearchAnnouncement());
     }
     onLike(annoucement) {
         this.http.post('announcement/like', { idAnnouncement: annoucement.id }).subscribe(() => this.getAnnouncement());
@@ -332,7 +340,7 @@ class AnnouncmentComponent {
     }
 }
 AnnouncmentComponent.ɵfac = function AnnouncmentComponent_Factory(t) { return new (t || AnnouncmentComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_6__.NgbModal), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_7__.HttpClient)); };
-AnnouncmentComponent.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineComponent"]({ type: AnnouncmentComponent, selectors: [["app-announcment"]], decls: 14, vars: 7, consts: [[1, "m-5"], [1, "col-xl-4", "col-6"], [1, "mb-5", "input-group", "input-group-merge"], ["type", "search", "placeholder", "Find announcements", 1, "form-control", 3, "formControl"], [1, "input-group-append"], [1, "input-group-text"], ["src", "/assets/images/icons/search_black_24dp.svg", "alt", "search", 1, "svg"], [1, "mb-5"], ["class", "row flex-wrap card-deck", 4, "ngIf"], [1, "d-flex", "justify-content-between"], [3, "collectionSize", "pageSize", "page", "rotate", "boundaryLinks", "collectionSizeChange", "pageChange"], ["type", "button", 1, "btn", "btn-outline-primary", 3, "click"], [1, "row", "flex-wrap", "card-deck"], ["class", "col-12 col-lg-6 col-xl-4 mb-3 d-flex align-items-stretch full_card", 4, "ngFor", "ngForOf"], [1, "col-12", "col-lg-6", "col-xl-4", "mb-3", "d-flex", "align-items-stretch", "full_card"], [1, "card", "w-100"], [1, "card-body", "d-flex", "body"], [1, "d-flex", "flex-column", "col-9"], [1, "d-flex", "mb-2", "image"], ["src", "/assets/user.jpg", "alt", "image", 1, "me-2"], [1, "description"], [1, "d-flex", "flex-column", "justify-content-between", "col-3", "second__card"], [1, "d-flex", "word-wrap", "svg"], ["src", "/assets/images/icons/today_black_24dp.svg", "alt", "date", 1, "svg", "me-1"], ["src", "/assets/images/icons/location_on_black_24dp.svg", "alt", "address", 1, "svg", "me-1"], ["src", "/assets/images/icons/heart.svg", "alt", "like", "class", "svg me-1", 3, "click", 4, "ngIf"], ["src", "/assets/images/icons/heart-outline.svg", "alt", "like", "class", "svg me-1", 3, "click", 4, "ngIf"], ["src", "/assets/images/icons/heart.svg", "alt", "like", 1, "svg", "me-1", 3, "click"], ["src", "/assets/images/icons/heart-outline.svg", "alt", "like", 1, "svg", "me-1", 3, "click"]], template: function AnnouncmentComponent_Template(rf, ctx) { if (rf & 1) {
+AnnouncmentComponent.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineComponent"]({ type: AnnouncmentComponent, selectors: [["app-announcment"]], decls: 14, vars: 7, consts: [[1, "m-5"], [1, "col-xl-4", "col-6"], [1, "mb-5", "input-group", "input-group-merge"], ["type", "search", "placeholder", "Find announcement", 1, "form-control", 3, "formControl"], [1, "input-group-append"], [1, "input-group-text"], ["src", "/assets/images/icons/search_black_24dp.svg", "alt", "search", 1, "svg"], [1, "mb-5"], ["class", "row flex-wrap card-deck", 4, "ngIf"], [1, "d-flex", "justify-content-between"], [3, "collectionSize", "pageSize", "page", "rotate", "boundaryLinks", "collectionSizeChange", "pageChange"], ["type", "button", 1, "btn", "btn-outline-primary", 3, "click"], [1, "row", "flex-wrap", "card-deck"], ["class", "col-12 col-lg-6 col-xl-4 mb-3 d-flex align-items-stretch full_card", 4, "ngFor", "ngForOf"], [1, "col-12", "col-lg-6", "col-xl-4", "mb-3", "d-flex", "align-items-stretch", "full_card"], [1, "card", "w-100"], [1, "card-body", "d-flex", "body"], [1, "d-flex", "flex-column", "col-9"], [1, "d-flex", "mb-2", "image"], ["src", "/assets/user.jpg", "alt", "image", 1, "me-2"], [1, "description"], [1, "d-flex", "flex-column", "justify-content-between", "col-3", "second__card"], [1, "d-flex", "word-wrap", "svg"], ["src", "/assets/images/icons/today_black_24dp.svg", "alt", "date", 1, "svg", "me-1"], ["src", "/assets/images/icons/location_on_black_24dp.svg", "alt", "address", 1, "svg", "me-1"], ["src", "/assets/images/icons/heart.svg", "alt", "like", "class", "svg me-1", 3, "click", 4, "ngIf"], ["src", "/assets/images/icons/heart-outline.svg", "alt", "like", "class", "svg me-1", 3, "click", 4, "ngIf"], ["src", "/assets/images/icons/heart.svg", "alt", "like", 1, "svg", "me-1", 3, "click"], ["src", "/assets/images/icons/heart-outline.svg", "alt", "like", 1, "svg", "me-1", 3, "click"]], template: function AnnouncmentComponent_Template(rf, ctx) { if (rf & 1) {
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "div", 0);
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](1, "div", 1);
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](2, "div", 2);

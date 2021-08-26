@@ -12,9 +12,9 @@
         </div>
       </div>
     </div>
-    <div>
+    <!-- <div>
       <app-categories-btn [quizType]="quizType" (OnSelect)="onSelect($event)"></app-categories-btn>
-    </div>
+    </div> -->
   </div>
   <h2 class="mb-5">All Quizzes</h2>  
   <!-- Cards -->
@@ -31,7 +31,7 @@
             <img src="/assets/images/icons/cup_black_24dp.svg">
             10 Best result 
           </p> -->
-          <button [routerLink]="quiz.id" class="btn btn-outline-primary w-100">
+          <button [routerLink]="quiz.title" class="btn btn-outline-primary w-100">
             Play
           </button>
       </div>

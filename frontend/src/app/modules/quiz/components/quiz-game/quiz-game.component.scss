@@ -55,10 +55,15 @@ select {
 // 
 .title {
   background-color: #A9D5DF;
+  font-size: 40px;
 }
 
 .quiz_card {
   border: 1px solid black;
+  font-size: 40px;
+  box-shadow: 4px 6px 7px 5px #ced3d6;
+  border-radius: 25px;
+  background-color: #A9D5DF;
 }
 
 .heigth {

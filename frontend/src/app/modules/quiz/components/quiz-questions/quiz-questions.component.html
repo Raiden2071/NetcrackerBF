@@ -89,7 +89,7 @@
                   <!-- определяем какой будет отображаться questionType -->
                   <!-- <input type="text" formControlName="question" class="mb-4"
                     [class.border-danger]="quiz.invalid && showErrors ? true : false"> -->
-                    <textarea name="" id="" cols="30" rows="2" class="mb-4 w-100"
+                    <textarea cols="50" rows="3" class="mb-4 form-control w-100"
                     [class.border-danger]="quiz.invalid && showErrors ? true : false"
                     ></textarea>
                 </div>
@@ -98,10 +98,10 @@
                   <div>
                     <div [formGroupName]="j" *ngFor="let answer of getAnswers(quiz); let j=index">
                       <div *ngIf="!(quiz.value.questionType=='TRUE_FALSE')" class="d-flex justify-content-between mb-4">
-                        <div class="text__input me-4">
+                        <div class="h4 text__input me-4">
                           Answer {{j+1}}
                         </div>
-                        <input type="text" class="me-4 w-100" formControlName="value"
+                        <input type="text" class="me-4 form-control w-100" formControlName="value"
                           [class.border-danger]="answer.invalid && showErrors ? true : false">
                         <div class="d-flex align-items-center">
                           <!-- <input type="checkbox" value="false" formControlName="answer">  -->
@@ -111,10 +111,10 @@
                       </div>
                       <!-- radio -->
                       <div *ngIf="(quiz.value.questionType=='TRUE_FALSE')" class="d-flex justify-content-between mb-4">
-                        <div class="text__input me-4">
+                        <div class="h4 text__input me-4">
                           Answer {{j+1}}
                         </div>
-                        <input type="text" class="me-4" [value]="'TRUE'" formControlName="value"
+                        <input type="text" class="me-4 form-control" [value]="'TRUE'" formControlName="value"
                           [class.border-danger]="answer.invalid && showErrors ? true : false">
                         <div class="d-flex align-items-center">
                           <!-- <input type="checkbox" value="false" formControlName="answer">  -->

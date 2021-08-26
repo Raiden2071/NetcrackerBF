@@ -35,7 +35,7 @@ select {
 
 .text__input {
   text-align: end;
-  flex: 0 0 140px;
+  flex: 0 0 131px;
 }
 
 .size__error {
@@ -46,3 +46,6 @@ select {
   background-color: #1075e9;
 }
 
+textarea {
+  resize: none;
+}

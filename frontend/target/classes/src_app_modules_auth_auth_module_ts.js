@@ -244,7 +244,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/core */ 7716);
 /* harmony import */ var _services_auth_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../services/auth.service */ 2542);
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/router */ 9895);
-/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/common */ 8583);
+/* harmony import */ var ngx_toastr__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ngx-toastr */ 9344);
+/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/common */ 8583);
+
 
 
 
@@ -264,17 +266,18 @@ function RegisterComponent_span_30_Template(rf, ctx) { if (rf & 1) {
     _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementEnd"]();
 } }
 class RegisterComponent {
-    constructor(fb, authService, router) {
+    constructor(fb, authService, router, toastr) {
         this.fb = fb;
         this.authService = authService;
         this.router = router;
+        this.toastr = toastr;
         this.showPassword = false;
         this.showErrors = false;
         this.registerForm = this.fb.group({
-            firstName: ['', [_angular_forms__WEBPACK_IMPORTED_MODULE_4__.Validators.required]],
-            lastName: ['', [_angular_forms__WEBPACK_IMPORTED_MODULE_4__.Validators.required]],
-            email: ['', [_angular_forms__WEBPACK_IMPORTED_MODULE_4__.Validators.email, _angular_forms__WEBPACK_IMPORTED_MODULE_4__.Validators.required]],
-            password: ['', [_angular_forms__WEBPACK_IMPORTED_MODULE_4__.Validators.minLength(5), _angular_forms__WEBPACK_IMPORTED_MODULE_4__.Validators.required]],
+            firstName: ['', [_angular_forms__WEBPACK_IMPORTED_MODULE_4__.Validators.minLength(2), _angular_forms__WEBPACK_IMPORTED_MODULE_4__.Validators.maxLength(20), _angular_forms__WEBPACK_IMPORTED_MODULE_4__.Validators.required]],
+            lastName: ['', [_angular_forms__WEBPACK_IMPORTED_MODULE_4__.Validators.minLength(2), _angular_forms__WEBPACK_IMPORTED_MODULE_4__.Validators.maxLength(20), _angular_forms__WEBPACK_IMPORTED_MODULE_4__.Validators.required]],
+            email: ['', [_angular_forms__WEBPACK_IMPORTED_MODULE_4__.Validators.email, _angular_forms__WEBPACK_IMPORTED_MODULE_4__.Validators.maxLength(30), _angular_forms__WEBPACK_IMPORTED_MODULE_4__.Validators.required]],
+            password: ['', [_angular_forms__WEBPACK_IMPORTED_MODULE_4__.Validators.minLength(8), _angular_forms__WEBPACK_IMPORTED_MODULE_4__.Validators.required]],
             confirmPassword: ['', [_angular_forms__WEBPACK_IMPORTED_MODULE_4__.Validators.required]]
         }, {
             validator: (0,_validators_must_match_validator__WEBPACK_IMPORTED_MODULE_1__.MustMatch)('password', 'confirmPassword')
@@ -292,7 +295,9 @@ class RegisterComponent {
                 password: (0,js_sha256__WEBPACK_IMPORTED_MODULE_0__.sha256)(this.registerForm.value.password),
                 confirmPassword: (0,js_sha256__WEBPACK_IMPORTED_MODULE_0__.sha256)(this.registerForm.value.confirmPassword)
             };
-            this.authService.register(data).subscribe(data => console.log(data));
+            this.authService.register(data).subscribe(() => this.toastr.info(`We have sent a link to restore access to your account to the address ${this.registerForm.value.email}.`, '', {
+                timeOut: 2000,
+            }));
             this.router.navigateByUrl('/auth/login');
         }
         else {
@@ -301,7 +306,7 @@ class RegisterComponent {
         }
     }
 }
-RegisterComponent.ɵfac = function RegisterComponent_Factory(t) { return new (t || RegisterComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵdirectiveInject"](_angular_forms__WEBPACK_IMPORTED_MODULE_4__.FormBuilder), _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵdirectiveInject"](_services_auth_service__WEBPACK_IMPORTED_MODULE_2__.AuthService), _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_5__.Router)); };
+RegisterComponent.ɵfac = function RegisterComponent_Factory(t) { return new (t || RegisterComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵdirectiveInject"](_angular_forms__WEBPACK_IMPORTED_MODULE_4__.FormBuilder), _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵdirectiveInject"](_services_auth_service__WEBPACK_IMPORTED_MODULE_2__.AuthService), _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_5__.Router), _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵdirectiveInject"](ngx_toastr__WEBPACK_IMPORTED_MODULE_6__.ToastrService)); };
 RegisterComponent.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵdefineComponent"]({ type: RegisterComponent, selectors: [["app-register"]], decls: 39, vars: 29, consts: [[1, "modal-dialog", "modal-dialog-centered", 3, "formGroup", "ngSubmit"], [1, "modal-content", "p-4"], [1, "modal-body", "custom_body"], [1, "h3", "text-center", "pb-4"], [1, "d-flex", "justify-content-between"], [1, "form-group", "mr-3", "mb-3"], [1, "mb-2"], ["type", "text", "placeholder", "Name", "formControlName", "firstName", 1, "form-control", "text-dark"], [1, "form-group", "mb-3"], ["type", "text", "placeholder", "Surname", "formControlName", "lastName", 1, "form-control", "text-dark"], ["type", "email", "placeholder", "Email", "formControlName", "email", 1, "form-control", "text-dark"], [1, "form-group"], ["class", "text-sm text-danger", 4, "ngIf"], [1, "input-group", "input-group-merge", "pass", "rounded", "mb-3"], ["formControlName", "password", "placeholder", "Password", 1, "form-control", "pass", 3, "type"], [1, "mb-4"], [1, "input-group", "input-group-merge", "pass", "rounded"], ["formControlName", "confirmPassword", "placeholder", "Confirm password", 1, "form-control", "pass", 3, "type"], ["class", " text-danger text-sm", 4, "ngIf"], ["type", "submit", 1, "mb-4", "mt-3", "btn", "btn-primary", "w-100"], [1, "border-top"], [1, "mt-3", "d-flex", "justify-content-center"], ["routerLink", "/auth/login", 1, "font-bold"], [1, "text-sm", "text-danger"], [1, "text-danger", "text-sm"]], template: function RegisterComponent_Template(rf, ctx) { if (rf & 1) {
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementStart"](0, "form", 0);
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵlistener"]("ngSubmit", function RegisterComponent_Template_form_ngSubmit_0_listener() { return ctx.onSubmit(); });
@@ -398,7 +403,7 @@ RegisterComponent.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_3
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵproperty"]("type", ctx.showPassword ? "text" : "password");
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵadvance"](1);
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵproperty"]("ngIf", (ctx.registerForm.controls.confirmPassword.errors == null ? null : ctx.registerForm.controls.confirmPassword.errors.mustMatch) && ctx.showErrors);
-    } }, directives: [_angular_forms__WEBPACK_IMPORTED_MODULE_4__["ɵNgNoValidate"], _angular_forms__WEBPACK_IMPORTED_MODULE_4__.NgControlStatusGroup, _angular_forms__WEBPACK_IMPORTED_MODULE_4__.FormGroupDirective, _angular_forms__WEBPACK_IMPORTED_MODULE_4__.DefaultValueAccessor, _angular_forms__WEBPACK_IMPORTED_MODULE_4__.NgControlStatus, _angular_forms__WEBPACK_IMPORTED_MODULE_4__.FormControlName, _angular_common__WEBPACK_IMPORTED_MODULE_6__.NgIf, _angular_router__WEBPACK_IMPORTED_MODULE_5__.RouterLinkWithHref], styles: [".custom_body[_ngcontent-%COMP%] {\n  padding: 0px !important;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInJlZ2lzdGVyLmNvbXBvbmVudC5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0UsdUJBQUE7QUFDRiIsImZpbGUiOiJyZWdpc3Rlci5jb21wb25lbnQuc2NzcyIsInNvdXJjZXNDb250ZW50IjpbIi5jdXN0b21fYm9keSB7XHJcbiAgcGFkZGluZzogMHB4ICFpbXBvcnRhbnQ7XHJcbn0iXX0= */"] });
+    } }, directives: [_angular_forms__WEBPACK_IMPORTED_MODULE_4__["ɵNgNoValidate"], _angular_forms__WEBPACK_IMPORTED_MODULE_4__.NgControlStatusGroup, _angular_forms__WEBPACK_IMPORTED_MODULE_4__.FormGroupDirective, _angular_forms__WEBPACK_IMPORTED_MODULE_4__.DefaultValueAccessor, _angular_forms__WEBPACK_IMPORTED_MODULE_4__.NgControlStatus, _angular_forms__WEBPACK_IMPORTED_MODULE_4__.FormControlName, _angular_common__WEBPACK_IMPORTED_MODULE_7__.NgIf, _angular_router__WEBPACK_IMPORTED_MODULE_5__.RouterLinkWithHref], styles: [".custom_body[_ngcontent-%COMP%] {\n  padding: 0px !important;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInJlZ2lzdGVyLmNvbXBvbmVudC5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0UsdUJBQUE7QUFDRiIsImZpbGUiOiJyZWdpc3Rlci5jb21wb25lbnQuc2NzcyIsInNvdXJjZXNDb250ZW50IjpbIi5jdXN0b21fYm9keSB7XHJcbiAgcGFkZGluZzogMHB4ICFpbXBvcnRhbnQ7XHJcbn0iXX0= */"] });
 
 
 /***/ })

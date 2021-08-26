@@ -68,7 +68,7 @@ const routes = [
         path: 'quiz/quiz-questions', component: _modules_quiz_components_quiz_questions_quiz_questions_component__WEBPACK_IMPORTED_MODULE_3__.QuizQuestionsComponent, canActivate: [_modules_quiz_quiz_guard__WEBPACK_IMPORTED_MODULE_4__.QuizGuard]
     },
     {
-        path: 'quiz/:id', component: _modules_quiz_components_quiz_game_quiz_game_component__WEBPACK_IMPORTED_MODULE_2__.QuizGameComponent
+        path: 'quiz/:id', component: _modules_quiz_components_quiz_game_quiz_game_component__WEBPACK_IMPORTED_MODULE_2__.QuizGameComponent, canActivate: [_modules_quiz_quiz_guard__WEBPACK_IMPORTED_MODULE_4__.QuizGuard]
     },
     {
         path: 'auth', loadChildren: () => Promise.all(/*! import() */[__webpack_require__.e("default-node_modules_js-sha256_src_sha256_js-src_app_modules_auth_components_recovery_recover-570908"), __webpack_require__.e("src_app_modules_auth_auth_module_ts")]).then(__webpack_require__.bind(__webpack_require__, /*! ./modules/auth/auth.module */ 3970)).then(m => m.AuthModule)
@@ -265,9 +265,20 @@ LayoutComponent.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_1__
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Filter": () => (/* binding */ Filter),
 /* harmony export */   "QuizType": () => (/* binding */ QuizType),
 /* harmony export */   "QuestionType": () => (/* binding */ QuestionType)
 /* harmony export */ });
+var Filter;
+(function (Filter) {
+    Filter["DATE"] = "Date";
+    Filter["MATHEMATICS"] = "Mathematics";
+    Filter["HISTORIC"] = "History";
+    Filter["SCIENCE"] = "Science";
+    Filter["GEOGRAPHICAL"] = "Geographical";
+    Filter["COMPLETED"] = "Completed";
+    Filter["FAVORITES"] = "Favorites";
+})(Filter || (Filter = {}));
 var QuizType;
 (function (QuizType) {
     QuizType["HISTORIC"] = "history";
@@ -277,8 +288,8 @@ var QuizType;
 })(QuizType || (QuizType = {}));
 var QuestionType;
 (function (QuestionType) {
-    QuestionType["FOUR_ANSWERS"] = "four answers";
-    QuestionType["TRUE_FALSE"] = "true/false";
+    QuestionType["FOUR_ANSWERS"] = "Four answers";
+    QuestionType["TRUE_FALSE"] = "Two answers";
 })(QuestionType || (QuestionType = {}));
 
 
@@ -402,8 +413,8 @@ __webpack_require__.r(__webpack_exports__);
 const _c0 = function (a0, a1, a2) { return { size__color: a0, size__error: a1, size__green: a2 }; };
 function QuizGameComponent_div_9_Template(rf, ctx) { if (rf & 1) {
     const _r5 = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵgetCurrentView"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](0, "div", 25);
-    _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](1, "div", 26);
+    _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](0, "div", 24);
+    _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](1, "div", 25);
     _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵlistener"]("click", function QuizGameComponent_div_9_Template_div_click_1_listener() { const restoredCtx = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵrestoreView"](_r5); const i_r3 = restoredCtx.index; const ctx_r4 = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵnextContext"](); ctx_r4.currentQuiz = i_r3; return ctx_r4.changeCurrentQuiz(); });
     _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementEnd"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementEnd"]();
@@ -416,7 +427,7 @@ function QuizGameComponent_div_9_Template(rf, ctx) { if (rf & 1) {
 const _c1 = function (a0) { return { green: a0 }; };
 function QuizGameComponent_div_36_div_1_div_1_div_1_Template(rf, ctx) { if (rf & 1) {
     const _r16 = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵgetCurrentView"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](0, "div", 34);
+    _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](0, "div", 33);
     _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵlistener"]("click", function QuizGameComponent_div_36_div_1_div_1_div_1_Template_div_click_0_listener() { _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵrestoreView"](_r16); const j_r11 = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵnextContext"]().index; const quiz_r6 = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵnextContext"](2).$implicit; const ctx_r14 = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵnextContext"](); return ctx_r14.changeAnswer(j_r11, quiz_r6.answers); });
     _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵtext"](1);
     _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementEnd"]();
@@ -428,7 +439,7 @@ function QuizGameComponent_div_36_div_1_div_1_div_1_Template(rf, ctx) { if (rf &
 } }
 const _c2 = function (a0, a1) { return { size__green: a0, size__error: a1 }; };
 function QuizGameComponent_div_36_div_1_div_1_div_2_Template(rf, ctx) { if (rf & 1) {
-    _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](0, "div", 35);
+    _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](0, "div", 34);
     _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵtext"](1);
     _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementEnd"]();
 } if (rf & 2) {
@@ -438,9 +449,9 @@ function QuizGameComponent_div_36_div_1_div_1_div_2_Template(rf, ctx) { if (rf &
     _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵtextInterpolate1"](" ", answer_r10.value, " ");
 } }
 function QuizGameComponent_div_36_div_1_div_1_Template(rf, ctx) { if (rf & 1) {
-    _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](0, "div", 31);
-    _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵtemplate"](1, QuizGameComponent_div_36_div_1_div_1_div_1_Template, 2, 4, "div", 32);
-    _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵtemplate"](2, QuizGameComponent_div_36_div_1_div_1_div_2_Template, 2, 5, "div", 33);
+    _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](0, "div", 30);
+    _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵtemplate"](1, QuizGameComponent_div_36_div_1_div_1_div_1_Template, 2, 4, "div", 31);
+    _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵtemplate"](2, QuizGameComponent_div_36_div_1_div_1_div_2_Template, 2, 5, "div", 32);
     _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementEnd"]();
 } if (rf & 2) {
     const ctx_r9 = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵnextContext"](3);
@@ -450,8 +461,8 @@ function QuizGameComponent_div_36_div_1_div_1_Template(rf, ctx) { if (rf & 1) {
     _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵproperty"]("ngIf", ctx_r9.quizPassed);
 } }
 function QuizGameComponent_div_36_div_1_Template(rf, ctx) { if (rf & 1) {
-    _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](0, "div", 29);
-    _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵtemplate"](1, QuizGameComponent_div_36_div_1_div_1_Template, 3, 2, "div", 30);
+    _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](0, "div", 28);
+    _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵtemplate"](1, QuizGameComponent_div_36_div_1_div_1_Template, 3, 2, "div", 29);
     _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementEnd"]();
 } if (rf & 2) {
     const quiz_r6 = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵnextContext"]().$implicit;
@@ -460,8 +471,8 @@ function QuizGameComponent_div_36_div_1_Template(rf, ctx) { if (rf & 1) {
 } }
 const _c3 = function (a0) { return { heigth: a0 }; };
 function QuizGameComponent_div_36_Template(rf, ctx) { if (rf & 1) {
-    _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](0, "div", 27);
-    _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵtemplate"](1, QuizGameComponent_div_36_div_1_Template, 2, 1, "div", 28);
+    _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](0, "div", 26);
+    _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵtemplate"](1, QuizGameComponent_div_36_div_1_Template, 2, 1, "div", 27);
     _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementEnd"]();
 } if (rf & 2) {
     const i_r7 = ctx.index;
@@ -537,7 +548,7 @@ class QuizGameComponent {
     }
 }
 QuizGameComponent.ɵfac = function QuizGameComponent_Factory(t) { return new (t || QuizGameComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_3__.ActivatedRoute), _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdirectiveInject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_4__.HttpClient), _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdirectiveInject"](src_app_shared_services_users_service__WEBPACK_IMPORTED_MODULE_1__.UserService), _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdirectiveInject"](ngx_toastr__WEBPACK_IMPORTED_MODULE_5__.ToastrService)); };
-QuizGameComponent.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdefineComponent"]({ type: QuizGameComponent, selectors: [["app-quiz-game"]], decls: 37, vars: 4, consts: [[1, "d-flex", "justify-content-between", "h-100", 3, "ngSubmit"], [1, "d-flex", "h-100", "sidebar_color"], [1, "d-flex", "justify-content-between"], [1, "d-flex", "flex-column", "justify-content-between", "mb-5", "w-100"], [1, "d-flex", "flex-column"], [1, "text-center", "blue", "py-3", "mb-4"], [1, "d-flex", "align-items-center", "flex-wrap", "w-100"], ["class", "col-4 d-flex justify-content-center mb-4", 4, "ngFor", "ngForOf"], [1, "d-flex", "justify-content-between", "mb-4"], ["type", "button", 1, "btn", "btn-primary", "ms-2", 3, "click"], ["type", "button", 1, "btn", "btn-primary", "me-2", 3, "click"], ["type", "submit", 1, "btn", "btn-primary", "w-100"], [1, "nav", "nav-pills", "flex-column"], [1, "mb-2"], ["routerLink", "/dashboard", "routerLinkActive", "active", 1, "nav-link", "link-dark"], ["src", "\\assets\\images\\icons\\dashboard_black_24dp.svg", "alt", "image"], ["routerLink", "/settings", "routerLinkActive", "active", 1, "nav-link", "link-dark"], ["src", "\\assets\\images\\icons\\settings_black_24dp.svg", "alt", "image"], [1, "mb-2", 3, "click"], ["routerLink", "/auth/login", 1, "nav-link", "link-dark"], ["src", "\\assets\\images\\icons\\logout_black_24dp.svg", "alt", "image"], [1, "d-flex", "flex-column", "w-100"], [1, "d-flex", "align-items-center", "justify-content-center", "title", "h-50"], [1, "h-50", "m-5"], [3, "ngClass", 4, "ngFor", "ngForOf"], [1, "col-4", "d-flex", "justify-content-center", "mb-4"], [1, "size", 3, "ngClass", "click"], [3, "ngClass"], ["class", "d-flex justify-content-between flex-wrap h-100", 4, "ngIf"], [1, "d-flex", "justify-content-between", "flex-wrap", "h-100"], ["class", "col-5 mb-5", 4, "ngFor", "ngForOf"], [1, "col-5", "mb-5"], ["class", "d-flex justify-content-center align-items-center quiz_card h-100", 3, "ngClass", "click", 4, "ngIf"], ["class", "d-flex justify-content-center align-items-center quiz_card h-100", 3, "ngClass", 4, "ngIf"], [1, "d-flex", "justify-content-center", "align-items-center", "quiz_card", "h-100", 3, "ngClass", "click"], [1, "d-flex", "justify-content-center", "align-items-center", "quiz_card", "h-100", 3, "ngClass"]], template: function QuizGameComponent_Template(rf, ctx) { if (rf & 1) {
+QuizGameComponent.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdefineComponent"]({ type: QuizGameComponent, selectors: [["app-quiz-game"]], decls: 37, vars: 4, consts: [[1, "d-flex", "justify-content-between", "h-100", 3, "ngSubmit"], [1, "d-flex", "h-100", "sidebar_color"], [1, "d-flex", "justify-content-between"], [1, "d-flex", "flex-column", "justify-content-between", "mb-5", "w-100"], [1, "d-flex", "flex-column"], [1, "text-center", "blue", "py-3", "mb-4"], [1, "d-flex", "align-items-center", "flex-wrap", "w-100"], ["class", "col-4 d-flex justify-content-center mb-4", 4, "ngFor", "ngForOf"], [1, "d-flex", "justify-content-between", "mb-4"], ["type", "button", 1, "btn", "btn-primary", "ms-2", 3, "click"], ["type", "button", 1, "btn", "btn-primary", "me-2", 3, "click"], ["type", "submit", 1, "btn", "btn-primary", "w-100"], [1, "nav", "nav-pills", "flex-column"], [1, "mb-2"], ["routerLink", "/dashboard", "routerLinkActive", "active", 1, "nav-link", "link-dark"], ["src", "\\assets\\images\\icons\\dashboard_black_24dp.svg", "alt", "image"], ["routerLink", "/settings", "routerLinkActive", "active", 1, "nav-link", "link-dark"], ["src", "\\assets\\images\\icons\\settings_black_24dp.svg", "alt", "image"], ["routerLink", "/auth/login", 1, "nav-link", "link-dark", 3, "click"], ["src", "\\assets\\images\\icons\\logout_black_24dp.svg", "alt", "image"], [1, "d-flex", "flex-column", "w-100"], [1, "d-flex", "align-items-center", "justify-content-center", "title", "h-50"], [1, "h-50", "m-5"], [3, "ngClass", 4, "ngFor", "ngForOf"], [1, "col-4", "d-flex", "justify-content-center", "mb-4"], [1, "size", 3, "ngClass", "click"], [3, "ngClass"], ["class", "d-flex justify-content-between flex-wrap h-100", 4, "ngIf"], [1, "d-flex", "justify-content-between", "flex-wrap", "h-100"], ["class", "col-5 mb-5", 4, "ngFor", "ngForOf"], [1, "col-5", "mb-5"], ["class", "d-flex justify-content-center align-items-center quiz_card h-100", 3, "ngClass", "click", 4, "ngIf"], ["class", "d-flex justify-content-center align-items-center quiz_card h-100", 3, "ngClass", 4, "ngIf"], [1, "d-flex", "justify-content-center", "align-items-center", "quiz_card", "h-100", 3, "ngClass", "click"], [1, "d-flex", "justify-content-center", "align-items-center", "quiz_card", "h-100", 3, "ngClass"]], template: function QuizGameComponent_Template(rf, ctx) { if (rf & 1) {
         _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](0, "form", 0);
         _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵlistener"]("ngSubmit", function QuizGameComponent_Template_form_ngSubmit_0_listener() { return ctx.onSubmit(); });
         _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](1, "div", 1);
@@ -581,10 +592,10 @@ QuizGameComponent.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_2
         _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵtext"](26, " Settings ");
         _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](27, "li", 18);
-        _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵlistener"]("click", function QuizGameComponent_Template_li_click_27_listener() { return ctx.logOut(); });
-        _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](28, "a", 19);
-        _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelement"](29, "img", 20);
+        _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](27, "li", 13);
+        _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](28, "a", 18);
+        _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵlistener"]("click", function QuizGameComponent_Template_a_click_28_listener() { return ctx.logOut(); });
+        _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelement"](29, "img", 19);
         _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵtext"](30, " Log out ");
         _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementEnd"]();
@@ -592,14 +603,14 @@ QuizGameComponent.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_2
         _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](31, "div", 21);
-        _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](32, "div", 22);
+        _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](31, "div", 20);
+        _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](32, "div", 21);
         _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](33, "div");
         _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵtext"](34);
         _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](35, "div", 23);
-        _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵtemplate"](36, QuizGameComponent_div_36_Template, 2, 4, "div", 24);
+        _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](35, "div", 22);
+        _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵtemplate"](36, QuizGameComponent_div_36_Template, 2, 4, "div", 23);
         _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementEnd"]();
@@ -646,8 +657,8 @@ __webpack_require__.r(__webpack_exports__);
 const _c0 = function (a0, a1) { return { size__error: a0, size__current: a1 }; };
 function QuizQuestionsComponent_div_9_Template(rf, ctx) { if (rf & 1) {
     const _r6 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵgetCurrentView"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "div", 28);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](1, "div", 29);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "div", 27);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](1, "div", 28);
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("click", function QuizQuestionsComponent_div_9_Template_div_click_1_listener() { const restoredCtx = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵrestoreView"](_r6); const i_r4 = restoredCtx.index; const ctx_r5 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"](); return ctx_r5.currentQuiz = i_r4; });
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
@@ -660,7 +671,7 @@ function QuizQuestionsComponent_div_9_Template(rf, ctx) { if (rf & 1) {
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("ngClass", _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵpureFunction2"](2, _c0, ctx_r0.showErrors && quiz_r3.invalid, ctx_r0.currentQuiz == i_r4));
 } }
 function QuizQuestionsComponent_div_13_div_1_option_2_Template(rf, ctx) { if (rf & 1) {
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "option", 34);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "option", 33);
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](1);
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
 } if (rf & 2) {
@@ -672,9 +683,9 @@ function QuizQuestionsComponent_div_13_div_1_option_2_Template(rf, ctx) { if (rf
 function QuizQuestionsComponent_div_13_div_1_Template(rf, ctx) { if (rf & 1) {
     const _r14 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵgetCurrentView"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "div");
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](1, "select", 32);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](1, "select", 31);
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("change", function QuizQuestionsComponent_div_13_div_1_Template_select_change_1_listener() { _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵrestoreView"](_r14); const ctx_r13 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"](); const quiz_r7 = ctx_r13.$implicit; const i_r8 = ctx_r13.index; const ctx_r12 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"](); return ctx_r12.onChangeType(quiz_r7.value, i_r8); });
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtemplate"](2, QuizQuestionsComponent_div_13_div_1_option_2_Template, 2, 2, "option", 33);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtemplate"](2, QuizQuestionsComponent_div_13_div_1_option_2_Template, 2, 2, "option", 32);
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵpipe"](3, "keyvalue");
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
@@ -684,8 +695,8 @@ function QuizQuestionsComponent_div_13_div_1_Template(rf, ctx) { if (rf & 1) {
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("ngForOf", _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵpipeBind1"](3, 1, ctx_r9.questionTypes));
 } }
 function QuizQuestionsComponent_div_13_Template(rf, ctx) { if (rf & 1) {
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "div", 30);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtemplate"](1, QuizQuestionsComponent_div_13_div_1_Template, 4, 3, "div", 31);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "div", 29);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtemplate"](1, QuizQuestionsComponent_div_13_div_1_Template, 4, 3, "div", 30);
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
 } if (rf & 2) {
     const i_r8 = ctx.index;
@@ -697,12 +708,12 @@ function QuizQuestionsComponent_div_13_Template(rf, ctx) { if (rf & 1) {
 function QuizQuestionsComponent_div_41_div_1_div_7_div_1_Template(rf, ctx) { if (rf & 1) {
     const _r25 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵgetCurrentView"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "div", 12);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](1, "div", 42);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](1, "div", 41);
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](2);
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelement"](3, "input", 43);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](4, "div", 44);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](5, "input", 45);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelement"](3, "input", 42);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](4, "div", 43);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](5, "input", 44);
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("change", function QuizQuestionsComponent_div_41_div_1_div_7_div_1_Template_input_change_5_listener() { _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵrestoreView"](_r25); const answer_r19 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"]().$implicit; const quiz_r15 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"](2).$implicit; const ctx_r23 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"](); return ctx_r23.isChecked(quiz_r15.value.answers, answer_r19.value); });
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
@@ -722,12 +733,12 @@ function QuizQuestionsComponent_div_41_div_1_div_7_div_1_Template(rf, ctx) { if 
 function QuizQuestionsComponent_div_41_div_1_div_7_div_2_Template(rf, ctx) { if (rf & 1) {
     const _r30 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵgetCurrentView"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "div", 12);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](1, "div", 42);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](1, "div", 41);
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](2);
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelement"](3, "input", 46);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](4, "div", 44);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](5, "input", 45);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelement"](3, "input", 45);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](4, "div", 43);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](5, "input", 44);
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("change", function QuizQuestionsComponent_div_41_div_1_div_7_div_2_Template_input_change_5_listener() { _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵrestoreView"](_r30); const answer_r19 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"]().$implicit; const quiz_r15 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"](2).$implicit; const ctx_r28 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"](); return ctx_r28.isChecked(quiz_r15.value.answers, answer_r19.value); });
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
@@ -746,9 +757,9 @@ function QuizQuestionsComponent_div_41_div_1_div_7_div_2_Template(rf, ctx) { if 
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("value", "TRUE");
 } }
 function QuizQuestionsComponent_div_41_div_1_div_7_Template(rf, ctx) { if (rf & 1) {
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "div", 30);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtemplate"](1, QuizQuestionsComponent_div_41_div_1_div_7_div_1_Template, 6, 4, "div", 41);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtemplate"](2, QuizQuestionsComponent_div_41_div_1_div_7_div_2_Template, 6, 5, "div", 41);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "div", 29);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtemplate"](1, QuizQuestionsComponent_div_41_div_1_div_7_div_1_Template, 6, 4, "div", 40);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtemplate"](2, QuizQuestionsComponent_div_41_div_1_div_7_div_2_Template, 6, 5, "div", 40);
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
 } if (rf & 2) {
     const j_r20 = ctx.index;
@@ -760,14 +771,14 @@ function QuizQuestionsComponent_div_41_div_1_div_7_Template(rf, ctx) { if (rf & 
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("ngIf", quiz_r15.value.questionType == "TRUE_FALSE");
 } }
 function QuizQuestionsComponent_div_41_div_1_Template(rf, ctx) { if (rf & 1) {
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "div", 36);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](1, "div", 37);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](2, "span", 38);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "div", 35);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](1, "div", 36);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](2, "span", 37);
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](3, " Question ");
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelement"](4, "input", 39);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelement"](4, "textarea", 38);
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](5, "div", 40);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](5, "div", 39);
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](6, "div");
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtemplate"](7, QuizQuestionsComponent_div_41_div_1_div_7_Template, 3, 3, "div", 11);
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
@@ -782,8 +793,8 @@ function QuizQuestionsComponent_div_41_div_1_Template(rf, ctx) { if (rf & 1) {
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("ngForOf", ctx_r17.getAnswers(quiz_r15));
 } }
 function QuizQuestionsComponent_div_41_Template(rf, ctx) { if (rf & 1) {
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "div", 30);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtemplate"](1, QuizQuestionsComponent_div_41_div_1_Template, 8, 3, "div", 35);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "div", 29);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtemplate"](1, QuizQuestionsComponent_div_41_div_1_Template, 8, 3, "div", 34);
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
 } if (rf & 2) {
     const i_r16 = ctx.index;
@@ -901,7 +912,7 @@ class QuizQuestionsComponent {
     }
 }
 QuizQuestionsComponent.ɵfac = function QuizQuestionsComponent_Factory(t) { return new (t || QuizQuestionsComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_3__.ActivatedRoute), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_angular_forms__WEBPACK_IMPORTED_MODULE_2__.FormBuilder), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_4__.HttpClient), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](ngx_toastr__WEBPACK_IMPORTED_MODULE_5__.ToastrService)); };
-QuizQuestionsComponent.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineComponent"]({ type: QuizQuestionsComponent, selectors: [["app-quiz-questions"]], decls: 42, vars: 5, consts: [[1, "d-flex", "justify-content-between", "h-100", 3, "formGroup", "ngSubmit"], [1, "d-flex", "sidebar_color", "h-100"], [1, "d-flex", "justify-content-between"], [1, "d-flex", "flex-column", "justify-content-between", "mb-5", "w-100"], [1, "d-flex", "flex-column"], [1, "text-center", "blue", "py-3", "mb-4"], ["formArrayName", "questions", 1, "sidebar_color"], [1, "d-flex", "align-items-center", "flex-wrap", "w-100", "mb-5"], ["class", "col-4 d-flex justify-content-center mb-4", 3, "formGroupName", 4, "ngFor", "ngForOf"], [1, "text-center", "mb-4"], [1, "mb-1"], [3, "formGroupName", 4, "ngFor", "ngForOf"], [1, "d-flex", "justify-content-between", "mb-4"], ["type", "button", 1, "btn", "btn-primary", "ms-1", 3, "click"], ["type", "button", 1, "btn", "btn-primary", "me-1", 3, "click"], ["type", "submit", 1, "btn", "btn-primary"], [1, "nav", "nav-pills", "flex-column", "sidebar_color"], [1, "mb-2"], ["routerLink", "/dashboard", "routerLinkActive", "active", 1, "nav-link", "link-dark"], ["src", "\\assets\\images\\icons\\dashboard_black_24dp.svg", "alt", "image"], ["routerLink", "/settings", "routerLinkActive", "active", 1, "nav-link", "link-dark"], ["src", "\\assets\\images\\icons\\settings_black_24dp.svg", "alt", "image"], [1, "mb-2", 3, "click"], ["routerLink", "/auth/login", 1, "nav-link", "link-dark"], ["src", "\\assets\\images\\icons\\logout_black_24dp.svg", "alt", "image"], [1, "m-5", "w-100"], [1, "mb-5", "text-center"], ["formArrayName", "questions", 1, "mb-4"], [1, "col-4", "d-flex", "justify-content-center", "mb-4", 3, "formGroupName"], [1, "size", 3, "ngClass", "click"], [3, "formGroupName"], [4, "ngIf"], ["formControlName", "questionType", 1, "w-75", 3, "change"], [3, "value", 4, "ngFor", "ngForOf"], [3, "value"], ["class", "ms-5", 4, "ngIf"], [1, "ms-5"], [1, "d-flex"], [1, "h4", "text__input", "me-4"], ["type", "text", "formControlName", "question", 1, "mb-4"], ["formArrayName", "answers", 1, "d-flex", "flex-column"], ["class", "d-flex justify-content-between mb-4", 4, "ngIf"], [1, "text__input", "me-4"], ["type", "text", "formControlName", "value", 1, "me-4"], [1, "d-flex", "align-items-center"], ["type", "radio", "name", "answer", "formControlName", "answer", 3, "value", "change"], ["type", "text", "formControlName", "value", 1, "me-4", 3, "value"]], template: function QuizQuestionsComponent_Template(rf, ctx) { if (rf & 1) {
+QuizQuestionsComponent.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineComponent"]({ type: QuizQuestionsComponent, selectors: [["app-quiz-questions"]], decls: 42, vars: 5, consts: [[1, "d-flex", "justify-content-between", "h-100", 3, "formGroup", "ngSubmit"], [1, "d-flex", "sidebar_color", "h-100"], [1, "d-flex", "justify-content-between"], [1, "d-flex", "flex-column", "justify-content-between", "mb-5", "w-100"], [1, "d-flex", "flex-column"], [1, "text-center", "blue", "py-3", "mb-4"], ["formArrayName", "questions", 1, "sidebar_color"], [1, "d-flex", "align-items-center", "flex-wrap", "w-100", "mb-5"], ["class", "col-4 d-flex justify-content-center mb-4", 3, "formGroupName", 4, "ngFor", "ngForOf"], [1, "text-center", "mb-4"], [1, "mb-1"], [3, "formGroupName", 4, "ngFor", "ngForOf"], [1, "d-flex", "justify-content-between", "mb-4"], ["type", "button", 1, "btn", "btn-primary", "ms-1", 3, "click"], ["type", "button", 1, "btn", "btn-primary", "me-1", 3, "click"], ["type", "submit", 1, "btn", "btn-primary"], [1, "nav", "nav-pills", "flex-column", "sidebar_color"], [1, "mb-2"], ["routerLink", "/dashboard", "routerLinkActive", "active", 1, "nav-link", "link-dark"], ["src", "\\assets\\images\\icons\\dashboard_black_24dp.svg", "alt", "image"], ["routerLink", "/settings", "routerLinkActive", "active", 1, "nav-link", "link-dark"], ["src", "\\assets\\images\\icons\\settings_black_24dp.svg", "alt", "image"], ["routerLink", "/auth/login", 1, "nav-link", "link-dark", 3, "click"], ["src", "\\assets\\images\\icons\\logout_black_24dp.svg", "alt", "image"], [1, "m-5", "w-100"], [1, "mb-5", "text-center"], ["formArrayName", "questions", 1, "mb-4"], [1, "col-4", "d-flex", "justify-content-center", "mb-4", 3, "formGroupName"], [1, "size", 3, "ngClass", "click"], [3, "formGroupName"], [4, "ngIf"], ["formControlName", "questionType", 1, "w-75", 3, "change"], [3, "value", 4, "ngFor", "ngForOf"], [3, "value"], ["class", "ms-5", 4, "ngIf"], [1, "ms-5"], [1, "d-flex"], [1, "h4", "text__input", "me-4"], ["name", "", "id", "", "cols", "30", "rows", "2", 1, "mb-4", "w-100"], ["formArrayName", "answers", 1, "d-flex", "flex-column"], ["class", "d-flex justify-content-between mb-4", 4, "ngIf"], [1, "text__input", "me-4"], ["type", "text", "formControlName", "value", 1, "me-4", "w-100"], [1, "d-flex", "align-items-center"], ["type", "radio", "name", "answer", "formControlName", "answer", 3, "value", "change"], ["type", "text", "formControlName", "value", 1, "me-4", 3, "value"]], template: function QuizQuestionsComponent_Template(rf, ctx) { if (rf & 1) {
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "form", 0);
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("ngSubmit", function QuizQuestionsComponent_Template_form_ngSubmit_0_listener() { return ctx.onSubmit(); });
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](1, "div", 1);
@@ -940,7 +951,7 @@ QuizQuestionsComponent.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MOD
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](22, "li", 17);
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](23, "a", 18);
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelement"](24, "img", 19);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](25, " Dashboard ");
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](25, " Quit the quiz ");
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](26, "li", 17);
@@ -949,10 +960,10 @@ QuizQuestionsComponent.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MOD
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](29, " Settings ");
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](30, "li", 22);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("click", function QuizQuestionsComponent_Template_li_click_30_listener() { return ctx.logOut(); });
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](31, "a", 23);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelement"](32, "img", 24);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](30, "li", 17);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](31, "a", 22);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("click", function QuizQuestionsComponent_Template_a_click_31_listener() { return ctx.logOut(); });
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelement"](32, "img", 23);
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](33, " Log out ");
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
@@ -960,14 +971,14 @@ QuizQuestionsComponent.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MOD
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](34, "div", 25);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](35, "h1", 26);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](34, "div", 24);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](35, "h1", 25);
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](36, "Create quiz");
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](37, "div", 2);
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](38, "div");
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](39, "div");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](40, "div", 27);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](40, "div", 26);
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtemplate"](41, QuizQuestionsComponent_div_41_Template, 2, 2, "div", 11);
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
@@ -985,7 +996,7 @@ QuizQuestionsComponent.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MOD
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("ngForOf", ctx.questionArray.controls);
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](28);
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("ngForOf", ctx.questionArray.controls);
-    } }, directives: [_angular_forms__WEBPACK_IMPORTED_MODULE_2__["ɵNgNoValidate"], _angular_forms__WEBPACK_IMPORTED_MODULE_2__.NgControlStatusGroup, _angular_forms__WEBPACK_IMPORTED_MODULE_2__.FormGroupDirective, _angular_forms__WEBPACK_IMPORTED_MODULE_2__.FormArrayName, _angular_common__WEBPACK_IMPORTED_MODULE_6__.NgForOf, _angular_router__WEBPACK_IMPORTED_MODULE_3__.RouterLinkWithHref, _angular_router__WEBPACK_IMPORTED_MODULE_3__.RouterLinkActive, _angular_forms__WEBPACK_IMPORTED_MODULE_2__.FormGroupName, _angular_common__WEBPACK_IMPORTED_MODULE_6__.NgClass, _angular_common__WEBPACK_IMPORTED_MODULE_6__.NgIf, _angular_forms__WEBPACK_IMPORTED_MODULE_2__.SelectControlValueAccessor, _angular_forms__WEBPACK_IMPORTED_MODULE_2__.NgControlStatus, _angular_forms__WEBPACK_IMPORTED_MODULE_2__.FormControlName, _angular_forms__WEBPACK_IMPORTED_MODULE_2__.NgSelectOption, _angular_forms__WEBPACK_IMPORTED_MODULE_2__["ɵNgSelectMultipleOption"], _angular_forms__WEBPACK_IMPORTED_MODULE_2__.DefaultValueAccessor, _angular_forms__WEBPACK_IMPORTED_MODULE_2__.RadioControlValueAccessor], pipes: [_angular_common__WEBPACK_IMPORTED_MODULE_6__.KeyValuePipe], styles: [".blue[_ngcontent-%COMP%] {\n  background-color: #228AC7;\n}\n\n.sidebar_color[_ngcontent-%COMP%] {\n  width: 180px;\n  background-color: #F8F8F8;\n}\n\n.return[_ngcontent-%COMP%] {\n  background-color: #E2E4E5;\n  color: #000000;\n  box-shadow: 0px 4px 4px #0101015c;\n  font-weight: bold;\n}\n\n.size[_ngcontent-%COMP%] {\n  border-radius: 50%;\n  border: 1px solid black;\n  width: 30px;\n  height: 30px;\n  cursor: pointer;\n  outline: none;\n}\n\nselect[_ngcontent-%COMP%] {\n  background-color: #F6FAF8;\n}\n\n[_nghost-%COMP%] {\n  width: 100%;\n  height: 100%;\n}\n\n.text__input[_ngcontent-%COMP%] {\n  text-align: end;\n  flex: 0 0 100px;\n}\n\n.size__error[_ngcontent-%COMP%] {\n  background-color: #ff0000f8;\n}\n\n.size__current[_ngcontent-%COMP%] {\n  background-color: #1075e9;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInF1aXotcXVlc3Rpb25zLmNvbXBvbmVudC5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUNBO0VBQ0UseUJBQUE7QUFBRjs7QUFHQTtFQUNFLFlBQUE7RUFDQSx5QkFBQTtBQUFGOztBQUdBO0VBQ0UseUJBQUE7RUFDQSxjQUFBO0VBQ0EsaUNBQUE7RUFDQSxpQkFBQTtBQUFGOztBQUdBO0VBQ0Usa0JBQUE7RUFDQSx1QkFBQTtFQUNBLFdBQUE7RUFDQSxZQUFBO0VBQ0EsZUFBQTtFQUNBLGFBQUE7QUFBRjs7QUFHQTtFQUNFLHlCQUFBO0FBQUY7O0FBR0E7RUFDRSxXQUFBO0VBQ0EsWUFBQTtBQUFGOztBQUdBO0VBQ0UsZUFBQTtFQUNBLGVBQUE7QUFBRjs7QUFHQTtFQUNFLDJCQUFBO0FBQUY7O0FBR0E7RUFDRSx5QkFBQTtBQUFGIiwiZmlsZSI6InF1aXotcXVlc3Rpb25zLmNvbXBvbmVudC5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsiLy8gc2lkZWJhclxyXG4uYmx1ZSB7XHJcbiAgYmFja2dyb3VuZC1jb2xvcjogIzIyOEFDNztcclxufVxyXG5cclxuLnNpZGViYXJfY29sb3Ige1xyXG4gIHdpZHRoOiAxODBweDtcclxuICBiYWNrZ3JvdW5kLWNvbG9yOiAjRjhGOEY4O1xyXG59XHJcblxyXG4ucmV0dXJuIHtcclxuICBiYWNrZ3JvdW5kLWNvbG9yOiAjRTJFNEU1O1xyXG4gIGNvbG9yOiAjMDAwMDAwO1xyXG4gIGJveC1zaGFkb3c6IDBweCA0cHggNHB4ICMwMTAxMDE1YztcclxuICBmb250LXdlaWdodDogYm9sZDsgXHJcbn1cclxuXHJcbi5zaXplIHtcclxuICBib3JkZXItcmFkaXVzOiA1MCU7XHJcbiAgYm9yZGVyOiAxcHggc29saWQgYmxhY2s7XHJcbiAgd2lkdGg6IDMwcHg7XHJcbiAgaGVpZ2h0OiAzMHB4O1xyXG4gIGN1cnNvcjogcG9pbnRlcjtcclxuICBvdXRsaW5lOiBub25lO1xyXG59XHJcblxyXG5zZWxlY3Qge1xyXG4gIGJhY2tncm91bmQtY29sb3I6ICNGNkZBRjg7XHJcbn1cclxuLy8gXHJcbjpob3N0IHtcclxuICB3aWR0aDogMTAwJTtcclxuICBoZWlnaHQ6IDEwMCU7XHJcbn1cclxuXHJcbi50ZXh0X19pbnB1dCB7XHJcbiAgdGV4dC1hbGlnbjogZW5kO1xyXG4gIGZsZXg6IDAgMCAxMDBweDtcclxufVxyXG5cclxuLnNpemVfX2Vycm9yIHtcclxuICBiYWNrZ3JvdW5kLWNvbG9yOiAjZmYwMDAwZjg7XHJcbn1cclxuXHJcbi5zaXplX19jdXJyZW50IHtcclxuICBiYWNrZ3JvdW5kLWNvbG9yOiAjMTA3NWU5O1xyXG59XHJcblxyXG4iXX0= */"] });
+    } }, directives: [_angular_forms__WEBPACK_IMPORTED_MODULE_2__["ɵNgNoValidate"], _angular_forms__WEBPACK_IMPORTED_MODULE_2__.NgControlStatusGroup, _angular_forms__WEBPACK_IMPORTED_MODULE_2__.FormGroupDirective, _angular_forms__WEBPACK_IMPORTED_MODULE_2__.FormArrayName, _angular_common__WEBPACK_IMPORTED_MODULE_6__.NgForOf, _angular_router__WEBPACK_IMPORTED_MODULE_3__.RouterLinkWithHref, _angular_router__WEBPACK_IMPORTED_MODULE_3__.RouterLinkActive, _angular_forms__WEBPACK_IMPORTED_MODULE_2__.FormGroupName, _angular_common__WEBPACK_IMPORTED_MODULE_6__.NgClass, _angular_common__WEBPACK_IMPORTED_MODULE_6__.NgIf, _angular_forms__WEBPACK_IMPORTED_MODULE_2__.SelectControlValueAccessor, _angular_forms__WEBPACK_IMPORTED_MODULE_2__.NgControlStatus, _angular_forms__WEBPACK_IMPORTED_MODULE_2__.FormControlName, _angular_forms__WEBPACK_IMPORTED_MODULE_2__.NgSelectOption, _angular_forms__WEBPACK_IMPORTED_MODULE_2__["ɵNgSelectMultipleOption"], _angular_forms__WEBPACK_IMPORTED_MODULE_2__.DefaultValueAccessor, _angular_forms__WEBPACK_IMPORTED_MODULE_2__.RadioControlValueAccessor], pipes: [_angular_common__WEBPACK_IMPORTED_MODULE_6__.KeyValuePipe], styles: [".blue[_ngcontent-%COMP%] {\n  background-color: #228AC7;\n}\n\n.sidebar_color[_ngcontent-%COMP%] {\n  width: 180px;\n  background-color: #F8F8F8;\n}\n\n.return[_ngcontent-%COMP%] {\n  background-color: #E2E4E5;\n  color: #000000;\n  box-shadow: 0px 4px 4px #0101015c;\n  font-weight: bold;\n}\n\n.size[_ngcontent-%COMP%] {\n  border-radius: 50%;\n  border: 1px solid black;\n  width: 30px;\n  height: 30px;\n  cursor: pointer;\n  outline: none;\n}\n\nselect[_ngcontent-%COMP%] {\n  background-color: #F6FAF8;\n}\n\n[_nghost-%COMP%] {\n  width: 100%;\n  height: 100%;\n}\n\n.text__input[_ngcontent-%COMP%] {\n  text-align: end;\n  flex: 0 0 140px;\n}\n\n.size__error[_ngcontent-%COMP%] {\n  background-color: #ff0000f8;\n}\n\n.size__current[_ngcontent-%COMP%] {\n  background-color: #1075e9;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInF1aXotcXVlc3Rpb25zLmNvbXBvbmVudC5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUNBO0VBQ0UseUJBQUE7QUFBRjs7QUFHQTtFQUNFLFlBQUE7RUFDQSx5QkFBQTtBQUFGOztBQUdBO0VBQ0UseUJBQUE7RUFDQSxjQUFBO0VBQ0EsaUNBQUE7RUFDQSxpQkFBQTtBQUFGOztBQUdBO0VBQ0Usa0JBQUE7RUFDQSx1QkFBQTtFQUNBLFdBQUE7RUFDQSxZQUFBO0VBQ0EsZUFBQTtFQUNBLGFBQUE7QUFBRjs7QUFHQTtFQUNFLHlCQUFBO0FBQUY7O0FBR0E7RUFDRSxXQUFBO0VBQ0EsWUFBQTtBQUFGOztBQUdBO0VBQ0UsZUFBQTtFQUNBLGVBQUE7QUFBRjs7QUFHQTtFQUNFLDJCQUFBO0FBQUY7O0FBR0E7RUFDRSx5QkFBQTtBQUFGIiwiZmlsZSI6InF1aXotcXVlc3Rpb25zLmNvbXBvbmVudC5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsiLy8gc2lkZWJhclxyXG4uYmx1ZSB7XHJcbiAgYmFja2dyb3VuZC1jb2xvcjogIzIyOEFDNztcclxufVxyXG5cclxuLnNpZGViYXJfY29sb3Ige1xyXG4gIHdpZHRoOiAxODBweDtcclxuICBiYWNrZ3JvdW5kLWNvbG9yOiAjRjhGOEY4O1xyXG59XHJcblxyXG4ucmV0dXJuIHtcclxuICBiYWNrZ3JvdW5kLWNvbG9yOiAjRTJFNEU1O1xyXG4gIGNvbG9yOiAjMDAwMDAwO1xyXG4gIGJveC1zaGFkb3c6IDBweCA0cHggNHB4ICMwMTAxMDE1YztcclxuICBmb250LXdlaWdodDogYm9sZDsgXHJcbn1cclxuXHJcbi5zaXplIHtcclxuICBib3JkZXItcmFkaXVzOiA1MCU7XHJcbiAgYm9yZGVyOiAxcHggc29saWQgYmxhY2s7XHJcbiAgd2lkdGg6IDMwcHg7XHJcbiAgaGVpZ2h0OiAzMHB4O1xyXG4gIGN1cnNvcjogcG9pbnRlcjtcclxuICBvdXRsaW5lOiBub25lO1xyXG59XHJcblxyXG5zZWxlY3Qge1xyXG4gIGJhY2tncm91bmQtY29sb3I6ICNGNkZBRjg7XHJcbn1cclxuLy8gXHJcbjpob3N0IHtcclxuICB3aWR0aDogMTAwJTtcclxuICBoZWlnaHQ6IDEwMCU7XHJcbn1cclxuXHJcbi50ZXh0X19pbnB1dCB7XHJcbiAgdGV4dC1hbGlnbjogZW5kO1xyXG4gIGZsZXg6IDAgMCAxNDBweDtcclxufVxyXG5cclxuLnNpemVfX2Vycm9yIHtcclxuICBiYWNrZ3JvdW5kLWNvbG9yOiAjZmYwMDAwZjg7XHJcbn1cclxuXHJcbi5zaXplX19jdXJyZW50IHtcclxuICBiYWNrZ3JvdW5kLWNvbG9yOiAjMTA3NWU5O1xyXG59XHJcblxyXG4iXX0= */"] });
 
 
 /***/ }),
@@ -1014,14 +1025,10 @@ class QuizGuard {
         this.data = false;
     }
     canActivate() {
-        // if(!this.authService.isAuthenticated) {
-        //   this.router.navigateByUrl('/auth/login');
-        //   return false;
-        // }
-        // if (!this.data) {
-        //   this.router.navigateByUrl('/quiz');
-        //   return false;
-        // }
+        if (!this.authService.isAuthenticated()) {
+            this.router.navigateByUrl('/auth/login');
+            return false;
+        }
         return true;
     }
 }

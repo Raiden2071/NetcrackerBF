@@ -28,11 +28,9 @@ export class QuizComponent implements OnInit {
     this.retrieveFilterChanges();
   }
 
-  onSelect(type: string) {   
-    console.log(type);
-     
-    this.http.get(`/quiz/filter?page=1&filter=${type}`).subscribe((v) => console.log(v))
-  }
+  // onSelect(type: string) {        
+  //   this.http.get(`/quiz/filter?page=1&filter=${type}`).subscribe((v) => console.log(v))
+  // }
 
   retrieveFilterChanges() {
     this.searchProject.valueChanges.pipe(

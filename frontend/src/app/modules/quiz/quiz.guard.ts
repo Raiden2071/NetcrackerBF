@@ -16,10 +16,6 @@ export class QuizGuard implements CanActivate {
       this.router.navigateByUrl('/auth/login');
       return false;
     }
-    if (!this.data) {
-      this.router.navigateByUrl('/quiz');
-      return false;
-    }
     return true;
   }
 

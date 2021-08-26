@@ -198,7 +198,7 @@ class QuizComponent {
         this.router = router;
         this.http = http;
         this.searchProject = new _angular_forms__WEBPACK_IMPORTED_MODULE_3__.FormControl('');
-        this.quizType = src_app_models_quiz__WEBPACK_IMPORTED_MODULE_0__.QuizType;
+        this.quizType = src_app_models_quiz__WEBPACK_IMPORTED_MODULE_0__.Filter;
         this.page = 1;
         this.totalElements = 6;
     }
@@ -207,7 +207,8 @@ class QuizComponent {
         this.retrieveFilterChanges();
     }
     onSelect(type) {
-        this.http.get(`quiz/filter?filter=SCIENCE`).subscribe((v) => console.log(v));
+        console.log(type);
+        this.http.get(`/quiz/filter?page=1&filter=${type}`).subscribe((v) => console.log(v));
     }
     retrieveFilterChanges() {
         this.searchProject.valueChanges.pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_4__.debounceTime)(300), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_5__.tap)(() => this.page = 1)).subscribe(() => this.getQuizzes());

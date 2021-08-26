@@ -28,10 +28,8 @@ export class AnnouncmentComponent implements OnInit {
     this.retrieveFilterChanges();    
   }
 
-  // announcement/all?page=1
-// announcement/search?page=${this.page}&title=${this.searchProject.value}
   getAnnouncement(): void {
-    this.http.get<Announcement>(`announcement/all?page=1`).subscribe((announcement: any) => {
+    this.http.get<Announcement>(`announcement/all?page=${this.page}`).subscribe((announcement: any) => {
       this.announcements = announcement.content
       this.totalElements = announcement.totalElements
     });
@@ -44,10 +42,10 @@ export class AnnouncmentComponent implements OnInit {
     });
   }
 
-  retrieveFilterChanges() {
+  retrieveFilterChanges() {    
     this.searchProject.valueChanges.pipe(
       debounceTime(300),
-      tap(() => this.page=1)).subscribe((searchValue) => searchValue == '' ? this.getAnnouncement() :this.getSearchAnnouncement());
+      tap(() => this.page=1)).subscribe((searchValue) => searchValue == '' ? this.getAnnouncement() : this.getSearchAnnouncement());
   }
 
   onLike(annoucement) {
