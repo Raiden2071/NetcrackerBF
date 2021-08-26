@@ -123,8 +123,8 @@ export class QuizQuestionsComponent implements OnInit {
     console.log(data);
     this.http.post('quiz/', data).subscribe(() => {
       this.toastr.success('Congratulations, you have successfully created a quiz.','')
-    },err => {
-      this.toastr.error(err.message,'')
+    },err => {      
+      this.toastr.error(err.error.message,'')
     });
     }
     else {

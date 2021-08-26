@@ -35,13 +35,12 @@ export class RecoveryComponent implements OnInit {
     this.router.navigateByUrl('/auth/login')
   }
 
-  onSubmit(): void {
-    console.log(this.recoveryForm);
-    
+  onSubmit(): void {    
     if(this.recoveryForm.valid) {
       this.toastr.info(`We have sent a link to restore access to your account to the address ${this.recoveryForm.value.email}.`, '', {
         timeOut: 2000,
-      });    
+      });  
+      this.activeModal.close();  
       if(!this.isModal) {
         this.router.navigateByUrl('/auth/login')
       }

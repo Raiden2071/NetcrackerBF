@@ -89,7 +89,7 @@
                   <!-- определяем какой будет отображаться questionType -->
                   <!-- <input type="text" formControlName="question" class="mb-4"
                     [class.border-danger]="quiz.invalid && showErrors ? true : false"> -->
-                    <textarea cols="50" rows="3" class="mb-4 form-control w-100"
+                    <textarea cols="50" rows="3" formControlName="question" class="mb-4 form-control w-100"
                     [class.border-danger]="quiz.invalid && showErrors ? true : false"
                     ></textarea>
                 </div>
