@@ -18,7 +18,7 @@ public interface GameService {
     int NUMBER_OF_USER_ANSWERS = 10;
 
     void setTestConnection() throws DAOConfigException;
-    Quiz sendGameQuiz(BigInteger quizId) throws DAOLogicException, QuizDoesNotExistException, QuizException, QuestionDoesNotExistException, AnswerDoesNotExistException;
+    Quiz sendGameQuiz(String quizTitle) throws DAOLogicException, QuizDoesNotExistException, QuizException, QuestionDoesNotExistException, AnswerDoesNotExistException;
     List<QuestionImpl> validateAnswers(Quiz quiz, User user, List<AnswerImpl> answers) throws QuestionDoesNotExistException, DAOLogicException, AnswerDoesNotExistException, QuizDoesNotExistException, QuizException;
     void setIsFavorite(User user, QuizAccomplishedImpl quizAccomplished) throws DAOLogicException;
 }

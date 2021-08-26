@@ -195,9 +195,9 @@ public class QuizController implements ApiAddresses {
     }
 
     @GetMapping(API_QUIZ_GAME)
-    public Quiz quizGame(@PathVariable BigInteger id) {
+    public Quiz quizGame(@PathVariable String title) {
         try {
-            return gameService.sendGameQuiz(id);
+            return gameService.sendGameQuiz(title);
         } catch (DAOLogicException e) {
             log.error(DAO_LOGIC_EXCEPTION + e.getMessage());
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, properties.getProperty(DAO_LOGIC_EXCEPTION));
