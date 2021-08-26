@@ -178,7 +178,7 @@ public class QuizController implements ApiAddresses {
     public Page<Quiz> showAllFilterQuizzes(@RequestParam("page") int pageNumber,
                                            @RequestParam Filter filter) {
         try {
-            return Filter.getQuzziesByFilter(pageNumber, filter, quizService, userService);
+            return Filter.getQuizzesByFilter(pageNumber, filter, quizService, userService);
         } catch (UserDoesNotExistException e) {
             log.error(USERS_DOESNT_EXIT + e.getMessage());
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, properties.getProperty(USER_EXCEPTION));
