@@ -16,7 +16,7 @@ export class AnnouncmentComponent implements OnInit {
   announcements: Announcement;
   searchProject: FormControl = new FormControl('');
   page = 1;
-  totalElements = 8;
+  totalElements = 6;
   
   constructor(
     private modalService: NgbModal,
@@ -28,17 +28,24 @@ export class AnnouncmentComponent implements OnInit {
     this.retrieveFilterChanges();    
   }
 
-  getAnnouncement() {
+  getAnnouncement(): void {
+    this.http.get<Announcement>(`announcement/all?page=${this.page}`).subscribe((announcement: any) => {
+      this.announcements = announcement.content
+      this.totalElements = announcement.totalElements
+    });
+  }
+  
+  getSearchAnnouncement():void {
     this.http.get<Announcement>(`announcement/search?page=${this.page}&title=${this.searchProject.value}`).subscribe((announcement: any) => {
       this.announcements = announcement.content
       this.totalElements = announcement.totalElements
     });
   }
 
-  retrieveFilterChanges() {
+  retrieveFilterChanges() {    
     this.searchProject.valueChanges.pipe(
       debounceTime(300),
-      tap(() => this.page=1)).subscribe(() => this.getAnnouncement());
+      tap(() => this.page=1)).subscribe((searchValue) => searchValue == '' ? this.getAnnouncement() : this.getSearchAnnouncement());
   }
 
   onLike(annoucement) {

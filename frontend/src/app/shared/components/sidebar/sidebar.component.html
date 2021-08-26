@@ -8,12 +8,12 @@
         </div>
 
         <ul class="nav nav-pills flex-column mb-auto">
-          <li class="mb-2">
-            <a routerLink="/profile" routerLinkActive="active" class="nav-link link-dark">
+          <!-- <li class="mb-2">
+            <a routerLink="/dashboard" routerLinkActive="active" class="nav-link link-dark">
               <img src="\assets\images\icons\account_circle_black_24dp.svg" alt="image">
-              Profile
+              Dashboard
             </a>
-          </li>
+          </li> -->
 
           <li class="mb-2">
             <a routerLink="/dashboard" routerLinkActive="active" class="nav-link link-dark">
@@ -25,7 +25,7 @@
           <li class="mb-2">
             <a routerLink="/announcement" routerLinkActive="active" class="nav-link link-dark">
               <img src="\assets\images\icons\info_black_24dp.svg" alt="image">
-              Announcment
+              Announcement
             </a>
           </li>
 
@@ -46,8 +46,8 @@
           </a>
         </li>
 
-        <li class="mb-2" (click)="logOut()">
-          <a routerLink="/auth/login" class="nav-link link-dark">
+        <li class="mb-2">
+          <a routerLink="/auth/login" (click)="logOut()" class="nav-link link-dark">
             <img src="\assets\images\icons\logout_black_24dp.svg" alt="image">
             Log out
           </a>

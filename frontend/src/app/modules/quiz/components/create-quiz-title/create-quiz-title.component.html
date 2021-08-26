@@ -1,7 +1,7 @@
 <!--   -->
 <form [formGroup]="createQuizForm" (ngSubmit)="onSubmit()" class="m-5">
   <h1 class="mb-4 text-center">Create quiz</h1>
-  <div class="d-flex justify-content-between">
+  <div class="d-flex">
     <!-- forms + inputs -->
     <div>
       <!-- title -->
@@ -40,7 +40,7 @@
       <div class="d-flex mb-4">
         <span class="text__input me-4">
         </span>
-        <span *ngIf="showErrors" class="text-danger">Пожалуйста, заполните все поля.</span>
+        <span *ngIf="showErrors" class="text-danger">Please fill in all fields.</span>
       </div>
       <!-- button -->
       <div class="d-flex">

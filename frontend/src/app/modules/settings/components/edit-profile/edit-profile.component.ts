@@ -25,14 +25,14 @@ export class EditProfileComponent implements OnInit {
       firstName:   ['', [Validators.required]], 
       lastName:    ['', [Validators.required]],
       email:       ['', [Validators.email, Validators.required]],
-      description: ['', [Validators.required]]
+      // description: ['', [Validators.required]]
     });   
     setTimeout(() => {
       this.editForm = this.fb.group({
         firstName:   [this.user?.firstName,   [Validators.required]], 
         lastName:    [this.user?.lastName,    [Validators.required]],
         email:       [this.user?.email,       [Validators.email, Validators.required]],
-        description: [this.user?.description, [Validators.required]]
+        // description: [this.user?.description, [Validators.required]]
       });
     }, 500);
   }
@@ -42,12 +42,16 @@ export class EditProfileComponent implements OnInit {
   }
 
   onSubmit() {
-    // if(this.editForm.valid) {
-    this.userService.editOne(this.user.id, this.editForm.value).subscribe(() => {
+    if(this.editForm.valid) {
+      let data = {
+        firstName: this.editForm.value.firstName,
+        lastName: this.editForm.value.lastName,
+      }
+    this.userService.editOne(this.user.id, data).subscribe(() => {
       this.userService.userInfo$.subscribe(user => this.user = user);
       this.userService.subject$.next(1);
     });
-    // }
+    }
   }
 
 }

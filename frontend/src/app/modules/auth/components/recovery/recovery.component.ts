@@ -39,7 +39,7 @@ export class RecoveryComponent implements OnInit {
     console.log(this.recoveryForm);
     
     if(this.recoveryForm.valid) {
-      this.toastr.info(`Мы отправили ссылку для восстановления доступа к вашему аккаунту на адрес ${this.recoveryForm.value.email}.`, '', {
+      this.toastr.info(`We have sent a link to restore access to your account to the address ${this.recoveryForm.value.email}.`, '', {
         timeOut: 2000,
       });    
       if(!this.isModal) {

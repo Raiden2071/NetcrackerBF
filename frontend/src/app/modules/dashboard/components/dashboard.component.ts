@@ -28,7 +28,7 @@ export class DashboardComponent implements OnInit {
     this.userService.userInfo$.pipe(
       tap(user => this.user = user),
       switchMap(({id}) => this.http.get<Dashboard>(`dashboard/${id}`))
-    ).subscribe(dashboard => this.dashboard = dashboard);
+    ).subscribe(dashboard => console.log(this.dashboard = dashboard));
   }
 
   onLike(annoucement) {

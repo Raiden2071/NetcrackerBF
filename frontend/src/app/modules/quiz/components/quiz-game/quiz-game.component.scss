@@ -3,6 +3,11 @@
   background-color: #228AC7;
 }
 
+.sidebar_color {
+  width: 180px;
+  background-color: #F8F8F8;
+}
+
 .return {
   background-color: #E2E4E5;
   color: #000000;
@@ -33,6 +38,32 @@ select {
   flex: 0 0 100px;
 }
 
+
+
+// 
+// 
+// 
+.title {
+  background-color: #A9D5DF;
+  font-size: 40px;
+}
+
+.quiz_card {
+  border: 1px solid black;
+  font-size: 40px;
+  box-shadow: 4px 6px 7px 5px #ced3d6;
+  border-radius: 25px;
+  background-color: #A9D5DF;
+}
+
+.heigth {
+  height: 100% !important;
+}
+
+.green {
+  background-color: green;
+}
+
 .size__error {
   background-color: #ff0000f8;
 }
@@ -44,23 +75,3 @@ select {
 .size__color {
   background-color: #1075e9;
 }
-
-// 
-// 
-// 
-.title {
-  background-color: #A9D5DF;
-}
-
-.quiz_card {
-  border: 1px solid black;
-}
-
-.heigth {
-  height: 100% !important;
-}
-
-.green {
-  background-color: green;
-}
-

@@ -47,15 +47,8 @@ export class QuizGameComponent implements OnInit {
   }
 
   changeAnswer(index, quiz): void {
-    let bool = quiz.every(v => v.answer == "FALSE"); // true если все false
-    if (bool || quiz[index].answer==="TRUE") {
-      if(quiz[index].answer == "TRUE") {
-        quiz[index].answer = "FALSE";
-      }
-      else if(quiz[index].answer == "FALSE") {
-        quiz[index].answer = "TRUE";
-      }
-    }
+    quiz.forEach(v => v.answer = "FALSE");
+    quiz[index].answer = "TRUE";
   }
 
   getUser(): void {
@@ -72,6 +65,11 @@ export class QuizGameComponent implements OnInit {
     this.showErrors = false;    
   }
 
+  click(aaa) {
+    console.log(aaa);
+    
+  }
+
   onSubmit(): void {    
     this.correctAnswer = this.quizData.questions.map(quiz => {
       let firstAnswer = quiz.answers.filter((quiz: any) => quiz.answer == "TRUE")
@@ -79,16 +77,14 @@ export class QuizGameComponent implements OnInit {
     });
 
     let searchError = this.correctAnswer.every(data => data?.answer=="TRUE"); //проверка на пустоту    
-    console.log(searchError);
 
     if (searchError) {
       let data = Object.assign({ user: this.user }, { quizTitle: this.quizTitle }, { answers: this.correctAnswer });
-      
       this.http.post('quiz/game/end', data).subscribe(v => {  
         console.log(v);
         (this.quizData.questions as any) = v;        
         this.quizPassed = true;
-        this.toastr.success('Поздравляю, вы успешно создали квиз','')
+        this.toastr.success('Congratulations, you have successfully passed a quiz.','')
       });
     }
     else {      

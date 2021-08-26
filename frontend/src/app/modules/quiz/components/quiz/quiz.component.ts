@@ -2,8 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
-import { debounceTime, switchMap, tap } from 'rxjs/operators';
-import { Quiz, QuizType } from 'src/app/models/quiz';
+import { debounceTime, tap } from 'rxjs/operators';
+import { Filter, Quiz } from 'src/app/models/quiz';
 
 @Component({
   selector: 'app-quiz',
@@ -14,7 +14,7 @@ export class QuizComponent implements OnInit {
 
   quizzes: Quiz[];
   searchProject: FormControl = new FormControl('');
-  quizType = QuizType;
+  quizType = Filter;
   page = 1;
   totalElements = 6;
 
@@ -23,14 +23,14 @@ export class QuizComponent implements OnInit {
     private http: HttpClient
   ) { }
 
-  ngOnInit(): void {    
+  ngOnInit(): void {        
     this.getQuizzes();
     this.retrieveFilterChanges();
   }
 
-  onSelect(type: string) {
-    this.http.get(`quiz/filter?filter=SCIENCE`).subscribe((v) => console.log(v))
-  }
+  // onSelect(type: string) {        
+  //   this.http.get(`/quiz/filter?page=1&filter=${type}`).subscribe((v) => console.log(v))
+  // }
 
   retrieveFilterChanges() {
     this.searchProject.valueChanges.pipe(
