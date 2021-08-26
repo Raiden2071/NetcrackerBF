@@ -215,7 +215,7 @@ public class QuizControllerTest {
         BigInteger id = BigInteger.ONE;
         String quizName = "NewQuiz";
 
-        when(gameService.sendGameQuiz(id))
+        when(gameService.sendGameQuiz(quizName))
                 .thenReturn(QuizImpl.QuizBuilder()
                         .setId(id)
                         .setTitle(quizName)
@@ -226,7 +226,7 @@ public class QuizControllerTest {
 
         this.mockMvc
                 .perform(MockMvcRequestBuilders
-                        .get("/quiz/game/{id}", id)
+                        .get("/quiz/game/{title}", quizName)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(id))
