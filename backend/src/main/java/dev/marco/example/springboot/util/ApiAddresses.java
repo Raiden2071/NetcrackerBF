@@ -22,7 +22,7 @@ public interface ApiAddresses {
   String API_UPDATE_QUIZ = "/{id}";
   String API_DELETE_QUIZ = "/{id}";
   String API_SHOW_ALL_FILTER_QUIZZES = "/filter";
-  String API_QUIZ_GAME = "/game/{id}";
+  String API_QUIZ_GAME = "/game/{title}";
   String API_FINISH_QUIZ = "/game/end";
   String API_LIKE_QUIZ = "/like/{id}";
 
