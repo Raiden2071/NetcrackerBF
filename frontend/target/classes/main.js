@@ -904,7 +904,7 @@ class QuizQuestionsComponent {
             this.http.post('quiz/', data).subscribe(() => {
                 this.toastr.success('Congratulations, you have successfully created a quiz.', '');
             }, err => {
-                this.toastr.error(err.message, '');
+                this.toastr.error(err.error.message, '');
             });
         }
         else {
