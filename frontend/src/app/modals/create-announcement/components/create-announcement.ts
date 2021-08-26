@@ -41,7 +41,7 @@ export class CreateAnnouncementComponent implements OnInit {
       this.activeModal.close(this.annoucementForm.value);
     }
     else {
-      this.toastr.error("Пожалуйста, заполните все поля.", '', {
+      this.toastr.error("Please fill in all fields.", '', {
         timeOut: 2000,
       });    
       this.showErrors = true;

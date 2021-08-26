@@ -47,15 +47,8 @@ export class QuizGameComponent implements OnInit {
   }
 
   changeAnswer(index, quiz): void {
-    let bool = quiz.every(v => v.answer == "FALSE"); // true если все false
-    if (bool || quiz[index].answer==="TRUE") {
-      if(quiz[index].answer == "TRUE") {
-        quiz[index].answer = "FALSE";
-      }
-      else if(quiz[index].answer == "FALSE") {
-        quiz[index].answer = "TRUE";
-      }
-    }
+    quiz.forEach(v => v.answer = "FALSE");
+    quiz[index].answer = "TRUE";
   }
 
   getUser(): void {
@@ -88,7 +81,7 @@ export class QuizGameComponent implements OnInit {
         console.log(v);
         (this.quizData.questions as any) = v;        
         this.quizPassed = true;
-        this.toastr.success('Поздравляю, вы успешно создали квиз','')
+        this.toastr.success('Congratulations, you have successfully passed a quiz.','')
       });
     }
     else {      

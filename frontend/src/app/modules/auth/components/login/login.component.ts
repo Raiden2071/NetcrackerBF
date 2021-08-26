@@ -47,7 +47,7 @@ export class LoginComponent implements OnInit {
       };
       this.authService.login(data, data.remember).subscribe((userData) => {
         this.userId = userData.user.id;
-        this.router.navigateByUrl('/profile')
+        this.router.navigateByUrl('/dashboard')
       },err => {
         this.showErrors = true;
       });

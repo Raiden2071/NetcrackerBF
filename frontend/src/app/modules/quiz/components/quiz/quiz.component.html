@@ -4,7 +4,7 @@
   <div class="d-flex justify-content-between">
     <div class="col-xl-4 col-6">
       <div class="mb-5 input-group input-group-merge">
-        <input type="search" class="form-control" placeholder="Найти проект" [formControl]="searchProject">
+        <input type="search" class="form-control" placeholder="Find a quiz" [formControl]="searchProject">
         <div class="input-group-append">
           <span class="input-group-text">
             <img src="/assets/images/icons/search_black_24dp.svg" alt="search" class="svg">
@@ -27,11 +27,11 @@
           <p class="card-text description"><small class="text-muted">{{quiz.description}} </small></p>
         </div>
         <div class="text-end">
-          <p>
+          <!-- <p>
             <img src="/assets/images/icons/cup_black_24dp.svg">
             10 Best result 
-          </p>
-          <button [routerLink]="quiz.title" class="btn btn-outline-primary w-100">
+          </p> -->
+          <button [routerLink]="quiz.id" class="btn btn-outline-primary w-100">
             Play
           </button>
       </div>

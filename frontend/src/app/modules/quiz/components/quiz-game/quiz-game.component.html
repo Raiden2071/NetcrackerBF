@@ -1,6 +1,6 @@
 <!-- quiz sidebar -->
 <form (ngSubmit)="onSubmit()" class="d-flex justify-content-between h-100">
-  <div class="d-flex h-100" style="width: 180px; background-color: '#F8F8F8';">
+  <div class="d-flex h-100 sidebar_color">
     <div class="d-flex justify-content-between">
       <div class="d-flex flex-column justify-content-between mb-5 w-100">
         <div class="d-flex flex-column">
@@ -34,9 +34,9 @@
         <!-- settings, logout -->
         <ul class="nav nav-pills flex-column">
           <li class="mb-2">
-            <a routerLink="/profile" routerLinkActive="active" class="nav-link link-dark">
-              <img src="\assets\images\icons\account_circle_black_24dp.svg" alt="image">
-              Profile
+            <a routerLink="/dashboard" routerLinkActive="active" class="nav-link link-dark">
+              <img src="\assets\images\icons\dashboard_black_24dp.svg" alt="image">
+              Dashboard
             </a>
           </li>
           <li class="mb-2">
@@ -45,8 +45,8 @@
               Settings
             </a>
           </li>
-          <li class="mb-2" (click)="logOut()">
-            <a routerLink="/auth/login" class="nav-link link-dark">
+          <li class="mb-2">
+            <a routerLink="/auth/login" (click)="logOut()" class="nav-link link-dark">
               <img src="\assets\images\icons\logout_black_24dp.svg" alt="image">
               Log out
             </a>
@@ -70,7 +70,7 @@
               [ngClass]="{green: answer.answer=='TRUE'}" (click)="changeAnswer(j, quiz.answers)">
               {{answer.value}}
             </div>
-            <!--  -->
+            <!-- if quizPassed -->
             <div *ngIf="quizPassed" class="d-flex justify-content-center align-items-center quiz_card h-100" [ngClass]="{size__green: answer.answer=='TRUE',
             size__error: answer.answer=='SELECTED'}">
               {{answer.value}}
