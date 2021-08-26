@@ -314,10 +314,8 @@ class AnnouncmentComponent {
         this.getAnnouncement();
         this.retrieveFilterChanges();
     }
-    // announcement/all?page=1
-    // announcement/search?page=${this.page}&title=${this.searchProject.value}
     getAnnouncement() {
-        this.http.get(`announcement/all?page=1`).subscribe((announcement) => {
+        this.http.get(`announcement/all?page=${this.page}`).subscribe((announcement) => {
             this.announcements = announcement.content;
             this.totalElements = announcement.totalElements;
         });
