@@ -251,7 +251,7 @@ public class QuizControllerTest {
     this.mockMvc.perform(MockMvcRequestBuilders
             .post("/quiz/game/end")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(mapper.writeValueAsString(new QuizController.ParamsInFinishQuiz(userAnswers, BigInteger.valueOf(3), user)))
+            .content(mapper.writeValueAsString(new QuizController.ParamsInFinishQuiz(userAnswers, "ZNO", user)))
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(MockMvcResultMatchers.status().isOk());
   }
