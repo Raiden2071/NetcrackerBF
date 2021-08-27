@@ -13,10 +13,10 @@
             <div class="d-flex align-items-center flex-wrap w-100">
               <div *ngFor="let quiz of quizData?.questions; let i=index"
                 class="col-4 d-flex justify-content-center mb-4">
-                <div class="size" (click)="currentQuiz=i;changeCurrentQuiz()" [ngClass]="
+                <div class="size" (click)="currentQuiz=i;changeCurrentQuiz(quiz)" [ngClass]="
                 {size__color: currentQuiz==i,
-                 size__error: correctAnswer[i]==undefined && showErrors,
-                 size__green: correctAnswer[i] && showErrors
+                 size__error: correctAnswer[i]==undefined && showErrors || correctAnswer[i] && quizPassed,
+                 size__green: correctAnswer[i] && showErrors || !correctAnswer[i] && quizPassed
                 }"></div>
               </div>
             </div>

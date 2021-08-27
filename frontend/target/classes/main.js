@@ -415,14 +415,14 @@ function QuizGameComponent_div_9_Template(rf, ctx) { if (rf & 1) {
     const _r5 = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵgetCurrentView"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](0, "div", 24);
     _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](1, "div", 25);
-    _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵlistener"]("click", function QuizGameComponent_div_9_Template_div_click_1_listener() { const restoredCtx = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵrestoreView"](_r5); const i_r3 = restoredCtx.index; const ctx_r4 = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵnextContext"](); ctx_r4.currentQuiz = i_r3; return ctx_r4.changeCurrentQuiz(); });
+    _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵlistener"]("click", function QuizGameComponent_div_9_Template_div_click_1_listener() { const restoredCtx = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵrestoreView"](_r5); const i_r3 = restoredCtx.index; const quiz_r2 = restoredCtx.$implicit; const ctx_r4 = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵnextContext"](); ctx_r4.currentQuiz = i_r3; return ctx_r4.changeCurrentQuiz(quiz_r2); });
     _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementEnd"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementEnd"]();
 } if (rf & 2) {
     const i_r3 = ctx.index;
     const ctx_r0 = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵnextContext"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵadvance"](1);
-    _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵproperty"]("ngClass", _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵpureFunction3"](1, _c0, ctx_r0.currentQuiz == i_r3, ctx_r0.correctAnswer[i_r3] == undefined && ctx_r0.showErrors, ctx_r0.correctAnswer[i_r3] && ctx_r0.showErrors));
+    _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵproperty"]("ngClass", _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵpureFunction3"](1, _c0, ctx_r0.currentQuiz == i_r3, ctx_r0.correctAnswer[i_r3] == undefined && ctx_r0.showErrors || ctx_r0.correctAnswer[i_r3] && ctx_r0.quizPassed, ctx_r0.correctAnswer[i_r3] && ctx_r0.showErrors || !ctx_r0.correctAnswer[i_r3] && ctx_r0.quizPassed));
 } }
 const _c1 = function (a0) { return { green: a0 }; };
 function QuizGameComponent_div_36_div_1_div_1_div_1_Template(rf, ctx) { if (rf & 1) {
@@ -525,8 +525,12 @@ class QuizGameComponent {
     changeCurrentQuiz() {
         this.showErrors = false;
     }
-    click(aaa) {
-        console.log(aaa);
+    click(index) {
+        console.log(index);
+        console.log(this.quizData.questions);
+        console.log(this.correctAnswer);
+        // console.log(quiz.answers.some(({answer}) => answer=="SELECTED"));
+        // console.log(quiz.answers);
     }
     onSubmit() {
         this.correctAnswer = this.quizData.questions.map(quiz => {
@@ -536,9 +540,9 @@ class QuizGameComponent {
         let searchError = this.correctAnswer.every(data => (data === null || data === void 0 ? void 0 : data.answer) == "TRUE"); //проверка на пустоту    
         if (searchError) {
             let data = Object.assign({ user: this.user }, { quizTitle: this.quizTitle }, { answers: this.correctAnswer });
-            this.http.post('quiz/game/end', data).subscribe(v => {
-                console.log(v);
-                this.quizData.questions = v;
+            this.http.post('quiz/game/end', data).subscribe((data) => {
+                this.correctAnswer = data.map(({ answers }) => answers.some(({ answer }) => answer == "SELECTED"));
+                this.quizData.questions = data;
                 this.quizPassed = true;
                 this.toastr.success('Congratulations, you have successfully passed a quiz.', '');
             });
@@ -806,11 +810,12 @@ function QuizQuestionsComponent_div_41_Template(rf, ctx) { if (rf & 1) {
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("ngIf", ctx_r2.currentQuiz == i_r16);
 } }
 class QuizQuestionsComponent {
-    constructor(route, fb, http, toastr) {
+    constructor(route, fb, http, toastr, router) {
         this.route = route;
         this.fb = fb;
         this.http = http;
         this.toastr = toastr;
+        this.router = router;
         this.questionTypes = src_app_models_quiz__WEBPACK_IMPORTED_MODULE_0__.QuestionType;
         this.currentQuiz = 0;
         this.quizId = 0;
@@ -903,6 +908,7 @@ class QuizQuestionsComponent {
             console.log(data);
             this.http.post('quiz/', data).subscribe(() => {
                 this.toastr.success('Congratulations, you have successfully created a quiz.', '');
+                this.router.navigateByUrl('/dashboard');
             }, err => {
                 this.toastr.error(err.error.message, '');
             });
@@ -913,7 +919,7 @@ class QuizQuestionsComponent {
         }
     }
 }
-QuizQuestionsComponent.ɵfac = function QuizQuestionsComponent_Factory(t) { return new (t || QuizQuestionsComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_3__.ActivatedRoute), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_angular_forms__WEBPACK_IMPORTED_MODULE_2__.FormBuilder), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_4__.HttpClient), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](ngx_toastr__WEBPACK_IMPORTED_MODULE_5__.ToastrService)); };
+QuizQuestionsComponent.ɵfac = function QuizQuestionsComponent_Factory(t) { return new (t || QuizQuestionsComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_3__.ActivatedRoute), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_angular_forms__WEBPACK_IMPORTED_MODULE_2__.FormBuilder), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_4__.HttpClient), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](ngx_toastr__WEBPACK_IMPORTED_MODULE_5__.ToastrService), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_3__.Router)); };
 QuizQuestionsComponent.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineComponent"]({ type: QuizQuestionsComponent, selectors: [["app-quiz-questions"]], decls: 42, vars: 5, consts: [[1, "d-flex", "justify-content-between", "h-100", 3, "formGroup", "ngSubmit"], [1, "d-flex", "sidebar_color", "h-100"], [1, "d-flex", "justify-content-between"], [1, "d-flex", "flex-column", "justify-content-between", "mb-5", "w-100"], [1, "d-flex", "flex-column"], [1, "text-center", "blue", "py-3", "mb-4"], ["formArrayName", "questions", 1, "sidebar_color"], [1, "d-flex", "align-items-center", "flex-wrap", "w-100", "mb-5"], ["class", "col-4 d-flex justify-content-center mb-4", 3, "formGroupName", 4, "ngFor", "ngForOf"], [1, "text-center", "mb-4"], [1, "mb-1"], [3, "formGroupName", 4, "ngFor", "ngForOf"], [1, "d-flex", "justify-content-between", "mb-4"], ["type", "button", 1, "btn", "btn-primary", "ms-1", 3, "click"], ["type", "button", 1, "btn", "btn-primary", "me-1", 3, "click"], ["type", "submit", 1, "btn", "btn-primary"], [1, "nav", "nav-pills", "flex-column", "sidebar_color"], [1, "mb-2"], ["routerLink", "/dashboard", "routerLinkActive", "active", 1, "nav-link", "link-dark"], ["src", "\\assets\\images\\icons\\dashboard_black_24dp.svg", "alt", "image"], ["routerLink", "/settings", "routerLinkActive", "active", 1, "nav-link", "link-dark"], ["src", "\\assets\\images\\icons\\settings_black_24dp.svg", "alt", "image"], ["routerLink", "/auth/login", 1, "nav-link", "link-dark", 3, "click"], ["src", "\\assets\\images\\icons\\logout_black_24dp.svg", "alt", "image"], [1, "m-5", "w-100"], [1, "mb-5", "text-center"], ["formArrayName", "questions", 1, "mb-4"], [1, "col-4", "d-flex", "justify-content-center", "mb-4", 3, "formGroupName"], [1, "size", 3, "ngClass", "click"], [3, "formGroupName"], [4, "ngIf"], ["formControlName", "questionType", 1, "w-75", 3, "change"], [3, "value", 4, "ngFor", "ngForOf"], [3, "value"], ["class", "ms-5", 4, "ngIf"], [1, "ms-5"], [1, "d-flex"], [1, "h4", "text__input", "me-4"], ["cols", "50", "rows", "3", "formControlName", "question", 1, "mb-4", "form-control", "w-100"], ["formArrayName", "answers", 1, "d-flex", "flex-column"], ["class", "d-flex justify-content-between mb-4", 4, "ngIf"], ["type", "text", "formControlName", "value", 1, "me-4", "form-control", "w-100"], [1, "d-flex", "align-items-center"], ["type", "radio", "name", "answer", "formControlName", "answer", 3, "value", "change"], ["type", "text", "formControlName", "value", 1, "me-4", "form-control", 3, "value"]], template: function QuizQuestionsComponent_Template(rf, ctx) { if (rf & 1) {
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "form", 0);
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("ngSubmit", function QuizQuestionsComponent_Template_form_ngSubmit_0_listener() { return ctx.onSubmit(); });

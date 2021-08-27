@@ -62,11 +62,17 @@ export class QuizGameComponent implements OnInit {
 
   // костыль поменяй 
   changeCurrentQuiz(): void {
-    this.showErrors = false;    
+    this.showErrors = false;        
   }
 
-  click(aaa) {
-    console.log(aaa);
+  click(index) {
+    console.log(index);
+    
+    console.log(this.quizData.questions);
+    console.log(this.correctAnswer);
+    
+    // console.log(quiz.answers.some(({answer}) => answer=="SELECTED"));
+    // console.log(quiz.answers);
     
   }
 
@@ -80,9 +86,10 @@ export class QuizGameComponent implements OnInit {
 
     if (searchError) {
       let data = Object.assign({ user: this.user }, { quizTitle: this.quizTitle }, { answers: this.correctAnswer });
-      this.http.post('quiz/game/end', data).subscribe(v => {  
-        console.log(v);
-        (this.quizData.questions as any) = v;        
+      this.http.post('quiz/game/end', data).subscribe((data: any) => {  
+        this.correctAnswer = data.map(({answers}) => answers.some(({answer}) => answer=="SELECTED"));
+        
+        (this.quizData.questions as any) = data;
         this.quizPassed = true;
         this.toastr.success('Congratulations, you have successfully passed a quiz.','')
       });

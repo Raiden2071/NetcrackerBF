@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { QuestionType, Quiz } from 'src/app/models/quiz';
 
@@ -37,7 +37,8 @@ export class QuizQuestionsComponent implements OnInit {
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private http: HttpClient,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -122,7 +123,8 @@ export class QuizQuestionsComponent implements OnInit {
     let data = Object.assign(this.data, this.questionsForm.value);
     console.log(data);
     this.http.post('quiz/', data).subscribe(() => {
-      this.toastr.success('Congratulations, you have successfully created a quiz.','')
+      this.toastr.success('Congratulations, you have successfully created a quiz.','');
+      this.router.navigateByUrl('/dashboard');
     },err => {      
       this.toastr.error(err.error.message,'')
     });
