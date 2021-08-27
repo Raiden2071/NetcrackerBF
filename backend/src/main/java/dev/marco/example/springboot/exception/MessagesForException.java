@@ -14,14 +14,14 @@ public interface MessagesForException {
   String ERROR_WHILE_SETTING_TEST_CONNECTION = "Error while setting test connection ";
   String DAO_LOGIC_EXCEPTION = "Dao logic exception ";
   String EMPTY_ID = "Id cannot be empty";
-  String EMPTY_TITLE = "Title field cannot be empty";
-  String EMPTY_DESCRIPTION = "Description field cannot be empty";
+  String EMPTY_TITLE = "Title field must be more than 2 characters";
+  String EMPTY_DESCRIPTION = "Description field must be more than 5 characters";
   String TITLE_TOO_LONG = "Length of the title field cannot exceed 50 characters";
   String DESCRIPTION_TOO_LONG = "Length of the description field cannot exceed 300 characters";
   String USER_IS_NULL = "User field cannot be empty";
   String OWNER_IS_NULL = "Owner field cannot be empty";
-  String LONG_TITLE = "Long title";
-  String LONG_DESCRIPTION = "Long description";
+  String LONG_TITLE = "Title cannot be more than 30 characters";
+  String LONG_DESCRIPTION = "Description cannot be more than 100 characters";
   String TITLE_IS_NOT_CORRECT = "Title must contains only letters, digits and whitespaces";
 
   String ANNOUNCEMENT_NOT_FOUND_EXCEPTION = "Announcement does not exist!";
@@ -46,12 +46,12 @@ public interface MessagesForException {
   String ACCOMPLISHED_QUIZ_HAS_NOT_BEEN_FOUNDED = "Accomplished quiz has not been founded";
   String PAGE_DOES_NOT_EXIST = "Page does not exist";
   String QUESTION_NOT_FULL = "Must be 10 questions";
-  String ANSWERS_NOT_FULL_FOR_FOURANSWER = "Must be 4 answers in ";
-  String ANSWERS_NOT_FULL_FOR_TRUEFALSSE = "Must be 2 answers in ";
+  String ANSWERS_NOT_FULL_FOR_FOURANSWER = "Must be 4 answers in question ";
+  String ANSWERS_NOT_FULL_FOR_TRUEFALSSE = "Must be 2 answers in question ";
   String SAME_ANSWERS_EXCEPTION = "Same answers ";
   String SAME_QUESTIONS_EXCEPTION = "Same questions with name ";
-  String EMPTY_ANSWER_EXCEPTION = "Empty answer in ";
-  String EMPTY_QUESTION_EXCEPTION = "Empty question";
+  String EMPTY_ANSWER_EXCEPTION = "Empty answer in question ";
+  String EMPTY_QUESTION_EXCEPTION = "Empty question ";
 
   String TEST_CONNECTION_ERR = "Error while setting test connection %s";
   String TEST_CONNECTION_EXC = "Error while setting test connection";
@@ -61,7 +61,7 @@ public interface MessagesForException {
 
   String ANSWER_EMPTY = "Answer title is empty";
   String ANSWER_NOT_FOUND = "AnswerDoesNotExistException ";
-  String ANSWER_IS_NOT_SELECTED = "Answer is not selected in ";
+  String ANSWER_IS_NOT_SELECTED = "Answer is not selected in question ";
 
   String getAnswerByIdNotFoundErr = "AnswerDoesNotExistException in getAnswerById, answerId = %d";
   String getAnswerByIdNotFoundExc = "getAnswerById() not found answer by answerId = %d";

@@ -134,11 +134,12 @@ public class QuizServiceImpl implements QuizService {
         }
 
         List<QuestionImpl> questions = quiz.getQuestions();
+        boolean answerIsTrue;
 
         for (int index = 0; index < questions.size(); index++) {
             if(questions.get(index).getQuestion().isEmpty()) {
                 log.error(EMPTY_QUESTION_EXCEPTION);
-                throw new QuestionException(EMPTY_QUESTION_EXCEPTION);
+                throw new QuestionException(EMPTY_QUESTION_EXCEPTION + (index + 1));
             }
 
             for (int j = index + 1; j < questions.size(); j++) {
@@ -155,22 +156,22 @@ public class QuizServiceImpl implements QuizService {
                 case FOUR_ANSWERS:
                     if (answers.size() != ANSWERS_LENGTH) {
                         log.error(ANSWERS_NOT_FULL_FOR_FOURANSWER + questions.get(index).getQuestion());
-                        throw new AnswerException(ANSWERS_NOT_FULL_FOR_FOURANSWER + questions.get(index).getQuestion());
+                        throw new AnswerException(ANSWERS_NOT_FULL_FOR_FOURANSWER + (index + 1) + " - " + questions.get(index).getQuestion());
                     }
                     break;
                 case TRUE_FALSE:
                     if (answers.size() != SHORT_ANSWERS_LENGTH) {
                         log.error(ANSWERS_NOT_FULL_FOR_TRUEFALSSE + questions.get(index).getQuestion());
-                        throw new AnswerException(ANSWERS_NOT_FULL_FOR_TRUEFALSSE + questions.get(index).getQuestion());
+                        throw new AnswerException(ANSWERS_NOT_FULL_FOR_TRUEFALSSE + (index + 1) + " - " + questions.get(index).getQuestion());
                     }
                     break;
             }
 
-            boolean answerIsTrue = false;
+            answerIsTrue = false;
             for (int i = 0; i < answers.size(); i++) {
                 if(answers.get(i).getValue().isEmpty()) {
                     log.error(EMPTY_ANSWER_EXCEPTION + questions.get(index).getQuestion());
-                    throw new AnswerException(EMPTY_ANSWER_EXCEPTION + questions.get(index).getQuestion());
+                    throw new AnswerException(EMPTY_ANSWER_EXCEPTION + (index + 1) + " - " + questions.get(index).getQuestion());
                 }
                 if(answers.get(i).getAnswer().equals(AnswerResult.TRUE)) {
                     answerIsTrue = true;
@@ -178,14 +179,15 @@ public class QuizServiceImpl implements QuizService {
                 for (int j = i + 1; j < answers.size(); j++) {
                     if (answers.get(i).getValue().equals(answers.get(j).getValue())) {
                         log.error(SAME_ANSWERS_EXCEPTION + questions.get(index).getQuestion());
-                        throw new AnswerException(SAME_ANSWERS_EXCEPTION + answers.get(i).getValue() + " in "
-                                + questions.get(index).getQuestion());
+                        throw new AnswerException(SAME_ANSWERS_EXCEPTION + answers.get(i).getValue() + " in question "
+                                + (index + 1) + " - " + questions.get(index).getQuestion());
                     }
                 }
             }
             if(!answerIsTrue) {
-                log.error(ANSWER_IS_NOT_SELECTED);
-                throw new AnswerException(ANSWER_IS_NOT_SELECTED + questions.get(index).getQuestion());
+                log.error(ANSWER_IS_NOT_SELECTED + questions.get(index).getQuestion());
+                throw new AnswerException(ANSWER_IS_NOT_SELECTED + (index + 1) + " - "
+                        + questions.get(index).getQuestion());
             }
         }
 

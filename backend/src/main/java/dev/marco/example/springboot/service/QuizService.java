@@ -14,7 +14,7 @@ public interface QuizService {
     int MIN_LENGTH_TITLE = 2;
     int MAX_LENGTH_TITLE = 30;
     int MIN_LENGTH_DESCRIPTION = 5;
-    int MAX_LENGTH_DESCRIPTION = 500;
+    int MAX_LENGTH_DESCRIPTION = 100;
     int MIN_PAGE = 1;
     int PAGE_SIZE = 8;
     int QUESTIONS_LENGTH = 10;
